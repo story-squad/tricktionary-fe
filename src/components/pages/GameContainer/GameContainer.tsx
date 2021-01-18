@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-import { Lobby } from './GameComponents';
+import { Lobby } from './Game';
 
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
 
