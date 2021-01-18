@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-import { Lobby } from './Game';
-import Pregame from './Game/Pregame';
+import { Lobby, PlayerList, Pregame } from './Game';
 
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
 
@@ -11,7 +10,13 @@ const GameContainer = (): React.ReactElement => {
     `Player${Math.floor(Math.random() * 9999)}`,
   );
   const [lobbyCode, setLobbyCode] = useState('');
-  const [lobbyData, setLobbyData] = useState({ phase: 'LOBBY' });
+  const [isHost, setIsHost] = useState(false);
+  const [lobbyData, setLobbyData] = useState({ phase: 'LOBBY', players: [] });
+
+  // If lobbyCode changes, isHost set to false
+  useEffect(() => {
+    setIsHost(false);
+  }, [lobbyCode]);
 
   // Socket event listeners/handlers. Put them here for now, but extract into separate files later
   useEffect(() => {
@@ -24,12 +29,18 @@ const GameContainer = (): React.ReactElement => {
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
     socket.emit('create lobby', username);
+    setIsHost(true);
   };
 
   const handleJoinLobby = (e: React.MouseEvent) => {
     e.preventDefault();
     console.log(lobbyCode);
     socket.emit('join lobby', username, lobbyCode);
+  };
+
+  const handleStartGame = (e: React.MouseEvent) => {
+    e.preventDefault();
+    socket.emit('start game', lobbyCode);
   };
   ////
 
@@ -44,7 +55,13 @@ const GameContainer = (): React.ReactElement => {
   const currentPhase = () => {
     switch (lobbyData.phase) {
       case 'PREGAME':
-        return <Pregame lobbyData={lobbyData} />;
+        return (
+          <Pregame
+            lobbyData={lobbyData}
+            handleStartGame={handleStartGame}
+            isHost={isHost}
+          />
+        );
       default:
         return (
           <Lobby
@@ -59,7 +76,14 @@ const GameContainer = (): React.ReactElement => {
     }
   };
 
-  return <div className="game-container">{currentPhase()}</div>;
+  return (
+    <div className="game-container">
+      {lobbyData.phase !== 'LOBBY' && (
+        <PlayerList players={lobbyData.players} />
+      )}
+      {currentPhase()}
+    </div>
+  );
 };
 
 export default GameContainer;
