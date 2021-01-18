@@ -38,6 +38,14 @@ const GameContainer = (): React.ReactElement => {
     e.preventDefault();
     socket.emit('start game', lobbyCode);
   };
+
+  const handleSubmitDefinition = (
+    e: React.FormEvent<HTMLFormElement>,
+    definition: string,
+  ) => {
+    e.preventDefault();
+    socket.emit('definition submitted', definition, lobbyCode);
+  };
   ////
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +67,12 @@ const GameContainer = (): React.ReactElement => {
           />
         );
       case 'WRITING':
-        return <Writing lobbyData={lobbyData} />;
+        return (
+          <Writing
+            lobbyData={lobbyData}
+            handleSubmitDefinition={handleSubmitDefinition}
+          />
+        );
       default:
         return (
           <Lobby
