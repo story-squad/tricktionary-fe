@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-import { Lobby, PlayerList, Pregame } from './Game';
+import { Lobby, PlayerList, Pregame, Writing } from './Game';
 
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
 
@@ -13,15 +13,11 @@ const GameContainer = (): React.ReactElement => {
   const [isHost, setIsHost] = useState(false);
   const [lobbyData, setLobbyData] = useState({ phase: 'LOBBY', players: [] });
 
-  // If lobbyCode changes, isHost set to false
-  useEffect(() => {
-    setIsHost(false);
-  }, [lobbyCode]);
-
   // Socket event listeners/handlers. Put them here for now, but extract into separate files later
   useEffect(() => {
     socket.on('game update', (socketData: any) => {
       setLobbyData(socketData);
+      setLobbyCode(socketData.lobbyCode);
       console.log(socketData);
     });
   }, []);
@@ -62,6 +58,8 @@ const GameContainer = (): React.ReactElement => {
             isHost={isHost}
           />
         );
+      case 'WRITING':
+        return <Writing lobbyData={lobbyData} />;
       default:
         return (
           <Lobby
