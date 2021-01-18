@@ -10,18 +10,37 @@ const GameContainer = (): React.ReactElement => {
   const [username, setUsername] = useState('user');
   const [lobbyCode, setLobbyCode] = useState('');
 
+  useEffect(() => {
+    socket.on('game update', (lobbyData: any) => {
+      console.log(lobbyData);
+    });
+  }, []);
+
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
   };
 
-  const handleChangeLobby = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLobbyCode(e.target.value);
+  };
+
+  const handleCreateLobby = (e: React.MouseEvent) => {
+    e.preventDefault();
+    socket.emit('create lobby', username);
   };
 
   const currentPhase = () => {
     switch (gameState) {
       case 'lobby':
-        return <Lobby />;
+        return (
+          <Lobby
+            username={username}
+            lobbyCode={lobbyCode}
+            handleChangeUsername={handleChangeUsername}
+            handleChangeCode={handleChangeCode}
+            handleCreateLobby={handleCreateLobby}
+          />
+        );
     }
   };
 
