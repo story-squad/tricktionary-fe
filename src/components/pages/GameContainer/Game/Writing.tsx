@@ -8,7 +8,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
   };
 
   return (
-    <div className="pregame game-page">
+    <div className="writing game-page">
       <h2>Writing</h2>
       <h3>Your Word:</h3>
       <p>{props.lobbyData.word}</p>
