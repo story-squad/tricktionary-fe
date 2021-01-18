@@ -20,7 +20,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         maxLength={4}
       />
       <button onClick={props.handleCreateLobby}>New Game</button>
-      <button>Join Game</button>
+      <button onClick={props.handleJoinLobby}>Join Game</button>
     </div>
   );
 };
@@ -33,4 +33,5 @@ interface LobbyProps {
   handleChangeUsername: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeCode: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleCreateLobby: (e: React.MouseEvent) => void;
+  handleJoinLobby: (e: React.MouseEvent) => void;
 }
