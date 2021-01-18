@@ -7,7 +7,9 @@ import Pregame from './Game/Pregame';
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
 
 const GameContainer = (): React.ReactElement => {
-  const [username, setUsername] = useState('user');
+  const [username, setUsername] = useState(
+    `Player${Math.floor(Math.random() * 9999)}`,
+  );
   const [lobbyCode, setLobbyCode] = useState('');
   const [lobbyData, setLobbyData] = useState({ phase: 'LOBBY' });
 
