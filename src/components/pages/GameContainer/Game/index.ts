@@ -1,3 +1,4 @@
 import Lobby from './Lobby';
+import Pregame from './Pregame';
 
-export { Lobby };
+export { Lobby, Pregame };
