@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import shuffle from 'shuffle-array';
 
+// Get a shuffled list of other players' definitions + the correct one
 const getDefinitions = (
   players: any[],
   username: string,
@@ -20,6 +21,7 @@ const getDefinitions = (
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
   const { lobbyData, username, handleSubmitGuess } = props;
+  // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selction
   const [definitions] = useState(
     getDefinitions(lobbyData.players, username, lobbyData.definition),
   );
