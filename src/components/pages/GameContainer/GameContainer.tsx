@@ -13,7 +13,7 @@ const GameContainer = (): React.ReactElement => {
   const [isHost, setIsHost] = useState(false);
   const [lobbyData, setLobbyData] = useState({ phase: 'LOBBY', players: [] });
 
-  // Socket event listeners/handlers. Put them here for now, but extract into separate files later
+  // Socket event listeners/handlers.
   useEffect(() => {
     socket.on('game update', (socketData: any) => {
       setLobbyData(socketData);
@@ -30,7 +30,6 @@ const GameContainer = (): React.ReactElement => {
 
   const handleJoinLobby = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log(lobbyCode);
     socket.emit('join lobby', username, lobbyCode);
   };
 
@@ -55,14 +54,6 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('guess', lobbyCode, guess);
   };
   ////
-
-  const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
-  };
-
-  const handleChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLobbyCode(e.target.value.toUpperCase());
-  };
 
   const currentPhase = () => {
     switch (lobbyData.phase) {
@@ -97,8 +88,8 @@ const GameContainer = (): React.ReactElement => {
           <Lobby
             username={username}
             lobbyCode={lobbyCode}
-            handleChangeUsername={handleChangeUsername}
-            handleChangeCode={handleChangeCode}
+            setUsername={setUsername}
+            setLobbyCode={setLobbyCode}
             handleCreateLobby={handleCreateLobby}
             handleJoinLobby={handleJoinLobby}
           />
