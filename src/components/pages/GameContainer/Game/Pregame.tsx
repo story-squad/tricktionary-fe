@@ -5,6 +5,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     <div className="pregame game-page">
       <h2>Pregame</h2>
       {props.isHost && <button onClick={props.handleStartGame}>Start</button>}
+      {!props.isHost && <p>Waiting on host to start...</p>}
     </div>
   );
 };
