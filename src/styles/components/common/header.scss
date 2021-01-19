@@ -1,0 +1,19 @@
+// Header - the bar at the top of the screen
+header {
+    background-color: $orange;
+    padding: 1rem 2rem;
+    color: $white;
+  
+    h2 {
+      font-family: $display-font;
+      font-size: 2.4rem;
+      a {
+        color: $white;
+        text-decoration: none;
+        &:hover {
+          text-shadow: 0 2px 6px #0009;
+          transition: all 0.2s ease-in-out;
+        }
+      }
+    }
+};
