@@ -27,6 +27,11 @@ const GameContainer = (): React.ReactElement => {
       setLobbyCode(socketData.lobbyCode);
       console.log(socketData);
     });
+    socket.on('play again', (socketData: any) => {
+      setLobbyData(socketData);
+      setLobbyCode(socketData.lobbyCode);
+      console.log(socketData);
+    });
   }, []);
 
   const handleCreateLobby = (e: React.MouseEvent) => {
@@ -65,6 +70,11 @@ const GameContainer = (): React.ReactElement => {
     e.preventDefault();
     socket.emit('guess', lobbyCode, guess);
   };
+
+  const handlePlayAgain = () => {
+    console.log('yup');
+    socket.emit('play again', lobbyCode);
+  };
   ////
 
   const currentPhase = () => {
@@ -93,7 +103,9 @@ const GameContainer = (): React.ReactElement => {
           />
         );
       case 'POSTGAME':
-        return <Postgame lobbyData={lobbyData} />;
+        return (
+          <Postgame lobbyData={lobbyData} handlePlayAgain={handlePlayAgain} />
+        );
       default:
         return (
           <Lobby
