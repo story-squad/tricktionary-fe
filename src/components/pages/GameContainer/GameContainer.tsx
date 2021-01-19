@@ -104,7 +104,11 @@ const GameContainer = (): React.ReactElement => {
         );
       case 'POSTGAME':
         return (
-          <Postgame lobbyData={lobbyData} handlePlayAgain={handlePlayAgain} />
+          <Postgame
+            lobbyData={lobbyData}
+            handlePlayAgain={handlePlayAgain}
+            isHost={isHost}
+          />
         );
       default:
         return (
