@@ -57,6 +57,7 @@ const Guess = (props: GuessProps): React.ReactElement => {
           id={definition.id}
           name="definition"
           onChange={handleSelectChoice}
+          required
         />
         <label htmlFor={definition.id}>{definition.definition}</label>
       </div>
