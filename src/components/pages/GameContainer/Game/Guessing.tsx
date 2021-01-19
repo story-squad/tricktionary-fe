@@ -32,6 +32,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   return (
     <div className="guessing game-page">
       <h2>Guessing</h2>
+      <p>Word: {lobbyData.word}</p>
       <form onSubmit={(e) => handleSubmitGuess(e, choice)}>
         {definitions.map((definition: any) => (
           <Guess
