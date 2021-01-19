@@ -107,7 +107,7 @@ const GameContainer = (): React.ReactElement => {
       {lobbyData.phase !== 'LOBBY' && (
         <>
           <p>Room Code: {lobbyCode}</p>
-          <PlayerList players={lobbyData.players} />
+          <PlayerList lobbyData={lobbyData} />
         </>
       )}
       {currentPhase()}
