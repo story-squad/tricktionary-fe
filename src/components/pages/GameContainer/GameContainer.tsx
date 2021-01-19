@@ -1,7 +1,14 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-import { Lobby, PlayerList, Pregame, Writing, Guessing } from './Game';
+import {
+  Lobby,
+  PlayerList,
+  Pregame,
+  Writing,
+  Guessing,
+  Postgame,
+} from './Game';
 
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
 
@@ -86,8 +93,7 @@ const GameContainer = (): React.ReactElement => {
           />
         );
       case 'POSTGAME':
-        //TODO do this
-        return null;
+        return <Postgame lobbyData={lobbyData} />;
       default:
         return (
           <Lobby
