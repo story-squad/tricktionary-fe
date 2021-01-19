@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const [definition, setDefinition] = useState('');
@@ -16,8 +16,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
       {!isSubmitted && (
         <form
           onSubmit={(e) => {
-            props.handleSubmitDefinition(e, definition);
-            setIsSubmitted(true);
+            props.handleSubmitDefinition(e, definition, setIsSubmitted);
           }}
         >
           <label htmlFor="definition">Write Your Definition:</label>
@@ -26,7 +25,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
             value={definition}
             onChange={handleChangeDefinition}
           />
-          <button>Submit</button>
+          <button disabled={definition.trim() === ''}>Submit</button>
         </form>
       )}
       {isSubmitted && (
@@ -46,5 +45,6 @@ interface WritingProps {
   handleSubmitDefinition: (
     e: React.FormEvent<HTMLFormElement>,
     definition: string,
+    cb: React.Dispatch<SetStateAction<boolean>>,
   ) => void;
 }

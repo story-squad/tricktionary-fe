@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
 import { Lobby, PlayerList, Pregame, Writing, Guessing } from './Game';
@@ -41,9 +41,14 @@ const GameContainer = (): React.ReactElement => {
   const handleSubmitDefinition = (
     e: React.FormEvent<HTMLFormElement>,
     definition: string,
+    cb: React.Dispatch<SetStateAction<boolean>>,
   ) => {
     e.preventDefault();
-    socket.emit('definition submitted', definition, lobbyCode);
+    const trimmedDefinition = definition.trim();
+    if (trimmedDefinition !== '') {
+      socket.emit('definition submitted', trimmedDefinition, lobbyCode);
+      cb(true);
+    }
   };
 
   const handleSubmitGuess = (
