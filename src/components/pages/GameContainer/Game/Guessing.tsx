@@ -50,13 +50,16 @@ const Guess = (props: GuessProps): React.ReactElement => {
   const { definition, handleSelectChoice } = props;
   return (
     <>
-      <input
-        type="radio"
-        id={definition.id}
-        name="definition"
-        onChange={handleSelectChoice}
-      />
-      <label htmlFor={definition.id}>{definition.definition}</label>
+      <div className="guess">
+        <input
+          type="radio"
+          id={definition.id}
+          name="definition"
+          onChange={handleSelectChoice}
+        />
+        <label htmlFor={definition.id}>{definition.definition}</label>
+      </div>
+      <br />
     </>
   );
 };
