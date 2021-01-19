@@ -61,7 +61,7 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handleChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLobbyCode(e.target.value);
+    setLobbyCode(e.target.value.toUpperCase());
   };
 
   const currentPhase = () => {
