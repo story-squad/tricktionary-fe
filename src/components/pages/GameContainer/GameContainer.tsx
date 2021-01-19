@@ -89,6 +89,9 @@ const GameContainer = (): React.ReactElement => {
             handleSubmitGuess={handleSubmitGuess}
           />
         );
+      case 'POSTGAME':
+        //TODO do this
+        return null;
       default:
         return (
           <Lobby
@@ -106,7 +109,10 @@ const GameContainer = (): React.ReactElement => {
   return (
     <div className="game-container">
       {lobbyData.phase !== 'LOBBY' && (
-        <PlayerList players={lobbyData.players} />
+        <>
+          <p>Room Code: {lobbyCode}</p>
+          <PlayerList players={lobbyData.players} />
+        </>
       )}
       {currentPhase()}
     </div>
