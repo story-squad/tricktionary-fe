@@ -38,7 +38,7 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
             className={playerClassName(props.lobbyData, player)}
             key={player.id}
           >
-            {player.username}
+            {player.username}, score: {player.points}
           </p>
         );
       })}
@@ -56,4 +56,5 @@ interface PlayerItem {
   id: string;
   username: string;
   definition: string;
+  points: number;
 }
