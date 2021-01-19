@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-import { Lobby, PlayerList, Pregame, Writing } from './Game';
+import { Lobby, PlayerList, Pregame, Writing, Guessing } from './Game';
 
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
 
@@ -46,6 +46,14 @@ const GameContainer = (): React.ReactElement => {
     e.preventDefault();
     socket.emit('definition submitted', definition, lobbyCode);
   };
+
+  const handleSubmitGuess = (
+    e: React.FormEvent<HTMLFormElement>,
+    guess: string,
+  ) => {
+    e.preventDefault();
+    socket.emit('guess', lobbyCode, guess);
+  };
   ////
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +79,14 @@ const GameContainer = (): React.ReactElement => {
           <Writing
             lobbyData={lobbyData}
             handleSubmitDefinition={handleSubmitDefinition}
+          />
+        );
+      case 'GUESSING':
+        return (
+          <Guessing
+            lobbyData={lobbyData}
+            username={username}
+            handleSubmitGuess={handleSubmitGuess}
           />
         );
       default:
