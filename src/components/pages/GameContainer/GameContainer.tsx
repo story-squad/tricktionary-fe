@@ -93,7 +93,6 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handlePlayAgain = () => {
-    console.log('yup');
     socket.emit('play again', lobbyCode);
   };
   ////
