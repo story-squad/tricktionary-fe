@@ -1,0 +1,18 @@
+// General styles across components
+
+// For testing, update later
+h1,
+h2,
+h3 {
+  font-size: 3rem;
+}
+
+p,
+label,
+input {
+  font-size: 2rem;
+}
+
+.submitted {
+  color: red;
+}
