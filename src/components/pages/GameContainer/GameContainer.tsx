@@ -1,5 +1,6 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import io from 'socket.io-client';
+import { getReactions } from '../../../api/apiRequests';
 
 import {
   Lobby,
@@ -19,6 +20,16 @@ const GameContainer = (): React.ReactElement => {
   const [lobbyCode, setLobbyCode] = useState('');
   const [isHost, setIsHost] = useState(false);
   const [lobbyData, setLobbyData] = useState({ phase: 'LOBBY', players: [] });
+  const [reactions, setReactions] = useState([]);
+
+  // API calls
+  useEffect(() => {
+    if (lobbyData.phase === 'GUESSING') {
+      getReactions()
+        .then((res: any) => setReactions(res.data.available))
+        .catch(() => console.log('error getting reactions'));
+    }
+  }, [lobbyData]);
 
   // Socket event listeners/handlers.
   useEffect(() => {
