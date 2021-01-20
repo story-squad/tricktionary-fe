@@ -13,6 +13,8 @@ import {
 } from './Game';
 
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
+const initialLobbyData = { phase: 'LOBBY', players: [] };
+const initialReactionSelection = [] as ReactionCbItem[];
 
 const GameContainer = (): React.ReactElement => {
   const [username, setUsername] = useState(
@@ -20,9 +22,12 @@ const GameContainer = (): React.ReactElement => {
   );
   const [lobbyCode, setLobbyCode] = useState('');
   const [isHost, setIsHost] = useState(false);
-  const [lobbyData, setLobbyData] = useState({ phase: 'LOBBY', players: [] });
+  const [lobbyData, setLobbyData] = useState(initialLobbyData);
   const [reactions, setReactions] = useState([]);
-  const [reactionSelection, setReactionSelection] = useState([]);
+  const [reactionSelection, setReactionSelection] = useState(
+    initialReactionSelection,
+  );
+  const [submittedGuess, setSubmittedGuess] = useState(false);
 
   // API calls
   useEffect(() => {
@@ -43,6 +48,8 @@ const GameContainer = (): React.ReactElement => {
     socket.on('play again', (socketData: any) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
+      setSubmittedGuess(false);
+      setReactionSelection(initialReactionSelection);
       console.log(socketData);
     });
   }, []);
@@ -81,7 +88,9 @@ const GameContainer = (): React.ReactElement => {
     guess: string,
   ) => {
     e.preventDefault();
-    socket.emit('guess', lobbyCode, guess);
+    socket.emit('guess', lobbyCode, guess, reactionSelection);
+    setSubmittedGuess(true);
+    setReactionSelection(initialReactionSelection);
   };
 
   const handlePlayAgain = () => {
@@ -91,10 +100,22 @@ const GameContainer = (): React.ReactElement => {
   ////
   // handler functions not related to sockets
   const handleReactionSelection = (choice: ReactionCbItem) => {
-    const { reactionId, definitionId } = choice;
-    console.log(choice);
+    let isNew = true;
+    const tempSelection = reactionSelection.map((selection) => {
+      if (selection.id === choice.id) {
+        isNew = false;
+        return choice;
+      } else {
+        return selection;
+      }
+    });
+    if (isNew) {
+      tempSelection.push(choice);
+    }
+    setReactionSelection(tempSelection);
   };
 
+  // determine Game component to render based on the current game phase
   const currentPhase = () => {
     switch (lobbyData.phase) {
       case 'PREGAME':
@@ -120,6 +141,7 @@ const GameContainer = (): React.ReactElement => {
             handleSubmitGuess={handleSubmitGuess}
             handleReactionSelection={handleReactionSelection}
             reactions={reactions}
+            submittedGuess={submittedGuess}
           />
         );
       case 'POSTGAME':
