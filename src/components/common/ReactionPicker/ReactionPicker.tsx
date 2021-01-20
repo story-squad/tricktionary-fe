@@ -45,7 +45,7 @@ export default ReactionPicker;
 
 interface ReactionPickerProps {
   reactions: ReactionItem[];
-  cb: (arg0: ReactionCbItem) => void;
+  cb: (arg0: ReactionDefinitionIdStrings) => void;
   id: number;
 }
 
@@ -59,7 +59,7 @@ export interface ReactionItem {
   content: string;
 }
 
-export interface ReactionCbItem {
+export interface ReactionDefinitionIdStrings {
   reaction: string;
   id: string;
 }

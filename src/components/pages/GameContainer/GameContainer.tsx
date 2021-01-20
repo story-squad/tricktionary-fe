@@ -1,20 +1,19 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { getReactions } from '../../../api/apiRequests';
-import { ReactionCbItem } from '../../common/ReactionPicker/ReactionPicker';
-
+import { ReactionDefinitionIdStrings } from '../../common/ReactionPicker/ReactionPicker';
 import {
+  Guessing,
   Lobby,
   PlayerList,
+  Postgame,
   Pregame,
   Writing,
-  Guessing,
-  Postgame,
 } from './Game';
 
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
 const initialLobbyData = { phase: 'LOBBY', players: [] };
-const initialReactionSelection = [] as ReactionCbItem[];
+const initialReactionSelection = [] as ReactionDefinitionIdStrings[];
 
 const GameContainer = (): React.ReactElement => {
   const [username, setUsername] = useState(
@@ -99,7 +98,7 @@ const GameContainer = (): React.ReactElement => {
   };
   ////
   // handler functions not related to sockets
-  const handleReactionSelection = (choice: ReactionCbItem) => {
+  const handleReactionSelection = (choice: ReactionDefinitionIdStrings) => {
     let isNew = true;
     const tempSelection = reactionSelection.map((selection) => {
       if (selection.id === choice.id) {

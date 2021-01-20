@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import shuffle from 'shuffle-array';
+import { ReactionPicker } from '../../../common/ReactionPicker';
 import {
-  ReactionCbItem,
+  ReactionDefinitionIdStrings,
   ReactionItem,
 } from '../../../common/ReactionPicker/ReactionPicker';
-
-import { ReactionPicker } from '../../../common/ReactionPicker';
 
 // Get a shuffled list of other players' definitions + the correct one
 const getDefinitions = (
@@ -98,7 +97,7 @@ interface GuessingProps {
     e: React.FormEvent<HTMLFormElement>,
     guess: string,
   ) => void;
-  handleReactionSelection: (choice: ReactionCbItem) => void;
+  handleReactionSelection: (choice: ReactionDefinitionIdStrings) => void;
   lobbyData: any;
   username: string;
   reactions: ReactionItem[];
