@@ -9,9 +9,14 @@ const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
     cb({ reactionId, definitionId });
   };
 
+  const handleSetModal = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setModalOn(!modalOn);
+  };
+
   return (
     <div className="reaction-picker">
-      <button onClick={() => setModalOn(!modalOn)}>Reaction Picker</button>
+      <button onClick={handleSetModal}>Reaction Picker</button>
       {modalOn && (
         <div className="reaction-modal">
           {reactions.map((reaction) => (
