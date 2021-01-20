@@ -1,6 +1,7 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { getReactions } from '../../../api/apiRequests';
+import { ReactionCbItem } from '../../common/ReactionPicker/ReactionPicker';
 
 import {
   Lobby,
@@ -21,6 +22,7 @@ const GameContainer = (): React.ReactElement => {
   const [isHost, setIsHost] = useState(false);
   const [lobbyData, setLobbyData] = useState({ phase: 'LOBBY', players: [] });
   const [reactions, setReactions] = useState([]);
+  const [reactionSelection, setReactionSelection] = useState([]);
 
   // API calls
   useEffect(() => {
@@ -87,6 +89,11 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('play again', lobbyCode);
   };
   ////
+  // handler functions not related to sockets
+  const handleReactionSelection = (choice: ReactionCbItem) => {
+    const { reactionId, definitionId } = choice;
+    console.log(choice);
+  };
 
   const currentPhase = () => {
     switch (lobbyData.phase) {
@@ -111,6 +118,8 @@ const GameContainer = (): React.ReactElement => {
             lobbyData={lobbyData}
             username={username}
             handleSubmitGuess={handleSubmitGuess}
+            handleReactionSelection={handleReactionSelection}
+            reactions={reactions}
           />
         );
       case 'POSTGAME':

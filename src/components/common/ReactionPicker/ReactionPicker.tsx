@@ -4,9 +4,9 @@ const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
   const { reactions, cb, definitionId } = props;
   const [modalOn, setModalOn] = useState(false);
 
-  const pickReaction = (id: number) => {
+  const pickReaction = (reactionId: number) => {
     setModalOn(false);
-    cb({ id, definitionId });
+    cb({ reactionId, definitionId });
   };
 
   return (
@@ -40,7 +40,7 @@ export default ReactionPicker;
 
 interface ReactionPickerProps {
   reactions: ReactionItem[];
-  cb: (arg0: CbItem) => void;
+  cb: (arg0: ReactionCbItem) => void;
   definitionId: number;
 }
 
@@ -54,7 +54,7 @@ export interface ReactionItem {
   content: string;
 }
 
-interface CbItem {
-  id: number;
+export interface ReactionCbItem {
+  reactionId: number;
   definitionId: number;
 }

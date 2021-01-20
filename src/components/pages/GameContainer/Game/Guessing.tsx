@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import shuffle from 'shuffle-array';
+import {
+  ReactionCbItem,
+  ReactionItem,
+} from '../../../common/ReactionPicker/ReactionPicker';
+
+import { ReactionPicker } from '../../../common/ReactionPicker';
 
 // Get a shuffled list of other players' definitions + the correct one
 const getDefinitions = (
@@ -20,7 +26,13 @@ const getDefinitions = (
 };
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
-  const { lobbyData, username, handleSubmitGuess } = props;
+  const {
+    lobbyData,
+    username,
+    handleSubmitGuess,
+    reactions,
+    handleReactionSelection,
+  } = props;
   // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selction
   const [definitions] = useState(
     getDefinitions(lobbyData.players, username, lobbyData.definition),
@@ -37,11 +49,18 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
       <p>Word: {lobbyData.word}</p>
       <form onSubmit={(e) => handleSubmitGuess(e, choice)}>
         {definitions.map((definition: any) => (
-          <Guess
-            key={definition.id}
-            definition={definition}
-            handleSelectChoice={handleSelectChoice}
-          />
+          <>
+            <Guess
+              key={definition.id}
+              definition={definition}
+              handleSelectChoice={handleSelectChoice}
+            />
+            <ReactionPicker
+              reactions={reactions}
+              definitionId={definition.id}
+              cb={handleReactionSelection}
+            />
+          </>
         ))}
         <button>Enter Guess</button>
       </form>
@@ -75,8 +94,10 @@ interface GuessingProps {
     e: React.FormEvent<HTMLFormElement>,
     guess: string,
   ) => void;
+  handleReactionSelection: (choice: ReactionCbItem) => void;
   lobbyData: any;
   username: string;
+  reactions: ReactionItem[];
 }
 
 interface GuessProps {
