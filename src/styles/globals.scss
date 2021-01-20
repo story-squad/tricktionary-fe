@@ -22,18 +22,32 @@ $text-font: 'Oswald', sans-serif;
 $display-font: 'Bangers', sans-serif;
 
 // Media Query Sizes
+$mid: 500px;
 $tablet: 650px;
 $large: 800px;
 
-// Colors
-$lt-blue: #85c7f2;
-$mid-blue: #3884ff;
-$bright-blue: #2462d9;
-$dark-blue: #40537f;
+// NEW COLORS
+$blue: #3884ff;
+$lt-orange: #f7bc50;
+$orange: #f66700;
 $jade: #00b67d;
 $seafoam: #34c9ad;
-$gold: #f7bc50;
-$orange: #f66700;
-$red: #f64141;
+$dark-blue: #40537f;
 $white: #ffffff;
 $charcoal: #343434;
+$red: #f64141;
+$ltblue: #85c7f2;
+$bright-blue: #2462d9;
+$rose: #d97f9f;
+$lime: #bfd349;
+
+#root {
+  background-color: $dark-blue;
+}
+
+.App > div:not(.modal-wrapper):not(.cookie-popup) {
+  min-height: 100vh;
+  background-color: $dark-blue;
+  display: flex;
+  flex-flow: column nowrap;
+}

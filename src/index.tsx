@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import App from './App';
@@ -11,11 +12,13 @@ dotenv.config();
 
 ReactDOM.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <Router>
-        <App />
-      </Router>
-    </RecoilRoot>
+    <HelmetProvider>
+      <RecoilRoot>
+        <Router>
+          <App />
+        </Router>
+      </RecoilRoot>
+    </HelmetProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
