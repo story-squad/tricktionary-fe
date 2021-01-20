@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { SetStateAction } from 'react';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {

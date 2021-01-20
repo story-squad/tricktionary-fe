@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
 import { GameContainer } from './components/pages/GameContainer';
 
 const App = (): React.ReactElement => {
