@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
-  const { reactions, cb, definitionId } = props;
+  const { reactions, cb, id } = props;
   const [modalOn, setModalOn] = useState(false);
 
-  const pickReaction = (reactionId: number) => {
+  const pickReaction = (reaction: number) => {
     setModalOn(false);
-    cb({ reactionId, definitionId });
+    cb({ reaction: `${reaction}`, id: `${id}` });
   };
 
   const handleSetModal = (e: React.MouseEvent) => {
@@ -46,7 +46,7 @@ export default ReactionPicker;
 interface ReactionPickerProps {
   reactions: ReactionItem[];
   cb: (arg0: ReactionCbItem) => void;
-  definitionId: number;
+  id: number;
 }
 
 interface ReactionProps {
@@ -60,6 +60,6 @@ export interface ReactionItem {
 }
 
 export interface ReactionCbItem {
-  reactionId: number;
-  definitionId: number;
+  reaction: string;
+  id: string;
 }
