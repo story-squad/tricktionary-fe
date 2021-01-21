@@ -1,16 +1,18 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import io from 'socket.io-client';
-
+import { ReactionDefinitionIdStrings } from '../../common/ReactionPicker/ReactionPicker';
 import {
+  Guessing,
   Lobby,
   PlayerList,
+  Postgame,
   Pregame,
   Writing,
-  Guessing,
-  Postgame,
 } from './Game';
 
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
+const initialLobbyData = { phase: 'LOBBY', players: [] };
+const initialReactionSelection = [] as ReactionDefinitionIdStrings[];
 
 const GameContainer = (): React.ReactElement => {
   const [username, setUsername] = useState(
@@ -18,7 +20,9 @@ const GameContainer = (): React.ReactElement => {
   );
   const [lobbyCode, setLobbyCode] = useState('');
   const [isHost, setIsHost] = useState(false);
-  const [lobbyData, setLobbyData] = useState({ phase: 'LOBBY', players: [] });
+  const [lobbyData, setLobbyData] = useState(initialLobbyData);
+  const [submittedGuess, setSubmittedGuess] = useState(false);
+  const [playerId, setPlayerId] = useState('');
 
   // Socket event listeners/handlers.
   useEffect(() => {
@@ -30,7 +34,11 @@ const GameContainer = (): React.ReactElement => {
     socket.on('play again', (socketData: any) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
+      setSubmittedGuess(false);
       console.log(socketData);
+    });
+    socket.on('welcome', (socketData: any) => {
+      setPlayerId(socketData);
     });
   }, []);
 
@@ -68,15 +76,16 @@ const GameContainer = (): React.ReactElement => {
     guess: string,
   ) => {
     e.preventDefault();
-    socket.emit('guess', lobbyCode, guess);
+    socket.emit('guess', lobbyCode, guess, []);
+    setSubmittedGuess(true);
   };
 
   const handlePlayAgain = () => {
-    console.log('yup');
     socket.emit('play again', lobbyCode);
   };
   ////
 
+  // determine Game component to render based on the current game phase
   const currentPhase = () => {
     switch (lobbyData.phase) {
       case 'PREGAME':
@@ -100,6 +109,7 @@ const GameContainer = (): React.ReactElement => {
             lobbyData={lobbyData}
             username={username}
             handleSubmitGuess={handleSubmitGuess}
+            submittedGuess={submittedGuess}
           />
         );
       case 'POSTGAME':
@@ -129,7 +139,7 @@ const GameContainer = (): React.ReactElement => {
       {lobbyData.phase !== 'LOBBY' && (
         <>
           <p>Room Code: {lobbyCode}</p>
-          <PlayerList lobbyData={lobbyData} />
+          <PlayerList lobbyData={lobbyData} playerId={playerId} />
         </>
       )}
       {currentPhase()}

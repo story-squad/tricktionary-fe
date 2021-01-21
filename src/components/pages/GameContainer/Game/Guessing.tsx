@@ -20,7 +20,7 @@ const getDefinitions = (
 };
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
-  const { lobbyData, username, handleSubmitGuess } = props;
+  const { lobbyData, username, handleSubmitGuess, submittedGuess } = props;
   // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selction
   const [definitions] = useState(
     getDefinitions(lobbyData.players, username, lobbyData.definition),
@@ -35,16 +35,19 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     <div className="guessing game-page">
       <h2>Guessing</h2>
       <p>Word: {lobbyData.word}</p>
-      <form onSubmit={(e) => handleSubmitGuess(e, choice)}>
-        {definitions.map((definition: any) => (
-          <Guess
-            key={definition.id}
-            definition={definition}
-            handleSelectChoice={handleSelectChoice}
-          />
-        ))}
-        <button>Enter Guess</button>
-      </form>
+      {!submittedGuess && (
+        <form onSubmit={(e) => handleSubmitGuess(e, choice)}>
+          {definitions.map((definition: any) => (
+            <Guess
+              key={definition.id}
+              definition={definition}
+              handleSelectChoice={handleSelectChoice}
+            />
+          ))}
+          <button>Enter Guess</button>
+        </form>
+      )}
+      {submittedGuess && <p>Waiting on other players to guess...</p>}
     </div>
   );
 };
@@ -77,6 +80,7 @@ interface GuessingProps {
   ) => void;
   lobbyData: any;
   username: string;
+  submittedGuess: boolean;
 }
 
 interface GuessProps {
