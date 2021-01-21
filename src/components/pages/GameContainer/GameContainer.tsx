@@ -1,6 +1,5 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { ReactionDefinitionIdStrings } from '../../common/ReactionPicker/ReactionPicker';
 import {
   Guessing,
   Lobby,
@@ -9,10 +8,20 @@ import {
   Pregame,
   Writing,
 } from './Game';
+import { LobbyData } from './gameTypes';
+import { getReactions } from '../../../api/apiRequests';
 
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
-const initialLobbyData = { phase: 'LOBBY', players: [] };
-const initialReactionSelection = [] as ReactionDefinitionIdStrings[];
+const initialLobbyData: LobbyData = {
+  phase: 'LOBBY',
+  players: [],
+  definition: '',
+  host: { id: '', username: '' },
+  guesses: [],
+  lobbyCode: '',
+  roundId: -1,
+  word: '',
+};
 
 const GameContainer = (): React.ReactElement => {
   const [username, setUsername] = useState(
@@ -26,19 +35,20 @@ const GameContainer = (): React.ReactElement => {
 
   // Socket event listeners/handlers.
   useEffect(() => {
-    socket.on('game update', (socketData: any) => {
+    getReactions().then((res) => console.log(res));
+    socket.on('game update', (socketData: LobbyData) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
       console.log(socketData);
     });
-    socket.on('play again', (socketData: any) => {
+    socket.on('play again', (socketData: LobbyData) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
       setSubmittedGuess(false);
       console.log(socketData);
     });
     // Get your playerId from the BE
-    socket.on('welcome', (socketData: any) => {
+    socket.on('welcome', (socketData: string) => {
       setPlayerId(socketData);
     });
     // Recieve BE errors

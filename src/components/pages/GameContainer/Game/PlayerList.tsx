@@ -1,4 +1,5 @@
 import React from 'react';
+import { LobbyData, PlayerItem } from '../gameTypes';
 
 // Functions to determine if the player has submitted, based on the current phase/lobbyData
 const guessArrayContainsPlayer = (guesses: any[], playerId: string) => {
@@ -49,13 +50,6 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
 export default PlayerList;
 
 interface PlayerListProps {
-  lobbyData: any;
+  lobbyData: LobbyData;
   playerId: string;
-}
-
-interface PlayerItem {
-  id: string;
-  username: string;
-  definition: string;
-  points: number;
 }

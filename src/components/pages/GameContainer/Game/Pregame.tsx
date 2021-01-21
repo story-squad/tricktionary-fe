@@ -1,4 +1,5 @@
 import React from 'react';
+import { LobbyData } from '../gameTypes';
 
 const Pregame = (props: PregameProps): React.ReactElement => {
   return (
@@ -13,7 +14,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 export default Pregame;
 
 interface PregameProps {
-  lobbyData: any;
+  lobbyData: LobbyData;
   isHost: boolean;
   handleStartGame: (e: React.MouseEvent) => void;
 }
