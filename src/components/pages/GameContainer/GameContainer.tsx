@@ -37,8 +37,13 @@ const GameContainer = (): React.ReactElement => {
       setSubmittedGuess(false);
       console.log(socketData);
     });
+    // Get your playerId from the BE
     socket.on('welcome', (socketData: any) => {
       setPlayerId(socketData);
+    });
+    // Recieve BE errors
+    socket.on('error', (errorData: any) => {
+      console.log(errorData);
     });
   }, []);
 
