@@ -30,15 +30,15 @@ const playerClassName = (lobbyData: any, player: PlayerItem) => {
 };
 
 const PlayerList = (props: PlayerListProps): React.ReactElement => {
+  const { playerId, lobbyData } = props;
+
   return (
     <div className="player-list">
-      {props.lobbyData.players.map((player: PlayerItem) => {
+      {lobbyData.players.map((player: PlayerItem) => {
         return (
-          <p
-            className={playerClassName(props.lobbyData, player)}
-            key={player.id}
-          >
-            {player.username}, score: {player.points}
+          <p className={playerClassName(lobbyData, player)} key={player.id}>
+            {`${playerId === player.id ? '(you)' : ''} ${player.username}`},
+            score: {player.points}
           </p>
         );
       })}
@@ -50,6 +50,7 @@ export default PlayerList;
 
 interface PlayerListProps {
   lobbyData: any;
+  playerId: string;
 }
 
 interface PlayerItem {
