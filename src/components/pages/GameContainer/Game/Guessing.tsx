@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
 import shuffle from 'shuffle-array';
-import { ReactionPicker } from '../../../common/ReactionPicker';
-import {
-  ReactionDefinitionIdStrings,
-  ReactionItem,
-} from '../../../common/ReactionPicker/ReactionPicker';
 
 // Get a shuffled list of other players' definitions + the correct one
 const getDefinitions = (
@@ -25,14 +20,7 @@ const getDefinitions = (
 };
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
-  const {
-    lobbyData,
-    username,
-    handleSubmitGuess,
-    reactions,
-    handleReactionSelection,
-    submittedGuess,
-  } = props;
+  const { lobbyData, username, handleSubmitGuess, submittedGuess } = props;
   // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selction
   const [definitions] = useState(
     getDefinitions(lobbyData.players, username, lobbyData.definition),
@@ -50,18 +38,11 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
       {!submittedGuess && (
         <form onSubmit={(e) => handleSubmitGuess(e, choice)}>
           {definitions.map((definition: any) => (
-            <>
-              <Guess
-                key={definition.id}
-                definition={definition}
-                handleSelectChoice={handleSelectChoice}
-              />
-              <ReactionPicker
-                reactions={reactions}
-                id={definition.id}
-                cb={handleReactionSelection}
-              />
-            </>
+            <Guess
+              key={definition.id}
+              definition={definition}
+              handleSelectChoice={handleSelectChoice}
+            />
           ))}
           <button>Enter Guess</button>
         </form>
@@ -97,10 +78,8 @@ interface GuessingProps {
     e: React.FormEvent<HTMLFormElement>,
     guess: string,
   ) => void;
-  handleReactionSelection: (choice: ReactionDefinitionIdStrings) => void;
   lobbyData: any;
   username: string;
-  reactions: ReactionItem[];
   submittedGuess: boolean;
 }
 
