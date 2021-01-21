@@ -27,6 +27,7 @@ const GameContainer = (): React.ReactElement => {
     initialReactionSelection,
   );
   const [submittedGuess, setSubmittedGuess] = useState(false);
+  const [playerId, setPlayerId] = useState('');
 
   // API calls
   useEffect(() => {
@@ -50,6 +51,9 @@ const GameContainer = (): React.ReactElement => {
       setSubmittedGuess(false);
       setReactionSelection(initialReactionSelection);
       console.log(socketData);
+    });
+    socket.on('welcome', (socketData: any) => {
+      setPlayerId(socketData);
     });
   }, []);
 
@@ -169,7 +173,7 @@ const GameContainer = (): React.ReactElement => {
       {lobbyData.phase !== 'LOBBY' && (
         <>
           <p>Room Code: {lobbyCode}</p>
-          <PlayerList lobbyData={lobbyData} />
+          <PlayerList lobbyData={lobbyData} playerId={playerId} />
         </>
       )}
       {currentPhase()}
