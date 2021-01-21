@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
 import shuffle from 'shuffle-array';
+import { DefinitionItem, LobbyData, PlayerItem } from '../gameTypes';
 
 // Get a shuffled list of other players' definitions + the correct one
 const getDefinitions = (
-  players: any[],
+  players: PlayerItem[],
   username: string,
   definition: string,
 ) => {
   const definitions = players
-    .filter((player: any) => player.username !== username)
-    .map((player: any) => {
+    .filter((player: PlayerItem) => player.username !== username)
+    .map((player: PlayerItem) => {
       return {
-        definition: player.definition,
+        content: player.definition,
         id: player.definitionId,
       };
     });
-  definitions.push({ id: 0, definition });
+  definitions.push({ id: 0, content: definition });
   return shuffle(definitions);
 };
 
@@ -37,10 +38,10 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
       <p>Word: {lobbyData.word}</p>
       {!submittedGuess && (
         <form onSubmit={(e) => handleSubmitGuess(e, choice)}>
-          {definitions.map((definition: any) => (
+          {definitions.map((definition) => (
             <Guess
               key={definition.id}
-              definition={definition}
+              definition={definition as DefinitionItem}
               handleSelectChoice={handleSelectChoice}
             />
           ))}
@@ -59,12 +60,12 @@ const Guess = (props: GuessProps): React.ReactElement => {
       <div className="guess">
         <input
           type="radio"
-          id={definition.id}
+          id={String(definition.id)}
           name="definition"
           onChange={handleSelectChoice}
           required
         />
-        <label htmlFor={definition.id}>{definition.definition}</label>
+        <label htmlFor={String(definition.id)}>{definition.content}</label>
       </div>
       <br />
     </>
@@ -78,15 +79,12 @@ interface GuessingProps {
     e: React.FormEvent<HTMLFormElement>,
     guess: string,
   ) => void;
-  lobbyData: any;
+  lobbyData: LobbyData;
   username: string;
   submittedGuess: boolean;
 }
 
 interface GuessProps {
   handleSelectChoice: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  definition: {
-    definition: string;
-    id: string;
-  };
+  definition: DefinitionItem;
 }

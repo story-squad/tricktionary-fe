@@ -1,4 +1,5 @@
 import React, { SetStateAction, useState } from 'react';
+import { LobbyData } from '../gameTypes';
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const [definition, setDefinition] = useState('');
@@ -41,7 +42,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
 export default Writing;
 
 interface WritingProps {
-  lobbyData: any;
+  lobbyData: LobbyData;
   handleSubmitDefinition: (
     e: React.FormEvent<HTMLFormElement>,
     definition: string,
