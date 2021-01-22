@@ -8,7 +8,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   useEffect(() => {
     let lobbyUrl = location.pathname;
     if (lobbyUrl !== '/') {
-      lobbyUrl = lobbyUrl.substring(1);
+      lobbyUrl = lobbyUrl.substring(1, 5);
       props.handleJoinLobby(null, lobbyUrl);
     }
   }, []);
