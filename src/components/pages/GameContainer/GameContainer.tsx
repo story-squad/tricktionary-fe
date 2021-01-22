@@ -1,5 +1,7 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import io from 'socket.io-client';
+import { LobbyData } from './gameTypes';
 import {
   Guessing,
   Lobby,
@@ -8,8 +10,6 @@ import {
   Pregame,
   Writing,
 } from './Game';
-import { LobbyData } from './gameTypes';
-import { getReactions } from '../../../api/apiRequests';
 
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
 const initialLobbyData: LobbyData = {
@@ -24,6 +24,7 @@ const initialLobbyData: LobbyData = {
 };
 
 const GameContainer = (): React.ReactElement => {
+  const history = useHistory();
   const [username, setUsername] = useState(
     `Player${Math.floor(Math.random() * 9999)}`,
   );
@@ -35,12 +36,14 @@ const GameContainer = (): React.ReactElement => {
 
   // Socket event listeners/handlers.
   useEffect(() => {
-    getReactions().then((res) => console.log(res));
+    // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
+      history.push(`/${socketData.lobbyCode}`);
       console.log(socketData);
     });
+    // New round with same players, retain points
     socket.on('play again', (socketData: LobbyData) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
@@ -63,9 +66,12 @@ const GameContainer = (): React.ReactElement => {
     setIsHost(true);
   };
 
-  const handleJoinLobby = (e: React.MouseEvent) => {
-    e.preventDefault();
-    socket.emit('join lobby', username, lobbyCode);
+  const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
+    if (e) {
+      e.preventDefault();
+    }
+    const code = optionalCode ? optionalCode : lobbyCode;
+    socket.emit('join lobby', username, code);
   };
 
   const handleStartGame = (e: React.MouseEvent) => {
