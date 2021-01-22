@@ -1,6 +1,18 @@
-import React, { SetStateAction } from 'react';
+import React, { SetStateAction, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
+  const location = useLocation();
+
+  // Join a lobby if the lobbyCode is provided in the URL
+  useEffect(() => {
+    let lobbyUrl = location.pathname;
+    if (lobbyUrl !== '/') {
+      lobbyUrl = lobbyUrl.substring(1, 5);
+      props.handleJoinLobby(null, lobbyUrl);
+    }
+  }, []);
+
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.setUsername(e.target.value);
   };
@@ -28,7 +40,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         maxLength={4}
       />
       <button onClick={props.handleCreateLobby}>New Game</button>
-      <button onClick={props.handleJoinLobby}>Join Game</button>
+      <button onClick={(e) => props.handleJoinLobby(e, '')}>Join Game</button>
     </div>
   );
 };
@@ -41,5 +53,9 @@ interface LobbyProps {
   setUsername: React.Dispatch<SetStateAction<string>>;
   setLobbyCode: React.Dispatch<SetStateAction<string>>;
   handleCreateLobby: (e: React.MouseEvent) => void;
-  handleJoinLobby: (e: React.MouseEvent) => void;
+  handleJoinLobby: (e: null | React.MouseEvent, optionalCode: string) => void;
+}
+
+interface ParamTypes {
+  lobbyCode: string;
 }

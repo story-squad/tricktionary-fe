@@ -1,4 +1,5 @@
 import React from 'react';
+import { LobbyData } from '../gameTypes';
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
   const { lobbyData, isHost, handlePlayAgain } = props;
@@ -18,7 +19,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
 export default Postgame;
 
 interface PostgameProps {
-  lobbyData: any;
+  lobbyData: LobbyData;
   isHost: boolean;
   handlePlayAgain: () => void;
 }

@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
 import shuffle from 'shuffle-array';
+import { DefinitionItem, LobbyData, PlayerItem } from '../gameTypes';
 
 // Get a shuffled list of other players' definitions + the correct one
 const getDefinitions = (
-  players: any[],
+  players: PlayerItem[],
   username: string,
   definition: string,
 ) => {
   const definitions = players
-    .filter((player: any) => player.username !== username)
-    .map((player: any) => {
+    .filter((player: PlayerItem) => player.username !== username)
+    .map((player: PlayerItem) => {
       return {
-        definition: player.definition,
+        content: player.definition,
         id: player.definitionId,
       };
     });
-  definitions.push({ id: 0, definition });
+  definitions.push({ id: 0, content: definition });
   return shuffle(definitions);
 };
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
-  const { lobbyData, username, handleSubmitGuess } = props;
+  const { lobbyData, username, handleSubmitGuess, submittedGuess } = props;
   // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selction
   const [definitions] = useState(
     getDefinitions(lobbyData.players, username, lobbyData.definition),
@@ -35,16 +36,19 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     <div className="guessing game-page">
       <h2>Guessing</h2>
       <p>Word: {lobbyData.word}</p>
-      <form onSubmit={(e) => handleSubmitGuess(e, choice)}>
-        {definitions.map((definition: any) => (
-          <Guess
-            key={definition.id}
-            definition={definition}
-            handleSelectChoice={handleSelectChoice}
-          />
-        ))}
-        <button>Enter Guess</button>
-      </form>
+      {!submittedGuess && (
+        <form onSubmit={(e) => handleSubmitGuess(e, choice)}>
+          {definitions.map((definition) => (
+            <Guess
+              key={definition.id}
+              definition={definition as DefinitionItem}
+              handleSelectChoice={handleSelectChoice}
+            />
+          ))}
+          <button>Enter Guess</button>
+        </form>
+      )}
+      {submittedGuess && <p>Waiting on other players to guess...</p>}
     </div>
   );
 };
@@ -56,12 +60,12 @@ const Guess = (props: GuessProps): React.ReactElement => {
       <div className="guess">
         <input
           type="radio"
-          id={definition.id}
+          id={String(definition.id)}
           name="definition"
           onChange={handleSelectChoice}
           required
         />
-        <label htmlFor={definition.id}>{definition.definition}</label>
+        <label htmlFor={String(definition.id)}>{definition.content}</label>
       </div>
       <br />
     </>
@@ -75,14 +79,12 @@ interface GuessingProps {
     e: React.FormEvent<HTMLFormElement>,
     guess: string,
   ) => void;
-  lobbyData: any;
+  lobbyData: LobbyData;
   username: string;
+  submittedGuess: boolean;
 }
 
 interface GuessProps {
   handleSelectChoice: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  definition: {
-    definition: string;
-    id: string;
-  };
+  definition: DefinitionItem;
 }
