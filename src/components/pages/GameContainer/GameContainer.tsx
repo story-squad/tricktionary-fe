@@ -79,17 +79,9 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('start game', lobbyCode);
   };
 
-  const handleSubmitDefinition = (
-    e: React.FormEvent<HTMLFormElement>,
-    definition: string,
-    cb: React.Dispatch<SetStateAction<boolean>>,
-  ) => {
-    e.preventDefault();
+  const handleSubmitDefinition = (definition: string) => {
     const trimmedDefinition = definition.trim();
-    if (trimmedDefinition !== '') {
-      socket.emit('definition submitted', trimmedDefinition, lobbyCode);
-      cb(true);
-    }
+    socket.emit('definition submitted', trimmedDefinition, lobbyCode);
   };
 
   const handleSubmitGuess = (
@@ -120,6 +112,7 @@ const GameContainer = (): React.ReactElement => {
       case 'WRITING':
         return (
           <Writing
+            isHost={isHost}
             lobbyData={lobbyData}
             handleSubmitDefinition={handleSubmitDefinition}
           />
