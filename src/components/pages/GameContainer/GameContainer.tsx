@@ -1,5 +1,5 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import { LobbyData } from './gameTypes';
 import {
@@ -159,7 +159,10 @@ const GameContainer = (): React.ReactElement => {
     <div className="game-container">
       {lobbyData.phase !== 'LOBBY' && (
         <>
-          <p>Room Code: {lobbyCode}</p>
+          <Link onClick={() => setLobbyData(initialLobbyData)} to="/">
+            Home
+          </Link>
+          <p className="room-code">Room Code: {lobbyCode}</p>
           <PlayerList lobbyData={lobbyData} playerId={playerId} />
         </>
       )}
