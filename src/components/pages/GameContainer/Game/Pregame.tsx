@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Host } from '../../../common/Host';
+import { Player } from '../../../common/Player';
 import { LobbyData } from '../gameTypes';
 
 const dummyWords = [
@@ -60,40 +62,46 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   return (
     <div className="pregame game-page">
       <h2>Pregame</h2>
-      <button onClick={() => setIsCustom(false)}>Choose a Word</button>
-      <button onClick={() => setIsCustom(true)}>Use My Own</button>
-      {!isCustom && (
-        <div className="word-list">
-          {dummyWords.map((word) => (
-            <WordChoice
-              key={word.id}
-              word={word}
-              handleChoose={handleChoose}
-              choice={choice}
-            />
-          ))}
-        </div>
-      )}
-      {isCustom && (
-        <div className="custom-word">
-          <label htmlFor="word">Word:</label>
-          <input
-            id="word"
-            name="word"
-            value={customInput.word}
-            onChange={handleInputChange}
-          />
-          <label htmlFor="definition">Definition:</label>
-          <input
-            id="definition"
-            name="definition"
-            value={customInput.definition}
-            onChange={handleInputChange}
-          />
-        </div>
-      )}
-      {props.isHost && <button onClick={props.handleStartGame}>Start</button>}
-      {!props.isHost && <p>Waiting on host to start...</p>}
+      <Host isHost={props.isHost}>
+        <>
+          <button onClick={() => setIsCustom(false)}>Choose a Word</button>
+          <button onClick={() => setIsCustom(true)}>Use My Own</button>
+          {!isCustom && (
+            <div className="word-list">
+              {dummyWords.map((word) => (
+                <WordChoice
+                  key={word.id}
+                  word={word}
+                  handleChoose={handleChoose}
+                  choice={choice}
+                />
+              ))}
+            </div>
+          )}
+          {isCustom && (
+            <div className="custom-word">
+              <label htmlFor="word">Word:</label>
+              <input
+                id="word"
+                name="word"
+                value={customInput.word}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="definition">Definition:</label>
+              <input
+                id="definition"
+                name="definition"
+                value={customInput.definition}
+                onChange={handleInputChange}
+              />
+            </div>
+          )}
+          <button onClick={props.handleStartGame}>Start</button>
+        </>
+      </Host>
+      <Player isHost={props.isHost}>
+        <p>Waiting on host to start...</p>
+      </Player>
     </div>
   );
 };
