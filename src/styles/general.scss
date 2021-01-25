@@ -2,17 +2,34 @@
 
 // For testing, update later
 h1,
-h2,
+h2 {
+  font-size: 5rem;
+  margin-bottom: 2rem;
+}
+
 h3 {
   font-size: 3rem;
+  margin-bottom: 1rem;
 }
 
 p,
 label,
-input {
-  font-size: 2rem;
+input,
+button,
+a {
+  font-size: 2.4rem;
+}
+
+a {
+  color: white;
 }
 
 .submitted {
   color: red;
+}
+
+.game-page,
+.player-list,
+.room-code {
+  padding: 2rem;
 }
