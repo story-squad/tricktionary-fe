@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import shuffle from 'shuffle-array';
+import { Host } from '../../../common/Host';
+import { Player } from '../../../common/Player';
 import { DefinitionItem, LobbyData, PlayerItem } from '../gameTypes';
 
 // Get a shuffled list of other players' definitions + the correct one
@@ -8,20 +10,31 @@ const getDefinitions = (
   username: string,
   definition: string,
 ) => {
-  const definitions = players
+  let definitions = players
     .filter((player: PlayerItem) => player.username !== username)
     .map((player: PlayerItem) => {
       return {
         content: player.definition,
         id: player.definitionId,
+        definitionKey: 0,
       };
     });
-  definitions.push({ id: 0, content: definition });
-  return shuffle(definitions);
+  definitions.push({ id: 0, content: definition, definitionKey: 0 });
+  definitions = shuffle(definitions);
+  definitions = definitions.map((definition, idx) => {
+    return { ...definition, definitionKey: idx + 1 };
+  });
+  return definitions;
 };
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
-  const { lobbyData, username, handleSubmitGuess, submittedGuess } = props;
+  const {
+    lobbyData,
+    username,
+    handleSubmitGuess,
+    submittedGuess,
+    isHost,
+  } = props;
   // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selction
   const [definitions] = useState(
     getDefinitions(lobbyData.players, username, lobbyData.definition),
@@ -36,19 +49,23 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     <div className="guessing game-page">
       <h2>Guessing</h2>
       <p>Word: {lobbyData.word}</p>
-      {!submittedGuess && (
-        <form onSubmit={(e) => handleSubmitGuess(e, choice)}>
-          {definitions.map((definition) => (
-            <Guess
-              key={definition.id}
-              definition={definition as DefinitionItem}
-              handleSelectChoice={handleSelectChoice}
-            />
-          ))}
-          <button>Enter Guess</button>
-        </form>
-      )}
-      {submittedGuess && <p>Waiting on other players to guess...</p>}
+      <Host isHost={isHost}>
+        <>
+          <div className="definitions">
+            {definitions.map((definition, key) => (
+              <div key={key} className="definition">
+                <span className="definition-key">
+                  {definition.definitionKey}
+                </span>
+                <span className="definition-content">{definition.content}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      </Host>
+      <Player isHost={isHost}>
+        <></>
+      </Player>
     </div>
   );
 };
@@ -82,6 +99,7 @@ interface GuessingProps {
   lobbyData: LobbyData;
   username: string;
   submittedGuess: boolean;
+  isHost: boolean;
 }
 
 interface GuessProps {
