@@ -16,7 +16,8 @@ p,
 label,
 input,
 button,
-a {
+a,
+span {
   font-size: 2.4rem;
 }
 
@@ -43,4 +44,22 @@ button {
 .player-list,
 .room-code {
   padding: 2rem;
+}
+
+.definition {
+  margin: 2rem auto;
+  .definition-key {
+    color: white;
+    margin-right: 2rem;
+    background: black;
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+
+    p {
+      width: 100%;
+      text-align: center;
+      padding: 0.5rem 0;
+    }
+  }
 }
