@@ -54,17 +54,22 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           <div className="definitions">
             {definitions.map((definition, key) => (
               <div key={key} className="definition">
-                <span className="definition-key">
-                  {definition.definitionKey}
-                </span>
-                <span className="definition-content">{definition.content}</span>
+                <div className="definition-key">
+                  <p>{definition.definitionKey}</p>
+                </div>
+                <p className="definition-content">{definition.content}</p>
               </div>
             ))}
           </div>
         </>
       </Host>
       <Player isHost={isHost}>
-        <></>
+        <>
+          <p>
+            The host will list off the definitions and their numbers. When the
+            host calls on you, choose a number.
+          </p>
+        </>
       </Player>
     </div>
   );
