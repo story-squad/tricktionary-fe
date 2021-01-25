@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LobbyData } from '../gameTypes';
 
 const Writing = (props: WritingProps): React.ReactElement => {
