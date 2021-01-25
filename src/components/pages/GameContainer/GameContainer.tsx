@@ -124,6 +124,7 @@ const GameContainer = (): React.ReactElement => {
             username={username}
             handleSubmitGuess={handleSubmitGuess}
             submittedGuess={submittedGuess}
+            isHost={isHost}
           />
         );
       case 'POSTGAME':
