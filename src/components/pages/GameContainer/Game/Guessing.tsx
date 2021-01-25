@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import shuffle from 'shuffle-array';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
-import { DefinitionItem, LobbyData, PlayerItem } from '../gameTypes';
+import { DefinitionItem, GuessItem, LobbyData, PlayerItem } from '../gameTypes';
 
 // Get a shuffled list of other players' definitions + the correct one
 const getDefinitions = (
@@ -26,6 +26,10 @@ const getDefinitions = (
   });
   return definitions;
 };
+const getPlayerGuess = (choices: GuessItem[], player: PlayerItem) => {
+  const found = choices.find((choice) => choice.player === player.id);
+  return found?.guess;
+};
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
   const {
@@ -39,10 +43,26 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   const [definitions] = useState(
     getDefinitions(lobbyData.players, username, lobbyData.definition),
   );
-  const [choice, setChoice] = useState('');
+  const [choices, setChoices] = useState(
+    lobbyData.players.map((player) => {
+      return { player: player.id, guess: '' };
+    }),
+  );
 
-  const handleSelectChoice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChoice(e.target.id);
+  const handleSelectChoice = (
+    e: React.MouseEvent,
+    playerId: string,
+    guessId: number,
+  ) => {
+    setChoices(
+      choices.map((choice) => {
+        if (choice.player === playerId) {
+          return { ...choice, guess: String(guessId) };
+        } else {
+          return choice;
+        }
+      }),
+    );
   };
 
   return (
@@ -52,6 +72,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
       <Host isHost={isHost}>
         <>
           <div className="definitions">
+            <h3>Definitions</h3>
             {definitions.map((definition, key) => (
               <div key={key} className="definition">
                 <div className="definition-key">
@@ -62,12 +83,14 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
             ))}
           </div>
           <div className="guesses">
+            <h3>Player Guesses</h3>
             {lobbyData.players.map((player, key) => (
               <Guess
                 key={key}
                 definitions={definitions as DefinitionItem[]}
                 player={player}
                 handleSelectChoice={handleSelectChoice}
+                choices={choices}
               />
             ))}
           </div>
@@ -86,13 +109,23 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 };
 
 const Guess = (props: GuessProps): React.ReactElement => {
-  const { player, definitions, handleSelectChoice } = props;
+  const { player, definitions, handleSelectChoice, choices } = props;
   return (
     <>
       <div className="guess">
         <p>{player.username}</p>
         {definitions.map((definition, key) => (
-          <button key={key}>{definition.definitionKey}</button>
+          <button
+            className={`${
+              getPlayerGuess(choices, player) === String(definition.id)
+                ? 'selected'
+                : ''
+            }`}
+            onClick={(e) => handleSelectChoice(e, player.id, definition.id)}
+            key={key}
+          >
+            {definition.definitionKey}
+          </button>
         ))}
       </div>
     </>
@@ -113,7 +146,12 @@ interface GuessingProps {
 }
 
 interface GuessProps {
-  handleSelectChoice: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSelectChoice: (
+    e: React.MouseEvent,
+    playerId: string,
+    guessId: number,
+  ) => void;
   definitions: DefinitionItem[];
   player: PlayerItem;
+  choices: GuessItem[];
 }
