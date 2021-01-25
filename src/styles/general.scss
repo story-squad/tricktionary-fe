@@ -28,11 +28,12 @@ a {
   color: red;
 }
 
-.word-choice {
+button {
   &.selected {
     background: blue;
     color: white;
   }
+
 }
 
 .game-page,
