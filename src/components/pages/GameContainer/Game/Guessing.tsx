@@ -61,6 +61,16 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
               </div>
             ))}
           </div>
+          <div className="guesses">
+            {lobbyData.players.map((player, key) => (
+              <Guess
+                key={key}
+                definitions={definitions as DefinitionItem[]}
+                player={player}
+                handleSelectChoice={handleSelectChoice}
+              />
+            ))}
+          </div>
         </>
       </Host>
       <Player isHost={isHost}>
@@ -76,20 +86,15 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 };
 
 const Guess = (props: GuessProps): React.ReactElement => {
-  const { definition, handleSelectChoice } = props;
+  const { player, definitions, handleSelectChoice } = props;
   return (
     <>
       <div className="guess">
-        <input
-          type="radio"
-          id={String(definition.id)}
-          name="definition"
-          onChange={handleSelectChoice}
-          required
-        />
-        <label htmlFor={String(definition.id)}>{definition.content}</label>
+        <p>{player.username}</p>
+        {definitions.map((definition, key) => (
+          <button key={key}>{definition.definitionKey}</button>
+        ))}
       </div>
-      <br />
     </>
   );
 };
@@ -109,5 +114,6 @@ interface GuessingProps {
 
 interface GuessProps {
   handleSelectChoice: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  definition: DefinitionItem;
+  definitions: DefinitionItem[];
+  player: PlayerItem;
 }
