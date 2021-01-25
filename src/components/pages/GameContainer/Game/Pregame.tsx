@@ -64,8 +64,18 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       <h2>Pregame</h2>
       <Host isHost={props.isHost}>
         <>
-          <button onClick={() => setIsCustom(false)}>Choose a Word</button>
-          <button onClick={() => setIsCustom(true)}>Use My Own</button>
+          <button
+            className={`${!isCustom ? 'selected' : ''}`}
+            onClick={() => setIsCustom(false)}
+          >
+            Choose a Word
+          </button>
+          <button
+            className={`${isCustom ? 'selected' : ''}`}
+            onClick={() => setIsCustom(true)}
+          >
+            Use My Own
+          </button>
           {!isCustom && (
             <div className="word-list">
               {dummyWords.map((word) => (
