@@ -28,6 +28,13 @@ a {
   color: red;
 }
 
+.word-choice {
+  &.selected {
+    background: blue;
+    color: white;
+  }
+}
+
 .game-page,
 .player-list,
 .room-code {
