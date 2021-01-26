@@ -68,42 +68,38 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
       <h2>Guessing</h2>
       <p>Word: {lobbyData.word}</p>
       <Host>
-        <>
-          <div className="definitions">
-            <h3>Definitions</h3>
-            {definitions.map((definition, key) => (
-              <div key={key} className="definition">
-                <div className="definition-key">
-                  <p>{definition.definitionKey}</p>
-                </div>
-                <p className="definition-content">{definition.content}</p>
+        <div className="definitions">
+          <h3>Definitions</h3>
+          {definitions.map((definition, key) => (
+            <div key={key} className="definition">
+              <div className="definition-key">
+                <p>{definition.definitionKey}</p>
               </div>
-            ))}
-          </div>
-          <div className="guesses">
-            <h3>Player Guesses</h3>
-            {lobbyData.players.map((player, key) => (
-              <Guess
-                key={key}
-                definitions={definitions as DefinitionItem[]}
-                player={player}
-                handleSelectChoice={handleSelectChoice}
-                choices={choices}
-              />
-            ))}
-            <button onClick={(e) => handleSubmitGuesses(e, choices)}>
-              Submit Guesses
-            </button>
-          </div>
-        </>
+              <p className="definition-content">{definition.content}</p>
+            </div>
+          ))}
+        </div>
+        <div className="guesses">
+          <h3>Player Guesses</h3>
+          {lobbyData.players.map((player, key) => (
+            <Guess
+              key={key}
+              definitions={definitions as DefinitionItem[]}
+              player={player}
+              handleSelectChoice={handleSelectChoice}
+              choices={choices}
+            />
+          ))}
+          <button onClick={(e) => handleSubmitGuesses(e, choices)}>
+            Submit Guesses
+          </button>
+        </div>
       </Host>
       <Player>
-        <>
-          <p>
-            The host will list off the definitions and their numbers. When the
-            host calls on you, choose a number.
-          </p>
-        </>
+        <p>
+          The host will list off the definitions and their numbers. When the
+          host calls on you, choose a number.
+        </p>
       </Player>
     </div>
   );
@@ -112,24 +108,22 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 const Guess = (props: GuessProps): React.ReactElement => {
   const { player, definitions, handleSelectChoice, choices } = props;
   return (
-    <>
-      <div className="guess">
-        <p>{player.username}</p>
-        {definitions.map((definition, key) => (
-          <button
-            className={`${
-              getPlayerGuess(choices, player) === String(definition.id)
-                ? 'selected'
-                : ''
-            }`}
-            onClick={(e) => handleSelectChoice(e, player.id, definition.id)}
-            key={key}
-          >
-            {definition.definitionKey}
-          </button>
-        ))}
-      </div>
-    </>
+    <div className="guess">
+      <p>{player.username}</p>
+      {definitions.map((definition, key) => (
+        <button
+          className={`${
+            getPlayerGuess(choices, player) === String(definition.id)
+              ? 'selected'
+              : ''
+          }`}
+          onClick={(e) => handleSelectChoice(e, player.id, definition.id)}
+          key={key}
+        >
+          {definition.definitionKey}
+        </button>
+      ))}
+    </div>
   );
 };
 
