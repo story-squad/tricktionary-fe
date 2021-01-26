@@ -67,7 +67,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     <div className="guessing game-page">
       <h2>Guessing</h2>
       <p>Word: {lobbyData.word}</p>
-      <Host isHost={isHost}>
+      <Host>
         <>
           <div className="definitions">
             <h3>Definitions</h3>
@@ -97,7 +97,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           </div>
         </>
       </Host>
-      <Player isHost={isHost}>
+      <Player>
         <>
           <p>
             The host will list off the definitions and their numbers. When the

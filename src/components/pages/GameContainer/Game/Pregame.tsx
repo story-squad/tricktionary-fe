@@ -62,7 +62,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   return (
     <div className="pregame game-page">
       <h2>Pregame</h2>
-      <Host isHost={props.isHost}>
+      <Host>
         <>
           <button
             className={`${!isCustom ? 'selected' : ''}`}
@@ -109,7 +109,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           <button onClick={props.handleStartGame}>Start</button>
         </>
       </Host>
-      <Player isHost={props.isHost}>
+      <Player>
         <p>Waiting on host to start...</p>
       </Player>
     </div>
