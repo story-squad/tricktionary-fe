@@ -1,7 +1,11 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import io from 'socket.io-client';
+
+import { isHostState } from '../../../state/isHostAtom';
 import { GuessItem, LobbyData } from './gameTypes';
+
 import {
   Guessing,
   Lobby,
@@ -11,6 +15,7 @@ import {
   Writing,
 } from './Game';
 
+// Create a socket connection to API
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
 const initialLobbyData: LobbyData = {
   phase: 'LOBBY',
@@ -29,7 +34,7 @@ const GameContainer = (): React.ReactElement => {
     `Player${Math.floor(Math.random() * 9999)}`,
   );
   const [lobbyCode, setLobbyCode] = useState('');
-  const [isHost, setIsHost] = useState(false);
+  const [isHost, setIsHost] = useRecoilState(isHostState);
   const [lobbyData, setLobbyData] = useState(initialLobbyData);
   const [playerId, setPlayerId] = useState('');
 
