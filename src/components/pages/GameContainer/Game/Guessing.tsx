@@ -4,6 +4,8 @@ import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
 import { DefinitionItem, GuessItem, LobbyData, PlayerItem } from '../gameTypes';
 
+// Non-state functions
+
 // Get a shuffled list of other players' definitions + the correct one
 const getDefinitions = (
   players: PlayerItem[],
@@ -31,15 +33,11 @@ const getPlayerGuess = (choices: GuessItem[], player: PlayerItem) => {
   return found?.guess;
 };
 
+// Components
+
 const Guessing = (props: GuessingProps): React.ReactElement => {
-  const {
-    lobbyData,
-    username,
-    handleSubmitGuess,
-    submittedGuess,
-    isHost,
-  } = props;
-  // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selction
+  const { lobbyData, username, handleSubmitGuesses, isHost } = props;
+  // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selection
   const [definitions] = useState(
     getDefinitions(lobbyData.players, username, lobbyData.definition),
   );
@@ -93,6 +91,9 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
                 choices={choices}
               />
             ))}
+            <button onClick={(e) => handleSubmitGuesses(e, choices)}>
+              Submit Guesses
+            </button>
           </div>
         </>
       </Host>
@@ -135,13 +136,9 @@ const Guess = (props: GuessProps): React.ReactElement => {
 export default Guessing;
 
 interface GuessingProps {
-  handleSubmitGuess: (
-    e: React.FormEvent<HTMLFormElement>,
-    guess: string,
-  ) => void;
+  handleSubmitGuesses: (e: React.MouseEvent, guesses: GuessItem[]) => void;
   lobbyData: LobbyData;
   username: string;
-  submittedGuess: boolean;
   isHost: boolean;
 }
 

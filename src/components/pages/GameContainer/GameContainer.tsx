@@ -1,7 +1,7 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import io from 'socket.io-client';
-import { LobbyData } from './gameTypes';
+import { GuessItem, LobbyData } from './gameTypes';
 import {
   Guessing,
   Lobby,
@@ -31,7 +31,6 @@ const GameContainer = (): React.ReactElement => {
   const [lobbyCode, setLobbyCode] = useState('');
   const [isHost, setIsHost] = useState(false);
   const [lobbyData, setLobbyData] = useState(initialLobbyData);
-  const [submittedGuess, setSubmittedGuess] = useState(false);
   const [playerId, setPlayerId] = useState('');
 
   // Socket event listeners/handlers.
@@ -47,7 +46,6 @@ const GameContainer = (): React.ReactElement => {
     socket.on('play again', (socketData: LobbyData) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
-      setSubmittedGuess(false);
       console.log(socketData);
     });
     // Get your playerId from the BE
@@ -84,13 +82,9 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('definition submitted', trimmedDefinition, lobbyCode);
   };
 
-  const handleSubmitGuess = (
-    e: React.FormEvent<HTMLFormElement>,
-    guess: string,
-  ) => {
+  const handleSubmitGuesses = (e: React.MouseEvent, guesses: GuessItem[]) => {
     e.preventDefault();
-    socket.emit('guess', lobbyCode, guess, []);
-    setSubmittedGuess(true);
+    socket.emit('guess', lobbyCode, guesses);
   };
 
   const handlePlayAgain = () => {
@@ -122,8 +116,7 @@ const GameContainer = (): React.ReactElement => {
           <Guessing
             lobbyData={lobbyData}
             username={username}
-            handleSubmitGuess={handleSubmitGuess}
-            submittedGuess={submittedGuess}
+            handleSubmitGuesses={handleSubmitGuesses}
             isHost={isHost}
           />
         );
