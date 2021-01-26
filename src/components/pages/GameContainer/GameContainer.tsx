@@ -3,7 +3,7 @@ import { useHistory, Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import io from 'socket.io-client';
 
-import { isHostState } from '../../../state/isHostAtom';
+import { isHostState } from '../../../state/isHostState';
 import { GuessItem, LobbyData } from './gameTypes';
 
 import {
@@ -58,7 +58,7 @@ const GameContainer = (): React.ReactElement => {
       setPlayerId(socketData);
     });
     // Recieve BE errors
-    socket.on('error', (errorData: any) => {
+    socket.on('error', (errorData: string) => {
       console.log(errorData);
     });
   }, []);
