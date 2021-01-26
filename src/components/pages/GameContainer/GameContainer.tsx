@@ -36,7 +36,7 @@ const GameContainer = (): React.ReactElement => {
     resetLobbyCode();
   };
 
-  // Socket event listeners/handlers.
+  // Socket event listeners
   useEffect(() => {
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
@@ -61,12 +61,12 @@ const GameContainer = (): React.ReactElement => {
     });
   }, []);
 
+  // Socket event emitters
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
     socket.emit('create lobby', username);
     setIsHost(true);
   };
-
   const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
     if (e) {
       e.preventDefault();
@@ -74,28 +74,23 @@ const GameContainer = (): React.ReactElement => {
     const code = optionalCode ? optionalCode : lobbyCode;
     socket.emit('join lobby', username, code);
   };
-
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault();
     socket.emit('start game', lobbyCode);
   };
-
   const handleSubmitDefinition = (definition: string) => {
     const trimmedDefinition = definition.trim();
     socket.emit('definition submitted', trimmedDefinition, lobbyCode);
   };
-
   const handleSubmitGuesses = (e: React.MouseEvent, guesses: GuessItem[]) => {
     e.preventDefault();
     socket.emit('guess', lobbyCode, guesses);
   };
-
   const handlePlayAgain = () => {
     socket.emit('play again', lobbyCode);
   };
-  ////
 
-  // determine Game component to render based on the current game phase
+  // Determine Game component to render based on the current game phase
   const currentPhase = () => {
     switch (lobbyData.phase) {
       case 'PREGAME':
