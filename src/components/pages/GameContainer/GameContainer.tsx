@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
-
-import { isHostState, lobbyState } from '../../../state';
-import { GuessItem, LobbyData } from './gameTypes';
-
+import { isHostState, lobbyCodeState, lobbyState } from '../../../state';
 import {
   Guessing,
   Lobby,
@@ -14,6 +11,7 @@ import {
   Pregame,
   Writing,
 } from './Game';
+import { GuessItem, LobbyData } from './gameTypes';
 
 // Create a socket connection to API
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
@@ -23,11 +21,20 @@ const GameContainer = (): React.ReactElement => {
   const [username, setUsername] = useState(
     `Player${Math.floor(Math.random() * 9999)}`,
   );
-  const [lobbyCode, setLobbyCode] = useState('');
   const [isHost, setIsHost] = useRecoilState(isHostState);
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
-  const resetLobbyData = useResetRecoilState(lobbyState);
+  const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [playerId, setPlayerId] = useState('');
+  const resetIsHost = useResetRecoilState(isHostState);
+  const resetLobbyData = useResetRecoilState(lobbyState);
+  const resetLobbyCode = useResetRecoilState(lobbyCodeState);
+
+  // Combine state reset functions
+  const resetGame = () => {
+    resetIsHost();
+    resetLobbyData();
+    resetLobbyCode();
+  };
 
   // Socket event listeners/handlers.
   useEffect(() => {
@@ -142,7 +149,7 @@ const GameContainer = (): React.ReactElement => {
     <div className="game-container">
       {lobbyData.phase !== 'LOBBY' && (
         <>
-          <Link onClick={() => resetLobbyData()} to="/">
+          <Link onClick={() => resetGame()} to="/">
             Home
           </Link>
           <p className="room-code">Room Code: {lobbyCode}</p>
