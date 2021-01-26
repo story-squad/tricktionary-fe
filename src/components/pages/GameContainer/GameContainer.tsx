@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
-import { isHostState, lobbyCodeState, lobbyState } from '../../../state';
+import {
+  isHostState,
+  lobbyCodeState,
+  lobbyState,
+  lobbySettingsState,
+} from '../../../state';
 import {
   Guessing,
   Lobby,
@@ -24,6 +29,7 @@ const GameContainer = (): React.ReactElement => {
   const [isHost, setIsHost] = useRecoilState(isHostState);
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
+  const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useState('');
   const resetIsHost = useResetRecoilState(isHostState);
   const resetLobbyData = useResetRecoilState(lobbyState);
@@ -34,6 +40,22 @@ const GameContainer = (): React.ReactElement => {
     resetIsHost();
     resetLobbyData();
     resetLobbyCode();
+  };
+
+  // Lobby Settings handlers
+  const handleSetWord = (
+    id: number,
+    word: string | undefined,
+    definition: string | undefined,
+  ) => {
+    setLobbySettings({
+      ...lobbySettings,
+      word: {
+        id,
+        word,
+        definition,
+      },
+    });
   };
 
   // Socket event listeners
@@ -77,7 +99,7 @@ const GameContainer = (): React.ReactElement => {
   };
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault();
-    socket.emit('start game', lobbyCode);
+    socket.emit('start game', lobbySettings, lobbyCode);
   };
   const handleSubmitDefinition = (definition: string) => {
     const trimmedDefinition = definition.trim();
