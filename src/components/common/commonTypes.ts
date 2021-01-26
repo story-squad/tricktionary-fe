@@ -1,3 +1,3 @@
 export interface HostPlayerProps {
-  children: React.ReactChild;
+  children: React.ReactNode;
 }
