@@ -53,6 +53,7 @@ const GameContainer = (): React.ReactElement => {
     });
     // Get your playerId from the BE
     socket.on('welcome', (socketData: string) => {
+      console.log('player ID: ', socketData);
       setPlayerId(socketData);
     });
     // Recieve BE errors
@@ -106,10 +107,8 @@ const GameContainer = (): React.ReactElement => {
       case 'GUESSING':
         return (
           <Guessing
-            lobbyData={lobbyData}
-            username={username}
+            playerId={playerId}
             handleSubmitGuesses={handleSubmitGuesses}
-            isHost={isHost}
           />
         );
       case 'POSTGAME':
