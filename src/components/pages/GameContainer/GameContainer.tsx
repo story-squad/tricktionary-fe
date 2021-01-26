@@ -97,13 +97,7 @@ const GameContainer = (): React.ReactElement => {
       case 'PREGAME':
         return <Pregame handleStartGame={handleStartGame} />;
       case 'WRITING':
-        return (
-          <Writing
-            isHost={isHost}
-            lobbyData={lobbyData}
-            handleSubmitDefinition={handleSubmitDefinition}
-          />
-        );
+        return <Writing handleSubmitDefinition={handleSubmitDefinition} />;
       case 'GUESSING':
         return (
           <Guessing
