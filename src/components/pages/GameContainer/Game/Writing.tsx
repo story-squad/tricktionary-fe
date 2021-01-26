@@ -1,12 +1,30 @@
-import React, { SetStateAction, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LobbyData } from '../gameTypes';
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  useEffect(() => {
+    if (props.isHost) {
+      props.handleSubmitDefinition('FIX THIS');
+      setIsSubmitted(true);
+    }
+  }, []);
+
   const handleChangeDefinition = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDefinition(e.target.value);
+  };
+
+  const handleSubmit = (
+    e: React.FormEvent<HTMLFormElement> | null,
+    definition: string,
+  ) => {
+    if (e) {
+      e.preventDefault();
+    }
+    props.handleSubmitDefinition(definition);
+    setIsSubmitted(true);
   };
 
   return (
@@ -17,7 +35,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
       {!isSubmitted && (
         <form
           onSubmit={(e) => {
-            props.handleSubmitDefinition(e, definition, setIsSubmitted);
+            handleSubmit(e, definition);
           }}
         >
           <label htmlFor="definition">Write Your Definition:</label>
@@ -43,9 +61,6 @@ export default Writing;
 
 interface WritingProps {
   lobbyData: LobbyData;
-  handleSubmitDefinition: (
-    e: React.FormEvent<HTMLFormElement>,
-    definition: string,
-    cb: React.Dispatch<SetStateAction<boolean>>,
-  ) => void;
+  isHost: boolean;
+  handleSubmitDefinition: (definition: string) => void;
 }

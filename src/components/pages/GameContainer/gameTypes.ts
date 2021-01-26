@@ -30,4 +30,5 @@ export interface HostItem {
 export interface DefinitionItem {
   content: string;
   id: number;
+  definitionKey: number;
 }
