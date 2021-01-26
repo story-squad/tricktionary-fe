@@ -94,13 +94,7 @@ const GameContainer = (): React.ReactElement => {
   const currentPhase = () => {
     switch (lobbyData.phase) {
       case 'PREGAME':
-        return (
-          <Pregame
-            lobbyData={lobbyData}
-            handleStartGame={handleStartGame}
-            isHost={isHost}
-          />
-        );
+        return <Pregame handleStartGame={handleStartGame} />;
       case 'WRITING':
         return (
           <Writing

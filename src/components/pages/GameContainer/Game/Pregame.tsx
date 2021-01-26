@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
-import { LobbyData } from '../gameTypes';
 
 const dummyWords = [
   {
@@ -128,8 +127,6 @@ const WordChoice = (props: WordChoiceProps): React.ReactElement => {
 export default Pregame;
 
 interface PregameProps {
-  lobbyData: LobbyData;
-  isHost: boolean;
   handleStartGame: (e: React.MouseEvent) => void;
 }
 
