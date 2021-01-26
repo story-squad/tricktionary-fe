@@ -18,7 +18,7 @@ export interface LobbyData {
 }
 
 export interface GuessItem {
-  guess: string;
+  guess: number;
   player: string;
 }
 

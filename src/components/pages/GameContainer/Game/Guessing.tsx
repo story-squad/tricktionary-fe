@@ -30,9 +30,9 @@ const getDefinitions = (
   });
   return definitions;
 };
-const getPlayerGuess = (choices: GuessItem[], player: PlayerItem) => {
+const getPlayerGuess = (choices: GuessItem[], player: PlayerItem): number => {
   const found = choices.find((choice) => choice.player === player.id);
-  return found?.guess;
+  return found?.guess as number;
 };
 
 // Components
@@ -46,7 +46,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   );
   const [choices, setChoices] = useState(
     lobbyData.players.map((player) => {
-      return { player: player.id, guess: '' };
+      return { player: player.id, guess: -1 };
     }),
   );
 
@@ -58,7 +58,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     setChoices(
       choices.map((choice) => {
         if (choice.player === playerId) {
-          return { ...choice, guess: String(guessId) };
+          return { ...choice, guess: guessId };
         } else {
           return choice;
         }
@@ -116,9 +116,7 @@ const Guess = (props: GuessProps): React.ReactElement => {
       {definitions.map((definition, key) => (
         <button
           className={`${
-            getPlayerGuess(choices, player) === String(definition.id)
-              ? 'selected'
-              : ''
+            getPlayerGuess(choices, player) === definition.id ? 'selected' : ''
           }`}
           onClick={(e) => handleSelectChoice(e, player.id, definition.id)}
           key={key}
