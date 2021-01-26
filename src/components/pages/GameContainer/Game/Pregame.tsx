@@ -36,16 +36,14 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     }
   }, [isCustom]);
 
-  // Determine the data and structure to send to API regarding word selection
-  const getSelectedWord = () => {
+  // Update word selection in lobbySettings object
+  useEffect(() => {
     if (isCustom) {
-      // return the custom word & definition
-      return customInput;
+      props.handleSetWord(0, customInput.word, customInput.definition);
     } else {
-      // return the selected word id
-      return choice;
+      props.handleSetWord(choice, undefined, undefined);
     }
-  };
+  }, [isCustom, choice, customInput]);
 
   const handleChoose = (id: number) => {
     setChoice(id);
@@ -128,6 +126,11 @@ export default Pregame;
 
 interface PregameProps {
   handleStartGame: (e: React.MouseEvent) => void;
+  handleSetWord: (
+    id: number,
+    word: string | undefined,
+    definition: string | undefined,
+  ) => void;
 }
 
 interface WordChoiceProps {
