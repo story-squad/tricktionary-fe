@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import shuffle from 'shuffle-array';
+import { lobbyState } from '../../../../state';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
-import { DefinitionItem, GuessItem, LobbyData, PlayerItem } from '../gameTypes';
+import { DefinitionItem, GuessItem, PlayerItem } from '../gameTypes';
 
 // Non-state functions
 
 // Get a shuffled list of other players' definitions + the correct one
 const getDefinitions = (
   players: PlayerItem[],
-  username: string,
+  playerId: string,
   definition: string,
 ) => {
   let definitions = players
-    .filter((player: PlayerItem) => player.username !== username)
+    .filter((player: PlayerItem) => player.id !== playerId)
     .map((player: PlayerItem) => {
       return {
         content: player.definition,
@@ -36,10 +38,11 @@ const getPlayerGuess = (choices: GuessItem[], player: PlayerItem) => {
 // Components
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
-  const { lobbyData, username, handleSubmitGuesses, isHost } = props;
+  const { playerId, handleSubmitGuesses } = props;
+  const lobbyData = useRecoilValue(lobbyState);
   // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selection
   const [definitions] = useState(
-    getDefinitions(lobbyData.players, username, lobbyData.definition),
+    getDefinitions(lobbyData.players, playerId, lobbyData.definition),
   );
   const [choices, setChoices] = useState(
     lobbyData.players.map((player) => {
@@ -131,9 +134,7 @@ export default Guessing;
 
 interface GuessingProps {
   handleSubmitGuesses: (e: React.MouseEvent, guesses: GuessItem[]) => void;
-  lobbyData: LobbyData;
-  username: string;
-  isHost: boolean;
+  playerId: string;
 }
 
 interface GuessProps {
