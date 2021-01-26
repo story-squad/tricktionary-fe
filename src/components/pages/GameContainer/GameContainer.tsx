@@ -45,8 +45,8 @@ const GameContainer = (): React.ReactElement => {
   // Lobby Settings handlers
   const handleSetWord = (
     id: number,
-    word: string | undefined,
-    definition: string | undefined,
+    word: string | undefined = undefined,
+    definition: string | undefined = undefined,
   ) => {
     setLobbySettings({
       ...lobbySettings,
@@ -99,6 +99,7 @@ const GameContainer = (): React.ReactElement => {
   };
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault();
+    console.log('LOBBY SETTINGS: ', lobbySettings);
     socket.emit('start game', lobbySettings, lobbyCode);
   };
   const handleSubmitDefinition = (definition: string) => {
@@ -117,7 +118,12 @@ const GameContainer = (): React.ReactElement => {
   const currentPhase = () => {
     switch (lobbyData.phase) {
       case 'PREGAME':
-        return <Pregame handleStartGame={handleStartGame} />;
+        return (
+          <Pregame
+            handleStartGame={handleStartGame}
+            handleSetWord={handleSetWord}
+          />
+        );
       case 'WRITING':
         return <Writing handleSubmitDefinition={handleSubmitDefinition} />;
       case 'GUESSING':
