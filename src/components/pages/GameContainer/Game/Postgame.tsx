@@ -49,7 +49,9 @@ const getPlayerDictionary = (players: PlayerItem[]): PlayerDictionary => {
 const Postgame = (props: PostgameProps): React.ReactElement => {
   const { lobbyData, isHost, handlePlayAgain } = props;
   // Generate a dictionary of playerId: username to make getSortedDefinitions more efficient
-  const [playerDict] = useState(getPlayerDictionary(lobbyData.players));
+  const [playerDict] = useState<PlayerDictionary>(
+    getPlayerDictionary(lobbyData.players),
+  );
 
   return (
     <div className="postgame game-page">
