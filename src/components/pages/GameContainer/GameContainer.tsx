@@ -1,7 +1,13 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
-import { GuessItem, LobbyData } from './gameTypes';
+import {
+  isHostState,
+  lobbyCodeState,
+  lobbyState,
+  lobbySettingsState,
+} from '../../../state';
 import {
   Guessing,
   Lobby,
@@ -10,30 +16,49 @@ import {
   Pregame,
   Writing,
 } from './Game';
+import { GuessItem, LobbyData } from './gameTypes';
 
+// Create a socket connection to API
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
-const initialLobbyData: LobbyData = {
-  phase: 'LOBBY',
-  players: [],
-  definition: '',
-  host: { id: '', username: '' },
-  guesses: [],
-  lobbyCode: '',
-  roundId: -1,
-  word: '',
-};
 
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();
   const [username, setUsername] = useState(
     `Player${Math.floor(Math.random() * 9999)}`,
   );
-  const [lobbyCode, setLobbyCode] = useState('');
-  const [isHost, setIsHost] = useState(false);
-  const [lobbyData, setLobbyData] = useState(initialLobbyData);
+  const [isHost, setIsHost] = useRecoilState(isHostState);
+  const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
+  const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
+  const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useState('');
+  const resetIsHost = useResetRecoilState(isHostState);
+  const resetLobbyData = useResetRecoilState(lobbyState);
+  const resetLobbyCode = useResetRecoilState(lobbyCodeState);
 
-  // Socket event listeners/handlers.
+  // Combine state reset functions
+  const resetGame = () => {
+    resetIsHost();
+    resetLobbyData();
+    resetLobbyCode();
+  };
+
+  // Lobby Settings handlers
+  const handleSetWord = (
+    id: number,
+    word: string | undefined = undefined,
+    definition: string | undefined = undefined,
+  ) => {
+    setLobbySettings({
+      ...lobbySettings,
+      word: {
+        id,
+        word,
+        definition,
+      },
+    });
+  };
+
+  // Socket event listeners
   useEffect(() => {
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
@@ -50,20 +75,21 @@ const GameContainer = (): React.ReactElement => {
     });
     // Get your playerId from the BE
     socket.on('welcome', (socketData: string) => {
+      console.log('player ID: ', socketData);
       setPlayerId(socketData);
     });
     // Recieve BE errors
-    socket.on('error', (errorData: any) => {
+    socket.on('error', (errorData: string) => {
       console.log(errorData);
     });
   }, []);
 
+  // Socket event emitters
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
     socket.emit('create lobby', username);
     setIsHost(true);
   };
-
   const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
     if (e) {
       e.preventDefault();
@@ -71,53 +97,40 @@ const GameContainer = (): React.ReactElement => {
     const code = optionalCode ? optionalCode : lobbyCode;
     socket.emit('join lobby', username, code);
   };
-
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault();
-    socket.emit('start game', lobbyCode);
+    console.log('LOBBY SETTINGS: ', lobbySettings);
+    socket.emit('start game', lobbySettings, lobbyCode);
   };
-
   const handleSubmitDefinition = (definition: string) => {
     const trimmedDefinition = definition.trim();
     socket.emit('definition submitted', trimmedDefinition, lobbyCode);
   };
-
   const handleSubmitGuesses = (e: React.MouseEvent, guesses: GuessItem[]) => {
     e.preventDefault();
     socket.emit('guess', lobbyCode, guesses);
   };
-
   const handlePlayAgain = () => {
     socket.emit('play again', lobbyCode);
   };
-  ////
 
-  // determine Game component to render based on the current game phase
+  // Determine Game component to render based on the current game phase
   const currentPhase = () => {
     switch (lobbyData.phase) {
       case 'PREGAME':
         return (
           <Pregame
-            lobbyData={lobbyData}
             handleStartGame={handleStartGame}
-            isHost={isHost}
+            handleSetWord={handleSetWord}
           />
         );
       case 'WRITING':
-        return (
-          <Writing
-            isHost={isHost}
-            lobbyData={lobbyData}
-            handleSubmitDefinition={handleSubmitDefinition}
-          />
-        );
+        return <Writing handleSubmitDefinition={handleSubmitDefinition} />;
       case 'GUESSING':
         return (
           <Guessing
-            lobbyData={lobbyData}
-            username={username}
+            playerId={playerId}
             handleSubmitGuesses={handleSubmitGuesses}
-            isHost={isHost}
           />
         );
       case 'POSTGAME':
@@ -146,7 +159,7 @@ const GameContainer = (): React.ReactElement => {
     <div className="game-container">
       {lobbyData.phase !== 'LOBBY' && (
         <>
-          <Link onClick={() => setLobbyData(initialLobbyData)} to="/">
+          <Link onClick={() => resetGame()} to="/">
             Home
           </Link>
           <p className="room-code">Room Code: {lobbyCode}</p>

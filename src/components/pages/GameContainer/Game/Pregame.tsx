@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
-import { LobbyData } from '../gameTypes';
 
 const dummyWords = [
   {
@@ -37,16 +36,14 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     }
   }, [isCustom]);
 
-  // Determine the data and structure to send to API regarding word selection
-  const getSelectedWord = () => {
+  // Update word selection in lobbySettings object
+  useEffect(() => {
     if (isCustom) {
-      // return the custom word & definition
-      return customInput;
+      props.handleSetWord(0, customInput.word, customInput.definition);
     } else {
-      // return the selected word id
-      return choice;
+      props.handleSetWord(choice, undefined, undefined);
     }
-  };
+  }, [isCustom, choice, customInput]);
 
   const handleChoose = (id: number) => {
     setChoice(id);
@@ -62,54 +59,52 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   return (
     <div className="pregame game-page">
       <h2>Pregame</h2>
-      <Host isHost={props.isHost}>
-        <>
-          <button
-            className={`${!isCustom ? 'selected' : ''}`}
-            onClick={() => setIsCustom(false)}
-          >
-            Choose a Word
-          </button>
-          <button
-            className={`${isCustom ? 'selected' : ''}`}
-            onClick={() => setIsCustom(true)}
-          >
-            Use My Own
-          </button>
-          {!isCustom && (
-            <div className="word-list">
-              {dummyWords.map((word) => (
-                <WordChoice
-                  key={word.id}
-                  word={word}
-                  handleChoose={handleChoose}
-                  choice={choice}
-                />
-              ))}
-            </div>
-          )}
-          {isCustom && (
-            <div className="custom-word">
-              <label htmlFor="word">Word:</label>
-              <input
-                id="word"
-                name="word"
-                value={customInput.word}
-                onChange={handleInputChange}
+      <Host>
+        <button
+          className={`${!isCustom ? 'selected' : ''}`}
+          onClick={() => setIsCustom(false)}
+        >
+          Choose a Word
+        </button>
+        <button
+          className={`${isCustom ? 'selected' : ''}`}
+          onClick={() => setIsCustom(true)}
+        >
+          Use My Own
+        </button>
+        {!isCustom && (
+          <div className="word-list">
+            {dummyWords.map((word) => (
+              <WordChoice
+                key={word.id}
+                word={word}
+                handleChoose={handleChoose}
+                choice={choice}
               />
-              <label htmlFor="definition">Definition:</label>
-              <input
-                id="definition"
-                name="definition"
-                value={customInput.definition}
-                onChange={handleInputChange}
-              />
-            </div>
-          )}
-          <button onClick={props.handleStartGame}>Start</button>
-        </>
+            ))}
+          </div>
+        )}
+        {isCustom && (
+          <div className="custom-word">
+            <label htmlFor="word">Word:</label>
+            <input
+              id="word"
+              name="word"
+              value={customInput.word}
+              onChange={handleInputChange}
+            />
+            <label htmlFor="definition">Definition:</label>
+            <input
+              id="definition"
+              name="definition"
+              value={customInput.definition}
+              onChange={handleInputChange}
+            />
+          </div>
+        )}
+        <button onClick={props.handleStartGame}>Start</button>
       </Host>
-      <Player isHost={props.isHost}>
+      <Player>
         <p>Waiting on host to start...</p>
       </Player>
     </div>
@@ -130,9 +125,12 @@ const WordChoice = (props: WordChoiceProps): React.ReactElement => {
 export default Pregame;
 
 interface PregameProps {
-  lobbyData: LobbyData;
-  isHost: boolean;
   handleStartGame: (e: React.MouseEvent) => void;
+  handleSetWord: (
+    id: number,
+    word: string | undefined,
+    definition: string | undefined,
+  ) => void;
 }
 
 interface WordChoiceProps {

@@ -1,8 +1,12 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+
+import { isHostState } from '../../../state/isHostState';
 import { HostPlayerProps } from '../commonTypes';
 
 const Host = (props: HostPlayerProps): React.ReactElement => {
-  const { isHost, children } = props;
+  const { children } = props;
+  const isHost = useRecoilValue(isHostState);
   return <>{isHost && children}</>;
 };
 

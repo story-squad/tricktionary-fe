@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import shuffle from 'shuffle-array';
+import { lobbyState } from '../../../../state';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
-import { DefinitionItem, GuessItem, LobbyData, PlayerItem } from '../gameTypes';
+import { DefinitionItem, GuessItem, PlayerItem } from '../gameTypes';
 
 // Non-state functions
 
 // Get a shuffled list of other players' definitions + the correct one
 const getDefinitions = (
   players: PlayerItem[],
-  username: string,
+  playerId: string,
   definition: string,
 ) => {
   let definitions = players
-    .filter((player: PlayerItem) => player.username !== username)
+    .filter((player: PlayerItem) => player.id !== playerId)
     .map((player: PlayerItem) => {
       return {
         content: player.definition,
@@ -28,22 +30,23 @@ const getDefinitions = (
   });
   return definitions;
 };
-const getPlayerGuess = (choices: GuessItem[], player: PlayerItem) => {
+const getPlayerGuess = (choices: GuessItem[], player: PlayerItem): number => {
   const found = choices.find((choice) => choice.player === player.id);
-  return found?.guess;
+  return found?.guess as number;
 };
 
 // Components
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
-  const { lobbyData, username, handleSubmitGuesses, isHost } = props;
+  const { playerId, handleSubmitGuesses } = props;
+  const lobbyData = useRecoilValue(lobbyState);
   // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selection
   const [definitions] = useState(
-    getDefinitions(lobbyData.players, username, lobbyData.definition),
+    getDefinitions(lobbyData.players, playerId, lobbyData.definition),
   );
   const [choices, setChoices] = useState(
     lobbyData.players.map((player) => {
-      return { player: player.id, guess: '' };
+      return { player: player.id, guess: -1 };
     }),
   );
 
@@ -55,7 +58,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     setChoices(
       choices.map((choice) => {
         if (choice.player === playerId) {
-          return { ...choice, guess: String(guessId) };
+          return { ...choice, guess: guessId };
         } else {
           return choice;
         }
@@ -67,43 +70,39 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     <div className="guessing game-page">
       <h2>Guessing</h2>
       <p>Word: {lobbyData.word}</p>
-      <Host isHost={isHost}>
-        <>
-          <div className="definitions">
-            <h3>Definitions</h3>
-            {definitions.map((definition, key) => (
-              <div key={key} className="definition">
-                <div className="definition-key">
-                  <p>{definition.definitionKey}</p>
-                </div>
-                <p className="definition-content">{definition.content}</p>
+      <Host>
+        <div className="definitions">
+          <h3>Definitions</h3>
+          {definitions.map((definition, key) => (
+            <div key={key} className="definition">
+              <div className="definition-key">
+                <p>{definition.definitionKey}</p>
               </div>
-            ))}
-          </div>
-          <div className="guesses">
-            <h3>Player Guesses</h3>
-            {lobbyData.players.map((player, key) => (
-              <Guess
-                key={key}
-                definitions={definitions as DefinitionItem[]}
-                player={player}
-                handleSelectChoice={handleSelectChoice}
-                choices={choices}
-              />
-            ))}
-            <button onClick={(e) => handleSubmitGuesses(e, choices)}>
-              Submit Guesses
-            </button>
-          </div>
-        </>
+              <p className="definition-content">{definition.content}</p>
+            </div>
+          ))}
+        </div>
+        <div className="guesses">
+          <h3>Player Guesses</h3>
+          {lobbyData.players.map((player, key) => (
+            <Guess
+              key={key}
+              definitions={definitions as DefinitionItem[]}
+              player={player}
+              handleSelectChoice={handleSelectChoice}
+              choices={choices}
+            />
+          ))}
+          <button onClick={(e) => handleSubmitGuesses(e, choices)}>
+            Submit Guesses
+          </button>
+        </div>
       </Host>
-      <Player isHost={isHost}>
-        <>
-          <p>
-            The host will list off the definitions and their numbers. When the
-            host calls on you, choose a number.
-          </p>
-        </>
+      <Player>
+        <p>
+          The host will list off the definitions and their numbers. When the
+          host calls on you, choose a number.
+        </p>
       </Player>
     </div>
   );
@@ -112,24 +111,20 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 const Guess = (props: GuessProps): React.ReactElement => {
   const { player, definitions, handleSelectChoice, choices } = props;
   return (
-    <>
-      <div className="guess">
-        <p>{player.username}</p>
-        {definitions.map((definition, key) => (
-          <button
-            className={`${
-              getPlayerGuess(choices, player) === String(definition.id)
-                ? 'selected'
-                : ''
-            }`}
-            onClick={(e) => handleSelectChoice(e, player.id, definition.id)}
-            key={key}
-          >
-            {definition.definitionKey}
-          </button>
-        ))}
-      </div>
-    </>
+    <div className="guess">
+      <p>{player.username}</p>
+      {definitions.map((definition, key) => (
+        <button
+          className={`${
+            getPlayerGuess(choices, player) === definition.id ? 'selected' : ''
+          }`}
+          onClick={(e) => handleSelectChoice(e, player.id, definition.id)}
+          key={key}
+        >
+          {definition.definitionKey}
+        </button>
+      ))}
+    </div>
   );
 };
 
@@ -137,9 +132,7 @@ export default Guessing;
 
 interface GuessingProps {
   handleSubmitGuesses: (e: React.MouseEvent, guesses: GuessItem[]) => void;
-  lobbyData: LobbyData;
-  username: string;
-  isHost: boolean;
+  playerId: string;
 }
 
 interface GuessProps {

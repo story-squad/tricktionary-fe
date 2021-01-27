@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { LobbyData } from '../gameTypes';
+import { useRecoilValue } from 'recoil';
+import { isHostState, lobbyState } from '../../../../state';
 
 const Writing = (props: WritingProps): React.ReactElement => {
+  const lobbyData = useRecoilValue(lobbyState);
+  const isHost = useRecoilValue(isHostState);
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  // If Host, submit a default string. Remove when API doesn't require the host to submit a definition
   useEffect(() => {
-    if (props.isHost) {
+    if (isHost) {
       props.handleSubmitDefinition('FIX THIS');
       setIsSubmitted(true);
     }
@@ -31,7 +35,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
     <div className="writing game-page">
       <h2>Writing</h2>
       <h3>Your Word:</h3>
-      <p>{props.lobbyData.word}</p>
+      <p>{lobbyData.word}</p>
       {!isSubmitted && (
         <form
           onSubmit={(e) => {
@@ -60,7 +64,5 @@ const Writing = (props: WritingProps): React.ReactElement => {
 export default Writing;
 
 interface WritingProps {
-  lobbyData: LobbyData;
-  isHost: boolean;
   handleSubmitDefinition: (definition: string) => void;
 }
