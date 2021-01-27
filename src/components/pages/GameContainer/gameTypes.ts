@@ -32,3 +32,9 @@ export interface DefinitionItem {
   id: number;
   definitionKey: number;
 }
+
+export interface WordItem {
+  id: number;
+  word: string;
+  definition: string;
+}

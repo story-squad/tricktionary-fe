@@ -1,24 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { WordItem } from '../gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
+import { getWords } from '../../../../api/apiRequests';
 
-const dummyWords = [
-  {
-    id: 100,
-    word: 'Baz',
-    definition: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
-  },
-  {
-    id: 101,
-    word: 'Foo',
-    definition: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
-  },
-  {
-    id: 102,
-    word: 'Bar',
-    definition: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
-  },
-];
 const initialChoiceValue = -1;
 const initialCustomInputValue = { word: '', definition: '' };
 
@@ -26,6 +11,12 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [isCustom, setIsCustom] = useState(false);
   const [choice, setChoice] = useState(initialChoiceValue);
   const [customInput, setCustomInput] = useState(initialCustomInputValue);
+  const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
+
+  // Get 3 word suggestions automatically
+  useEffect(() => {
+    handleGetWords();
+  }, []);
 
   // Clear choice/input when switching between word selection type
   useEffect(() => {
@@ -44,6 +35,12 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       props.handleSetWord(choice, undefined, undefined);
     }
   }, [isCustom, choice, customInput]);
+
+  const handleGetWords = () => {
+    getWords()
+      .then((res) => setWordSelection(res.data.words))
+      .catch((err) => console.log(err));
+  };
 
   const handleChoose = (id: number) => {
     setChoice(id);
@@ -74,7 +71,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         </button>
         {!isCustom && (
           <div className="word-list">
-            {dummyWords.map((word) => (
+            {wordSelection.map((word) => (
               <WordChoice
                 key={word.id}
                 word={word}
@@ -102,6 +99,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             />
           </div>
         )}
+        <button onClick={handleGetWords}>Get New Words</button>
         <button onClick={props.handleStartGame}>Start</button>
       </Host>
       <Player>
