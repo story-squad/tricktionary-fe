@@ -84,15 +84,17 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         </div>
         <div className="guesses">
           <h3>Player Guesses</h3>
-          {lobbyData.players.map((player, key) => (
-            <Guess
-              key={key}
-              definitions={definitions as DefinitionItem[]}
-              player={player}
-              handleSelectChoice={handleSelectChoice}
-              choices={choices}
-            />
-          ))}
+          {lobbyData.players
+            .filter((player) => player.id !== lobbyData.host.id)
+            .map((player, key) => (
+              <Guess
+                key={key}
+                definitions={definitions as DefinitionItem[]}
+                player={player}
+                handleSelectChoice={handleSelectChoice}
+                choices={choices}
+              />
+            ))}
           <button onClick={(e) => handleSubmitGuesses(e, choices)}>
             Submit Guesses
           </button>
