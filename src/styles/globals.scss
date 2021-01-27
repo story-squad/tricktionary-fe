@@ -18,8 +18,8 @@ html {
 }
 
 // Font Variables
-$text-font: 'Oswald', sans-serif;
-$display-font: 'Bangers', sans-serif;
+$text-font: "Oswald", sans-serif;
+$display-font: "Bangers", sans-serif;
 
 // Media Query Sizes
 $mid: 500px;
@@ -42,12 +42,12 @@ $rose: #d97f9f;
 $lime: #bfd349;
 
 #root {
-  background-color: $dark-blue;
+  background-color: $white;
 }
 
 .App > div:not(.modal-wrapper):not(.cookie-popup) {
   min-height: 100vh;
-  background-color: $dark-blue;
+  background-color: $white;
   display: flex;
   flex-flow: column nowrap;
 }

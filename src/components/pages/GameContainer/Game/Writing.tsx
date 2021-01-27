@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { isHostState, lobbyState } from '../../../../state';
+import { Host } from '../../../common/Host';
+import { Player } from '../../../common/Player';
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
@@ -34,29 +36,40 @@ const Writing = (props: WritingProps): React.ReactElement => {
   return (
     <div className="writing game-page">
       <h2>Writing</h2>
-      <h3>Your Word:</h3>
-      <p>{lobbyData.word}</p>
-      {!isSubmitted && (
-        <form
-          onSubmit={(e) => {
-            handleSubmit(e, definition);
-          }}
-        >
-          <label htmlFor="definition">Write Your Definition:</label>
-          <input
-            type="textfield"
-            value={definition}
-            onChange={handleChangeDefinition}
-          />
-          <button disabled={definition.trim() === ''}>Submit</button>
-        </form>
-      )}
-      {isSubmitted && (
-        <div>
-          <p>Submitted:</p>
-          <p>{definition}</p>
-        </div>
-      )}
+      <div className="word-display">
+        <h3>Your Word:</h3>
+        <p>{lobbyData.word}</p>
+      </div>
+      <Host>
+        <p>Waiting for players to submit definitions...</p>
+      </Host>
+      <Player>
+        {!isSubmitted && (
+          <form
+            onSubmit={(e) => {
+              handleSubmit(e, definition);
+            }}
+          >
+            <label htmlFor="definition">Write Your Definition:</label>
+            <br />
+            <input
+              id="definition"
+              name="definition"
+              type="textfield"
+              value={definition}
+              onChange={handleChangeDefinition}
+            />
+            <br />
+            <button disabled={definition.trim() === ''}>Submit</button>
+          </form>
+        )}
+        {isSubmitted && (
+          <div>
+            <p>Submitted:</p>
+            <p>{definition}</p>
+          </div>
+        )}
+      </Player>
     </div>
   );
 };

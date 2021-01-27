@@ -9,7 +9,13 @@ h2 {
 
 h3 {
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin: 4rem 0 1rem;
+}
+
+h1,
+h2,
+h3 {
+  font-family: $display-font;
 }
 
 p,
@@ -18,11 +24,24 @@ input,
 button,
 a,
 span {
+  font-family: $text-font;
   font-size: 2.4rem;
 }
 
+button {
+  cursor: pointer;
+  border-radius: 1rem;
+  border: 1px solid $charcoal;
+  margin: 1rem;
+  padding: 0.2rem 1rem;
+}
+
+label {
+  margin: 2rem 0;
+}
+
 a {
-  color: white;
+  color: $blue;
 }
 
 .submitted {
@@ -31,13 +50,30 @@ a {
 
 button {
   &.selected {
-    background: blue;
+    background: $blue;
     color: white;
   }
 }
 
 .word-choice {
   display: block;
+  width: 100%;
+
+  .definition {
+    font-weight: 300;
+  }
+}
+
+.word-display {
+  margin: 2rem 0;
+  padding: 2rem;
+  border: 1px solid $charcoal;
+  border-radius: 1rem;
+  max-width: 50rem;
+
+  h3 {
+    margin-top: 0;
+  }
 }
 
 .game-page,
@@ -47,10 +83,13 @@ button {
 }
 
 .definition {
+  width: 100%;
   margin: 2rem auto;
+  text-align: center;
+
   .definition-key {
+    margin: 2rem auto 1rem;
     color: white;
-    margin-right: 2rem;
     background: black;
     border-radius: 50%;
     width: 4rem;
@@ -62,4 +101,8 @@ button {
       padding: 0.5rem 0;
     }
   }
+}
+
+.home-link {
+  margin: 2rem 
 }

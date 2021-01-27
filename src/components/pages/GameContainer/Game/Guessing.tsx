@@ -69,7 +69,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   return (
     <div className="guessing game-page">
       <h2>Guessing</h2>
-      <p>Word: {lobbyData.word}</p>
+      <p className="word-display">Word: {lobbyData.word}</p>
       <Host>
         <div className="definitions">
           <h3>Definitions</h3>
