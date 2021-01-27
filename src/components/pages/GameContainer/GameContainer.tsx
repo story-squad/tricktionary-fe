@@ -67,17 +67,20 @@ const GameContainer = (): React.ReactElement => {
       history.push(`/${socketData.lobbyCode}`);
       console.log(socketData);
     });
+
     // New round with same players, retain points
     socket.on('play again', (socketData: LobbyData) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
       console.log(socketData);
     });
+
     // Get your playerId from the BE
     socket.on('welcome', (socketData: string) => {
       console.log('player ID: ', socketData);
       setPlayerId(socketData);
     });
+
     // Recieve BE errors
     socket.on('error', (errorData: string) => {
       console.log(errorData);
@@ -90,6 +93,7 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('create lobby', username);
     setIsHost(true);
   };
+
   const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
     if (e) {
       e.preventDefault();
@@ -97,19 +101,23 @@ const GameContainer = (): React.ReactElement => {
     const code = optionalCode ? optionalCode : lobbyCode;
     socket.emit('join lobby', username, code);
   };
+
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault();
     console.log('LOBBY SETTINGS: ', lobbySettings);
     socket.emit('start game', lobbySettings, lobbyCode);
   };
+
   const handleSubmitDefinition = (definition: string) => {
     const trimmedDefinition = definition.trim();
     socket.emit('definition submitted', trimmedDefinition, lobbyCode);
   };
+
   const handleSubmitGuesses = (e: React.MouseEvent, guesses: GuessItem[]) => {
     e.preventDefault();
     socket.emit('guess', lobbyCode, guesses);
   };
+
   const handlePlayAgain = () => {
     socket.emit('play again', lobbyCode);
   };
@@ -159,7 +167,7 @@ const GameContainer = (): React.ReactElement => {
     <div className="game-container">
       {lobbyData.phase !== 'LOBBY' && (
         <>
-          <Link onClick={() => resetGame()} to="/">
+          <Link className="home-link" onClick={() => resetGame()} to="/">
             Home
           </Link>
           <p className="room-code">Room Code: {lobbyCode}</p>

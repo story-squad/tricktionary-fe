@@ -79,6 +79,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 choice={choice}
               />
             ))}
+            <button onClick={handleGetWords}>Get New Words</button>
           </div>
         )}
         {isCustom && (
@@ -99,7 +100,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             />
           </div>
         )}
-        <button onClick={handleGetWords}>Get New Words</button>
         <button onClick={props.handleStartGame}>Start</button>
       </Host>
       <Player>
@@ -114,8 +114,8 @@ const WordChoice = (props: WordChoiceProps): React.ReactElement => {
   const className = `word-choice${word.id === choice ? ' selected' : ''}`;
   return (
     <button onClick={() => handleChoose(word.id)} className={className}>
-      <p>{word.word}</p>
-      <p>{word.definition}</p>
+      <p className="word">{word.word}</p>
+      <p className="definition">{word.definition}</p>
     </button>
   );
 };
