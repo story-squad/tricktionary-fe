@@ -2,17 +2,125 @@
 
 // For testing, update later
 h1,
-h2,
+h2 {
+  font-size: 5rem;
+  margin-bottom: 2rem;
+}
+
 h3 {
   font-size: 3rem;
+  margin: 4rem 0 1rem;
+}
+
+h1,
+h2,
+h3 {
+  font-family: $display-font;
 }
 
 p,
 label,
-input {
-  font-size: 2rem;
+input,
+button,
+a,
+span {
+  font-family: $text-font;
+  font-size: 2.4rem;
+}
+
+button {
+  cursor: pointer;
+  border-radius: 1rem;
+  border: 1px solid $charcoal;
+  margin: 1rem;
+  padding: 0.2rem 1rem;
+}
+
+label {
+  margin: 2rem 0;
+}
+
+a {
+  color: $blue;
 }
 
 .submitted {
   color: red;
+}
+
+button {
+  &.selected {
+    background: $blue;
+    color: white;
+  }
+}
+
+.word-choice {
+  display: block;
+  width: 100%;
+
+  .definition {
+    font-weight: 300;
+  }
+}
+
+.word-display {
+  margin: 2rem 0;
+  padding: 2rem;
+  border: 1px solid $charcoal;
+  border-radius: 1rem;
+  max-width: 50rem;
+
+  h3 {
+    margin-top: 0;
+  }
+}
+
+.game-page,
+.player-list,
+.room-code {
+  padding: 2rem;
+}
+
+.definition {
+  width: 100%;
+  margin: 2rem auto;
+  text-align: center;
+
+  .definition-key {
+    margin: 2rem auto 1rem;
+    color: white;
+    background: black;
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+
+    p {
+      width: 100%;
+      text-align: center;
+      padding: 0.5rem 0;
+    }
+  }
+}
+
+.home-link {
+  margin: 2rem;
+}
+
+.definition-result {
+  margin: 4rem 0;
+
+  .result-username {
+    color: $blue;
+  }
+  .guess-names {
+    display: flex;
+    margin: 1rem 1rem 1rem 0;
+    p {
+      border: 1px solid black;
+      border-radius: 1rem;
+      padding: 1rem;
+      width: auto;
+    }
+  }
 }

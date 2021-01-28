@@ -9,7 +9,7 @@ export interface PlayerItem {
 export interface LobbyData {
   definition: string;
   guesses: GuessItem[];
-  host: HostItem;
+  host: string;
   lobbyCode: string;
   phase: string;
   players: PlayerItem[];
@@ -18,16 +18,18 @@ export interface LobbyData {
 }
 
 export interface GuessItem {
-  guess: string;
+  guess: number;
   player: string;
-}
-
-export interface HostItem {
-  id: string;
-  username: string;
 }
 
 export interface DefinitionItem {
   content: string;
   id: number;
+  definitionKey: number;
+}
+
+export interface WordItem {
+  id: number;
+  word: string;
+  definition: string;
 }

@@ -31,16 +31,23 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         value={props.username}
         onChange={handleChangeUsername}
       />
-      <label htmlFor="lobby-code">Room Code</label>
-      <input
-        id="lobby-code"
-        name="lobby-code"
-        value={props.lobbyCode}
-        onChange={handleChangeCode}
-        maxLength={4}
-      />
+      <br />
+      <form>
+        <label htmlFor="lobby-code">Lobby Code</label>
+        <input
+          id="lobby-code"
+          name="lobby-code"
+          value={props.lobbyCode}
+          onChange={handleChangeCode}
+          maxLength={4}
+        />
+        <br />
+        <button onClick={(e) => props.handleJoinLobby(e, '')}>
+          Join Lobby
+        </button>
+      </form>
+      <p>or</p>
       <button onClick={props.handleCreateLobby}>New Game</button>
-      <button onClick={(e) => props.handleJoinLobby(e, '')}>Join Game</button>
     </div>
   );
 };
