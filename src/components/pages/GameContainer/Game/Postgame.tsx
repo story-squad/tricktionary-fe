@@ -94,12 +94,11 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
             <DefinitionResult key={key} definitionResult={definitionResult} />
           ))}
         </div>
+        <button onClick={handlePlayAgain}>Play Again</button>
       </Host>
       <Player>
         <p>The Host will now read the results!</p>
       </Player>
-      {isHost && <button onClick={handlePlayAgain}>Play Again</button>}
-      {!isHost && <p>Waiting on host to start new game...</p>}
     </div>
   );
 };
