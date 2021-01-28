@@ -8,6 +8,7 @@ import {
   lobbySettingsState,
   lobbyState,
 } from '../../../state';
+import { guessesState } from '../../../state/guessesState';
 import {
   Guessing,
   Lobby,
@@ -34,12 +35,14 @@ const GameContainer = (): React.ReactElement => {
   const resetIsHost = useResetRecoilState(isHostState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
+  const resetGuesses = useResetRecoilState(guessesState);
 
   // Combine state reset functions
   const resetGame = () => {
     resetIsHost();
     resetLobbyData();
     resetLobbyCode();
+    resetGuesses();
   };
 
   // Lobby Settings handlers
@@ -119,7 +122,7 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handlePlayAgain = () => {
-    socket.emit('play again', lobbyCode);
+    socket.emit('play again', lobbySettings, lobbyCode);
   };
 
   // Determine Game component to render based on the current game phase
