@@ -141,7 +141,7 @@ const GameContainer = (): React.ReactElement => {
             handleSubmitGuesses={handleSubmitGuesses}
           />
         );
-      case 'POSTGAME':
+      case 'RESULTS':
         return (
           <Postgame
             lobbyData={lobbyData}
