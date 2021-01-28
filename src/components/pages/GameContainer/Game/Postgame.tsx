@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { isHostState, lobbyState } from '../../../../state';
 import { guessesState } from '../../../../state/guessesState';
+import { Host } from '../../../common/Host';
+import { Player } from '../../../common/Player';
 import { GuessItem, LobbyData, PlayerItem } from '../gameTypes';
 
 const getSortedDefinitions = (
   lobbyData: LobbyData,
   guesses: GuessItem[],
   playerDict: PlayerDictionary,
-): DefinitionResult[] => {
+): DefinitionResultItem[] => {
   // Create a definition dictionary to easily map all player guesses to each definition
   const definitions: DefinitionDictionary = {};
   lobbyData.players.forEach((player) => {
@@ -69,9 +71,13 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     getPlayerDictionary(lobbyData.players),
   );
   const guesses = useRecoilValue(guessesState);
-  const [sortedDefinitions] = useState<DefinitionResult[]>(
+  const [sortedDefinitions] = useState<DefinitionResultItem[]>(
     getSortedDefinitions(lobbyData, guesses, playerDict),
   );
+
+  useEffect(() => {
+    console.log(sortedDefinitions);
+  }, [sortedDefinitions]);
 
   return (
     <div className="postgame game-page">
@@ -80,8 +86,36 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         <p>Word:</p>
         <p>{lobbyData.word}</p>
       </div>
+      <Host>
+        <div className="round-results">
+          {sortedDefinitions.map((definitionResult, key) => (
+            <DefinitionResult key={key} definitionResult={definitionResult} />
+          ))}
+        </div>
+      </Host>
+      <Player>
+        <p>The Host will now read the results!</p>
+      </Player>
       {isHost && <button onClick={handlePlayAgain}>Play Again</button>}
       {!isHost && <p>Waiting on host to start new game...</p>}
+    </div>
+  );
+};
+
+const DefinitionResult = (props: DefinitionResultProps): React.ReactElement => {
+  const { username, definition, points, guesses } = props.definitionResult;
+  return (
+    <div className="definition-result">
+      <p>
+        {username}: {points} points earned
+      </p>
+      <p>Definition:</p>
+      <p>{definition}</p>
+      {guesses.map((guess, key) => (
+        <div key={key} className="guess-name">
+          <p>{guess}</p>
+        </div>
+      ))}
     </div>
   );
 };
@@ -92,15 +126,19 @@ interface PostgameProps {
   handlePlayAgain: () => void;
 }
 
+interface DefinitionResultProps {
+  definitionResult: DefinitionResultItem;
+}
+
 interface PlayerDictionary {
   [Key: string]: string;
 }
 
 interface DefinitionDictionary {
-  [Key: number]: DefinitionResult;
+  [Key: number]: DefinitionResultItem;
 }
 
-interface DefinitionResult {
+interface DefinitionResultItem {
   username: string;
   definition: string;
   definitionId: number;
