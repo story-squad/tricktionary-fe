@@ -14,13 +14,15 @@ const getSortedDefinitions = (
   // Create a definition dictionary to easily map all player guesses to each definition
   const definitions: DefinitionDictionary = {};
   lobbyData.players.forEach((player) => {
-    definitions[player.definitionId as number] = {
-      username: player.username,
-      definition: player.definition,
-      definitionId: player.definitionId as number,
-      guesses: [],
-      points: 0,
-    };
+    if (player.id !== lobbyData.host) {
+      definitions[player.definitionId as number] = {
+        username: player.username,
+        definition: player.definition,
+        definitionId: player.definitionId as number,
+        guesses: [],
+        points: 0,
+      };
+    }
   });
   // Add real definition
   definitions[0] = {
@@ -106,13 +108,13 @@ const DefinitionResult = (props: DefinitionResultProps): React.ReactElement => {
   const { username, definition, points, guesses } = props.definitionResult;
   return (
     <div className="definition-result">
-      <p>
+      <p className="result-username">
         {username}: {points} points earned
       </p>
       <p>Definition:</p>
-      <p>{definition}</p>
+      <p className="result-definition">{definition}</p>
       {guesses.map((guess, key) => (
-        <div key={key} className="guess-name">
+        <div key={key} className="guess-names">
           <p>{guess}</p>
         </div>
       ))}
