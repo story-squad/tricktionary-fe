@@ -107,7 +107,6 @@ const GameContainer = (): React.ReactElement => {
 
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log('LOBBY SETTINGS: ', lobbySettings);
     socket.emit('start game', lobbySettings, lobbyCode);
   };
 
