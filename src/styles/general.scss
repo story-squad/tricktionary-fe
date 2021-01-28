@@ -104,5 +104,23 @@ button {
 }
 
 .home-link {
-  margin: 2rem 
+  margin: 2rem;
+}
+
+.definition-result {
+  margin: 4rem 0;
+
+  .result-username {
+    color: $blue;
+  }
+  .guess-names {
+    display: flex;
+    margin: 1rem 1rem 1rem 0;
+    p {
+      border: 1px solid black;
+      border-radius: 1rem;
+      padding: 1rem;
+      width: auto;
+    }
+  }
 }

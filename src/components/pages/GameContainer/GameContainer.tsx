@@ -5,9 +5,10 @@ import io from 'socket.io-client';
 import {
   isHostState,
   lobbyCodeState,
-  lobbyState,
   lobbySettingsState,
+  lobbyState,
 } from '../../../state';
+import { guessesState } from '../../../state/guessesState';
 import {
   Guessing,
   Lobby,
@@ -26,7 +27,7 @@ const GameContainer = (): React.ReactElement => {
   const [username, setUsername] = useState(
     `Player${Math.floor(Math.random() * 9999)}`,
   );
-  const [isHost, setIsHost] = useRecoilState(isHostState);
+  const [, setIsHost] = useRecoilState(isHostState);
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
@@ -34,12 +35,14 @@ const GameContainer = (): React.ReactElement => {
   const resetIsHost = useResetRecoilState(isHostState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
+  const resetGuesses = useResetRecoilState(guessesState);
 
   // Combine state reset functions
   const resetGame = () => {
     resetIsHost();
     resetLobbyData();
     resetLobbyCode();
+    resetGuesses();
   };
 
   // Lobby Settings handlers
@@ -104,7 +107,6 @@ const GameContainer = (): React.ReactElement => {
 
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log('LOBBY SETTINGS: ', lobbySettings);
     socket.emit('start game', lobbySettings, lobbyCode);
   };
 
@@ -119,7 +121,7 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handlePlayAgain = () => {
-    socket.emit('play again', lobbyCode);
+    socket.emit('play again', lobbySettings, lobbyCode);
   };
 
   // Determine Game component to render based on the current game phase
@@ -141,14 +143,8 @@ const GameContainer = (): React.ReactElement => {
             handleSubmitGuesses={handleSubmitGuesses}
           />
         );
-      case 'POSTGAME':
-        return (
-          <Postgame
-            lobbyData={lobbyData}
-            handlePlayAgain={handlePlayAgain}
-            isHost={isHost}
-          />
-        );
+      case 'RESULTS':
+        return <Postgame handlePlayAgain={handlePlayAgain} />;
       default:
         return (
           <Lobby
