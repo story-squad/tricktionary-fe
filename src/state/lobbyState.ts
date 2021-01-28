@@ -7,7 +7,7 @@ export const lobbyState = atom<LobbyData>({
     phase: 'LOBBY',
     players: [],
     definition: '',
-    host: { id: '', username: '' },
+    host: '',
     guesses: [],
     lobbyCode: '',
     roundId: 0,

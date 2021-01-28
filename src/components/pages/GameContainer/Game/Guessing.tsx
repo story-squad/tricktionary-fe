@@ -85,7 +85,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         <div className="guesses">
           <h3>Player Guesses</h3>
           {lobbyData.players
-            .filter((player) => player.id !== lobbyData.host.id)
+            .filter((player) => player.id !== lobbyData.host)
             .map((player, key) => (
               <Guess
                 key={key}
