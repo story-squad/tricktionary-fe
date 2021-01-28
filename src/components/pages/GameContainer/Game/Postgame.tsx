@@ -17,6 +17,7 @@ const getSortedDefinitions = (
     if (player.id !== lobbyData.host) {
       definitions[player.definitionId as number] = {
         username: player.username,
+        playerId: player.id,
         definition: player.definition,
         definitionId: player.definitionId as number,
         guesses: [],
@@ -27,6 +28,7 @@ const getSortedDefinitions = (
   // Add real definition
   definitions[0] = {
     username: 'Real Definition',
+    playerId: '0',
     definition: lobbyData.definition,
     definitionId: 0,
     guesses: [],
@@ -36,7 +38,9 @@ const getSortedDefinitions = (
   guesses.forEach((guess) => {
     try {
       definitions[guess.guess].guesses.push(playerDict[guess.player]);
-      definitions[guess.guess].points += 1;
+      if (guess.player !== definitions[guess.guess].playerId) {
+        definitions[guess.guess].points += 1;
+      }
     } catch {
       return;
     }
@@ -141,6 +145,7 @@ interface DefinitionDictionary {
 
 interface DefinitionResultItem {
   username: string;
+  playerId: string;
   definition: string;
   definitionId: number;
   guesses: string[];
