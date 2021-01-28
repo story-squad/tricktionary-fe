@@ -55,17 +55,11 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     );
   }, []);
 
-  // For testing
-  useEffect(() => {
-    console.log(guesses);
-  }, [guesses]);
-
   const handleSelectGuess = (
     e: React.MouseEvent,
     playerId: string,
     guessId: number,
   ) => {
-    console.log(playerId, guessId);
     setGuesses(
       guesses.map((guess) => {
         if (guess.player === playerId) {

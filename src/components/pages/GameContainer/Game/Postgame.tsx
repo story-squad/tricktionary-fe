@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { isHostState, lobbyState } from '../../../../state';
 import { guessesState } from '../../../../state/guessesState';
@@ -80,10 +80,6 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   const [sortedDefinitions] = useState<DefinitionResultItem[]>(
     getSortedDefinitions(lobbyData, guesses, playerDict),
   );
-
-  useEffect(() => {
-    console.log(sortedDefinitions);
-  }, [sortedDefinitions]);
 
   return (
     <div className="postgame game-page">
