@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { isHostState, lobbyState } from '../../../../state';
 import { guessesState } from '../../../../state/guessesState';
 import { GuessItem, LobbyData, PlayerItem } from '../gameTypes';
 
@@ -19,7 +20,6 @@ const getSortedDefinitions = (
       points: 0,
     };
   });
-  console.log('1');
   // Add real definition
   definitions[0] = {
     username: 'Real Definition',
@@ -37,26 +37,22 @@ const getSortedDefinitions = (
       return;
     }
   });
-  console.log('2: ', definitions);
   // Get an array from the result that can be sorted and mapped in JSX
   let definitionArray = Object.values(definitions);
-  console.log('3: ', definitionArray);
   // Grab the real definition to place at the end after the array is sorted
   const realDefinition = definitionArray.filter(
     (definition) => definition.definitionId === 0,
   );
-  console.log('3.5: ', realDefinition);
   // Remove the real definition and sort by point values
   definitionArray = definitionArray
     .filter((definition) => definition.definitionId !== 0)
     .sort((a, b) => (a.points > b.points ? 1 : -1));
-  console.log('4: ', definitionArray);
   // Add the real definition at the end
   definitionArray.push(...realDefinition);
-  console.log('5: ', definitionArray);
   return definitionArray;
 };
 
+// Generate a dictionary of playerId: username to make getSortedDefinitions more efficient
 const getPlayerDictionary = (players: PlayerItem[]): PlayerDictionary => {
   const dict: PlayerDictionary = {};
   players.forEach((player) => {
@@ -66,13 +62,14 @@ const getPlayerDictionary = (players: PlayerItem[]): PlayerDictionary => {
 };
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
-  const { lobbyData, isHost, handlePlayAgain } = props;
-  // Generate a dictionary of playerId: username to make getSortedDefinitions more efficient
+  const { handlePlayAgain } = props;
+  const isHost = useRecoilValue(isHostState);
+  const lobbyData = useRecoilValue(lobbyState);
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
   );
   const guesses = useRecoilValue(guessesState);
-  const [sortedGuesses] = useState(
+  const [sortedDefinitions] = useState<DefinitionResult[]>(
     getSortedDefinitions(lobbyData, guesses, playerDict),
   );
 
@@ -92,8 +89,6 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
 export default Postgame;
 
 interface PostgameProps {
-  lobbyData: LobbyData;
-  isHost: boolean;
   handlePlayAgain: () => void;
 }
 

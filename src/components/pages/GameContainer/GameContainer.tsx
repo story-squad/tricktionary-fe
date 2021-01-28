@@ -5,8 +5,8 @@ import io from 'socket.io-client';
 import {
   isHostState,
   lobbyCodeState,
-  lobbyState,
   lobbySettingsState,
+  lobbyState,
 } from '../../../state';
 import {
   Guessing,
@@ -142,13 +142,7 @@ const GameContainer = (): React.ReactElement => {
           />
         );
       case 'RESULTS':
-        return (
-          <Postgame
-            lobbyData={lobbyData}
-            handlePlayAgain={handlePlayAgain}
-            isHost={isHost}
-          />
-        );
+        return <Postgame handlePlayAgain={handlePlayAgain} />;
       default:
         return (
           <Lobby
