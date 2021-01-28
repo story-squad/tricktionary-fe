@@ -13,7 +13,7 @@ export const lobbySettingsState = atom<TricktionarySettings>({
       style: undefined,
       list: undefined,
     },
-    source: undefined,
+    source: 'User',
   },
 });
 
