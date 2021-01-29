@@ -45,7 +45,10 @@ const Writing = (props: WritingProps): React.ReactElement => {
       </div>
       <Timer seconds={LobbySettings.seconds} timeUp={setTimerDone} />
       <Host>
-        <p>Waiting for players to submit definitions...</p>
+        {!timerDone && <p>Waiting for players to submit definitions...</p>}
+        {timerDone && (
+          <p>Time&apos;s up for players to submit! Start the next phase.</p>
+        )}
         <button onClick={() => props.handleSetPhase('GUESSING')}>
           Start Guessing Phase
         </button>
