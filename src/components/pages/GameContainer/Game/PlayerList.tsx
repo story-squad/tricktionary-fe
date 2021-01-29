@@ -35,14 +35,17 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
 
   return (
     <div className="player-list">
-      {lobbyData.players.map((player: PlayerItem) => {
-        return (
-          <p className={playerClassName(lobbyData, player)} key={player.id}>
-            {`${playerId === player.id ? '(you)' : ''} ${player.username}`},
-            score: {player.points}
-          </p>
-        );
-      })}
+      {console.log(lobbyData)}
+      {lobbyData.players
+        .filter((player: PlayerItem) => player.id !== lobbyData.host)
+        .map((player: PlayerItem) => {
+          return (
+            <p className={playerClassName(lobbyData, player)} key={player.id}>
+              {`${playerId === player.id ? '(you)' : ''} ${player.username}`},
+              score: {player.points}, info: {`${player.id} : ${lobbyData.host}`}
+            </p>
+          );
+        })}
     </div>
   );
 };
