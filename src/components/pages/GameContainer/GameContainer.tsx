@@ -81,6 +81,11 @@ const GameContainer = (): React.ReactElement => {
       setPlayerId(socketData);
     });
 
+    // Recieve BE info
+    socket.on('info', (infoData: string) => {
+      console.log(infoData);
+    });
+
     // Recieve BE errors
     socket.on('error', (errorData: string) => {
       console.log(errorData);
@@ -90,7 +95,7 @@ const GameContainer = (): React.ReactElement => {
   // Socket event emitters
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
-    socket.emit('create lobby', username);
+    socket.emit('create lobby', 'Host');
     setIsHost(true);
   };
 
