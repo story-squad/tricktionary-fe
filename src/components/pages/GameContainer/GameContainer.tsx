@@ -68,19 +68,16 @@ const GameContainer = (): React.ReactElement => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
       history.push(`/${socketData.lobbyCode}`);
-      console.log(socketData);
     });
 
     // New round with same players, retain points
     socket.on('play again', (socketData: LobbyData) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
-      console.log(socketData);
     });
 
     // Get your playerId from the BE
     socket.on('welcome', (socketData: string) => {
-      console.log('player ID: ', socketData);
       setPlayerId(socketData);
     });
 
