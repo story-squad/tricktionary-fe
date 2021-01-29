@@ -1,5 +1,7 @@
 import React from 'react';
-import { LobbyData, PlayerItem } from '../gameTypes';
+import { useRecoilValue } from 'recoil';
+import { lobbyState } from '../../../../state';
+import { PlayerItem } from '../gameTypes';
 
 // Functions to determine if the player has submitted, based on the current phase/lobbyData
 const guessArrayContainsPlayer = (guesses: any[], playerId: string) => {
@@ -31,7 +33,8 @@ const playerClassName = (lobbyData: any, player: PlayerItem) => {
 };
 
 const PlayerList = (props: PlayerListProps): React.ReactElement => {
-  const { playerId, lobbyData } = props;
+  const { playerId } = props;
+  const lobbyData = useRecoilValue(lobbyState);
 
   return (
     <div className="player-list">
@@ -53,6 +56,5 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
 export default PlayerList;
 
 interface PlayerListProps {
-  lobbyData: LobbyData;
   playerId: string;
 }

@@ -164,7 +164,7 @@ const GameContainer = (): React.ReactElement => {
             Home
           </Link>
           <p className="room-code">Room Code: {lobbyCode}</p>
-          <PlayerList lobbyData={lobbyData} playerId={playerId} />
+          <PlayerList playerId={playerId} />
         </>
       )}
       {currentPhase()}
