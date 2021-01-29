@@ -38,6 +38,7 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
 
   return (
     <div className="player-list">
+      <h2>Players</h2>
       {lobbyData.players
         .filter((player: PlayerItem) => player.id !== lobbyData.host)
         .map((player: PlayerItem) => {
