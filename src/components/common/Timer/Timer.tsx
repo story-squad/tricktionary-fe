@@ -20,8 +20,11 @@ const Timer = (props: TimerProps): React.ReactElement => {
   }, []);
 
   return (
-    <div className="timer">
-      <p>{timer} seconds</p>
+    <div id="timer">
+      <p>
+        <span className="time">{timer}</span>{' '}
+        <span className="text">seconds left</span>
+      </p>
     </div>
   );
 };
