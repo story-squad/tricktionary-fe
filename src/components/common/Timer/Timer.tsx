@@ -2,29 +2,26 @@ import React, { useEffect, useState } from 'react';
 
 const Timer = (props: TimerProps): React.ReactElement => {
   const { seconds, timeUp } = props;
-  const [time, setTime] = useState(seconds);
+  const [timer, setTimer] = useState(seconds);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      tick(interval);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const tick = (interval: ReturnType<typeof setInterval>) => {
-    if (time && time > 0) {
-      setTime(time - 1);
-    } else if (time) {
-      timeUp(true);
-      clearInterval(interval);
-    } else {
-      clearInterval(interval);
+    if (seconds) {
+      let time = seconds;
+      const interval = setInterval(() => {
+        if (time > 0) {
+          time--;
+          setTimer(time);
+        } else {
+          timeUp(true);
+        }
+      }, 1000);
+      return () => clearInterval(interval);
     }
-  };
+  }, []);
 
   return (
     <div className="timer">
-      <p>{time} seconds</p>
+      <p>{timer} seconds</p>
     </div>
   );
 };
