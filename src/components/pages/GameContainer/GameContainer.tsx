@@ -103,8 +103,11 @@ const GameContainer = (): React.ReactElement => {
     if (e) {
       e.preventDefault();
     }
-    const code = optionalCode ? optionalCode : lobbyCode;
-    socket.emit('join lobby', username, code);
+    socket.emit(
+      'join lobby',
+      username,
+      optionalCode ? optionalCode : lobbyCode,
+    );
   };
 
   const handleStartGame = (e: React.MouseEvent) => {
