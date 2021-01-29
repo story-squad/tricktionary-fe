@@ -129,6 +129,10 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('play again', lobbySettings, lobbyCode);
   };
 
+  const handleSetPhase = (phase: string) => {
+    socket.emit('set phase', phase, lobbyCode);
+  };
+
   // Determine Game component to render based on the current game phase
   const currentPhase = () => {
     switch (lobbyData.phase) {
@@ -140,7 +144,12 @@ const GameContainer = (): React.ReactElement => {
           />
         );
       case 'WRITING':
-        return <Writing handleSubmitDefinition={handleSubmitDefinition} />;
+        return (
+          <Writing
+            handleSubmitDefinition={handleSubmitDefinition}
+            handleSetPhase={handleSetPhase}
+          />
+        );
       case 'GUESSING':
         return (
           <Guessing

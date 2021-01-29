@@ -9,14 +9,17 @@ import { DefinitionItem, GuessItem, PlayerItem } from '../gameTypes';
 
 // Non-state functions
 
-// Get a shuffled list of other players' definitions + the correct one
+// Get a shuffled list of definitions + the correct one
 const getDefinitions = (
   players: PlayerItem[],
   playerId: string,
   definition: string,
 ) => {
   let definitions = players
-    .filter((player: PlayerItem) => player.id !== playerId)
+    .filter(
+      (player: PlayerItem) =>
+        player.id !== playerId && player.definition !== '',
+    )
     .map((player: PlayerItem) => {
       return {
         content: player.definition,
@@ -31,6 +34,7 @@ const getDefinitions = (
   });
   return definitions;
 };
+
 const getPlayerGuess = (choices: GuessItem[], player: PlayerItem): number => {
   const found = choices.find((choice) => choice.player === player.id);
   return found?.guess as number;
