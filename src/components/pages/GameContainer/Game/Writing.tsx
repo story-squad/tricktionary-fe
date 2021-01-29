@@ -42,6 +42,9 @@ const Writing = (props: WritingProps): React.ReactElement => {
       </div>
       <Host>
         <p>Waiting for players to submit definitions...</p>
+        <button onClick={() => props.handleSetPhase('GUESSING')}>
+          Start Guessing Phase
+        </button>
       </Host>
       <Player>
         {!isSubmitted && (
@@ -78,4 +81,5 @@ export default Writing;
 
 interface WritingProps {
   handleSubmitDefinition: (definition: string) => void;
+  handleSetPhase: (phase: string) => void;
 }
