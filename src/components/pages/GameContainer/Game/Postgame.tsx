@@ -84,8 +84,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     <div className="postgame game-page">
       <h2>Results</h2>
       <div className="word-display">
-        <p>Word:</p>
-        <p>{lobbyData.word}</p>
+        <p>Word: {lobbyData.word}</p>
       </div>
       <Host>
         <div className="round-results">
