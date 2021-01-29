@@ -37,7 +37,11 @@ button {
 }
 
 label {
-  margin: 2rem 0;
+  margin: auto 2rem auto 0;
+}
+
+input {
+  font-weight: 300;
 }
 
 a {
@@ -123,4 +127,8 @@ button {
       width: auto;
     }
   }
+}
+
+#definition {
+  width: 40rem;
 }

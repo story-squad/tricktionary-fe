@@ -1,8 +1,10 @@
 import React from 'react';
-import { LobbyData, PlayerItem } from '../gameTypes';
+import { useRecoilValue } from 'recoil';
+import { lobbyState } from '../../../../state';
+import { GuessItem, LobbyData, PlayerItem } from '../gameTypes';
 
 // Functions to determine if the player has submitted, based on the current phase/lobbyData
-const guessArrayContainsPlayer = (guesses: any[], playerId: string) => {
+const guessArrayContainsPlayer = (guesses: GuessItem[], playerId: string) => {
   let found = false;
   for (let i = 0; i < guesses.length; i++) {
     if (guesses[i].player === playerId) {
@@ -13,7 +15,7 @@ const guessArrayContainsPlayer = (guesses: any[], playerId: string) => {
   return found;
 };
 
-const playerHasSubmitted = (lobbyData: any, player: PlayerItem) => {
+const playerHasSubmitted = (lobbyData: LobbyData, player: PlayerItem) => {
   if (lobbyData.phase === 'WRITING' && player.definition !== '') {
     return true;
   } else if (
@@ -26,23 +28,27 @@ const playerHasSubmitted = (lobbyData: any, player: PlayerItem) => {
   }
 };
 
-const playerClassName = (lobbyData: any, player: PlayerItem) => {
+const playerClassName = (lobbyData: LobbyData, player: PlayerItem) => {
   return `player${playerHasSubmitted(lobbyData, player) ? ' submitted' : ''}`;
 };
 
 const PlayerList = (props: PlayerListProps): React.ReactElement => {
-  const { playerId, lobbyData } = props;
+  const { playerId } = props;
+  const lobbyData = useRecoilValue(lobbyState);
 
   return (
     <div className="player-list">
-      {lobbyData.players.map((player: PlayerItem) => {
-        return (
-          <p className={playerClassName(lobbyData, player)} key={player.id}>
-            {`${playerId === player.id ? '(you)' : ''} ${player.username}`},
-            score: {player.points}
-          </p>
-        );
-      })}
+      <h2>Players</h2>
+      {lobbyData.players
+        .filter((player: PlayerItem) => player.id !== lobbyData.host)
+        .map((player: PlayerItem) => {
+          return (
+            <p className={playerClassName(lobbyData, player)} key={player.id}>
+              {`${playerId === player.id ? '(you)' : ''} ${player.username}`},
+              score: {player.points}
+            </p>
+          );
+        })}
     </div>
   );
 };
@@ -50,6 +56,5 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
 export default PlayerList;
 
 interface PlayerListProps {
-  lobbyData: LobbyData;
   playerId: string;
 }

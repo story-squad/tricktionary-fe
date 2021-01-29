@@ -68,20 +68,22 @@ const GameContainer = (): React.ReactElement => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
       history.push(`/${socketData.lobbyCode}`);
-      console.log(socketData);
     });
 
     // New round with same players, retain points
     socket.on('play again', (socketData: LobbyData) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
-      console.log(socketData);
     });
 
     // Get your playerId from the BE
     socket.on('welcome', (socketData: string) => {
-      console.log('player ID: ', socketData);
       setPlayerId(socketData);
+    });
+
+    // Recieve BE info
+    socket.on('info', (infoData: string) => {
+      console.log(infoData);
     });
 
     // Recieve BE errors
@@ -93,7 +95,7 @@ const GameContainer = (): React.ReactElement => {
   // Socket event emitters
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
-    socket.emit('create lobby', username);
+    socket.emit('create lobby', 'Host');
     setIsHost(true);
   };
 
@@ -101,8 +103,11 @@ const GameContainer = (): React.ReactElement => {
     if (e) {
       e.preventDefault();
     }
-    const code = optionalCode ? optionalCode : lobbyCode;
-    socket.emit('join lobby', username, code);
+    socket.emit(
+      'join lobby',
+      username,
+      optionalCode ? optionalCode : lobbyCode,
+    );
   };
 
   const handleStartGame = (e: React.MouseEvent) => {
@@ -167,7 +172,7 @@ const GameContainer = (): React.ReactElement => {
             Home
           </Link>
           <p className="room-code">Room Code: {lobbyCode}</p>
-          <PlayerList lobbyData={lobbyData} playerId={playerId} />
+          <PlayerList playerId={playerId} />
         </>
       )}
       {currentPhase()}
