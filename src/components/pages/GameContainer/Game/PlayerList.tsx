@@ -1,10 +1,10 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { lobbyState } from '../../../../state';
-import { PlayerItem } from '../gameTypes';
+import { GuessItem, LobbyData, PlayerItem } from '../gameTypes';
 
 // Functions to determine if the player has submitted, based on the current phase/lobbyData
-const guessArrayContainsPlayer = (guesses: any[], playerId: string) => {
+const guessArrayContainsPlayer = (guesses: GuessItem[], playerId: string) => {
   let found = false;
   for (let i = 0; i < guesses.length; i++) {
     if (guesses[i].player === playerId) {
@@ -15,7 +15,7 @@ const guessArrayContainsPlayer = (guesses: any[], playerId: string) => {
   return found;
 };
 
-const playerHasSubmitted = (lobbyData: any, player: PlayerItem) => {
+const playerHasSubmitted = (lobbyData: LobbyData, player: PlayerItem) => {
   if (lobbyData.phase === 'WRITING' && player.definition !== '') {
     return true;
   } else if (
@@ -28,7 +28,7 @@ const playerHasSubmitted = (lobbyData: any, player: PlayerItem) => {
   }
 };
 
-const playerClassName = (lobbyData: any, player: PlayerItem) => {
+const playerClassName = (lobbyData: LobbyData, player: PlayerItem) => {
   return `player${playerHasSubmitted(lobbyData, player) ? ' submitted' : ''}`;
 };
 
