@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { isHostState, lobbyState } from '../../../../state';
+import { lobbyState } from '../../../../state';
 import { guessesState } from '../../../../state/guessesState';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
@@ -71,7 +71,6 @@ const getPlayerDictionary = (players: PlayerItem[]): PlayerDictionary => {
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
   const { handlePlayAgain } = props;
-  const isHost = useRecoilValue(isHostState);
   const lobbyData = useRecoilValue(lobbyState);
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
@@ -83,10 +82,9 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
 
   return (
     <div className="postgame game-page">
-      <h2>Postgame</h2>
+      <h2>Results</h2>
       <div className="word-display">
-        <p>Word:</p>
-        <p>{lobbyData.word}</p>
+        <p>Word: {lobbyData.word}</p>
       </div>
       <Host>
         <div className="round-results">

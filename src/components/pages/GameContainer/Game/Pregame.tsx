@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { WordItem } from '../gameTypes';
+import { getWords } from '../../../../api/apiRequests';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
-import { getWords } from '../../../../api/apiRequests';
+import { WordItem } from '../gameTypes';
 
 const initialChoiceValue = -1;
 const initialCustomInputValue = { word: '', definition: '' };
@@ -91,6 +91,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
               value={customInput.word}
               onChange={handleInputChange}
             />
+            <br />
             <label htmlFor="definition">Definition:</label>
             <input
               id="definition"
