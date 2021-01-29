@@ -42,6 +42,8 @@ label {
 
 input {
   font-weight: 300;
+  margin-bottom: 2rem;
+  border-radius: 1rem;
 }
 
 a {
@@ -62,6 +64,7 @@ button {
 .word-choice {
   display: block;
   width: 100%;
+  max-width: 100rem;
 
   .definition {
     font-weight: 300;
@@ -131,4 +134,27 @@ button {
 
 #definition {
   width: 40rem;
+}
+
+#timer {
+  margin: 2rem 0;
+  border: 1px solid black;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 18rem;
+  p {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  p,
+  span {
+    font-family: $display-font;
+  }
+  .text {
+    width: 80%;
+  }
+  .time {
+    width: 20%;
+  }
 }
