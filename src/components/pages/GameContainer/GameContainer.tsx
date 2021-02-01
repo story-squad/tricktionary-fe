@@ -3,12 +3,12 @@ import { Link, useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 import {
+  guessesState,
   isHostState,
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
 } from '../../../state';
-import { guessesState } from '../../../state/guessesState';
 import {
   Guessing,
   Lobby,
