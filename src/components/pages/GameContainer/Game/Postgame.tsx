@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { lobbyState } from '../../../../state';
 import { guessesState } from '../../../../state/guessesState';
+import { GuessItem, LobbyData, PlayerItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
-import { GuessItem, LobbyData, PlayerItem } from '../gameTypes';
 
+// Create a list of definitions, attach players who guessed for each, calculate point gains (UI only), add real definiton to the end
 const getSortedDefinitions = (
   lobbyData: LobbyData,
   guesses: GuessItem[],

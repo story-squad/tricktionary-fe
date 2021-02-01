@@ -62,7 +62,3 @@ interface LobbyProps {
   handleCreateLobby: (e: React.MouseEvent) => void;
   handleJoinLobby: (e: null | React.MouseEvent, optionalCode: string) => void;
 }
-
-interface ParamTypes {
-  lobbyCode: string;
-}

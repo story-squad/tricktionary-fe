@@ -3,9 +3,13 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import shuffle from 'shuffle-array';
 import { lobbyState } from '../../../../state';
 import { guessesState } from '../../../../state/guessesState';
+import {
+  DefinitionItem,
+  GuessItem,
+  PlayerItem,
+} from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
-import { DefinitionItem, GuessItem, PlayerItem } from '../gameTypes';
 
 // Non-state functions
 
