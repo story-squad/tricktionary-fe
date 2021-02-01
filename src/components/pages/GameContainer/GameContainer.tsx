@@ -64,8 +64,8 @@ const GameContainer = (): React.ReactElement => {
     });
   };
 
-  // Socket event listeners
   useEffect(() => {
+    //// Socket event listeners
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
       setLobbyData(socketData);
@@ -93,6 +93,13 @@ const GameContainer = (): React.ReactElement => {
     socket.on('error', (errorData: string) => {
       console.log(errorData);
     });
+
+    //// Other on-mount functions
+    // Get username from localStorage if it exists
+    const username = localStorage.getItem('username');
+    if (username) {
+      setUsername(username);
+    }
   }, []);
 
   // Socket event emitters
@@ -111,6 +118,9 @@ const GameContainer = (): React.ReactElement => {
       username,
       optionalCode ? optionalCode : lobbyCode,
     );
+    if (username) {
+      localStorage.setItem('username', username);
+    }
   };
 
   const handleStartGame = (e: React.MouseEvent) => {
