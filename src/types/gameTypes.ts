@@ -33,3 +33,17 @@ export interface WordItem {
   word: string;
   definition: string;
 }
+
+export interface TricktionarySettings {
+  word: {
+    id: number;
+    word: string | undefined;
+    definition: string | undefined;
+  };
+  seconds: number | undefined;
+  filter: {
+    style: string | undefined;
+    list: string[] | undefined;
+  };
+  source: string | undefined;
+}

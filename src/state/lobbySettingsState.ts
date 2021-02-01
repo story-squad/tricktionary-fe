@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import { TricktionarySettings } from '../types/gameTypes';
 
 export const lobbySettingsState = atom<TricktionarySettings>({
   key: 'lobbySettings',
@@ -16,17 +17,3 @@ export const lobbySettingsState = atom<TricktionarySettings>({
     source: 'User',
   },
 });
-
-export interface TricktionarySettings {
-  word: {
-    id: number;
-    word: string | undefined;
-    definition: string | undefined;
-  };
-  seconds: number | undefined;
-  filter: {
-    style: string | undefined;
-    list: string[] | undefined;
-  };
-  source: string | undefined;
-}

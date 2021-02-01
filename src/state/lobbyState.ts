@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { LobbyData } from '../components/pages/GameContainer/gameTypes';
+import { LobbyData } from '../types/gameTypes';
 
 export const lobbyState = atom<LobbyData>({
   key: 'lobbyState',

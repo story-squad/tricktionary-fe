@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { GuessItem } from '../components/pages/GameContainer/gameTypes';
+import { GuessItem } from '../types/gameTypes';
 
 export const guessesState = atom<GuessItem[]>({
   key: 'guessesState',

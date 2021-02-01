@@ -3,12 +3,13 @@ import { Link, useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 import {
+  guessesState,
   isHostState,
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
 } from '../../../state';
-import { guessesState } from '../../../state/guessesState';
+import { GuessItem, LobbyData } from '../../../types/gameTypes';
 import {
   Guessing,
   Lobby,
@@ -17,10 +18,12 @@ import {
   Pregame,
   Writing,
 } from './Game';
-import { GuessItem, LobbyData } from './gameTypes';
 
 // Create a socket connection to API
-const socket = io.connect(process.env.REACT_APP_API_URL as string);
+const socket = io.connect(process.env.REACT_APP_API_URL as string, {
+  forceNew: true,
+  transports: ['polling'],
+});
 
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getWords } from '../../../../api/apiRequests';
+import { WordItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
-import { WordItem } from '../gameTypes';
 
 const initialChoiceValue = -1;
 const initialCustomInputValue = { word: '', definition: '' };
