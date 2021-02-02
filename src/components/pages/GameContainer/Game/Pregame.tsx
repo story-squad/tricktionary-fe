@@ -15,6 +15,9 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [customInput, setCustomInput] = useState(initialCustomInputValue);
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
   const lobbySettings = useRecoilValue(lobbySettingsState);
+  const [useTimer, setUseTimer] = useState<boolean>(
+    lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
+  );
 
   // Get 3 word suggestions automatically
   useEffect(() => {
@@ -58,6 +61,15 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
   const handleSecondsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.handleSetSeconds(Number(e.target.value));
+  };
+
+  const handleSetUseTimer = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      props.handleSetSeconds(60);
+    } else {
+      props.handleSetSeconds(0);
+    }
+    setUseTimer(e.target.checked);
   };
 
   return (
@@ -108,16 +120,29 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             />
           </div>
         )}
-        <label htmlFor="seconds">Seconds to Submit Definition</label>
         <input
-          type="number"
-          min={0}
-          max={120}
-          value={lobbySettings.seconds}
-          onChange={handleSecondsChange}
-          id="seconds"
-          name="seconds"
+          type="checkbox"
+          id="use-timer"
+          checked={useTimer}
+          onChange={handleSetUseTimer}
         />
+        <label htmlFor="use-timer">Use Timer</label>
+        <br />
+        {useTimer && (
+          <>
+            <input
+              type="number"
+              min={0}
+              max={120}
+              value={lobbySettings.seconds}
+              onChange={handleSecondsChange}
+              id="seconds"
+              name="seconds"
+            />
+            <label htmlFor="seconds">Seconds to Submit Definition</label>
+            <br />
+          </>
+        )}
         <button onClick={props.handleStartGame}>Start</button>
       </Host>
       <Player>
