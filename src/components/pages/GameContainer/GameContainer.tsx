@@ -4,7 +4,6 @@ import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 import {
   guessesState,
-  isHostState,
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
@@ -34,19 +33,16 @@ const GameContainer = (): React.ReactElement => {
   const [username, setUsername] = useState(
     `Player${Math.floor(Math.random() * 9999)}`,
   );
-  const [, setIsHost] = useRecoilState(isHostState);
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
-  const resetIsHost = useResetRecoilState(isHostState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetGuesses = useResetRecoilState(guessesState);
 
   // Combine state reset functions
   const resetGame = () => {
-    resetIsHost();
     resetLobbyData();
     resetLobbyCode();
     resetGuesses();
@@ -125,7 +121,6 @@ const GameContainer = (): React.ReactElement => {
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
     socket.emit('create lobby', username);
-    setIsHost(true);
   };
 
   const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
