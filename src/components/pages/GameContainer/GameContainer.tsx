@@ -19,6 +19,9 @@ import {
   Writing,
 } from './Game';
 
+// Game constants
+const MAX_SECONDS = 120;
+
 // Create a socket connection to API
 const socket = io.connect(process.env.REACT_APP_API_URL as string, {
   forceNew: true,
@@ -65,6 +68,13 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handleSetSeconds = (seconds: number) => {
+    seconds = Math.floor(seconds);
+    if (seconds > MAX_SECONDS) {
+      seconds = MAX_SECONDS;
+    }
+    if (seconds < 0) {
+      seconds = 0;
+    }
     setLobbySettings({
       ...lobbySettings,
       seconds,
