@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PlayerItem } from '../../../types/gameTypes';
 
-const SetHost = (props: SetHostProps) => {
+const SetHost = (props: SetHostProps): React.ReactElement => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [chosenPlayer, setChosenPlayer] = useState<string>('0');
 
