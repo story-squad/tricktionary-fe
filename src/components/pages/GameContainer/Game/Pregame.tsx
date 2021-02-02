@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { getWords } from '../../../../api/apiRequests';
+import { lobbySettingsState } from '../../../../state';
 import { WordItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
@@ -12,6 +14,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [choice, setChoice] = useState(initialChoiceValue);
   const [customInput, setCustomInput] = useState(initialCustomInputValue);
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
+  const lobbySettings = useRecoilValue(lobbySettingsState);
 
   // Get 3 word suggestions automatically
   useEffect(() => {
@@ -51,6 +54,10 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       ...customInput,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleSecondsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.handleSetSeconds(Number(e.target.value));
   };
 
   return (
@@ -101,6 +108,16 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             />
           </div>
         )}
+        <label htmlFor="seconds">Seconds to Submit Definition</label>
+        <input
+          type="number"
+          min={0}
+          max={120}
+          value={lobbySettings.seconds}
+          onChange={handleSecondsChange}
+          id="seconds"
+          name="seconds"
+        />
         <button onClick={props.handleStartGame}>Start</button>
       </Host>
       <Player>
@@ -130,6 +147,7 @@ interface PregameProps {
     word: string | undefined,
     definition: string | undefined,
   ) => void;
+  handleSetSeconds: (seconds: number) => void;
 }
 
 interface WordChoiceProps {

@@ -64,6 +64,13 @@ const GameContainer = (): React.ReactElement => {
     });
   };
 
+  const handleSetSeconds = (seconds: number) => {
+    setLobbySettings({
+      ...lobbySettings,
+      seconds,
+    });
+  };
+
   useEffect(() => {
     //// Socket event listeners
     // Update game each phase, push socket data to state, push lobbyCode to URL
@@ -155,6 +162,7 @@ const GameContainer = (): React.ReactElement => {
           <Pregame
             handleStartGame={handleStartGame}
             handleSetWord={handleSetWord}
+            handleSetSeconds={handleSetSeconds}
           />
         );
       case 'WRITING':
