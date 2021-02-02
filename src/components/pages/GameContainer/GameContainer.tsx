@@ -8,6 +8,7 @@ import {
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
+  playerIdState,
 } from '../../../state';
 import { GuessItem, LobbyData } from '../../../types/gameTypes';
 import {
@@ -37,7 +38,7 @@ const GameContainer = (): React.ReactElement => {
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
-  const [playerId, setPlayerId] = useState('');
+  const [playerId, setPlayerId] = useRecoilState(playerIdState);
   const resetIsHost = useResetRecoilState(isHostState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
