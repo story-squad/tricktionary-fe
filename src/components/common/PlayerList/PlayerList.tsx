@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { lobbyState } from '../../../../state';
-import { GuessItem, LobbyData, PlayerItem } from '../../../../types/gameTypes';
+import { lobbyState } from '../../../state';
+import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
 
 // Functions to determine if the player has submitted, based on the current phase/lobbyData
 const guessArrayContainsPlayer = (guesses: GuessItem[], playerId: string) => {
