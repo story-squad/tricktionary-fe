@@ -123,7 +123,7 @@ const GameContainer = (): React.ReactElement => {
   // Socket event emitters
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
-    socket.emit('create lobby', 'Host');
+    socket.emit('create lobby', username);
     setIsHost(true);
   };
 
@@ -164,6 +164,10 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('set phase', phase, lobbyCode);
   };
 
+  const handleSetHost = (hostId: string) => {
+    socket.emit('set host', hostId, lobbyCode);
+  };
+
   // Determine Game component to render based on the current game phase
   const currentPhase = () => {
     switch (lobbyData.phase) {
@@ -190,7 +194,12 @@ const GameContainer = (): React.ReactElement => {
           />
         );
       case 'RESULTS':
-        return <Postgame handlePlayAgain={handlePlayAgain} />;
+        return (
+          <Postgame
+            handlePlayAgain={handlePlayAgain}
+            handleSetHost={handleSetHost}
+          />
+        );
       default:
         return (
           <Lobby

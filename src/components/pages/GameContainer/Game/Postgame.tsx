@@ -5,6 +5,7 @@ import { guessesState } from '../../../../state/guessesState';
 import { GuessItem, LobbyData, PlayerItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
+import SetHost from '../../../common/SetHost/SetHost';
 
 // Create a list of definitions, attach players who guessed for each, calculate point gains (UI only), add real definiton to the end
 const getSortedDefinitions = (
@@ -71,7 +72,7 @@ const getPlayerDictionary = (players: PlayerItem[]): PlayerDictionary => {
 };
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
-  const { handlePlayAgain } = props;
+  const { handlePlayAgain, handleSetHost } = props;
   const lobbyData = useRecoilValue(lobbyState);
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
@@ -93,6 +94,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
             <DefinitionResult key={key} definitionResult={definitionResult} />
           ))}
         </div>
+        <SetHost players={lobbyData.players} handleSetHost={handleSetHost} />
         <button onClick={handlePlayAgain}>Play Again</button>
       </Host>
       <Player>
@@ -124,6 +126,7 @@ export default Postgame;
 
 interface PostgameProps {
   handlePlayAgain: () => void;
+  handleSetHost: (hostId: string) => void;
 }
 
 interface DefinitionResultProps {
