@@ -21,7 +21,7 @@ const Timer = (props: TimerProps): React.ReactElement => {
 
   return (
     <>
-      {seconds && seconds > 0 && (
+      {seconds !== undefined && seconds > 0 && (
         <div id="timer">
           <p>
             <span className="time">{timer}</span>{' '}
