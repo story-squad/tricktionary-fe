@@ -12,5 +12,13 @@ export const lobbyState = atom<LobbyData>({
     lobbyCode: '',
     roundId: 0,
     word: '',
+    roundSettings: {
+      seconds: 60,
+      source: 'User',
+      filter: {
+        style: '',
+        list: [],
+      },
+    },
   },
 });

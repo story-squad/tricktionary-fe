@@ -63,6 +63,7 @@ a {
   display: block;
   width: 100%;
   max-width: 100rem;
+  text-align: left;
 
   .definition {
     font-weight: 300;
@@ -87,23 +88,32 @@ a {
   padding: 2rem;
 }
 
-.definition {
-  width: 100%;
-  margin: 2rem auto;
-  text-align: center;
+.guessing {
+  .definition {
+    width: 100%;
+    margin: 2rem;
+    text-align: center;
+    display: flex;
+    justify-content: flex-start;
 
-  .definition-key {
-    margin: 2rem auto 1rem;
-    color: white;
-    background: black;
-    border-radius: 50%;
-    width: 4rem;
-    height: 4rem;
+    .definition-content {
+      align-self: center;
+      text-align: left;
+    }
 
-    p {
-      width: 100%;
-      text-align: center;
-      padding: 0.5rem 0;
+    .definition-key {
+      margin: 0 2rem 0 0;
+      color: white;
+      background: black;
+      border-radius: 50%;
+      width: 4rem;
+      height: 4rem;
+
+      p {
+        width: 4rem;
+        text-align: center;
+        padding: 0.5rem 0;
+      }
     }
   }
 }
