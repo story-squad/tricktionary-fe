@@ -1,5 +1,4 @@
 // General styles across components
-
 // For testing, update later
 h1,
 h2 {
@@ -29,17 +28,13 @@ span {
 }
 
 button {
-  cursor: pointer;
-  border-radius: 1rem;
-  border: 1px solid $charcoal;
-  margin: 1rem 1rem 1rem 0;
-  padding: 0.2rem 1rem;
-
+  @include button;
   &.selected {
     background: $blue;
     color: white;
   }
 }
+
 
 label {
   margin: auto 2rem auto 0;
@@ -82,6 +77,8 @@ a {
   }
 }
 
+
+
 .game-page,
 .player-list,
 .room-code {
@@ -111,6 +108,7 @@ a {
 
       p {
         width: 4rem;
+        font-size: 1.8rem;
         text-align: center;
         padding: 0.5rem 0;
       }
@@ -118,9 +116,9 @@ a {
   }
 }
 
-.home-link {
-  margin: 2rem;
-}
+// .home-link {
+//   margin: 2rem;
+// }
 
 .definition-result {
   margin: 4rem 0;

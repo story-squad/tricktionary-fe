@@ -19,6 +19,9 @@ import {
   Writing,
 } from './Game';
 
+//Logo
+import logo from '../../../assets/TricktionaryLogo.png';
+
 // Game constants
 const MAX_SECONDS = 120;
 
@@ -211,18 +214,25 @@ const GameContainer = (): React.ReactElement => {
   };
 
   return (
-    <div className="game-container">
-      {lobbyData.phase !== 'LOBBY' && (
-        <>
-          <Link className="home-link" onClick={() => resetGame()} to="/">
-            Home
-          </Link>
-          <p className="room-code">Room Code: {lobbyCode}</p>
-          <PlayerList />
-        </>
-      )}
-      {currentPhase()}
-    </div>
+    <>
+      <div className="game-container">
+        {lobbyData.phase !== 'LOBBY' && (
+          <>
+            <header>
+              <Link className="home-link" onClick={() => resetGame()} to="/">
+                <img className="trick-logo" src={logo} />
+              </Link>
+              <p>
+                The game where the wrong definition could lead you to greatness.
+              </p>
+            </header>
+            <p className="room-code">Room Code: {lobbyCode}</p>
+            <PlayerList />
+          </>
+        )}
+        {currentPhase()}
+      </div>
+    </>
   );
 };
 
