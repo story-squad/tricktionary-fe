@@ -26,10 +26,7 @@ import logo from '../../../assets/TricktionaryLogo.png';
 const MAX_SECONDS = 120;
 
 // Create a socket connection to API
-const socket = io.connect(process.env.REACT_APP_API_URL as string, {
-  forceNew: true,
-  transports: ['polling'],
-});
+const socket = io.connect(process.env.REACT_APP_API_URL as string);
 
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();
