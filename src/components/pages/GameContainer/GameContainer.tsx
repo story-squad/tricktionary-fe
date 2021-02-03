@@ -23,10 +23,7 @@ import {
 const MAX_SECONDS = 120;
 
 // Create a socket connection to API
-const socket = io.connect(process.env.REACT_APP_API_URL as string, {
-  forceNew: true,
-  transports: ['polling'],
-});
+const socket = io.connect(process.env.REACT_APP_API_URL as string);
 
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();
@@ -218,7 +215,7 @@ const GameContainer = (): React.ReactElement => {
             Home
           </Link>
           <p className="room-code">Room Code: {lobbyCode}</p>
-          <PlayerList playerId={playerId} />
+          <PlayerList />
         </>
       )}
       {currentPhase()}
