@@ -1,12 +1,19 @@
 import React, { SetStateAction, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-
-//styles
-import '../../../../styles/gameContainer.scss';
-import '../../../../styles/components/pages/Lobby.scss';
-
 //image
 import logo from '../../../../assets/TricktionaryLogo.png';
+import '../../../../styles/components/pages/Lobby.scss';
+//styles
+import '../../../../styles/gameContainer.scss';
+
+//basic input length validation. Replace with more robust validation later.
+const usernameIsValid = (username: string): boolean => {
+  if (username.trim().length > 1 && username.trim().length <= 12) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
@@ -62,6 +69,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
           <button
             className="join lobby-button"
             onClick={(e) => props.handleJoinLobby(e, '')}
+            disabled={!usernameIsValid(props.username)}
           >
             Join Lobby
           </button>
@@ -70,6 +78,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
           <button
             className="host lobby-button"
             onClick={props.handleCreateLobby}
+            disabled={!usernameIsValid(props.username)}
           >
             Host New Game
           </button>

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
+//Logo
+import logo from '../../../assets/TricktionaryLogo.png';
 import {
   guessesState,
   lobbyCodeState,
@@ -18,9 +20,6 @@ import {
   Pregame,
   Writing,
 } from './Game';
-
-//Logo
-import logo from '../../../assets/TricktionaryLogo.png';
 
 // Game constants
 const MAX_SECONDS = 120;
@@ -83,7 +82,6 @@ const GameContainer = (): React.ReactElement => {
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
       setLobbyData(socketData);
-      console.log(socketData);
       setLobbyCode(socketData.lobbyCode);
       history.push(`/${socketData.lobbyCode}`);
     });
@@ -113,14 +111,14 @@ const GameContainer = (): React.ReactElement => {
     // Get username from localStorage if it exists
     const username = localStorage.getItem('username');
     if (username) {
-      setUsername(username);
+      setUsername(username.trim());
     }
   }, []);
 
   // Socket event emitters
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
-    socket.emit('create lobby', username);
+    socket.emit('create lobby', username.trim());
   };
 
   const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
@@ -129,11 +127,11 @@ const GameContainer = (): React.ReactElement => {
     }
     socket.emit(
       'join lobby',
-      username,
+      username.trim(),
       optionalCode ? optionalCode : lobbyCode,
     );
     if (username) {
-      localStorage.setItem('username', username);
+      localStorage.setItem('username', username.trim());
     }
   };
 
