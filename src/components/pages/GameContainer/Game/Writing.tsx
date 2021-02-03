@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { lobbySettingsState, lobbyState } from '../../../../state';
+import { lobbyState } from '../../../../state';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
 import Timer from '../../../common/Timer/Timer';
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
-  const LobbySettings = useRecoilValue(lobbySettingsState);
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
@@ -34,7 +33,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
         <h3>Your Word:</h3>
         <p>{lobbyData.word}</p>
       </div>
-      <Timer seconds={LobbySettings.seconds} timeUp={setTimerDone} />
+      <Timer seconds={lobbyData.roundSettings.seconds} timeUp={setTimerDone} />
       <Host>
         {!timerDone && <p>Waiting for players to submit definitions...</p>}
         {timerDone && (

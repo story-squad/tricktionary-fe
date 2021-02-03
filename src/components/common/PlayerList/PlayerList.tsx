@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { lobbyState } from '../../../../state';
-import { GuessItem, LobbyData, PlayerItem } from '../gameTypes';
+import { lobbyState } from '../../../state';
+import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
 
 // Functions to determine if the player has submitted, based on the current phase/lobbyData
 const guessArrayContainsPlayer = (guesses: GuessItem[], playerId: string) => {
@@ -32,6 +32,22 @@ const playerClassName = (lobbyData: LobbyData, player: PlayerItem) => {
   return `player${playerHasSubmitted(lobbyData, player) ? ' submitted' : ''}`;
 };
 
+const playerUserName = (
+  lobbyData: LobbyData,
+  player: PlayerItem,
+  playerId: string,
+) => {
+  let username = '';
+  if (player.id === playerId) {
+    username += '(You) ';
+  }
+  if (lobbyData.host === player.id) {
+    username += '(Host) ';
+  }
+  username += player.username;
+  return username;
+};
+
 const PlayerList = (props: PlayerListProps): React.ReactElement => {
   const { playerId } = props;
   const lobbyData = useRecoilValue(lobbyState);
@@ -39,16 +55,14 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
   return (
     <div className="player-list">
       <h2>Players</h2>
-      {lobbyData.players
-        .filter((player: PlayerItem) => player.id !== lobbyData.host)
-        .map((player: PlayerItem) => {
-          return (
-            <p className={playerClassName(lobbyData, player)} key={player.id}>
-              {`${playerId === player.id ? '(you)' : ''} ${player.username}`},
-              score: {player.points}
-            </p>
-          );
-        })}
+      {lobbyData.players.map((player: PlayerItem) => {
+        return (
+          <p className={playerClassName(lobbyData, player)} key={player.id}>
+            {playerUserName(lobbyData, player, playerId)}, score:{' '}
+            {player.points}
+          </p>
+        );
+      })}
     </div>
   );
 };

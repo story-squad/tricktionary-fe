@@ -3,12 +3,13 @@ import { Link, useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 import {
-  isHostState,
+  guessesState,
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
+  playerIdState,
 } from '../../../state';
-import { guessesState } from '../../../state/guessesState';
+import { GuessItem, LobbyData } from '../../../types/gameTypes';
 import {
   Guessing,
   Lobby,
@@ -17,7 +18,9 @@ import {
   Pregame,
   Writing,
 } from './Game';
-import { GuessItem, LobbyData } from './gameTypes';
+
+// Game constants
+const MAX_SECONDS = 120;
 
 // Create a socket connection to API
 const socket = io.connect(process.env.REACT_APP_API_URL as string, {
@@ -30,19 +33,16 @@ const GameContainer = (): React.ReactElement => {
   const [username, setUsername] = useState(
     `Player${Math.floor(Math.random() * 9999)}`,
   );
-  const [, setIsHost] = useRecoilState(isHostState);
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
-  const [playerId, setPlayerId] = useState('');
-  const resetIsHost = useResetRecoilState(isHostState);
+  const [playerId, setPlayerId] = useRecoilState(playerIdState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetGuesses = useResetRecoilState(guessesState);
 
   // Combine state reset functions
   const resetGame = () => {
-    resetIsHost();
     resetLobbyData();
     resetLobbyCode();
     resetGuesses();
@@ -64,11 +64,26 @@ const GameContainer = (): React.ReactElement => {
     });
   };
 
-  // Socket event listeners
+  const handleSetSeconds = (seconds: number) => {
+    seconds = Math.floor(seconds);
+    if (seconds > MAX_SECONDS) {
+      seconds = MAX_SECONDS;
+    }
+    if (seconds < 0) {
+      seconds = 0;
+    }
+    setLobbySettings({
+      ...lobbySettings,
+      seconds,
+    });
+  };
+
   useEffect(() => {
+    //// Socket event listeners
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
       setLobbyData(socketData);
+      console.log(socketData);
       setLobbyCode(socketData.lobbyCode);
       history.push(`/${socketData.lobbyCode}`);
     });
@@ -93,13 +108,19 @@ const GameContainer = (): React.ReactElement => {
     socket.on('error', (errorData: string) => {
       console.log(errorData);
     });
+
+    //// Other on-mount functions
+    // Get username from localStorage if it exists
+    const username = localStorage.getItem('username');
+    if (username) {
+      setUsername(username);
+    }
   }, []);
 
   // Socket event emitters
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
-    socket.emit('create lobby', 'Host');
-    setIsHost(true);
+    socket.emit('create lobby', username);
   };
 
   const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
@@ -111,6 +132,9 @@ const GameContainer = (): React.ReactElement => {
       username,
       optionalCode ? optionalCode : lobbyCode,
     );
+    if (username) {
+      localStorage.setItem('username', username);
+    }
   };
 
   const handleStartGame = (e: React.MouseEvent) => {
@@ -136,6 +160,10 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('set phase', phase, lobbyCode);
   };
 
+  const handleSetHost = (hostId: string) => {
+    socket.emit('set host', hostId, lobbyCode);
+  };
+
   // Determine Game component to render based on the current game phase
   const currentPhase = () => {
     switch (lobbyData.phase) {
@@ -144,6 +172,7 @@ const GameContainer = (): React.ReactElement => {
           <Pregame
             handleStartGame={handleStartGame}
             handleSetWord={handleSetWord}
+            handleSetSeconds={handleSetSeconds}
           />
         );
       case 'WRITING':
@@ -161,7 +190,12 @@ const GameContainer = (): React.ReactElement => {
           />
         );
       case 'RESULTS':
-        return <Postgame handlePlayAgain={handlePlayAgain} />;
+        return (
+          <Postgame
+            handlePlayAgain={handlePlayAgain}
+            handleSetHost={handleSetHost}
+          />
+        );
       default:
         return (
           <Lobby

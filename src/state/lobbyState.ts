@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { LobbyData } from '../components/pages/GameContainer/gameTypes';
+import { LobbyData } from '../types/gameTypes';
 
 export const lobbyState = atom<LobbyData>({
   key: 'lobbyState',
@@ -12,5 +12,13 @@ export const lobbyState = atom<LobbyData>({
     lobbyCode: '',
     roundId: 0,
     word: '',
+    roundSettings: {
+      seconds: 60,
+      source: 'User',
+      filter: {
+        style: '',
+        list: [],
+      },
+    },
   },
 });

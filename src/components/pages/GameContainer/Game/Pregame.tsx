@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { getWords } from '../../../../api/apiRequests';
+import { lobbySettingsState } from '../../../../state';
+import { WordItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
-import { WordItem } from '../gameTypes';
 
 const initialChoiceValue = -1;
 const initialCustomInputValue = { word: '', definition: '' };
@@ -12,6 +14,10 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [choice, setChoice] = useState(initialChoiceValue);
   const [customInput, setCustomInput] = useState(initialCustomInputValue);
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
+  const lobbySettings = useRecoilValue(lobbySettingsState);
+  const [useTimer, setUseTimer] = useState<boolean>(
+    lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
+  );
 
   // Get 3 word suggestions automatically
   useEffect(() => {
@@ -51,6 +57,19 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       ...customInput,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleSecondsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.handleSetSeconds(Number(e.target.value));
+  };
+
+  const handleSetUseTimer = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      props.handleSetSeconds(60);
+    } else {
+      props.handleSetSeconds(0);
+    }
+    setUseTimer(e.target.checked);
   };
 
   return (
@@ -101,6 +120,29 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             />
           </div>
         )}
+        <input
+          type="checkbox"
+          id="use-timer"
+          checked={useTimer}
+          onChange={handleSetUseTimer}
+        />
+        <label htmlFor="use-timer">Use Timer</label>
+        <br />
+        {useTimer && (
+          <>
+            <input
+              type="number"
+              min={0}
+              max={120}
+              value={lobbySettings.seconds}
+              onChange={handleSecondsChange}
+              id="seconds"
+              name="seconds"
+            />
+            <label htmlFor="seconds">Seconds to Submit Definition</label>
+            <br />
+          </>
+        )}
         <button onClick={props.handleStartGame}>Start</button>
       </Host>
       <Player>
@@ -130,6 +172,7 @@ interface PregameProps {
     word: string | undefined,
     definition: string | undefined,
   ) => void;
+  handleSetSeconds: (seconds: number) => void;
 }
 
 interface WordChoiceProps {

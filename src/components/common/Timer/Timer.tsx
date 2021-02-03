@@ -20,12 +20,16 @@ const Timer = (props: TimerProps): React.ReactElement => {
   }, []);
 
   return (
-    <div id="timer">
-      <p>
-        <span className="time">{timer}</span>{' '}
-        <span className="text">seconds left</span>
-      </p>
-    </div>
+    <>
+      {seconds !== undefined && seconds > 0 && (
+        <div id="timer">
+          <p>
+            <span className="time">{timer}</span>{' '}
+            <span className="text">seconds left</span>
+          </p>
+        </div>
+      )}
+    </>
   );
 };
 

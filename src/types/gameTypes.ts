@@ -15,6 +15,14 @@ export interface LobbyData {
   players: PlayerItem[];
   roundId: number;
   word: string;
+  roundSettings: {
+    seconds: number;
+    source: string;
+    filter: {
+      style: string;
+      list: unknown[];
+    };
+  };
 }
 
 export interface GuessItem {
@@ -32,4 +40,18 @@ export interface WordItem {
   id: number;
   word: string;
   definition: string;
+}
+
+export interface TricktionarySettings {
+  word: {
+    id: number;
+    word: string | undefined;
+    definition: string | undefined;
+  };
+  seconds: number | undefined;
+  filter: {
+    style: string | undefined;
+    list: string[] | undefined;
+  };
+  source: string | undefined;
 }
