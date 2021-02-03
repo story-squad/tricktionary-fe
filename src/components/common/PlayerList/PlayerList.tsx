@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { lobbyState } from '../../../state';
+import { lobbyState, playerIdState } from '../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
 
 // Functions to determine if the player has submitted, based on the current phase/lobbyData
@@ -48,8 +48,8 @@ const playerUserName = (
   return username;
 };
 
-const PlayerList = (props: PlayerListProps): React.ReactElement => {
-  const { playerId } = props;
+const PlayerList = (): React.ReactElement => {
+  const playerId = useRecoilValue(playerIdState);
   const lobbyData = useRecoilValue(lobbyState);
 
   return (
@@ -68,7 +68,3 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
 };
 
 export default PlayerList;
-
-interface PlayerListProps {
-  playerId: string;
-}
