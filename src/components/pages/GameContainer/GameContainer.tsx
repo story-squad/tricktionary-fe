@@ -82,7 +82,6 @@ const GameContainer = (): React.ReactElement => {
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
       setLobbyData(socketData);
-      console.log(socketData);
       setLobbyCode(socketData.lobbyCode);
       history.push(`/${socketData.lobbyCode}`);
     });
