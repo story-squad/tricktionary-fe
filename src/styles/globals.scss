@@ -17,8 +17,12 @@ html {
   font-size: 62.5%;
 }
 
+input, label {
+  display:block;
+}
+
 // Font Variables
-$text-font: "Oswald", sans-serif;
+$text-font: "Roboto", sans-serif;
 $display-font: "Bangers", sans-serif;
 
 // Media Query Sizes
@@ -40,14 +44,16 @@ $ltblue: #85c7f2;
 $bright-blue: #2462d9;
 $rose: #d97f9f;
 $lime: #bfd349;
+$purpleblue: #40537F;
 
 #root {
-  background-color: $white;
+  font-size: 16px;
+  background-color: $purpleblue;
 }
 
 .App > div:not(.modal-wrapper):not(.cookie-popup) {
   min-height: 100vh;
-  background-color: $white;
+  background-color: $purpleblue;
   display: flex;
   flex-flow: column nowrap;
 }

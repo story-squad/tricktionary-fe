@@ -5,6 +5,11 @@ import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
 import Timer from '../../../common/Timer/Timer';
 
+// simple definition validation
+const definitionIsValid = (definition: string): boolean => {
+  return definition.trim().length > 0 && definition.trim().length <= 250;
+};
+
 const Writing = (props: WritingProps): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
   const [definition, setDefinition] = useState('');
@@ -60,7 +65,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
               onChange={handleChangeDefinition}
             />
             <br />
-            <button disabled={definition.trim() === ''}>Submit</button>
+            <button disabled={!definitionIsValid(definition)}>Submit</button>
           </form>
         )}
         {!isSubmitted && timerDone && <p>Time&apos;s up!</p>}

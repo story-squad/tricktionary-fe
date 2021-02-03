@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
+//Logo
+import logo from '../../../assets/TricktionaryLogo.png';
 import {
   guessesState,
   lobbyCodeState,
@@ -80,7 +82,6 @@ const GameContainer = (): React.ReactElement => {
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
       setLobbyData(socketData);
-      console.log(socketData);
       setLobbyCode(socketData.lobbyCode);
       history.push(`/${socketData.lobbyCode}`);
     });
@@ -110,14 +111,14 @@ const GameContainer = (): React.ReactElement => {
     // Get username from localStorage if it exists
     const username = localStorage.getItem('username');
     if (username) {
-      setUsername(username);
+      setUsername(username.trim());
     }
   }, []);
 
   // Socket event emitters
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
-    socket.emit('create lobby', username);
+    socket.emit('create lobby', username.trim());
   };
 
   const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
@@ -126,11 +127,11 @@ const GameContainer = (): React.ReactElement => {
     }
     socket.emit(
       'join lobby',
-      username,
+      username.trim(),
       optionalCode ? optionalCode : lobbyCode,
     );
     if (username) {
-      localStorage.setItem('username', username);
+      localStorage.setItem('username', username.trim());
     }
   };
 
@@ -140,8 +141,7 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handleSubmitDefinition = (definition: string) => {
-    const trimmedDefinition = definition.trim();
-    socket.emit('definition submitted', trimmedDefinition, lobbyCode);
+    socket.emit('definition submitted', definition.trim(), lobbyCode);
   };
 
   const handleSubmitGuesses = (e: React.MouseEvent, guesses: GuessItem[]) => {
@@ -208,18 +208,25 @@ const GameContainer = (): React.ReactElement => {
   };
 
   return (
-    <div className="game-container">
-      {lobbyData.phase !== 'LOBBY' && (
-        <>
-          <Link className="home-link" onClick={() => resetGame()} to="/">
-            Home
-          </Link>
-          <p className="room-code">Room Code: {lobbyCode}</p>
-          <PlayerList />
-        </>
-      )}
-      {currentPhase()}
-    </div>
+    <>
+      <div className="game-container">
+        {lobbyData.phase !== 'LOBBY' && (
+          <>
+            <header>
+              <Link className="home-link" onClick={() => resetGame()} to="/">
+                <img className="trick-logo" src={logo} />
+              </Link>
+              <p>
+                The game where the wrong definition could lead you to greatness.
+              </p>
+            </header>
+            <p className="room-code">Room Code: {lobbyCode}</p>
+            <PlayerList />
+          </>
+        )}
+        {currentPhase()}
+      </div>
+    </>
   );
 };
 
