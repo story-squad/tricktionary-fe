@@ -141,8 +141,7 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handleSubmitDefinition = (definition: string) => {
-    const trimmedDefinition = definition.trim();
-    socket.emit('definition submitted', trimmedDefinition, lobbyCode);
+    socket.emit('definition submitted', definition.trim(), lobbyCode);
   };
 
   const handleSubmitGuesses = (e: React.MouseEvent, guesses: GuessItem[]) => {
