@@ -9,6 +9,7 @@ import {
   PlayerItem,
 } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
+import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
 
 // Non-state functions
@@ -54,6 +55,18 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     getDefinitions(lobbyData.players, playerId, lobbyData.definition),
   );
   const [guesses, setGuesses] = useRecoilState(guessesState);
+  const [showModal, setShowModal] = useState(false);
+
+  const allPlayersHaveGuessed = () => {
+    let all = true;
+    for (let i = 0; i < guesses.length; i++) {
+      if (guesses[i].guess === -1) {
+        all = false;
+        break;
+      }
+    }
+    return all;
+  };
 
   useEffect(() => {
     setGuesses(
@@ -77,6 +90,14 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         }
       }),
     );
+  };
+
+  const handleSubmit = () => {
+    if (allPlayersHaveGuessed()) {
+      handleSubmitGuesses(guesses);
+    } else {
+      setShowModal(true);
+    }
   };
 
   return (
@@ -108,10 +129,14 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
                 guesses={guesses}
               />
             ))}
-          <button onClick={(e) => handleSubmitGuesses(e, guesses)}>
-            Submit Guesses
-          </button>
+          <button onClick={handleSubmit}>Submit Guesses</button>
         </div>
+        <Modal
+          message={`You haven't selected a guess for every player. Continue anyway?`}
+          handleConfirm={() => handleSubmitGuesses(guesses)}
+          handleCancel={() => setShowModal(false)}
+          visible={showModal}
+        />
       </Host>
       <Player>
         <p>
@@ -146,7 +171,7 @@ const Guess = (props: GuessProps): React.ReactElement => {
 export default Guessing;
 
 interface GuessingProps {
-  handleSubmitGuesses: (e: React.MouseEvent, guesses: GuessItem[]) => void;
+  handleSubmitGuesses: (guesses: GuessItem[]) => void;
   playerId: string;
 }
 
