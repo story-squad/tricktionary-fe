@@ -59,8 +59,11 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
   const allPlayersHaveGuessed = () => {
     let all = true;
-    for (let i = 0; i < guesses.length; i++) {
-      if (guesses[i].guess === -1) {
+    const playerGuesses = guesses.filter(
+      (guess) => guess.player !== lobbyData.host,
+    );
+    for (let i = 0; i < playerGuesses.length; i++) {
+      if (playerGuesses[i].guess === -1) {
         all = false;
         break;
       }
