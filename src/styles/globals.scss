@@ -12,18 +12,23 @@ body,
   min-height: 100vh;
 }
 
+#root {
+  padding: 2.4rem 2.4rem 2.4rem 2.4rem;
+}
+
 // Set the font-size so 1rem = 10px for easier styling
 html {
   font-size: 62.5%;
 }
 
-input, label {
+input,
+label {
   display: block;
 }
 
 // Font Variables
-$text-font: "Roboto", sans-serif;
-$display-font: "Bangers", sans-serif;
+$text-font: 'Roboto', sans-serif;
+$display-font: 'Bangers', sans-serif;
 
 // Media Query Sizes
 $mid: 500px;
@@ -44,8 +49,8 @@ $ltblue: #85c7f2;
 $bright-blue: #2462d9;
 $rose: #d97f9f;
 $lime: #bfd349;
-$purpleblue: #40537F;
-$lt-grey: #C4C4C4;
+$purpleblue: #40537f;
+$lt-grey: #c4c4c4;
 
 #root {
   font-size: 16px;

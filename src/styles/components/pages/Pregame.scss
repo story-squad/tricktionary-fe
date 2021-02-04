@@ -2,11 +2,25 @@
 @import '../../globals.scss';
 
 .selected {
-    background-color: $orange;
+  background-color: $orange;
 }
 
-p.room-code{
-    font-family: $display-font;
-    text-align: center;
-    margin-top: 40px;
+p.room-code {
+  font-family: $display-font;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.pick-word-instructions {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 40px;
+
+  .pick-instructions {
+    width: 75%;
+    margin-bottom: 2.4rem;
+  }
 }

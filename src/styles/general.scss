@@ -35,6 +35,9 @@ button {
   }
   &.sm-btn {
     background: $bright-blue;
+    font-size: 1.2rem;
+    height: 2.4rem;
+    padding: 0 8px;
   }
 }
 
@@ -63,17 +66,18 @@ a {
 .word-list {
   display: flex;
   flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .word-choice {
   background: $white;
   border: 1px solid $dark-blue;
   display: block;
-  max-width: 100rem;
-  text-align: left;
+  width: 19rem;
   .word {
     color: $charcoal;
     margin-bottom: 0;
+    font-size: 2.4rem;
     font-family: $display-font;
   }
   .definition {

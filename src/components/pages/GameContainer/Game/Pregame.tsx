@@ -89,21 +89,15 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           have arrived, press start.
         </p>
 
-        <button
-          className={`${!isCustom ? 'selected' : ''}`}
-          onClick={() => setIsCustom(false)}
-        >
-          Choose a Word
-        </button>
-        <button
-          className={`${isCustom ? 'selected' : ''}`}
-          onClick={() => setIsCustom(true)}
-        >
-          Use My Own
-        </button>
-        <button className="shuffle-btn sm-btn" onClick={handleGetWords}>
-          Shuffle Words
-        </button>
+        <div className="pick-word-instructions">
+          <p className="pick-instructions">
+            Click on a word to choose to read its definition. If you like that
+            word, ready your team, then click start!
+          </p>
+          <button className="shuffle-btn sm-btn" onClick={handleGetWords}>
+            Shuffle Words
+          </button>
+        </div>
         {!isCustom && (
           <div className="word-list">
             {wordSelection.map((word) => (
@@ -135,6 +129,18 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             />
           </div>
         )}
+        <button
+          className={`${!isCustom ? 'selected' : ''}`}
+          onClick={() => setIsCustom(false)}
+        >
+          Choose a Word
+        </button>
+        <button
+          className={`${isCustom ? 'selected' : ''}`}
+          onClick={() => setIsCustom(true)}
+        >
+          Use My Own
+        </button>
         <input
           type="checkbox"
           id="use-timer"
