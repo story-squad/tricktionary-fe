@@ -1,0 +1,12 @@
+@import '../../mixins.scss';
+@import '../../globals.scss';
+
+.selected {
+    background-color: $orange;
+}
+
+p.room-code{
+    font-family: $display-font;
+    text-align: center;
+    margin-top: 40px;
+}

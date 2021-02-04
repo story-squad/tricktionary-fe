@@ -12,14 +12,7 @@ import {
   playerIdState,
 } from '../../../state';
 import { GuessItem, LobbyData } from '../../../types/gameTypes';
-import {
-  Guessing,
-  Lobby,
-  PlayerList,
-  Postgame,
-  Pregame,
-  Writing,
-} from './Game';
+import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
 // Game constants
 const MAX_SECONDS = 120;
@@ -210,6 +203,17 @@ const GameContainer = (): React.ReactElement => {
   return (
     <>
       <div className="game-container">
+        {lobbyData.phase == 'LOBBY' && (
+          <>
+            <header>
+              <img className="trick-logo" src={logo} />
+              <p>
+                The game where the wrong definition could lead you to greatness.
+              </p>
+            </header>
+          </>
+        )}
+        :
         {lobbyData.phase !== 'LOBBY' && (
           <>
             <header>
@@ -220,11 +224,9 @@ const GameContainer = (): React.ReactElement => {
                 The game where the wrong definition could lead you to greatness.
               </p>
             </header>
-            <p className="room-code">Room Code: {lobbyCode}</p>
-            <PlayerList />
           </>
         )}
-        {currentPhase()}
+        <div className="game-styles">{currentPhase()}</div>
       </div>
     </>
   );

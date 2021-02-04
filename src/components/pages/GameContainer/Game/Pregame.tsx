@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { getWords } from '../../../../api/apiRequests';
-import { lobbySettingsState } from '../../../../state';
+import { lobbySettingsState, lobbyState } from '../../../../state';
 import { WordItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
+import { PlayerList } from '../Game';
+
+//styles
+import '../../../../styles/components/pages/Pregame.scss';
 
 const initialChoiceValue = -1;
 const initialCustomInputValue = { word: '', definition: '' };
@@ -15,9 +19,12 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [customInput, setCustomInput] = useState(initialCustomInputValue);
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
   const lobbySettings = useRecoilValue(lobbySettingsState);
+  const lobbyData = useRecoilValue(lobbyState);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
   );
+
+  console.log('Word Info:', wordSelection);
 
   // Get 3 word suggestions automatically
   useEffect(() => {
@@ -74,8 +81,14 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
   return (
     <div className="pregame game-page">
-      <h2>Pregame</h2>
       <Host>
+        <p className="room-code">Room Code: {lobbyData.lobbyCode}</p>
+        <h2>Please choose a word!</h2>
+        <p>
+          While you wait for your team, please pick a word. When all members
+          have arrived, press start.
+        </p>
+
         <button
           className={`${!isCustom ? 'selected' : ''}`}
           onClick={() => setIsCustom(false)}
@@ -88,6 +101,9 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         >
           Use My Own
         </button>
+        <button className="shuffle-btn sm-btn" onClick={handleGetWords}>
+          Shuffle Words
+        </button>
         {!isCustom && (
           <div className="word-list">
             {wordSelection.map((word) => (
@@ -98,7 +114,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 choice={choice}
               />
             ))}
-            <button onClick={handleGetWords}>Get New Words</button>
           </div>
         )}
         {isCustom && (
@@ -144,9 +159,16 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           </>
         )}
         <button onClick={props.handleStartGame}>Start</button>
+        <PlayerList />
       </Host>
       <Player>
+        <h2>Please choose a word!</h2>
+        <p>
+          While you wait for your team, please pick a word. When all members
+          have arrived, press start.
+        </p>
         <p>Waiting on host to start...</p>
+        <PlayerList />
       </Player>
     </div>
   );
@@ -156,10 +178,12 @@ const WordChoice = (props: WordChoiceProps): React.ReactElement => {
   const { word, handleChoose, choice } = props;
   const className = `word-choice${word.id === choice ? ' selected' : ''}`;
   return (
-    <button onClick={() => handleChoose(word.id)} className={className}>
-      <p className="word">{word.word}</p>
-      <p className="definition">{word.definition}</p>
-    </button>
+    <>
+      <button onClick={() => handleChoose(word.id)} className={className}>
+        <p className="word">{word.word}</p>
+      </button>
+      {/* <p className="definition">{word.definition}</p> */}
+    </>
   );
 };
 

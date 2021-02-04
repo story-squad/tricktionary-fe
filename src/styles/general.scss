@@ -33,8 +33,10 @@ button {
     background: $blue;
     color: white;
   }
+  &.sm-btn {
+    background: $bright-blue;
+  }
 }
-
 
 label {
   margin: auto 2rem auto 0;
@@ -42,8 +44,12 @@ label {
 
 input {
   font-weight: 300;
+  font-size: 1.4rem;
   margin-bottom: 2rem;
-  border-radius: 1rem;
+  padding-left: 8px;
+  border: solid $lt-grey;
+  border-radius: 0.8rem;
+  height: 50px;
 }
 
 a {
@@ -54,14 +60,25 @@ a {
   color: red;
 }
 
+.word-list {
+  display: flex;
+  flex-direction: row;
+}
+
 .word-choice {
+  background: $white;
+  border: 1px solid $dark-blue;
   display: block;
-  width: 100%;
   max-width: 100rem;
   text-align: left;
-
+  .word {
+    color: $charcoal;
+    margin-bottom: 0;
+    font-family: $display-font;
+  }
   .definition {
     font-weight: 300;
+    border: 1px dashed $dark-blue;
   }
 }
 
@@ -75,14 +92,6 @@ a {
   h3 {
     margin-top: 0;
   }
-}
-
-
-
-.game-page,
-.player-list,
-.room-code {
-  padding: 2rem;
 }
 
 .guessing {
@@ -115,10 +124,6 @@ a {
     }
   }
 }
-
-// .home-link {
-//   margin: 2rem;
-// }
 
 .definition-result {
   margin: 4rem 0;
