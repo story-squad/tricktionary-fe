@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { lobbyState, playerIdState } from '../../../state';
-import { HostPlayerProps } from '../commonTypes';
+import { HostPlayerProps } from '../../../types/commonTypes';
 
 const Host = (props: HostPlayerProps): React.ReactElement => {
   const { children } = props;

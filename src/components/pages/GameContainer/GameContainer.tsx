@@ -10,7 +10,9 @@ import {
   lobbySettingsState,
   lobbyState,
   playerIdState,
+  tokenState,
 } from '../../../state';
+import { Token } from '../../../types/commonTypes';
 import { GuessItem, LobbyData } from '../../../types/gameTypes';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
@@ -29,6 +31,7 @@ const GameContainer = (): React.ReactElement => {
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
+  const [token, setToken] = useRecoilState<Token>(tokenState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetGuesses = useResetRecoilState(guessesState);
@@ -85,30 +88,54 @@ const GameContainer = (): React.ReactElement => {
       setLobbyCode(socketData.lobbyCode);
     });
 
-    // Get your playerId from the BE
+    // Get your playerId from the API
     socket.on('welcome', (socketData: string) => {
       setPlayerId(socketData);
     });
 
-    // Recieve BE info
+    // Recieve API info
     socket.on('info', (infoData: string) => {
       console.log(infoData);
     });
 
-    // Recieve BE errors
+    // Recieve API errors
     socket.on('error', (errorData: string) => {
       console.log(errorData);
     });
 
+    // Get API token
+    socket.on('token update', (newToken: Token) => {
+      localStorage.setItem('token', JSON.stringify(newToken));
+      setToken(newToken);
+    });
+
     //// Other on-mount functions
     // Get username from localStorage if it exists
-    const username = localStorage.getItem('username');
-    if (username) {
-      setUsername(username.trim());
+    const localUsername = localStorage.getItem('username');
+    if (localUsername) {
+      setUsername(localUsername.trim());
+    }
+
+    // Get token from localStorage if it exists, log in
+    const localToken: Token = JSON.parse(
+      localStorage.getItem('token') as string,
+    );
+    if (localToken) {
+      setToken(localToken);
+      handleLogin(localToken);
+    } else {
+      handleLogin();
     }
   }, []);
 
   // Socket event emitters
+  const handleLogin = (localToken: Token | undefined = undefined) => {
+    const tokenString = localToken
+      ? localToken.player.token
+      : token.player.token;
+    socket.emit('login', tokenString);
+  };
+
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
     socket.emit('create lobby', username.trim());
