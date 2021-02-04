@@ -105,7 +105,6 @@ const GameContainer = (): React.ReactElement => {
 
     // Get API token
     socket.on('token update', (newToken: Token) => {
-      console.log('TOKEN STRING: ', newToken);
       localStorage.setItem('token', JSON.stringify(newToken));
       setToken(newToken);
     });
@@ -117,28 +116,24 @@ const GameContainer = (): React.ReactElement => {
       setUsername(localUsername.trim());
     }
 
-    // Get token from localStorage if it exists
+    // Get token from localStorage if it exists, log in
     const localToken: Token = JSON.parse(
       localStorage.getItem('token') as string,
     );
     if (localToken) {
       setToken(localToken);
-    }
-
-    // If there's no token, get token from API
-    if (!localToken || (localToken && localToken.player.token.length === 0)) {
+      handleLogin(localToken);
+    } else {
       handleLogin();
     }
   }, []);
 
-  useEffect(() => {
-    console.log('TOKEN: ', token);
-  }, [token]);
-
   // Socket event emitters
-  const handleLogin = () => {
-    console.log('LOGIN');
-    socket.emit('login', token.player.token);
+  const handleLogin = (localToken: Token | undefined = undefined) => {
+    const tokenString = localToken
+      ? localToken.player.token
+      : token.player.token;
+    socket.emit('login', tokenString);
   };
 
   const handleCreateLobby = (e: React.MouseEvent) => {
