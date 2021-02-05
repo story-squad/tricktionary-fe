@@ -1,7 +1,5 @@
 import React, { SetStateAction, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-//image
-import logo from '../../../../assets/TricktionaryLogo.png';
 import '../../../../styles/components/pages/Lobby.scss';
 //styles
 import '../../../../styles/gameContainer.scss';
@@ -68,7 +66,6 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         >
           Join Lobby
         </button>
-
         <p className="or">- OR -</p>
         <button
           className="host lobby-button"

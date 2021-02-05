@@ -121,7 +121,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             </button>
           </>
         )}
-
         {/* Selected word information */}
         {!isCustom && getCurrentWord() && (
           <div className="word-block">
@@ -139,7 +138,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             </button>
           </div>
         )}
-
         {/* Custom word form */}
         {isCustom && (
           <>
@@ -157,7 +155,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                   value={customInput.word}
                   onChange={handleInputChange}
                 />
-
                 <label htmlFor="definition">Definition:</label>
                 <input
                   id="definition"
@@ -209,7 +206,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <p>Play without a timer</p>
           </div>
         </div>
-
         <PlayerList />
       </Host>
       <Player>
