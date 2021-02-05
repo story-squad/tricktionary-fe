@@ -21,7 +21,7 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
           <div className="modal-content">
             <div className="players">
               {props.players
-                .filter((player) => player.id === playerId)
+                .filter((player) => player.id !== playerId)
                 .map((player) => (
                   <button
                     className={player.id === chosenPlayer ? 'selected' : ''}
