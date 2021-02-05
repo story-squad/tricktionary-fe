@@ -1,5 +1,9 @@
 // General styles across components
 // For testing, update later
+*:focus {
+  outline: none;
+}
+
 h1,
 h2 {
   font-size: 5rem;
@@ -17,14 +21,17 @@ h3 {
   font-family: $display-font;
 }
 
-p,
 label,
 input,
 button,
-a,
 span {
   font-family: $text-font;
-  font-size: 2.4rem;
+  font-size: 1.6rem;
+}
+p {
+  font-family: $text-font;
+  font-size: 1.6rem;
+  margin-bottom: 1.6rem;
 }
 
 button {
@@ -34,10 +41,27 @@ button {
     color: white;
   }
   &.sm-btn {
-    background: $bright-blue;
+    background: $otherblue;
     font-size: 1.2rem;
     height: 2.4rem;
     padding: 0 8px;
+  }
+  &.choose-word.sm-btn {
+    display: block;
+    margin: 0 auto;
+    height: auto;
+    padding: 8px 16px;
+  }
+  &.start-btn {
+    box-sizing: border-box;
+    background: $green;
+    font-size: 1.8rem;
+    font-family: $display-font;
+    height: 5rem;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+  &.start-btn.center {
+    align-self: center;
   }
 }
 
@@ -58,7 +82,20 @@ input {
 a {
   color: $blue;
 }
+.or {
+  font-family: $display-font;
+  color: $red;
+  text-align: center;
+  font-size: 1.8rem;
+  vertical-align: middle;
+  margin: 20px auto 20px auto;
+}
 
+.game-page {
+  &p.welcome-word {
+    font-size: 1.4rem;
+  }
+}
 .submitted {
   color: red;
 }
@@ -129,6 +166,15 @@ a {
   }
 }
 
+.timer-container {
+  .timer-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .definition-result {
   margin: 4rem 0;
 
@@ -162,13 +208,7 @@ a {
     display: flex;
     justify-content: space-between;
   }
-  p,
-  span {
-    font-family: $display-font;
-  }
-  .text {
-    width: 80%;
-  }
+
   .time {
     width: 20%;
   }

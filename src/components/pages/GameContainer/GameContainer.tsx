@@ -212,14 +212,13 @@ const GameContainer = (): React.ReactElement => {
             </header>
           </>
         )}
-        :
         {lobbyData.phase !== 'LOBBY' && (
           <>
             <header>
               <Link className="home-link" onClick={() => resetGame()} to="/">
                 <img className="trick-logo" src={logo} />
               </Link>
-              <p>
+              <p className="welcome-word">
                 The game where the wrong definition could lead you to greatness.
               </p>
             </header>

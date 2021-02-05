@@ -85,18 +85,23 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     <div className="pregame game-page">
       <Host>
         <p className="room-code">Room Code: {lobbyData.lobbyCode}</p>
-        <h2>Please choose a word!</h2>
-        <p>
-          While you wait for your team, please pick a word. When all members
-          have arrived, press start.
-        </p>
-
         {/* Word selection */}
         {!isCustom && (
           <>
-            <button className="shuffle-btn sm-btn" onClick={handleGetWords}>
-              Shuffle Words
-            </button>
+            <h2>Please choose a word!</h2>
+            <p className="welcome-word">
+              While you wait for your team, please pick a word. When all members
+              have arrived, press start.
+            </p>
+            <div className="pick-word-instructions">
+              <p className="pick-instructions">
+                Click on a word to choose to read its definition. If you like
+                that word, ready your team, then click start!
+              </p>
+              <button className="shuffle-btn sm-btn" onClick={handleGetWords}>
+                Shuffle Words
+              </button>
+            </div>
             <div className="word-list">
               {wordSelection.map((word) => (
                 <WordChoice
@@ -107,82 +112,108 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 />
               ))}
             </div>
+            <p className="or">- OR -</p>
+            <button
+              className="choose-word sm-btn"
+              onClick={() => setIsCustom(!isCustom)}
+            >
+              {isCustom ? 'Pick One of Our Words' : 'Bring Your Own Word'}
+            </button>
           </>
         )}
-        <button onClick={() => setIsCustom(!isCustom)}>
-          {isCustom ? 'Choose a Word' : 'Bring Your Own Word'}
-        </button>
+
         {/* Selected word information */}
         {!isCustom && getCurrentWord() && (
-          <div>
-            <p>Word:</p>
-            <p>{getCurrentWord()?.word}</p>
-            <p>Definition:</p>
-            <p>{getCurrentWord()?.definition}</p>
-            <button onClick={props.handleStartGame}>Start</button>
+          <div className="word-block">
+            <div className="word-definition">
+              <p className="sm-word">Word:</p>
+              <p className="word">{getCurrentWord()?.word}</p>
+              <p className="sm-word">Definition:</p>
+              <p className="definition">{getCurrentWord()?.definition}</p>
+            </div>
+            <button
+              className="start-btn center"
+              onClick={props.handleStartGame}
+            >
+              Start Game!
+            </button>
           </div>
         )}
+
         {/* Custom word form */}
         {isCustom && (
-          <div className="custom-word">
-            <label htmlFor="word">Word:</label>
-            <input
-              id="word"
-              name="word"
-              value={customInput.word}
-              onChange={handleInputChange}
-            />
-            <br />
-            <label htmlFor="definition">Definition:</label>
-            <input
-              id="definition"
-              name="definition"
-              value={customInput.definition}
-              onChange={handleInputChange}
-            />
-            <button onClick={props.handleStartGame}>Start</button>
-          </div>
-        )}
-        <button
-          className={`${!isCustom ? 'selected' : ''}`}
-          onClick={() => setIsCustom(false)}
-        >
-          Choose a Word
-        </button>
-        <button
-          className={`${isCustom ? 'selected' : ''}`}
-          onClick={() => setIsCustom(true)}
-        >
-          Use My Own
-        </button>
-        <input
-          type="checkbox"
-          id="use-timer"
-          checked={useTimer}
-          onChange={handleSetUseTimer}
-        />
-        <label htmlFor="use-timer">Use Timer</label>
-        <br />
-        {useTimer && (
           <>
-            <input
-              type="number"
-              min={0}
-              max={120}
-              value={lobbySettings.seconds}
-              onChange={handleSecondsChange}
-              id="seconds"
-              name="seconds"
-            />
-            <label htmlFor="seconds">Seconds to Submit Definition</label>
-            <br />
+            <h2>Bring Your Own Word!</h2>
+            <p>
+              While you wait for your team, please enter your word and its
+              definition word. When all members have arrived, press start.
+            </p>
+            <div className="word-block">
+              <div className="word-column col-a">
+                <label htmlFor="word">Word:</label>
+                <input
+                  id="word"
+                  name="word"
+                  value={customInput.word}
+                  onChange={handleInputChange}
+                />
+
+                <label htmlFor="definition">Definition:</label>
+                <input
+                  id="definition"
+                  name="definition"
+                  value={customInput.definition}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="word-column col-b">
+                <button
+                  className="choose-word sm-btn"
+                  onClick={() => setIsCustom(!isCustom)}
+                >
+                  {isCustom ? 'Pick One of Our Words' : 'Bring Your Own Word'}
+                </button>
+                <button className="start-btn" onClick={props.handleStartGame}>
+                  Start Game!
+                </button>
+              </div>
+            </div>
           </>
         )}
+        <div className="timer-container">
+          <h3 className="timer-title">Set A Timer!</h3>
+          <p className="timer-directions">
+            This timer is to deterimite how long player’s have to type.
+          </p>
+          {useTimer && (
+            <>
+              <input
+                className="timer-itself"
+                type="number"
+                min={0}
+                max={120}
+                value={lobbySettings.seconds}
+                onChange={handleSecondsChange}
+                id="seconds"
+                name="seconds"
+              />
+            </>
+          )}
+          <div className="timer-wrap">
+            <input
+              type="checkbox"
+              id="use-timer"
+              checked={useTimer}
+              onChange={handleSetUseTimer}
+            />
+            <p>Play without a timer</p>
+          </div>
+        </div>
 
         <PlayerList />
       </Host>
       <Player>
-        <h2>Please choose a word!</h2>
+        <h2>Wait!</h2>
         <p>
           While you wait for your team, please pick a word. When all members
           have arrived, press start.
@@ -202,7 +233,6 @@ const WordChoice = (props: WordChoiceProps): React.ReactElement => {
       <button onClick={() => handleChoose(word.id)} className={className}>
         <p className="word">{word.word}</p>
       </button>
-      {/* <p className="definition">{word.definition}</p> */}
     </>
   );
 };
