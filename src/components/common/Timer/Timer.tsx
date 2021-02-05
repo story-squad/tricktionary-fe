@@ -5,8 +5,8 @@ const Timer = (props: TimerProps): React.ReactElement => {
   const [timer, setTimer] = useState(seconds);
 
   useEffect(() => {
-    if (seconds) {
-      let time = seconds;
+    if (Number(seconds) > 0) {
+      let time = Number(seconds);
       const interval = setInterval(() => {
         if (time > 0) {
           time--;
@@ -21,7 +21,7 @@ const Timer = (props: TimerProps): React.ReactElement => {
 
   return (
     <>
-      {seconds !== undefined && seconds > 0 && (
+      {seconds !== undefined && Number(seconds) > 0 && (
         <div id="timer">
           <p>
             <span className="time">{timer}</span>{' '}
