@@ -12,18 +12,23 @@ body,
   min-height: 100vh;
 }
 
+#root {
+  padding: 2.4rem 2.4rem 2.4rem 2.4rem;
+}
+
 // Set the font-size so 1rem = 10px for easier styling
 html {
   font-size: 62.5%;
 }
 
-input, label {
+input,
+label {
   display: block;
 }
 
 // Font Variables
-$text-font: "Roboto", sans-serif;
-$display-font: "Bangers", sans-serif;
+$text-font: 'Roboto', sans-serif;
+$display-font: 'Bangers', sans-serif;
 
 // Media Query Sizes
 $mid: 500px;
@@ -32,9 +37,11 @@ $large: 800px;
 
 // NEW COLORS
 $blue: #3884ff;
+$hover-blue: #5872ff;
 $lt-orange: #f7bc50;
 $orange: #f66700;
 $jade: #00b67d;
+$medium-grey: #5A5B5B;
 $seafoam: #34c9ad;
 $dark-blue: #40537f;
 $white: #ffffff;
@@ -42,10 +49,13 @@ $charcoal: #343434;
 $red: #f64141;
 $ltblue: #85c7f2;
 $bright-blue: #2462d9;
+$otherblue: #4558C1;
 $rose: #d97f9f;
+$green: #297C12;
 $lime: #bfd349;
-$purpleblue: #40537F;
-$lt-grey: #C4C4C4;
+$royal-blue: #162CA7;
+$purpleblue: #40537f;
+$lt-grey: #c4c4c4;
 
 #root {
   font-size: 16px;
