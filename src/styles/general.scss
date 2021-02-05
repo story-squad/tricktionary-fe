@@ -37,7 +37,7 @@ p {
 button {
   @include button;
   &.selected {
-    background: $blue;
+    background: $orange;
     color: white;
   }
   &.sm-btn {
@@ -210,6 +210,42 @@ a {
   }
 
   .time {
+    font-family: $display-font;
+    font-size: 4.8rem;
     width: 20%;
+  }
+}
+
+h2.player-h2 {
+  font-size: 1.8rem;
+}
+
+.player-lobby {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-top: 16px;
+
+  .players {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    background: $white;
+    border: 2px solid $charcoal;
+    border-radius: 8px;
+    padding: 12px 26px;
+    box-sizing: border-box;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-right: 8px;
+
+    .player {
+      font-family: $display-font;
+      margin-bottom: 8px;
+    }
+    p.player-score {
+      margin: 0 auto;
+      font-size: 1.4rem;
+    }
   }
 }

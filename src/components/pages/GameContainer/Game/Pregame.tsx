@@ -180,7 +180,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         <div className="timer-container">
           <h3 className="timer-title">Set A Timer!</h3>
           <p className="timer-directions">
-            This timer is to deterimite how long player’s have to type.
+            This timer is to deterimite how long players have to type.
           </p>
           {useTimer && (
             <>
@@ -203,18 +203,14 @@ const Pregame = (props: PregameProps): React.ReactElement => {
               checked={useTimer}
               onChange={handleSetUseTimer}
             />
-            <p>Play without a timer</p>
+            <p>Play with a timer</p>
           </div>
         </div>
+        <h2 className="player-h2">Player Lobby</h2>
         <PlayerList />
       </Host>
       <Player>
-        <h2>Wait!</h2>
-        <p>
-          While you wait for your team, please pick a word. When all members
-          have arrived, press start.
-        </p>
-        <p>Waiting on host to start...</p>
+        <h2>Waiting for your team to join...</h2>
         <PlayerList />
       </Player>
     </div>

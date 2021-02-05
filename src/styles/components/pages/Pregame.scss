@@ -3,6 +3,7 @@
 
 .selected {
   background-color: $orange;
+  color: $white;
 }
 
 p.room-code {
@@ -71,25 +72,30 @@ p.room-code {
   }
   .timer-itself {
     border: none;
+    height: 80px;
+    text-align: center;
+    align-items: center;
     margin: 0 auto;
+    padding-right: 8px;
     background: $orange;
     color: $white;
     font-family: $display-font;
-    font-size: 1.8rem;
+    font-size: 3.2rem;
   }
 }
 
 input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   background: #eee url('../../../assets/arrows.png') no-repeat 50% 50%;
-  width: 15px;
+  opacity: 1;
+  width: 14px;
   height: 20px;
   padding: 0;
   position: relative;
-  right: 4px;
+  right: 16px;
+  top: 8px;
   cursor: pointer;
   display: block;
-  width: 8px;
   color: $white;
   text-align: center;
 }

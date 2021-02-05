@@ -41,10 +41,10 @@ const playerUserName = (
   if (player.id === playerId) {
     username += '(You) ';
   }
-  if (lobbyData.host === player.id) {
-    username += '(Host) ';
-  }
   username += player.username;
+  if (lobbyData.host === player.id) {
+    username += '***';
+  }
   return username;
 };
 
@@ -53,14 +53,15 @@ const PlayerList = (): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
 
   return (
-    <div className="player-list">
-      <h2>Players</h2>
+    <div className="player-lobby">
       {lobbyData.players.map((player: PlayerItem) => {
         return (
-          <p className={playerClassName(lobbyData, player)} key={player.id}>
-            {playerUserName(lobbyData, player, playerId)}, score:{' '}
-            {player.points}
-          </p>
+          <div className="players" key={player.id}>
+            <p className={playerClassName(lobbyData, player)}>
+              {playerUserName(lobbyData, player, playerId)}
+            </p>
+            <p className="player-score">Score:{player.points}</p>
+          </div>
         );
       })}
     </div>
