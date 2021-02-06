@@ -4,15 +4,15 @@ import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 //Logo
 import logo from '../../../assets/TricktionaryLogo.png';
+// local storage hook
+import useLocalStorage from '../../../hooks/useLocalStorage';
 import {
   guessesState,
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
   playerIdState,
-  tokenState,
 } from '../../../state';
-import { Token } from '../../../types/commonTypes';
 import { GuessItem, LobbyData } from '../../../types/gameTypes';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
@@ -31,11 +31,10 @@ const GameContainer = (): React.ReactElement => {
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
-  const [token, setToken] = useRecoilState<Token>(tokenState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetGuesses = useResetRecoilState(guessesState);
-
+  const [localToken, setLocalToken] = useLocalStorage('token', '');
   // Combine state reset functions
   const resetGame = () => {
     resetLobbyData();
@@ -74,6 +73,8 @@ const GameContainer = (): React.ReactElement => {
   };
 
   useEffect(() => {
+    // Get token from localStorage if it exists, log in
+    handleLogin();
     //// Socket event listeners
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
@@ -104,9 +105,8 @@ const GameContainer = (): React.ReactElement => {
     });
 
     // Get API token
-    socket.on('token update', (newToken: Token) => {
-      localStorage.setItem('token', JSON.stringify(newToken));
-      setToken(newToken);
+    socket.on('token update', (newToken: string) => {
+      setLocalToken(newToken);
     });
 
     //// Other on-mount functions
@@ -115,25 +115,11 @@ const GameContainer = (): React.ReactElement => {
     if (localUsername) {
       setUsername(localUsername.trim());
     }
-
-    // Get token from localStorage if it exists, log in
-    const localToken: Token = JSON.parse(
-      localStorage.getItem('token') as string,
-    );
-    if (localToken) {
-      setToken(localToken);
-      handleLogin(localToken);
-    } else {
-      handleLogin();
-    }
   }, []);
 
   // Socket event emitters
-  const handleLogin = (localToken: Token | undefined = undefined) => {
-    const tokenString = localToken
-      ? localToken.player.token
-      : token.player.token;
-    socket.emit('login', tokenString);
+  const handleLogin = () => {
+    socket.emit('login', localToken);
   };
 
   const handleCreateLobby = (e: React.MouseEvent) => {
