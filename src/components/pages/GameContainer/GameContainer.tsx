@@ -136,10 +136,10 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('login', tokenString);
   };
 
-  const handleCreateLobby = (e: React.MouseEvent) => {
+  function handleCreateLobby(e: React.MouseEvent) {
     e.preventDefault();
     socket.emit('create lobby', username.trim());
-  };
+  }
 
   const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
     if (e) {

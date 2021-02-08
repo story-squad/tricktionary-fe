@@ -100,6 +100,7 @@ a {
   color: red;
 }
 
+
 .word-list {
   display: flex;
   flex-direction: row;
@@ -111,11 +112,22 @@ a {
   border: 1px solid $dark-blue;
   display: block;
   width: 19rem;
+
+  &.writing {
+    border-style: dashed;
+    border-radius: 8px;
+  }
+
   .word {
     color: $charcoal;
     margin-bottom: 0;
     font-size: 2.4rem;
     font-family: $display-font;
+    &.single-word {
+      text-align: center;
+      font-size: 4.8rem;
+      color: $hover-blue;
+    }
   }
   .definition {
     font-weight: 300;
@@ -124,16 +136,15 @@ a {
 }
 
 .word-display {
-  margin: 2rem 0;
+  margin: 0 auto;
+  text-align: center;
   padding: 2rem;
-  border: 1px solid $charcoal;
+  border: 1px dashed #343434;
   border-radius: 1rem;
-  max-width: 50rem;
-
-  h3 {
-    margin-top: 0;
-  }
+  max-width: 25rem;
 }
+
+
 
 .guessing {
   .definition {
@@ -166,6 +177,32 @@ a {
   }
 }
 
+.submit-definition {
+  button {
+    float: right;
+  }
+}
+
+.guess-word {
+  text-align: center;
+  margin: 24px auto;
+  width: 50%;
+  .guess-h3 {
+    text-align: start;
+    margin-top: 16px;
+  }
+  .word {
+    display: inline-block;
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px dashed $royal-blue;
+
+    font-size: 3.2rem;
+    font-family: $display-font;
+    color: $hover-blue;
+  }
+}
+
 .timer-container {
   .timer-wrap {
     display: flex;
@@ -195,11 +232,11 @@ a {
 
 #definition {
   width: 40rem;
+  margin: 0 auto;
 }
 
 #timer {
-  margin: 2rem 0;
-  border: 1px solid black;
+  margin: 0 auto;
   border-radius: 1rem;
   padding: 2rem;
   width: 18rem;
@@ -213,6 +250,20 @@ a {
     font-family: $display-font;
     font-size: 4.8rem;
     width: 20%;
+  }
+}
+
+.times-up-container {
+  text-align: center;
+  margin-top: 40px;
+  .times-up-button {
+    margin: 0 auto;
+    background-color: $orange;
+  }
+  .times-up {
+    margin-top: 8px;
+    color: $red;
+    font-family: $display-font;
   }
 }
 
