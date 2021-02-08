@@ -53,6 +53,16 @@ const GameContainer = (): React.ReactElement => {
       history.push(`/${socketData.lobbyCode}`);
     });
 
+    // Remove a player from the list when they leave
+    socket.on('remove player', (oldPlayerId: string) => {
+      setLobbyData({
+        ...lobbyData,
+        players: lobbyData.players.filter(
+          (player) => player.id !== oldPlayerId,
+        ),
+      });
+    });
+
     // New round with same players, retain points
     socket.on('play again', (socketData: LobbyData) => {
       setLobbyData(socketData);
