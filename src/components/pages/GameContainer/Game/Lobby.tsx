@@ -3,15 +3,7 @@ import { useLocation } from 'react-router-dom';
 import '../../../../styles/components/pages/Lobby.scss';
 //styles
 import '../../../../styles/gameContainer.scss';
-
-//basic input length validation. Replace with more robust validation later.
-const usernameIsValid = (username: string): boolean => {
-  if (username.trim().length > 1 && username.trim().length <= 12) {
-    return true;
-  } else {
-    return false;
-  }
-};
+import { usernameIsValid } from '../../../../utils/validation/simpleValidation';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
