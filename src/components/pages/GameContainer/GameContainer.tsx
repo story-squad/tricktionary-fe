@@ -145,7 +145,7 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handleUpdateUsername = (newUsername: string) => {
-    socket.emit('update username', newUsername, playerId);
+    socket.emit('update username', newUsername);
   };
 
   // Lobby Settings handlers / State handlers
