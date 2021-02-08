@@ -82,12 +82,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   };
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.setUsername(e.target.value);
+    props.handleSetUsername(e.target.value);
   };
 
   const handleSubmitUsername = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowEditName(false);
+    props.handleUpdateUsername(props.username);
   };
 
   return (
@@ -272,8 +273,9 @@ interface PregameProps {
     definition: string | undefined,
   ) => void;
   handleSetSeconds: (seconds: number) => void;
-  setUsername: (username: string) => void;
+  handleSetUsername: (newUsername: string) => void;
   username: string;
+  handleUpdateUsername: (newUsername: string) => void;
 }
 
 interface WordChoiceProps {
