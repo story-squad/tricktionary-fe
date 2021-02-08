@@ -3,8 +3,8 @@
 
 .game-styles {
   margin: 0 auto;
-  max-width: 50%;
-  height: 70%;
+  max-width: 82rem;
+  width: 100%;
   background-color: $white;
   border-radius: 24px;
   padding: 2.4rem 4rem;
@@ -13,8 +13,8 @@
     font-size: 3.6rem;
     margin-bottom: 4px;
   }
-  
-  p {
+
+  &p {
     font-size: 1.4rem;
     margin-bottom: 40px;
   }

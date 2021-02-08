@@ -4,6 +4,8 @@ import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 //Logo
 import logo from '../../../assets/TricktionaryLogo.png';
+// local storage hook
+import useLocalStorage from '../../../hooks/useLocalStorage';
 import {
   guessesState,
   lobbyCodeState,
@@ -12,14 +14,7 @@ import {
   playerIdState,
 } from '../../../state';
 import { GuessItem, LobbyData } from '../../../types/gameTypes';
-import {
-  Guessing,
-  Lobby,
-  PlayerList,
-  Postgame,
-  Pregame,
-  Writing,
-} from './Game';
+import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
 // Game constants
 const MAX_SECONDS = 120;
@@ -39,7 +34,7 @@ const GameContainer = (): React.ReactElement => {
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetGuesses = useResetRecoilState(guessesState);
-
+  const [localToken, setLocalToken] = useLocalStorage('token', '');
   // Combine state reset functions
   const resetGame = () => {
     resetLobbyData();
@@ -78,6 +73,8 @@ const GameContainer = (): React.ReactElement => {
   };
 
   useEffect(() => {
+    // Get token from localStorage if it exists, log in
+    handleLogin();
     //// Socket event listeners
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
@@ -92,30 +89,39 @@ const GameContainer = (): React.ReactElement => {
       setLobbyCode(socketData.lobbyCode);
     });
 
-    // Get your playerId from the BE
+    // Get your playerId from the API
     socket.on('welcome', (socketData: string) => {
       setPlayerId(socketData);
     });
 
-    // Recieve BE info
+    // Recieve API info
     socket.on('info', (infoData: string) => {
       console.log(infoData);
     });
 
-    // Recieve BE errors
+    // Recieve API errors
     socket.on('error', (errorData: string) => {
       console.log(errorData);
     });
 
+    // Get API token
+    socket.on('token update', (newToken: string) => {
+      setLocalToken(newToken);
+    });
+
     //// Other on-mount functions
     // Get username from localStorage if it exists
-    const username = localStorage.getItem('username');
-    if (username) {
-      setUsername(username.trim());
+    const localUsername = localStorage.getItem('username');
+    if (localUsername) {
+      setUsername(localUsername.trim());
     }
   }, []);
 
   // Socket event emitters
+  const handleLogin = () => {
+    socket.emit('login', localToken);
+  };
+
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
     socket.emit('create lobby', username.trim());
@@ -144,8 +150,7 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('definition submitted', definition.trim(), lobbyCode);
   };
 
-  const handleSubmitGuesses = (e: React.MouseEvent, guesses: GuessItem[]) => {
-    e.preventDefault();
+  const handleSubmitGuesses = (guesses: GuessItem[]) => {
     socket.emit('guess', lobbyCode, guesses);
   };
 
@@ -210,21 +215,29 @@ const GameContainer = (): React.ReactElement => {
   return (
     <>
       <div className="game-container">
+        {lobbyData.phase == 'LOBBY' && (
+          <>
+            <header>
+              <img className="trick-logo" src={logo} />
+              <p>
+                The game where the wrong definition could lead you to greatness.
+              </p>
+            </header>
+          </>
+        )}
         {lobbyData.phase !== 'LOBBY' && (
           <>
             <header>
               <Link className="home-link" onClick={() => resetGame()} to="/">
                 <img className="trick-logo" src={logo} />
               </Link>
-              <p>
+              <p className="welcome-word">
                 The game where the wrong definition could lead you to greatness.
               </p>
             </header>
-            <p className="room-code">Room Code: {lobbyCode}</p>
-            <PlayerList />
           </>
         )}
-        {currentPhase()}
+        <div className="game-styles">{currentPhase()}</div>
       </div>
     </>
   );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { lobbyState } from '../../../../state';
 import { Host } from '../../../common/Host';
+import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
 import Timer from '../../../common/Timer/Timer';
 
@@ -15,9 +16,18 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const handleChangeDefinition = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDefinition(e.target.value);
+  };
+
+  const handleGoToNextPhase = () => {
+    if (timerDone) {
+      props.handleSetPhase('GUESSING');
+    } else {
+      setShowModal(true);
+    }
   };
 
   const handleSubmit = (
@@ -44,9 +54,15 @@ const Writing = (props: WritingProps): React.ReactElement => {
         {timerDone && (
           <p>Time&apos;s up for players to submit! Start the next phase.</p>
         )}
-        <button onClick={() => props.handleSetPhase('GUESSING')}>
-          Start Guessing Phase
-        </button>
+        <button onClick={handleGoToNextPhase}>Start Guessing Phase</button>
+        <Modal
+          message={
+            'There is still time on the clock. Do you want to skip to the next phase?'
+          }
+          handleConfirm={() => props.handleSetPhase('GUESSING')}
+          handleCancel={() => setShowModal(false)}
+          visible={showModal}
+        />
       </Host>
       <Player>
         {!isSubmitted && !timerDone && (
