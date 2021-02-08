@@ -42,36 +42,6 @@ const GameContainer = (): React.ReactElement => {
     resetGuesses();
   };
 
-  // Lobby Settings handlers
-  const handleSetWord = (
-    id: number,
-    word: string | undefined = undefined,
-    definition: string | undefined = undefined,
-  ) => {
-    setLobbySettings({
-      ...lobbySettings,
-      word: {
-        id,
-        word,
-        definition,
-      },
-    });
-  };
-
-  const handleSetSeconds = (seconds: number) => {
-    seconds = Math.floor(seconds);
-    if (seconds > MAX_SECONDS) {
-      seconds = MAX_SECONDS;
-    }
-    if (seconds < 0) {
-      seconds = 0;
-    }
-    setLobbySettings({
-      ...lobbySettings,
-      seconds,
-    });
-  };
-
   useEffect(() => {
     // Get token from localStorage if it exists, log in
     handleLogin();
@@ -164,6 +134,45 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('set host', hostId, lobbyCode);
   };
 
+  const handleUpdateUsername = (newUsername: string) => {
+    socket.emit('update username', newUsername, playerId);
+  };
+
+  // Lobby Settings handlers / State handlers
+  const handleSetWord = (
+    id: number,
+    word: string | undefined = undefined,
+    definition: string | undefined = undefined,
+  ) => {
+    setLobbySettings({
+      ...lobbySettings,
+      word: {
+        id,
+        word,
+        definition,
+      },
+    });
+  };
+
+  const handleSetSeconds = (seconds: number) => {
+    seconds = Math.floor(seconds);
+    if (seconds > MAX_SECONDS) {
+      seconds = MAX_SECONDS;
+    }
+    if (seconds < 0) {
+      seconds = 0;
+    }
+    setLobbySettings({
+      ...lobbySettings,
+      seconds,
+    });
+  };
+
+  const handleSetUsername = (newUsername: string) => {
+    setUsername(newUsername);
+    localStorage.setItem('username', newUsername.trim());
+  };
+
   // Determine Game component to render based on the current game phase
   const currentPhase = () => {
     switch (lobbyData.phase) {
@@ -174,7 +183,8 @@ const GameContainer = (): React.ReactElement => {
             handleSetWord={handleSetWord}
             handleSetSeconds={handleSetSeconds}
             username={username}
-            setUsername={setUsername}
+            handleSetUsername={handleSetUsername}
+            handleUpdateUsername={handleUpdateUsername}
           />
         );
       case 'WRITING':
@@ -203,7 +213,7 @@ const GameContainer = (): React.ReactElement => {
           <Lobby
             username={username}
             lobbyCode={lobbyCode}
-            setUsername={setUsername}
+            handleSetUsername={handleSetUsername}
             setLobbyCode={setLobbyCode}
             handleCreateLobby={handleCreateLobby}
             handleJoinLobby={handleJoinLobby}

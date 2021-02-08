@@ -18,7 +18,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   }, []);
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.setUsername(e.target.value);
+    props.handleSetUsername(e.target.value);
   };
 
   const handleChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +76,7 @@ export default Lobby;
 interface LobbyProps {
   username: string;
   lobbyCode: string;
-  setUsername: React.Dispatch<SetStateAction<string>>;
+  handleSetUsername: (newUsername: string) => void;
   setLobbyCode: React.Dispatch<SetStateAction<string>>;
   handleCreateLobby: (e: React.MouseEvent) => void;
   handleJoinLobby: (e: null | React.MouseEvent, optionalCode: string) => void;
