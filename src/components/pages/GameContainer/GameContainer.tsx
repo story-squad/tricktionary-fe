@@ -174,6 +174,7 @@ const GameContainer = (): React.ReactElement => {
             handleSetWord={handleSetWord}
             handleSetSeconds={handleSetSeconds}
             username={username}
+            setUsername={setUsername}
           />
         );
       case 'WRITING':
