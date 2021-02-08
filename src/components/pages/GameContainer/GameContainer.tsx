@@ -136,9 +136,7 @@ const GameContainer = (): React.ReactElement => {
       username.trim(),
       optionalCode ? optionalCode : lobbyCode,
     );
-    if (username) {
-      localStorage.setItem('username', username.trim());
-    }
+    localStorage.setItem('username', username.trim());
   };
 
   const handleStartGame = (e: React.MouseEvent) => {
@@ -175,6 +173,7 @@ const GameContainer = (): React.ReactElement => {
             handleStartGame={handleStartGame}
             handleSetWord={handleSetWord}
             handleSetSeconds={handleSetSeconds}
+            username={username}
           />
         );
       case 'WRITING':
