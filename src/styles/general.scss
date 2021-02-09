@@ -12,7 +12,7 @@ h2 {
 
 h3 {
   font-size: 3rem;
-  margin: 4rem 0 1rem;
+  margin: 4rem 0 0.8rem;
 }
 
 h1,
@@ -38,7 +38,9 @@ button {
   @include button;
   &.selected {
     background: $orange;
-    color: white;
+    p.word {
+      color: $white;
+    }
   }
   &.sm-btn {
     background: $otherblue;
@@ -96,10 +98,6 @@ a {
     font-size: 1.4rem;
   }
 }
-.submitted {
-  color: red;
-}
-
 
 .word-list {
   display: flex;
@@ -144,34 +142,34 @@ a {
   max-width: 25rem;
 }
 
-
-
 .guessing {
   .definition {
     width: 100%;
-    margin: 2rem;
     text-align: center;
     display: flex;
     justify-content: flex-start;
-
+    border: 1px solid $charcoal;
+    border-radius: 8px;
+    margin-bottom: 16px;
     .definition-content {
       align-self: center;
       text-align: left;
     }
-
     .definition-key {
+      display: flex;
+      justify-content: center;
       margin: 0 2rem 0 0;
-      color: white;
-      background: black;
-      border-radius: 50%;
+      color: $black;
+      background: $white;
+      border: 1px solid $charcoal;
+      border-radius: 8px;
       width: 4rem;
       height: 4rem;
-
       p {
         width: 4rem;
         font-size: 1.8rem;
         text-align: center;
-        padding: 0.5rem 0;
+        margin: auto;
       }
     }
   }
@@ -183,23 +181,63 @@ a {
   }
 }
 
+.pregame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  h3 {
+    margin-top: 0;
+    color: $red;
+  }
+  .invite-code {
+    width: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px dashed $dark-blue;
+    margin-bottom: 48px;
+    h3 {
+      color: $black;
+      margin-top: 0;
+    }
+    p.room-code {
+      font-family: $display-font;
+      font-size: 3.2rem;
+      margin: 0;
+      color: $red;
+    }
+  }
+}
+
 .guess-word {
   text-align: center;
   margin: 24px auto;
   width: 50%;
-  .guess-h3 {
-    text-align: start;
-    margin-top: 16px;
-  }
+  border-radius: 16px;
+  padding: 24px;
+  border: 2px dashed $royal-blue;
   .word {
-    display: inline-block;
-    border-radius: 16px;
-    padding: 24px;
-    border: 2px dashed $royal-blue;
-
     font-size: 3.2rem;
     font-family: $display-font;
-    color: $hover-blue;
+    color: $black;
+    margin-bottom: 0;
+  }
+}
+
+.times-up {
+  text-align: center;
+  margin-top: 2.4rem;
+  font-size: 3.2rem;
+  color: $red;
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
   }
 }
 
@@ -231,25 +269,41 @@ a {
 }
 
 #definition {
-  width: 40rem;
-  margin: 0 auto;
+  width: 100%;
 }
 
-#timer {
-  margin: 0 auto;
-  border-radius: 1rem;
-  padding: 2rem;
-  width: 18rem;
-  p {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+.countdown-container {
+  display: flex;
+  justify-content: center;
+  #timer {
+    display: inline-block;
+    border-radius: 1rem;
+    padding: 2rem;
+    border: 1px solid black;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    p {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
   }
-
   .time {
     font-family: $display-font;
     font-size: 4.8rem;
     width: 20%;
+  }
+}
+
+.player-submitted {
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  h3 {
+    margin-top: 0;
+  }
+  p {
+    text-align: center;
   }
 }
 
@@ -283,13 +337,17 @@ h2.player-h2 {
     flex-direction: column;
     flex-wrap: wrap;
     background: $white;
-    border: 2px solid $charcoal;
+    border: 2px solid $black;
     border-radius: 8px;
     padding: 12px 26px;
     box-sizing: border-box;
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
     margin-right: 8px;
-
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    &.submitted {
+      background-color: $green;
+      color: $white;
+      border: 2px solid $green;
+    }
     .player {
       font-family: $display-font;
       margin-bottom: 8px;

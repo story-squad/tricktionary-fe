@@ -105,9 +105,15 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
   return (
     <div className="guessing game-page">
-      <h2>Guessing</h2>
-      <p className="word-display">Word: {lobbyData.word}</p>
+      <h2>Time for your team to guess!</h2>
       <Host>
+        <p>
+          This is where the fun happens! Here are the definitions your players
+          have submitted. To make sure all definitions are read, click on each
+          definition to highlight it. That way you know whether you’ve read it
+          or not. REMEMBER! Read each number before the definition.
+        </p>
+        <p className="word-display">Word: {lobbyData.word}</p>
         <div className="definitions">
           <h3>Definitions</h3>
           {definitions.map((definition, key) => (

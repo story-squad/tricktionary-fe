@@ -78,9 +78,17 @@ const Writing = (props: WritingProps): React.ReactElement => {
         <h2>First thought = Best thought!</h2>
         <p>
           Your host has chosen a word. Your job is to come up with a definition.
+          Can you hit submit before the timer runs out?
         </p>
+        <Timer
+          seconds={lobbyData.roundSettings.seconds}
+          timeUp={setTimerDone}
+        />
+        {!isSubmitted && timerDone && (
+          <h3 className="times-up">Time&apos;s up!</h3>
+        )}
         <div className="guess-word">
-          <h3 className="guess-h3">Your Word:</h3>
+          <p className="word-label">Your Word:</p>
           <p className="word">{lobbyData.word}</p>
         </div>
         {!isSubmitted && !timerDone && (
@@ -90,10 +98,6 @@ const Writing = (props: WritingProps): React.ReactElement => {
               handleSubmit(e, definition);
             }}
           >
-            <Timer
-              seconds={lobbyData.roundSettings.seconds}
-              timeUp={setTimerDone}
-            />
             <h2>Type out your best guess!</h2>
             <p>
               When the timer is up, you will no longer be able to add to your
@@ -110,13 +114,14 @@ const Writing = (props: WritingProps): React.ReactElement => {
             <button disabled={!definitionIsValid(definition)}>Submit</button>
           </form>
         )}
-        {!isSubmitted && timerDone && <h3>Time&apos;s up!</h3>}
         {isSubmitted && (
-          <div>
-            <p>Submitted:</p>
+          <div className="player-submitted">
+            <h3>You submitted:</h3>
             <p>{definition}</p>
           </div>
         )}
+        <h2 className="player-h2">Player list:</h2>
+        <PlayerList />
       </Player>
     </div>
   );

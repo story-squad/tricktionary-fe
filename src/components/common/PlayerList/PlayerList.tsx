@@ -29,7 +29,7 @@ const playerHasSubmitted = (lobbyData: LobbyData, player: PlayerItem) => {
 };
 
 const playerClassName = (lobbyData: LobbyData, player: PlayerItem) => {
-  return `player${playerHasSubmitted(lobbyData, player) ? ' submitted' : ''}`;
+  return `players${playerHasSubmitted(lobbyData, player) ? ' submitted' : ''}`;
 };
 
 const playerUserName = (
@@ -56,8 +56,8 @@ const PlayerList = (): React.ReactElement => {
     <div className="player-lobby">
       {lobbyData.players.map((player: PlayerItem) => {
         return (
-          <div className="players" key={player.id}>
-            <p className={playerClassName(lobbyData, player)}>
+          <div className={playerClassName(lobbyData, player)} key={player.id}>
+            <p className="player">
               {playerUserName(lobbyData, player, playerId)}
             </p>
             <p className="player-score">Score:{player.points}</p>

@@ -6,20 +6,11 @@
   color: $white;
 }
 
-p.room-code {
-  font-family: $display-font;
-  font-size: 2.4rem;
-  text-align: center;
-  margin: 2rem 0 2rem 0;
-}
-
 .pick-word-instructions {
   display: flex;
   flex-direction: row;
   align-items: baseline;
   justify-content: space-between;
-  margin-top: 40px;
-
   .pick-instructions {
     width: 85%;
     font-size: 1.4rem;
@@ -34,8 +25,8 @@ p.room-code {
   border-radius: 16px;
   padding: 24px;
   border: 2px dashed $hover-blue;
-  margin: 3.2rem 0;
-
+  margin-top: 3.2rem;
+  
   .word-column {
     display: flex;
     flex-direction: column;
@@ -60,6 +51,7 @@ p.room-code {
 }
 
 .timer-container {
+  margin-top: 4.8rem;
   .timer-title {
     color: $red;
     font-size: 3.6rem;

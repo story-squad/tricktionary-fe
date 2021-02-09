@@ -84,15 +84,18 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   return (
     <div className="pregame game-page">
       <Host>
-        <p className="room-code">Room Code: {lobbyData.lobbyCode}</p>
+        <h2>Pregame Settings</h2>
+        <p className="welcome-word">
+          Invite your friends, pick a word, set the timer, start the game!
+        </p>
+        <div className="invite-code">
+          <h3>Invite Code:</h3>
+          <p className="room-code">{lobbyData.lobbyCode}</p>
+        </div>
         {/* Word selection */}
         {!isCustom && (
           <>
-            <h2>Please choose a word!</h2>
-            <p className="welcome-word">
-              While you wait for your team, please pick a word. When all members
-              have arrived, press start.
-            </p>
+            <h3>Choose a word!</h3>
             <div className="pick-word-instructions">
               <p className="pick-instructions">
                 Click on a word to choose to read its definition. If you like
@@ -141,7 +144,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         {/* Custom word form */}
         {isCustom && (
           <>
-            <h2>Bring Your Own Word!</h2>
+            <h2 className="BYOW">Bring Your Own Word!</h2>
             <p>
               While you wait for your team, please enter your word and its
               definition word. When all members have arrived, press start.
