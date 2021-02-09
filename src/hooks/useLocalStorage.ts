@@ -2,7 +2,7 @@ import { useState } from 'react';
 // Hook translated to TS from JS https://usehooks.com/useLocalStorage/
 export function useLocalStorage<T>(
   key: string,
-  initialValue: string,
+  initialValue: unknown,
 ): Array<T> {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
