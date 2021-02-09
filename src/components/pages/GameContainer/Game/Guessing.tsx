@@ -11,6 +11,7 @@ import {
 import { Host } from '../../../common/Host';
 import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
+import { PlayerList } from '../../../common/PlayerList';
 
 // Non-state functions
 
@@ -113,13 +114,13 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           definition to highlight it. That way you know whether you’ve read it
           or not. REMEMBER! Read each number before the definition.
         </p>
-        <p className="word-display">Word: {lobbyData.word}</p>
+        <p className="word-display">{lobbyData.word}</p>
         <div className="definitions">
           <h3>Definitions</h3>
           {definitions.map((definition, key) => (
             <div key={key} className="definition">
               <div className="definition-key">
-                <p>{definition.definitionKey}</p>
+                <p>#{definition.definitionKey}</p>
               </div>
               <p className="definition-content">{definition.content}</p>
             </div>
@@ -152,6 +153,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           The host will list off the definitions and their numbers. When the
           host calls on you, choose a number.
         </p>
+        <PlayerList />
       </Player>
     </div>
   );
@@ -161,7 +163,7 @@ const Guess = (props: GuessProps): React.ReactElement => {
   const { player, definitions, handleSelectGuess, guesses } = props;
   return (
     <div className="guess">
-      <p>{player.username}</p>
+      <p className="guess-name">{player.username}</p>
       {definitions.map((definition, key) => (
         <button
           className={`${

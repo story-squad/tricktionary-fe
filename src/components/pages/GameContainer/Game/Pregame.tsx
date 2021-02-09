@@ -224,12 +224,15 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       </Host>
       <Player>
         <h2>Waiting for your team to join...</h2>
-        <PlayerList />
         {!showEditName && (
-          <button onClick={() => setShowEditName(true)}>Edit Name</button>
-        )}
+          <div className="edit-name-block">
+            <button className="sm-btn" onClick={() => setShowEditName(true)}>
+              Edit Name
+            </button>
+          </div>
+        )}{' '}
         {showEditName && (
-          <form>
+          <form className="edit-name-form">
             <label htmlFor="edit-name">Edit Name</label>
             <input
               id="edit-name"
@@ -245,6 +248,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             </button>
           </form>
         )}
+        <PlayerList />
       </Player>
     </div>
   );
