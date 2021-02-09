@@ -80,7 +80,7 @@ const GameContainer = (): React.ReactElement => {
     });
 
     // Update a player's username when they edit their name
-    socket.on('update username', (newUsername: string, playerId: string) => {
+    socket.on('updated username', (newUsername: string, playerId: string) => {
       setLobbyData({
         ...lobbyData,
         players: lobbyData.players.map((player) => {
