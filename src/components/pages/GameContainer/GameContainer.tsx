@@ -13,7 +13,7 @@ import {
   lobbyState,
   playerIdState,
 } from '../../../state';
-import { GuessItem, LobbyData } from '../../../types/gameTypes';
+import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
 // Game constants
@@ -53,6 +53,14 @@ const GameContainer = (): React.ReactElement => {
       history.push(`/${socketData.lobbyCode}`);
     });
 
+    // Add a player to the list when they join
+    socket.on('add player', (newPlayer: PlayerItem) => {
+      setLobbyData({
+        ...lobbyData,
+        players: [...lobbyData.players, newPlayer],
+      });
+    });
+
     // Remove a player from the list when they leave
     socket.on('remove player', (oldPlayerId: string) => {
       setLobbyData({
@@ -60,6 +68,28 @@ const GameContainer = (): React.ReactElement => {
         players: lobbyData.players.filter(
           (player) => player.id !== oldPlayerId,
         ),
+      });
+    });
+
+    // Get list of players
+    socket.on('player list', (playerList: PlayerItem[]) => {
+      setLobbyData({
+        ...lobbyData,
+        players: playerList,
+      });
+    });
+
+    // Update a player's username when they edit their name
+    socket.on('update username', (newUsername: string, playerId: string) => {
+      setLobbyData({
+        ...lobbyData,
+        players: lobbyData.players.map((player) => {
+          if (player.id === playerId) {
+            return { ...player, username: newUsername };
+          } else {
+            return player;
+          }
+        }),
       });
     });
 
