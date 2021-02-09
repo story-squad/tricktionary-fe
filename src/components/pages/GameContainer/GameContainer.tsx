@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
@@ -12,6 +12,7 @@ import {
   playerIdState,
 } from '../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
+import { randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
@@ -23,9 +24,7 @@ const socket = io.connect(process.env.REACT_APP_API_URL as string);
 
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();
-  const [username, setUsername] = useState(
-    `Player${Math.floor(Math.random() * 9999)}`,
-  );
+  const [username, setUsername] = useLocalStorage('username', randomUsername());
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
@@ -117,13 +116,6 @@ const GameContainer = (): React.ReactElement => {
     socket.on('token update', (newToken: string) => {
       setLocalToken(newToken);
     });
-
-    //// Other on-mount functions
-    // Get username from localStorage if it exists
-    const localUsername = localStorage.getItem('username');
-    if (localUsername) {
-      setUsername(localUsername.trim());
-    }
   }, []);
 
   // Socket event emitters
@@ -208,8 +200,7 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handleSetUsername = (newUsername: string) => {
-    setUsername(newUsername);
-    localStorage.setItem('username', newUsername.trim());
+    setUsername(newUsername.trim());
   };
 
   // Determine Game component to render based on the current game phase
