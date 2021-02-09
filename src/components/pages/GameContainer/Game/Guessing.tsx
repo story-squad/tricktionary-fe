@@ -163,6 +163,11 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
 const Guess = (props: GuessProps): React.ReactElement => {
   const { player, definitions, handleSelectGuess, guesses } = props;
+
+  const chosenDefinition = definitions.filter(
+    (definition) => definition.id === getPlayerGuess(guesses, player),
+  )[0]?.content;
+
   return (
     <div className="guess">
       <p className="guess-name">{player.username}</p>
@@ -177,6 +182,7 @@ const Guess = (props: GuessProps): React.ReactElement => {
           {definition.definitionKey}
         </button>
       ))}
+      {chosenDefinition && <p>{chosenDefinition}</p>}
     </div>
   );
 };
