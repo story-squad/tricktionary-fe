@@ -11,6 +11,7 @@ import {
 import { Host } from '../../../common/Host';
 import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
+import { PlayerList } from '../../../common/PlayerList';
 
 // Non-state functions
 
@@ -105,15 +106,21 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
   return (
     <div className="guessing game-page">
-      <h2>Guessing</h2>
-      <p className="word-display">Word: {lobbyData.word}</p>
+      <h2>Time for your team to guess!</h2>
       <Host>
+        <p>
+          This is where the fun happens! Here are the definitions your players
+          have submitted. To make sure all definitions are read, click on each
+          definition to highlight it. That way you know whether you’ve read it
+          or not. REMEMBER! Read each number before the definition.
+        </p>
+        <p className="word-display">{lobbyData.word}</p>
         <div className="definitions">
           <h3>Definitions</h3>
           {definitions.map((definition, key) => (
             <div key={key} className="definition">
               <div className="definition-key">
-                <p>{definition.definitionKey}</p>
+                <p>#{definition.definitionKey}</p>
               </div>
               <p className="definition-content">{definition.content}</p>
             </div>
@@ -132,7 +139,9 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
                 guesses={guesses}
               />
             ))}
-          <button onClick={handleSubmit}>Submit Guesses</button>
+          <button className="submit-guesses" onClick={handleSubmit}>
+            Submit Guesses
+          </button>
         </div>
         <Modal
           message={`You haven't selected a guess for every player. Continue anyway?`}
@@ -146,6 +155,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           The host will list off the definitions and their numbers. When the
           host calls on you, choose a number.
         </p>
+        <PlayerList />
       </Player>
     </div>
   );
@@ -155,7 +165,7 @@ const Guess = (props: GuessProps): React.ReactElement => {
   const { player, definitions, handleSelectGuess, guesses } = props;
   return (
     <div className="guess">
-      <p>{player.username}</p>
+      <p className="guess-name">{player.username}</p>
       {definitions.map((definition, key) => (
         <button
           className={`${

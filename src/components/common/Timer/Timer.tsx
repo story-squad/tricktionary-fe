@@ -22,11 +22,11 @@ const Timer = (props: TimerProps): React.ReactElement => {
   return (
     <>
       {seconds !== undefined && Number(seconds) > 0 && (
-        <div id="timer">
-          <p>
+        <div className="countdown-container">
+          <div id="timer">
             <span className="time">{timer}</span>{' '}
-            <span className="text">seconds left</span>
-          </p>
+            <span className="text">secs</span>
+          </div>
         </div>
       )}
     </>

@@ -12,7 +12,7 @@ h2 {
 
 h3 {
   font-size: 3rem;
-  margin: 4rem 0 1rem;
+  margin: 4rem 0 0.8rem;
 }
 
 h1,
@@ -37,8 +37,10 @@ p {
 button {
   @include button;
   &.selected {
-    background: $blue;
-    color: white;
+    background: $orange;
+    p.word {
+      color: $white;
+    }
   }
   &.sm-btn {
     background: $otherblue;
@@ -96,9 +98,6 @@ a {
     font-size: 1.4rem;
   }
 }
-.submitted {
-  color: red;
-}
 
 .word-list {
   display: flex;
@@ -111,11 +110,22 @@ a {
   border: 1px solid $dark-blue;
   display: block;
   width: 19rem;
+
+  &.writing {
+    border-style: dashed;
+    border-radius: 8px;
+  }
+
   .word {
     color: $charcoal;
     margin-bottom: 0;
     font-size: 2.4rem;
     font-family: $display-font;
+    &.single-word {
+      text-align: center;
+      font-size: 4.8rem;
+      color: $hover-blue;
+    }
   }
   .definition {
     font-weight: 300;
@@ -124,45 +134,142 @@ a {
 }
 
 .word-display {
-  margin: 2rem 0;
+  margin: 0 auto;
+  text-align: center;
   padding: 2rem;
-  border: 1px solid $charcoal;
+  color: $hover-blue;
+  font-size: 3.6rem;
+  font-family: $display-font;
+  border: 2px dashed $dark-blue;
   border-radius: 1rem;
-  max-width: 50rem;
-
-  h3 {
-    margin-top: 0;
-  }
+  max-width: 25rem;
 }
 
 .guessing {
   .definition {
     width: 100%;
-    margin: 2rem;
     text-align: center;
     display: flex;
     justify-content: flex-start;
-
+    align-items: baseline;
+    border: 1px solid $lt-grey;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    padding: 8px;
+    box-shadow: $boxshadow;
     .definition-content {
       align-self: center;
       text-align: left;
+      margin: 0;
     }
-
     .definition-key {
+      display: flex;
+      justify-content: center;
       margin: 0 2rem 0 0;
-      color: white;
-      background: black;
-      border-radius: 50%;
+      color: $black;
+      background: $white;
+      border-radius: 8px;
       width: 4rem;
       height: 4rem;
-
       p {
         width: 4rem;
         font-size: 1.8rem;
         text-align: center;
-        padding: 0.5rem 0;
+        margin: auto;
+        font-family: $display-font;
+        color: $red;
       }
     }
+  }
+}
+
+.submit-definition {
+  button {
+    float: right;
+  }
+}
+
+.pregame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  h3 {
+    margin-top: 0;
+    color: $red;
+  }
+  .invite-code {
+    width: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px dashed $dark-blue;
+    margin: 24px;
+    h3 {
+      color: $black;
+      margin-top: 0;
+      font-size: 1.8rem;
+    }
+    p.room-code {
+      font-family: $display-font;
+      font-size: 4.8rem;
+      margin: 0;
+      color: $hover-blue;
+    }
+  }
+}
+
+.edit-name-block {
+  display: flex;
+  justify-content: flex-end;
+  .edit-name {
+    width: 150px;
+    height: 50px;
+    background-color: $otherblue;
+  }
+}
+
+.edit-name-form {
+  display: flex;
+  flex-direction: column;
+  margin: 1.6rem auto 1.6rem auto;
+  padding: 1.6rem;
+  border-radius: 8px;
+  border: 2px solid $dark-blue;
+  .button {
+    float: right;
+    color: $otherblue;
+  }
+}
+
+.guess-word {
+  text-align: center;
+  margin: 24px auto;
+  width: 50%;
+  border-radius: 16px;
+  padding: 24px;
+  border: 2px dashed $royal-blue;
+  .word {
+    font-size: 4.8rem;
+    font-family: $display-font;
+    color: $hover-blue;
+    margin-bottom: 0;
+  }
+}
+
+.times-up {
+  text-align: center;
+  margin-top: 2.4rem;
+  font-size: 3.2rem;
+  color: $red;
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
   }
 }
 
@@ -194,22 +301,115 @@ a {
 }
 
 #definition {
-  width: 40rem;
+  width: 100%;
 }
 
-#timer {
-  margin: 2rem 0;
-  border: 1px solid black;
-  border-radius: 1rem;
-  padding: 2rem;
-  width: 18rem;
-  p {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+.countdown-container {
+  display: flex;
+  justify-content: center;
+  #timer {
+    display: inline-block;
+    border-radius: 1rem;
+    padding: 2rem;
+    border: 1px solid black;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    p {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
   }
-
   .time {
+    font-family: $display-font;
+    font-size: 4.8rem;
     width: 20%;
+  }
+}
+
+.player-submitted {
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  h3 {
+    margin-top: 0;
+  }
+  p {
+    text-align: center;
+  }
+}
+
+.times-up-container {
+  text-align: center;
+  margin-top: 40px;
+  .times-up-button {
+    margin: 0 auto;
+    background-color: $orange;
+  }
+  .times-up {
+    margin-top: 8px;
+    color: $red;
+    font-family: $display-font;
+  }
+}
+
+h2.player-h2 {
+  font-size: 1.8rem;
+}
+
+.player-lobby {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-top: 16px;
+
+  .players {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    background: $white;
+    border: 2px solid $black;
+    border-radius: 8px;
+    padding: 12px 26px;
+    box-sizing: border-box;
+    margin-right: 8px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    &.submitted {
+      background-color: $green;
+      color: $white;
+      border: 2px solid $green;
+    }
+    .player {
+      font-family: $display-font;
+      margin-bottom: 8px;
+    }
+    p.player-score {
+      margin: 0 auto;
+      font-size: 1.4rem;
+    }
+  }
+}
+
+.guess {
+  .guess-name {
+    font-weight: bold;
+  }
+  button {
+    height: 3.2rem;
+    width: 3.2rem;
+    background-color: $white;
+    color: $charcoal;
+    border: 2px solid $lt-grey;
+    box-shadow: $boxshadow;
+    padding: 8px;
+
+    &.selected {
+      background-color: $blue;
+      color: $white;
+    }
+  }
+  .submit-guesses {
+    background-color: $orange;
   }
 }
