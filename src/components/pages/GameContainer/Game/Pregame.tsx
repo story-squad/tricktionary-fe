@@ -193,7 +193,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         <div className="timer-container">
           <h3 className="timer-title">Set A Timer!</h3>
           <p className="timer-directions">
-            This timer is to deterimite how long players have to type.
+            This timer is to deterimine how long players have to type.
           </p>
           {useTimer && (
             <>

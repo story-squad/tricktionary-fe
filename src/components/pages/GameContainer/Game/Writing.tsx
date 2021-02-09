@@ -97,7 +97,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
             <h2>Type out your best guess!</h2>
             <p>
               When the timer is up, you will no longer be able to add to your
-              defintion.
+              definition.
             </p>
             <input
               id="definition"

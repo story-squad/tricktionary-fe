@@ -139,7 +139,9 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
                 guesses={guesses}
               />
             ))}
-          <button onClick={handleSubmit}>Submit Guesses</button>
+          <button className="submit-guesses" onClick={handleSubmit}>
+            Submit Guesses
+          </button>
         </div>
         <Modal
           message={`You haven't selected a guess for every player. Continue anyway?`}
