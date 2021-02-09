@@ -143,6 +143,10 @@ a {
   border: 2px dashed $dark-blue;
   border-radius: 1rem;
   max-width: 25rem;
+  p.word-display {
+    font-size: 3.6rem;
+    font-family: $display-font;
+  }
 }
 
 .guessing {
@@ -422,6 +426,7 @@ h2.player-h2 {
       &.selected {
         background-color: $blue;
         color: $white;
+        border: 2px solid $blue;
       }
     }
   }

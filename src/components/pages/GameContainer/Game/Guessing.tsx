@@ -165,6 +165,10 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           The host will list off the definitions and their numbers. When the
           host calls on you, choose a number.
         </p>
+        <div className="player-guess">
+          <h3>Your guess:</h3>
+          <h1>0</h1>
+        </div>
         <PlayerList />
       </Player>
     </div>
