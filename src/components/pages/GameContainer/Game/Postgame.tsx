@@ -6,6 +6,7 @@ import { GuessItem, LobbyData, PlayerItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
 import SetHost from '../../../common/SetHost/SetHost';
+import { PlayerList } from '../Game';
 
 // Create a list of definitions, attach players who guessed for each, calculate point gains (UI only), add real definiton to the end
 const getSortedDefinitions = (
@@ -99,6 +100,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
       </Host>
       <Player>
         <p>The Host will now read the results!</p>
+        <PlayerList />
       </Player>
     </div>
   );
