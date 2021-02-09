@@ -262,16 +262,14 @@ const GameContainer = (): React.ReactElement => {
   };
 
   return (
-    <>
-      <div className="game-container">
-        {lobbyData.phase === 'LOBBY' ? (
-          <Header />
-        ) : (
-          <Header onClick={resetGame} />
-        )}
-        <div className="game-styles">{currentPhase()}</div>
-      </div>
-    </>
+    <div className="game-container">
+      {lobbyData.phase === 'LOBBY' ? (
+        <Header />
+      ) : (
+        <Header onClick={resetGame} />
+      )}
+      <div className="game-styles">{currentPhase()}</div>
+    </div>
   );
 };
 
