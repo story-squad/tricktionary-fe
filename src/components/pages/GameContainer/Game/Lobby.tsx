@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import '../../../../styles/components/pages/Lobby.scss';
 //styles
 import '../../../../styles/gameContainer.scss';
-import { usernameIsValid } from '../../../../utils/validation/simpleValidation';
+import { usernameIsValid } from '../../../../utils/validation';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();

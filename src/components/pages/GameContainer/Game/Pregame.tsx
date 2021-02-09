@@ -5,7 +5,7 @@ import { lobbySettingsState, lobbyState } from '../../../../state';
 //styles
 import '../../../../styles/components/pages/Pregame.scss';
 import { WordItem } from '../../../../types/gameTypes';
-import { usernameIsValid } from '../../../../utils/validation/simpleValidation';
+import { usernameIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
 import { PlayerList } from '../Game';
