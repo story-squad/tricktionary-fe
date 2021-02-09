@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { lobbyState } from '../../../../state';
+import { definitionIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
 import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
 import Timer from '../../../common/Timer/Timer';
 import { PlayerList } from '../Game';
-
-// simple definition validation
-const definitionIsValid = (definition: string): boolean => {
-  return definition.trim().length > 0 && definition.trim().length <= 250;
-};
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
