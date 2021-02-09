@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
-//Logo
-import logo from '../../../assets/TricktionaryLogo.png';
 // local storage hook
 import useLocalStorage from '../../../hooks/useLocalStorage';
 import {
@@ -14,6 +12,7 @@ import {
   playerIdState,
 } from '../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
+import { Header } from '../../common/Header';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
 // Game constants
@@ -265,27 +264,10 @@ const GameContainer = (): React.ReactElement => {
   return (
     <>
       <div className="game-container">
-        {lobbyData.phase == 'LOBBY' && (
-          <>
-            <header>
-              <img className="trick-logo" src={logo} />
-              <p>
-                The game where the wrong definition could lead you to greatness.
-              </p>
-            </header>
-          </>
-        )}
-        {lobbyData.phase !== 'LOBBY' && (
-          <>
-            <header>
-              <Link className="home-link" onClick={() => resetGame()} to="/">
-                <img className="trick-logo" src={logo} />
-              </Link>
-              <p className="welcome-word">
-                The game where the wrong definition could lead you to greatness.
-              </p>
-            </header>
-          </>
+        {lobbyData.phase === 'LOBBY' ? (
+          <Header />
+        ) : (
+          <Header onClick={resetGame} />
         )}
         <div className="game-styles">{currentPhase()}</div>
       </div>
