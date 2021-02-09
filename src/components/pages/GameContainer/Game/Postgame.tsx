@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useLocalStorage } from '../../../../hooks';
 import { lobbyState } from '../../../../state';
-import { guessesState } from '../../../../state/guessesState';
 import { GuessItem, LobbyData, PlayerItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
@@ -77,9 +77,9 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
   );
-  const guesses = useRecoilValue(guessesState);
+  const [guesses] = useLocalStorage('guesses', []);
   const [sortedDefinitions] = useState<DefinitionResultItem[]>(
-    getSortedDefinitions(lobbyData, guesses, playerDict),
+    getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict),
   );
 
   return (

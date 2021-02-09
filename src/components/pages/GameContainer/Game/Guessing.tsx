@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import shuffle from 'shuffle-array';
+import { useLocalStorage } from '../../../../hooks';
 import { lobbyState } from '../../../../state';
-import { guessesState } from '../../../../state/guessesState';
 import {
   DefinitionItem,
   GuessItem,
@@ -54,13 +54,13 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   const [definitions] = useState(
     getDefinitions(lobbyData.players, playerId, lobbyData.definition),
   );
-  const [guesses, setGuesses] = useRecoilState(guessesState);
+  const [guesses, setGuesses] = useLocalStorage('guesses', []);
   const [showModal, setShowModal] = useState(false);
 
   const allPlayersHaveGuessed = () => {
     let all = true;
     const playerGuesses = guesses.filter(
-      (guess) => guess.player !== lobbyData.host,
+      (guess: GuessItem) => guess.player !== lobbyData.host,
     );
     for (let i = 0; i < playerGuesses.length; i++) {
       if (playerGuesses[i].guess === -1) {
@@ -85,7 +85,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     guessId: number,
   ) => {
     setGuesses(
-      guesses.map((guess) => {
+      guesses.map((guess: GuessItem) => {
         if (guess.player === playerId) {
           return { ...guess, guess: guessId };
         } else {

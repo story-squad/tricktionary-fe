@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { getWords } from '../../../../api/apiRequests';
+import { useLocalStorage } from '../../../../hooks';
 import { lobbySettingsState, lobbyState } from '../../../../state';
 //styles
 import '../../../../styles/components/pages/Pregame.scss';
@@ -21,6 +22,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
   const lobbySettings = useRecoilValue(lobbySettingsState);
   const lobbyData = useRecoilValue(lobbyState);
+  const [, setGuesses] = useLocalStorage('guesses', []);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
   );
@@ -28,9 +30,10 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const getCurrentWord = () =>
     wordSelection.filter((word) => word.id === choice)[0];
 
-  // Get 3 word suggestions automatically
+  // Get 3 word suggestions automatically, reset guesses array from previous game
   useEffect(() => {
     handleGetWords();
+    setGuesses([]);
   }, []);
 
   // Clear choice/input when switching between word selection type
