@@ -127,7 +127,17 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           ))}
         </div>
         <div className="guesses">
-          <h3>Player Guesses</h3>
+          <h2>Player Guesses</h2>
+          <p>
+            Now it’s time for your team to vote! Read each name, then mark their
+            vote accordingly. If they don’t remember what definition goes to
+            what number... TOO BAD! Have them guess a random number, anwyay.
+          </p>
+          <div className="voting-label">
+            <h3>Name:</h3>
+            <h3>Vote:</h3>
+          </div>
+          <hr />
           {lobbyData.players
             .filter((player) => player.id !== lobbyData.host)
             .map((player, key) => (
@@ -164,20 +174,25 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 const Guess = (props: GuessProps): React.ReactElement => {
   const { player, definitions, handleSelectGuess, guesses } = props;
   return (
-    <div className="guess">
-      <p className="guess-name">{player.username}</p>
-      {definitions.map((definition, key) => (
-        <button
-          className={`${
-            getPlayerGuess(guesses, player) === definition.id ? 'selected' : ''
-          }`}
-          onClick={(e) => handleSelectGuess(e, player.id, definition.id)}
-          key={key}
-        >
-          {definition.definitionKey}
-        </button>
-      ))}
-    </div>
+    <>
+      <div className="guess">
+        <p className="guess-name">{player.username}</p>
+        {definitions.map((definition, key) => (
+          <button
+            className={`${
+              getPlayerGuess(guesses, player) === definition.id
+                ? 'selected'
+                : ''
+            }`}
+            onClick={(e) => handleSelectGuess(e, player.id, definition.id)}
+            key={key}
+          >
+            {definition.definitionKey}
+          </button>
+        ))}
+      </div>
+      <hr />
+    </>
   );
 };
 

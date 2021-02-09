@@ -154,7 +154,7 @@ a {
     align-items: baseline;
     border: 1px solid $lt-grey;
     border-radius: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     padding: 8px;
     box-shadow: $boxshadow;
     .definition-content {
@@ -173,7 +173,7 @@ a {
       height: 4rem;
       p {
         width: 4rem;
-        font-size: 1.8rem;
+        font-size: 3.2rem;
         text-align: center;
         margin: auto;
         font-family: $display-font;
@@ -391,25 +391,59 @@ h2.player-h2 {
   }
 }
 
-.guess {
-  .guess-name {
-    font-weight: bold;
+.guesses {
+  h2 {
+    margin-top: 4.8rem;
   }
-  button {
-    height: 3.2rem;
-    width: 3.2rem;
-    background-color: $white;
-    color: $charcoal;
-    border: 2px solid $lt-grey;
-    box-shadow: $boxshadow;
-    padding: 8px;
-
-    &.selected {
-      background-color: $blue;
-      color: $white;
+  hr {
+    border-top: 2px dashed $dark-blue;
+    hr:first-child {
+      margin-top: 0;
     }
   }
-  .submit-guesses {
-    background-color: $orange;
+  .guess {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    .guess-name {
+      font-weight: bold;
+      margin-right: 7.2rem;
+    }
+    button {
+      height: 3.2rem;
+      width: 3.2rem;
+      background-color: $white;
+      color: $charcoal;
+      border: 2px solid $lt-grey;
+      box-shadow: $boxshadow;
+      padding: 0;
+      margin: 4px;
+
+      &.selected {
+        background-color: $blue;
+        color: $white;
+      }
+    }
   }
+}
+
+.voting-label {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0;
+    margin-top: 1.6rem;
+  }
+  h3:first-child {
+    margin-right: 12.08rem;
+  }
+}
+
+.submit-guesses {
+  display: flex;
+  margin: 0 auto;
+  background-color: $orange;
+  margin-top: 4.8rem;
 }
