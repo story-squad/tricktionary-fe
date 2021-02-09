@@ -44,7 +44,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
         <h2>Your team is typing out their best definitions:</h2>
         <p>
           When the timer is up, your team will no longer be able to add to their
-          defintiion.
+          definition.
         </p>
         <Timer
           seconds={lobbyData.roundSettings.seconds}
