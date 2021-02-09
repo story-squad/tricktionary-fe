@@ -5,6 +5,7 @@ import { lobbySettingsState, lobbyState } from '../../../../state';
 //styles
 import '../../../../styles/components/pages/Pregame.scss';
 import { WordItem } from '../../../../types/gameTypes';
+import { usernameIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
 import { PlayerList } from '../Game';
@@ -16,14 +17,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [isCustom, setIsCustom] = useState(false);
   const [choice, setChoice] = useState(initialChoiceValue);
   const [customInput, setCustomInput] = useState(initialCustomInputValue);
+  const [showEditName, setShowEditName] = useState(false);
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
   const lobbySettings = useRecoilValue(lobbySettingsState);
   const lobbyData = useRecoilValue(lobbyState);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
   );
-
-  console.log('Word Info:', wordSelection);
 
   const getCurrentWord = () =>
     wordSelection.filter((word) => word.id === choice)[0];
@@ -79,6 +79,16 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       props.handleSetSeconds(0);
     }
     setUseTimer(e.target.checked);
+  };
+
+  const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.handleSetUsername(e.target.value);
+  };
+
+  const handleSubmitUsername = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowEditName(false);
+    props.handleUpdateUsername(props.username);
   };
 
   return (
@@ -216,6 +226,26 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         </p>
         <p>Waiting on host to start...</p>
         <PlayerList />
+        {!showEditName && (
+          <button onClick={() => setShowEditName(true)}>Edit Name</button>
+        )}
+        {showEditName && (
+          <form>
+            <label htmlFor="edit-name">Edit Name</label>
+            <input
+              id="edit-name"
+              name="edit-name"
+              value={props.username}
+              onChange={handleChangeUsername}
+            ></input>
+            <button
+              disabled={!usernameIsValid(props.username)}
+              onClick={handleSubmitUsername}
+            >
+              Confirm
+            </button>
+          </form>
+        )}
       </Player>
     </div>
   );
@@ -243,6 +273,9 @@ interface PregameProps {
     definition: string | undefined,
   ) => void;
   handleSetSeconds: (seconds: number) => void;
+  handleSetUsername: (newUsername: string) => void;
+  username: string;
+  handleUpdateUsername: (newUsername: string) => void;
 }
 
 interface WordChoiceProps {

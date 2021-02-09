@@ -3,15 +3,7 @@ import { useLocation } from 'react-router-dom';
 import '../../../../styles/components/pages/Lobby.scss';
 //styles
 import '../../../../styles/gameContainer.scss';
-
-//basic input length validation. Replace with more robust validation later.
-const usernameIsValid = (username: string): boolean => {
-  if (username.trim().length > 1 && username.trim().length <= 12) {
-    return true;
-  } else {
-    return false;
-  }
-};
+import { usernameIsValid } from '../../../../utils/validation';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
@@ -26,7 +18,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   }, []);
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.setUsername(e.target.value);
+    props.handleSetUsername(e.target.value);
   };
 
   const handleChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +76,7 @@ export default Lobby;
 interface LobbyProps {
   username: string;
   lobbyCode: string;
-  setUsername: React.Dispatch<SetStateAction<string>>;
+  handleSetUsername: (newUsername: string) => void;
   setLobbyCode: React.Dispatch<SetStateAction<string>>;
   handleCreateLobby: (e: React.MouseEvent) => void;
   handleJoinLobby: (e: null | React.MouseEvent, optionalCode: string) => void;

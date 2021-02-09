@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
-//Logo
-import logo from '../../../assets/TricktionaryLogo.png';
 // local storage hook
-import useLocalStorage from '../../../hooks/useLocalStorage';
+import { useLocalStorage } from '../../../hooks';
 import {
   guessesState,
   lobbyCodeState,
@@ -13,7 +11,9 @@ import {
   lobbyState,
   playerIdState,
 } from '../../../state';
-import { GuessItem, LobbyData } from '../../../types/gameTypes';
+import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
+import { randomUsername } from '../../../utils/helpers';
+import { Header } from '../../common/Header';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
 // Game constants
@@ -24,9 +24,7 @@ const socket = io.connect(process.env.REACT_APP_API_URL as string);
 
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();
-  const [username, setUsername] = useState(
-    `Player${Math.floor(Math.random() * 9999)}`,
-  );
+  const [username, setUsername] = useLocalStorage('username', randomUsername());
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
@@ -42,7 +40,136 @@ const GameContainer = (): React.ReactElement => {
     resetGuesses();
   };
 
-  // Lobby Settings handlers
+  useEffect(() => {
+    // Get token from localStorage if it exists, log in
+    handleLogin();
+    //// Socket event listeners
+    // Update game each phase, push socket data to state, push lobbyCode to URL
+    socket.on('game update', (socketData: LobbyData) => {
+      setLobbyData(socketData);
+      setLobbyCode(socketData.lobbyCode);
+      history.push(`/${socketData.lobbyCode}`);
+    });
+
+    // Add a player to the list when they join
+    socket.on('add player', (newPlayer: PlayerItem) => {
+      setLobbyData({
+        ...lobbyData,
+        players: [...lobbyData.players, newPlayer],
+      });
+    });
+
+    // Remove a player from the list when they leave
+    socket.on('remove player', (oldPlayerId: string) => {
+      setLobbyData({
+        ...lobbyData,
+        players: lobbyData.players.filter(
+          (player) => player.id !== oldPlayerId,
+        ),
+      });
+    });
+
+    // Get list of players
+    socket.on('player list', (playerList: PlayerItem[]) => {
+      setLobbyData({
+        ...lobbyData,
+        players: playerList,
+      });
+    });
+
+    // Update a player's username when they edit their name
+    socket.on('updated username', (newUsername: string, playerId: string) => {
+      setLobbyData({
+        ...lobbyData,
+        players: lobbyData.players.map((player) => {
+          if (player.id === playerId) {
+            return { ...player, username: newUsername };
+          } else {
+            return player;
+          }
+        }),
+      });
+    });
+
+    // New round with same players, retain points
+    socket.on('play again', (socketData: LobbyData) => {
+      setLobbyData(socketData);
+      setLobbyCode(socketData.lobbyCode);
+    });
+
+    // Get your playerId from the API
+    socket.on('welcome', (socketData: string) => {
+      setPlayerId(socketData);
+    });
+
+    // Recieve API info
+    socket.on('info', (infoData: string) => {
+      console.log(infoData);
+    });
+
+    // Recieve API errors
+    socket.on('error', (errorData: string) => {
+      console.log(errorData);
+    });
+
+    // Get API token
+    socket.on('token update', (newToken: string) => {
+      setLocalToken(newToken);
+    });
+  }, []);
+
+  // Socket event emitters
+  const handleLogin = () => {
+    socket.emit('login', localToken);
+  };
+
+  const handleCreateLobby = (e: React.MouseEvent) => {
+    e.preventDefault();
+    socket.emit('create lobby', username.trim());
+  };
+
+  const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
+    if (e) {
+      e.preventDefault();
+    }
+    socket.emit(
+      'join lobby',
+      username.trim(),
+      optionalCode ? optionalCode : lobbyCode,
+    );
+    localStorage.setItem('username', username.trim());
+  };
+
+  const handleStartGame = (e: React.MouseEvent) => {
+    e.preventDefault();
+    socket.emit('start game', lobbySettings, lobbyCode);
+  };
+
+  const handleSubmitDefinition = (definition: string) => {
+    socket.emit('definition submitted', definition.trim(), lobbyCode);
+  };
+
+  const handleSubmitGuesses = (guesses: GuessItem[]) => {
+    socket.emit('guess', lobbyCode, guesses);
+  };
+
+  const handlePlayAgain = () => {
+    socket.emit('play again', lobbySettings, lobbyCode);
+  };
+
+  const handleSetPhase = (phase: string) => {
+    socket.emit('set phase', phase, lobbyCode);
+  };
+
+  const handleSetHost = (hostId: string) => {
+    socket.emit('set host', hostId, lobbyCode);
+  };
+
+  const handleUpdateUsername = (newUsername: string) => {
+    socket.emit('update username', newUsername);
+  };
+
+  // Lobby Settings handlers / State handlers
   const handleSetWord = (
     id: number,
     word: string | undefined = undefined,
@@ -72,98 +199,8 @@ const GameContainer = (): React.ReactElement => {
     });
   };
 
-  useEffect(() => {
-    // Get token from localStorage if it exists, log in
-    handleLogin();
-    //// Socket event listeners
-    // Update game each phase, push socket data to state, push lobbyCode to URL
-    socket.on('game update', (socketData: LobbyData) => {
-      setLobbyData(socketData);
-      setLobbyCode(socketData.lobbyCode);
-      history.push(`/${socketData.lobbyCode}`);
-    });
-
-    // New round with same players, retain points
-    socket.on('play again', (socketData: LobbyData) => {
-      setLobbyData(socketData);
-      setLobbyCode(socketData.lobbyCode);
-    });
-
-    // Get your playerId from the API
-    socket.on('welcome', (socketData: string) => {
-      setPlayerId(socketData);
-    });
-
-    // Recieve API info
-    socket.on('info', (infoData: string) => {
-      console.log(infoData);
-    });
-
-    // Recieve API errors
-    socket.on('error', (errorData: string) => {
-      console.log(errorData);
-    });
-
-    // Get API token
-    socket.on('token update', (newToken: string) => {
-      setLocalToken(newToken);
-    });
-
-    //// Other on-mount functions
-    // Get username from localStorage if it exists
-    const localUsername = localStorage.getItem('username');
-    if (localUsername) {
-      setUsername(localUsername.trim());
-    }
-  }, []);
-
-  // Socket event emitters
-  const handleLogin = () => {
-    socket.emit('login', localToken);
-  };
-
-  const handleCreateLobby = (e: React.MouseEvent) => {
-    e.preventDefault();
-    socket.emit('create lobby', username.trim());
-  };
-
-  const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
-    if (e) {
-      e.preventDefault();
-    }
-    socket.emit(
-      'join lobby',
-      username.trim(),
-      optionalCode ? optionalCode : lobbyCode,
-    );
-    if (username) {
-      localStorage.setItem('username', username.trim());
-    }
-  };
-
-  const handleStartGame = (e: React.MouseEvent) => {
-    e.preventDefault();
-    socket.emit('start game', lobbySettings, lobbyCode);
-  };
-
-  const handleSubmitDefinition = (definition: string) => {
-    socket.emit('definition submitted', definition.trim(), lobbyCode);
-  };
-
-  const handleSubmitGuesses = (guesses: GuessItem[]) => {
-    socket.emit('guess', lobbyCode, guesses);
-  };
-
-  const handlePlayAgain = () => {
-    socket.emit('play again', lobbySettings, lobbyCode);
-  };
-
-  const handleSetPhase = (phase: string) => {
-    socket.emit('set phase', phase, lobbyCode);
-  };
-
-  const handleSetHost = (hostId: string) => {
-    socket.emit('set host', hostId, lobbyCode);
+  const handleSetUsername = (newUsername: string) => {
+    setUsername(newUsername.trim());
   };
 
   // Determine Game component to render based on the current game phase
@@ -175,6 +212,9 @@ const GameContainer = (): React.ReactElement => {
             handleStartGame={handleStartGame}
             handleSetWord={handleSetWord}
             handleSetSeconds={handleSetSeconds}
+            username={username}
+            handleSetUsername={handleSetUsername}
+            handleUpdateUsername={handleUpdateUsername}
           />
         );
       case 'WRITING':
@@ -203,7 +243,7 @@ const GameContainer = (): React.ReactElement => {
           <Lobby
             username={username}
             lobbyCode={lobbyCode}
-            setUsername={setUsername}
+            handleSetUsername={handleSetUsername}
             setLobbyCode={setLobbyCode}
             handleCreateLobby={handleCreateLobby}
             handleJoinLobby={handleJoinLobby}
@@ -213,33 +253,14 @@ const GameContainer = (): React.ReactElement => {
   };
 
   return (
-    <>
-      <div className="game-container">
-        {lobbyData.phase == 'LOBBY' && (
-          <>
-            <header>
-              <img className="trick-logo" src={logo} />
-              <p>
-                The game where the wrong definition could lead you to greatness.
-              </p>
-            </header>
-          </>
-        )}
-        {lobbyData.phase !== 'LOBBY' && (
-          <>
-            <header>
-              <Link className="home-link" onClick={() => resetGame()} to="/">
-                <img className="trick-logo" src={logo} />
-              </Link>
-              <p className="welcome-word">
-                The game where the wrong definition could lead you to greatness.
-              </p>
-            </header>
-          </>
-        )}
-        <div className="game-styles">{currentPhase()}</div>
-      </div>
-    </>
+    <div className="game-container">
+      {lobbyData.phase === 'LOBBY' ? (
+        <Header />
+      ) : (
+        <Header onClick={resetGame} />
+      )}
+      <div className="game-styles">{currentPhase()}</div>
+    </div>
   );
 };
 
