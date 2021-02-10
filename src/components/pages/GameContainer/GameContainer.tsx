@@ -126,6 +126,7 @@ const GameContainer = (): React.ReactElement => {
       setLobbyCode(socketData.lobbyCode);
     });
 
+    // When reloading the page with a valid token, the API will ask the player to rejoin
     socket.on('game rejoin', (lobbyCode: string) => {
       setRejoinCode(lobbyCode);
     });
