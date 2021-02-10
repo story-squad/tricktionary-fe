@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
@@ -13,6 +13,7 @@ import {
 import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
 import { randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
+import { Modal } from '../../common/Modal';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
 // Game constants
@@ -32,13 +33,25 @@ const GameContainer = (): React.ReactElement => {
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const [, setGuesses] = useLocalStorage('guesses', []);
   const [localToken, setLocalToken] = useLocalStorage('token', '');
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
 
-  // Combine state reset functions
+  // Combine reset functions
   const resetGame = () => {
     resetLobbyData();
     resetLobbyCode();
     setGuesses([]);
+    socket.disconnect();
+    setLocalToken('');
+    handleLogin();
+    setShowLeaveModal(false);
   };
+
+  // Make a new socket connection after disconnecting
+  useEffect(() => {
+    if (socket.disconnected) {
+      socket.connect();
+    }
+  }, [socket.disconnected]);
 
   useEffect(() => {
     // Get token from localStorage if it exists, log in
@@ -127,8 +140,8 @@ const GameContainer = (): React.ReactElement => {
   }, []);
 
   // Socket event emitters
-  const handleLogin = () => {
-    socket.emit('login', localToken);
+  const handleLogin = (newToken = false) => {
+    socket.emit('login', newToken ? '' : localToken);
   };
 
   function handleCreateLobby(e: React.MouseEvent) {
@@ -262,10 +275,16 @@ const GameContainer = (): React.ReactElement => {
 
   return (
     <div className="game-container">
+      <Modal
+        message={'Would you like to leave the current game?'}
+        handleConfirm={resetGame}
+        handleCancel={() => setShowLeaveModal(false)}
+        visible={showLeaveModal}
+      />
       {lobbyData.phase === 'LOBBY' ? (
         <Header />
       ) : (
-        <Header onClick={resetGame} />
+        <Header onClick={() => setShowLeaveModal(true)} />
       )}
       <div className="game-styles">{currentPhase()}</div>
     </div>
