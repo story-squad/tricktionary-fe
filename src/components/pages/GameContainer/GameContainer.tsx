@@ -27,6 +27,7 @@ const GameContainer = (): React.ReactElement => {
   const [username, setUsername] = useLocalStorage('username', randomUsername());
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
+  const [rejoinCode, setRejoinCode] = useState('');
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
   const resetLobbyData = useResetRecoilState(lobbyState);
@@ -34,6 +35,7 @@ const GameContainer = (): React.ReactElement => {
   const [, setGuesses] = useLocalStorage('guesses', []);
   const [localToken, setLocalToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [showRejoinModal, setShowRejoinModal] = useState(false);
 
   // Combine reset functions
   const resetGame = () => {
@@ -52,6 +54,12 @@ const GameContainer = (): React.ReactElement => {
       socket.connect();
     }
   }, [socket.disconnected]);
+
+  useEffect(() => {
+    if (rejoinCode.length === 4) {
+      setShowRejoinModal(true);
+    }
+  }, [rejoinCode]);
 
   useEffect(() => {
     // Get token from localStorage if it exists, log in
@@ -116,6 +124,10 @@ const GameContainer = (): React.ReactElement => {
     socket.on('play again', (socketData: LobbyData) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
+    });
+
+    socket.on('game rejoin', (lobbyCode: string) => {
+      setRejoinCode(lobbyCode);
     });
 
     // Get your playerId from the API
@@ -224,6 +236,14 @@ const GameContainer = (): React.ReactElement => {
     setUsername(newUsername.trim());
   };
 
+  const handleRejoin = (join: boolean) => {
+    if (join) {
+      handleJoinLobby(null, rejoinCode);
+    }
+    setRejoinCode('');
+    setShowRejoinModal(false);
+  };
+
   // Determine Game component to render based on the current game phase
   const currentPhase = () => {
     switch (lobbyData.phase) {
@@ -280,6 +300,12 @@ const GameContainer = (): React.ReactElement => {
         handleConfirm={resetGame}
         handleCancel={() => setShowLeaveModal(false)}
         visible={showLeaveModal}
+      />
+      <Modal
+        message={'Your previous game is still going. Would you like to rejoin?'}
+        handleConfirm={() => handleRejoin(true)}
+        handleCancel={() => handleRejoin(false)}
+        visible={showRejoinModal}
       />
       {lobbyData.phase === 'LOBBY' ? (
         <Header />
