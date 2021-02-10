@@ -58,7 +58,6 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   const [guesses, setGuesses] = useLocalStorage('guesses', []);
   const [showModal, setShowModal] = useState(false);
   const [showGuesses, setShowGuesses] = useState(false);
-
   const allPlayersHaveGuessed = () => {
     let all = true;
     const playerGuesses = guesses.filter(
@@ -124,6 +123,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
                 <div className="definition-key">
                   <p>#{definition.definitionKey}</p>
                 </div>
+                <p>{definition.content}</p>
               </div>
             ))}
             <button
