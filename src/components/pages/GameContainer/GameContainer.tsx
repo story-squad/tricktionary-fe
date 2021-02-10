@@ -32,6 +32,7 @@ const GameContainer = (): React.ReactElement => {
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const [, setGuesses] = useLocalStorage('guesses', []);
   const [localToken, setLocalToken] = useLocalStorage('token', '');
+
   // Combine state reset functions
   const resetGame = () => {
     resetLobbyData();
@@ -52,41 +53,49 @@ const GameContainer = (): React.ReactElement => {
 
     // Add a player to the list when they join
     socket.on('add player', (newPlayer: PlayerItem) => {
-      setLobbyData({
-        ...lobbyData,
-        players: [...lobbyData.players, newPlayer],
+      setLobbyData((prevLobbyData) => {
+        return {
+          ...prevLobbyData,
+          players: [...prevLobbyData.players, newPlayer],
+        };
       });
     });
 
     // Remove a player from the list when they leave
     socket.on('remove player', (oldPlayerId: string) => {
-      setLobbyData({
-        ...lobbyData,
-        players: lobbyData.players.filter(
-          (player) => player.id !== oldPlayerId,
-        ),
+      setLobbyData((prevLobbyData) => {
+        return {
+          ...prevLobbyData,
+          players: prevLobbyData.players.filter(
+            (player) => player.id !== oldPlayerId,
+          ),
+        };
       });
     });
 
     // Get list of players
     socket.on('player list', (playerList: PlayerItem[]) => {
-      setLobbyData({
-        ...lobbyData,
-        players: playerList,
+      setLobbyData((prevLobbyData) => {
+        return {
+          ...prevLobbyData,
+          players: playerList,
+        };
       });
     });
 
     // Update a player's username when they edit their name
-    socket.on('updated username', (newUsername: string, playerId: string) => {
-      setLobbyData({
-        ...lobbyData,
-        players: lobbyData.players.map((player) => {
-          if (player.id === playerId) {
-            return { ...player, username: newUsername };
-          } else {
-            return player;
-          }
-        }),
+    socket.on('updated username', (playerId: string, newUsername: string) => {
+      setLobbyData((prevLobbyData) => {
+        return {
+          ...prevLobbyData,
+          players: prevLobbyData.players.map((player) => {
+            if (player.id === playerId) {
+              return { ...player, username: newUsername };
+            } else {
+              return player;
+            }
+          }),
+        };
       });
     });
 
