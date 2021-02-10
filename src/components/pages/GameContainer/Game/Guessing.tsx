@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import shuffle from 'shuffle-array';
+import { useLocalStorage } from '../../../../hooks';
 import { lobbyState } from '../../../../state';
-import { guessesState } from '../../../../state/guessesState';
 import {
   DefinitionItem,
   GuessItem,
@@ -55,13 +55,14 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   const [definitions] = useState(
     getDefinitions(lobbyData.players, playerId, lobbyData.definition),
   );
-  const [guesses, setGuesses] = useRecoilState(guessesState);
+  const [guesses, setGuesses] = useLocalStorage('guesses', []);
   const [showModal, setShowModal] = useState(false);
+  const [showGuesses, setShowGuesses] = useState(false);
 
   const allPlayersHaveGuessed = () => {
     let all = true;
     const playerGuesses = guesses.filter(
-      (guess) => guess.player !== lobbyData.host,
+      (guess: GuessItem) => guess.player !== lobbyData.host,
     );
     for (let i = 0; i < playerGuesses.length; i++) {
       if (playerGuesses[i].guess === -1) {
@@ -86,7 +87,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     guessId: number,
   ) => {
     setGuesses(
-      guesses.map((guess) => {
+      guesses.map((guess: GuessItem) => {
         if (guess.player === playerId) {
           return { ...guess, guess: guessId };
         } else {
@@ -115,44 +116,43 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           or not. REMEMBER! Read each number before the definition.
         </p>
         <p className="word-display">{lobbyData.word}</p>
-        <div className="definitions">
-          <h3>Definitions</h3>
-          {definitions.map((definition, key) => (
-            <div key={key} className="definition">
-              <div className="definition-key">
-                <p>#{definition.definitionKey}</p>
+        {!showGuesses && (
+          <div className="definitions">
+            <h3>Definitions</h3>
+            {definitions.map((definition, key) => (
+              <div key={key} className="definition">
+                <div className="definition-key">
+                  <p>#{definition.definitionKey}</p>
+                </div>
               </div>
-              <p className="definition-content">{definition.content}</p>
-            </div>
-          ))}
-        </div>
-        <div className="guesses">
-          <h2>Player Guesses</h2>
-          <p>
-            Now it’s time for your team to vote! Read each name, then mark their
-            vote accordingly. If they don’t remember what definition goes to
-            what number... TOO BAD! Have them guess a random number, anwyay.
-          </p>
-          <div className="voting-label">
-            <h3>Name:</h3>
-            <h3>Vote:</h3>
-          </div>
-          <hr />
-          {lobbyData.players
-            .filter((player) => player.id !== lobbyData.host)
-            .map((player, key) => (
-              <Guess
-                key={key}
-                definitions={definitions as DefinitionItem[]}
-                player={player}
-                handleSelectGuess={handleSelectGuess}
-                guesses={guesses}
-              />
             ))}
-          <button className="submit-guesses" onClick={handleSubmit}>
-            Submit Guesses
-          </button>
-        </div>
+            <button
+              className="submit-guesses"
+              onClick={() => setShowGuesses(true)}
+            >
+              Start Voting
+            </button>
+          </div>
+        )}
+        {showGuesses && (
+          <div className="guesses">
+            <h3>Player Guesses</h3>
+            {lobbyData.players
+              .filter((player) => player.id !== lobbyData.host)
+              .map((player, key) => (
+                <Guess
+                  key={key}
+                  definitions={definitions as DefinitionItem[]}
+                  player={player}
+                  handleSelectGuess={handleSelectGuess}
+                  guesses={guesses}
+                />
+              ))}
+            <button className="submit-guesses" onClick={handleSubmit}>
+              Submit Guesses
+            </button>
+          </div>
+        )}
         <Modal
           message={`You haven't selected a guess for every player. Continue anyway?`}
           handleConfirm={() => handleSubmitGuesses(guesses)}
@@ -177,26 +177,27 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
 const Guess = (props: GuessProps): React.ReactElement => {
   const { player, definitions, handleSelectGuess, guesses } = props;
+
+  const chosenDefinition = definitions.filter(
+    (definition) => definition.id === getPlayerGuess(guesses, player),
+  )[0]?.content;
+
   return (
-    <>
-      <div className="guess">
-        <p className="guess-name">{player.username}</p>
-        {definitions.map((definition, key) => (
-          <button
-            className={`${
-              getPlayerGuess(guesses, player) === definition.id
-                ? 'selected'
-                : ''
-            }`}
-            onClick={(e) => handleSelectGuess(e, player.id, definition.id)}
-            key={key}
-          >
-            {definition.definitionKey}
-          </button>
-        ))}
-      </div>
-      <hr />
-    </>
+    <div className="guess">
+      <p className="guess-name">{player.username}</p>
+      {definitions.map((definition, key) => (
+        <button
+          className={`${
+            getPlayerGuess(guesses, player) === definition.id ? 'selected' : ''
+          }`}
+          onClick={(e) => handleSelectGuess(e, player.id, definition.id)}
+          key={key}
+        >
+          {definition.definitionKey}
+        </button>
+      ))}
+      {chosenDefinition && <p>{chosenDefinition}</p>}
+    </div>
   );
 };
 

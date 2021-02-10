@@ -5,7 +5,6 @@ import io from 'socket.io-client';
 // local storage hook
 import { useLocalStorage } from '../../../hooks';
 import {
-  guessesState,
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
@@ -31,13 +30,13 @@ const GameContainer = (): React.ReactElement => {
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
-  const resetGuesses = useResetRecoilState(guessesState);
+  const [, setGuesses] = useLocalStorage('guesses', []);
   const [localToken, setLocalToken] = useLocalStorage('token', '');
   // Combine state reset functions
   const resetGame = () => {
     resetLobbyData();
     resetLobbyCode();
-    resetGuesses();
+    setGuesses([]);
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { lobbyState } from '../../../../state';
 import { definitionIsValid } from '../../../../utils/validation';
@@ -15,15 +15,42 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const [timerDone, setTimerDone] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  useEffect(() => {
+    console.log(lobbyData);
+    console.log(allPlayersHaveWritten());
+  }, [lobbyData]);
+
+  const allPlayersHaveWritten = () => {
+    let all = true;
+    const players = lobbyData.players.filter(
+      (player) => player.id !== lobbyData.host,
+    );
+    for (let i = 0; i < players.length; i++) {
+      if (players[i].definition === '') {
+        all = false;
+        break;
+      }
+    }
+    return all;
+  };
+
   const handleChangeDefinition = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDefinition(e.target.value);
   };
 
   const handleGoToNextPhase = () => {
-    if (timerDone) {
+    if (timerDone || allPlayersHaveWritten()) {
       props.handleSetPhase('GUESSING');
     } else {
       setShowModal(true);
+    }
+  };
+
+  const modalMessage = () => {
+    if (Number(lobbyData.roundSettings.seconds) === 0) {
+      return 'Not all players have submitted. Are you sure want to skip to the next phase?';
+    } else {
+      return 'There is still time on the clock. Are you sure want to skip to the next phase?';
     }
   };
 
@@ -62,9 +89,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
           )}
         </div>
         <Modal
-          message={
-            'There is still time on the clock. Are you sure want to skip to the next phase?'
-          }
+          message={modalMessage()}
           handleConfirm={() => props.handleSetPhase('GUESSING')}
           handleCancel={() => setShowModal(false)}
           visible={showModal}
@@ -95,10 +120,12 @@ const Writing = (props: WritingProps): React.ReactElement => {
             }}
           >
             <h2>Type out your best guess!</h2>
-            <p>
-              When the timer is up, you will no longer be able to add to your
-              definition.
-            </p>
+            {Number(lobbyData.roundSettings.seconds) > 0 && (
+              <p>
+                When the timer is up, you will no longer be able to add to your
+                definition.
+              </p>
+            )}
             <input
               id="definition"
               name="definition"
