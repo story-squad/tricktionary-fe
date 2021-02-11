@@ -44,7 +44,7 @@ const GameContainer = (): React.ReactElement => {
     setGuesses([]);
     socket.disconnect();
     setLocalToken('');
-    handleLogin();
+    handleLogin(true);
     setShowLeaveModal(false);
   };
 
@@ -150,6 +150,10 @@ const GameContainer = (): React.ReactElement => {
     socket.on('token update', (newToken: string) => {
       setLocalToken(newToken);
     });
+
+    socket.on('player guess', (definitionKey: number) => {
+      console.log('DEFINITION KEY ', definitionKey);
+    });
   }, []);
 
   // Socket event emitters
@@ -201,6 +205,12 @@ const GameContainer = (): React.ReactElement => {
 
   const handleUpdateUsername = (newUsername: string) => {
     socket.emit('update username', newUsername);
+  };
+
+  // Host sends the guess # to the player to display on their screen
+  const handleSendGuess = (playerId: string, definitionKey: number) => {
+    console.log('KEY ', definitionKey);
+    socket.emit('player guess', playerId, definitionKey);
   };
 
   // Lobby Settings handlers / State handlers
@@ -271,6 +281,7 @@ const GameContainer = (): React.ReactElement => {
           <Guessing
             playerId={playerId}
             handleSubmitGuesses={handleSubmitGuesses}
+            handleSendGuess={handleSendGuess}
           />
         );
       case 'RESULTS':
