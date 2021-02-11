@@ -48,6 +48,10 @@ const GameContainer = (): React.ReactElement => {
     setShowLeaveModal(false);
   };
 
+  useEffect(() => {
+    console.log(lobbyData);
+  }, [lobbyData]);
+
   // Make a new socket connection after disconnecting
   useEffect(() => {
     if (socket.disconnected) {
