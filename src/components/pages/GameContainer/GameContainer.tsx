@@ -52,9 +52,7 @@ const GameContainer = (): React.ReactElement => {
 
   // Make a new socket connection after disconnecting
   useEffect(() => {
-    if (socket.disconnected) {
-      setTimeout(() => socket.connect(), 1000);
-    }
+    socket.connect();
   }, [socket.disconnected]);
 
   useEffect(() => {
@@ -65,7 +63,7 @@ const GameContainer = (): React.ReactElement => {
     socket.on('game update', (socketData: LobbyData) => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
-      history.push(`/`);
+      history.push(`/${socketData.lobbyCode}`);
     });
 
     // Add a player to the list when they join
