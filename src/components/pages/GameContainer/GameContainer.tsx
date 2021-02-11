@@ -158,6 +158,10 @@ const GameContainer = (): React.ReactElement => {
     socket.on('player guess', (definitionKey: number) => {
       console.log('DEFINITION KEY ', definitionKey);
     });
+
+    socket.on('ask rejoin', (code: string) => {
+      console.log(code);
+    });
   }, []);
 
   // Socket event emitters
