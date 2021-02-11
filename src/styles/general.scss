@@ -147,6 +147,11 @@ a {
     font-size: 3.6rem;
     font-family: $display-font;
   }
+  p {
+    font-size: 3.6rem;
+    font-family: $display-font;
+    margin-bottom: 0;
+  }
 }
 
 .guessing {
@@ -288,18 +293,33 @@ a {
 
 .definition-result {
   margin: 4rem 0;
-
+  border: 1px solid $charcoal;
+  box-shadow: $boxshadow;
+  border-radius: 8px;
+  padding: 8px;
+  .vote-align {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
   .result-username {
-    color: $blue;
+    color: $charcoal;
   }
   .guess-names {
     display: flex;
+    flex-direction: row;
+    align-items: baseline;
     margin: 1rem 1rem 1rem 0;
-    p {
-      border: 1px solid black;
-      border-radius: 1rem;
+    p.who-voted {
+      font-family: $display-font;
+      color: $orange;
       padding: 1rem;
       width: auto;
+    }
+  }
+  &:last-child {
+    span {
+      display: none;
     }
   }
 }
@@ -419,7 +439,6 @@ h2.player-h2 {
       background-color: $white;
       color: $charcoal;
       border: 2px solid $lt-grey;
-      box-shadow: $boxshadow;
       padding: 0;
       margin: 4px;
 
@@ -427,8 +446,15 @@ h2.player-h2 {
         background-color: $blue;
         color: $white;
         border: 2px solid $blue;
+        box-shadow: $boxshadow;
       }
     }
+  }
+}
+
+.show-guess {
+  p.guess-choice {
+    text-align: center;
   }
 }
 

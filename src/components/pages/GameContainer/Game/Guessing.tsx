@@ -115,6 +115,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           or not. REMEMBER! Read each number before the definition.
         </p>
         <p className="word-display">{lobbyData.word}</p>
+
         {!showGuesses && (
           <div className="definitions">
             <h3>Definitions</h3>
@@ -137,6 +138,11 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         {showGuesses && (
           <div className="guesses">
             <h3>Player Guesses</h3>
+            <div className="voting-label">
+              <h3>Name:</h3>
+              <h3>Vote:</h3>
+            </div>
+            <hr />
             {lobbyData.players
               .filter((player) => player.id !== lobbyData.host)
               .map((player, key) => (
@@ -183,21 +189,33 @@ const Guess = (props: GuessProps): React.ReactElement => {
   )[0]?.content;
 
   return (
-    <div className="guess">
-      <p className="guess-name">{player.username}</p>
-      {definitions.map((definition, key) => (
-        <button
-          className={`${
-            getPlayerGuess(guesses, player) === definition.id ? 'selected' : ''
-          }`}
-          onClick={(e) => handleSelectGuess(e, player.id, definition.id)}
-          key={key}
-        >
-          {definition.definitionKey}
-        </button>
-      ))}
-      {chosenDefinition && <p>{chosenDefinition}</p>}
-    </div>
+    <>
+      <div className="guess">
+        <p className="guess-name">{player.username}</p>
+        {definitions.map((definition, key) => (
+          <button
+            className={`${
+              getPlayerGuess(guesses, player) === definition.id
+                ? 'selected'
+                : ''
+            }`}
+            onClick={(e) => handleSelectGuess(e, player.id, definition.id)}
+            key={key}
+          >
+            {definition.definitionKey}
+          </button>
+        ))}
+      </div>
+      <div className="show-guess">
+        {chosenDefinition && (
+          <div>
+            <p>Chosen Definition: </p>
+            <p className="guess-choice">{chosenDefinition}</p>
+          </div>
+        )}
+      </div>
+      <hr />
+    </>
   );
 };
 
