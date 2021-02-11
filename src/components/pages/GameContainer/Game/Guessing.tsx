@@ -49,7 +49,7 @@ const getPlayerGuess = (choices: GuessItem[], player: PlayerItem): number => {
 // Components
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
-  const { playerId, handleSubmitGuesses } = props;
+  const { playerId, handleSubmitGuesses, handleSendGuess } = props;
   const lobbyData = useRecoilValue(lobbyState);
   // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selection
   const [definitions] = useState(
@@ -84,7 +84,9 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     e: React.MouseEvent,
     playerId: string,
     guessId: number,
+    definitionKey: number,
   ) => {
+    handleSendGuess(playerId, definitionKey);
     setGuesses(
       guesses.map((guess: GuessItem) => {
         if (guess.player === playerId) {
@@ -199,7 +201,7 @@ const Guess = (props: GuessProps): React.ReactElement => {
                 ? 'selected'
                 : ''
             }`}
-            onClick={(e) => handleSelectGuess(e, player.id, definition.id)}
+            onClick={(e) => handleSelectGuess(e, player.id, definition.id, definition.definitionKey,)}
             key={key}
           >
             {definition.definitionKey}
@@ -223,6 +225,7 @@ export default Guessing;
 
 interface GuessingProps {
   handleSubmitGuesses: (guesses: GuessItem[]) => void;
+  handleSendGuess: (playerId: string, definitionKey: number) => void;
   playerId: string;
 }
 
@@ -231,6 +234,7 @@ interface GuessProps {
     e: React.MouseEvent,
     playerId: string,
     guessId: number,
+    definitionKey: number,
   ) => void;
   definitions: DefinitionItem[];
   player: PlayerItem;
