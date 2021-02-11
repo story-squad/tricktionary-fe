@@ -130,11 +130,6 @@ const GameContainer = (): React.ReactElement => {
       setLobbyCode(socketData.lobbyCode);
     });
 
-    // When reloading the page with a valid token, the API will ask the player to rejoin
-    socket.on('game rejoin', (lobbyCode: string) => {
-      setRejoinCode(lobbyCode);
-    });
-
     // Get your playerId from the API
     socket.on('welcome', (socketData: string) => {
       setPlayerId(socketData);
@@ -157,10 +152,6 @@ const GameContainer = (): React.ReactElement => {
 
     socket.on('player guess', (definitionKey: number) => {
       console.log('DEFINITION KEY ', definitionKey);
-    });
-
-    socket.on('ask rejoin', (code: string) => {
-      console.log(code);
     });
   }, []);
 
@@ -217,7 +208,6 @@ const GameContainer = (): React.ReactElement => {
 
   // Host sends the guess # to the player to display on their screen
   const handleSendGuess = (playerId: string, definitionKey: number) => {
-    console.log('KEY ', definitionKey);
     socket.emit('player guess', playerId, definitionKey);
   };
 
