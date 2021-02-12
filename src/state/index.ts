@@ -3,6 +3,7 @@ import { lobbyCodeState } from './lobbyCodeState';
 import { lobbySettingsState } from './lobbySettingsState';
 import { lobbyState } from './lobbyState';
 import { playerIdState } from './playerIdState';
+import { timerState } from './timerState';
 import { tokenState } from './tokenState';
 
 export {
@@ -12,4 +13,5 @@ export {
   guessesState,
   playerIdState,
   tokenState,
+  timerState,
 };

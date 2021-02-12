@@ -9,6 +9,7 @@ import {
   lobbySettingsState,
   lobbyState,
   playerIdState,
+  timerState,
 } from '../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
 import { randomUsername } from '../../../utils/helpers';
@@ -34,7 +35,8 @@ const GameContainer = (): React.ReactElement => {
   const [, setGuesses] = useLocalStorage('guesses', []);
   const [localToken, setLocalToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useRecoilState(timerState);
+  const [tempTime, setTempTime] = useState(0);
 
   // Combine reset functions
   const resetGame = () => {
@@ -48,9 +50,15 @@ const GameContainer = (): React.ReactElement => {
     history.push('/');
   };
 
+  // For testing, DELETE later
   useEffect(() => {
     console.log(lobbyData);
   }, [lobbyData]);
+
+  // Sync recoil timer
+  useEffect(() => {
+    setTime({ ...time, startTime: tempTime });
+  }, [tempTime]);
 
   // Make a new socket connection after disconnecting
   useEffect(() => {
@@ -152,7 +160,10 @@ const GameContainer = (): React.ReactElement => {
     });
 
     socket.on('synchronize', (seconds: number) => {
-      console.log('YOU"VE BEEN SYNCED', seconds);
+      if (lobbyData.host !== playerId) {
+        console.log('sync: ', seconds);
+        setTempTime(seconds);
+      }
     });
   }, []);
 
@@ -269,8 +280,6 @@ const GameContainer = (): React.ReactElement => {
           <Writing
             handleSubmitDefinition={handleSubmitDefinition}
             handleSetPhase={handleSetPhase}
-            time={time}
-            setTime={setTime}
             handleSyncTimer={handleSyncTimer}
           />
         );

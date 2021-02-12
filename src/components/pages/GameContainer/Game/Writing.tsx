@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { lobbyState } from '../../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { lobbyState, timerState } from '../../../../state';
 import { definitionIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
 import { Modal } from '../../../common/Modal';
@@ -9,18 +9,23 @@ import Timer from '../../../common/Timer/Timer';
 import { PlayerList } from '../Game';
 
 const Writing = (props: WritingProps): React.ReactElement => {
-  const { time, setTime, handleSyncTimer } = props;
+  const { handleSyncTimer } = props;
   const lobbyData = useRecoilValue(lobbyState);
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const timerIsOn = Number(lobbyData.roundSettings.seconds) > 0;
+  const [time, setTime] = useRecoilState(timerState);
 
-  // Set timer seconds when the phase starts
+  // Put time on the timer
   useEffect(() => {
-    setTime(Number(lobbyData.roundSettings.seconds));
-  }, []);
+    if (lobbyData?.roundSettings?.seconds !== undefined) {
+      setTime({
+        startTime: lobbyData.roundSettings.seconds,
+        currentTime: lobbyData.roundSettings.seconds,
+      });
+    }
+  }, [lobbyData?.roundSettings?.seconds]);
 
   const allPlayersHaveWritten = () => {
     let all = true;
@@ -40,8 +45,8 @@ const Writing = (props: WritingProps): React.ReactElement => {
     setDefinition(e.target.value);
   };
 
-  const handleAddTime = (currentTime: number, add: number) => {
-    setTime(currentTime + add);
+  const handleAddTime = (time: number, add: number) => {
+    setTime({ startTime: time + add, currentTime: time + add });
   };
 
   const handleGoToNextPhase = () => {
@@ -132,6 +137,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
               </p>
             )}
             <input
+              disabled={timerDone}
               id="definition"
               name="definition"
               type="textfield"
@@ -160,7 +166,5 @@ export default Writing;
 interface WritingProps {
   handleSubmitDefinition: (definition: string) => void;
   handleSetPhase: (phase: string) => void;
-  time: number;
-  setTime: React.Dispatch<React.SetStateAction<number>>;
   handleSyncTimer: (seconds: number) => void;
 }

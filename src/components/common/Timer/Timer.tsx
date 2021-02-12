@@ -1,46 +1,50 @@
 import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { timerState } from '../../../state';
 
 const Timer = (props: TimerProps): React.ReactElement => {
   const { timeUp, syncTime, addTime } = props;
-  const seconds = Number(props.seconds);
-  const [timer, setTimer] = useState(seconds);
+  const [time, setTime] = useRecoilState(timerState);
+  const [timerTime, setTimerTime] = useState(time.startTime);
 
   useEffect(() => {
-    if (timer % 5 === 0) {
-      console.log(timer);
-      syncTime(timer);
+    if (time.currentTime % 2 === 0) {
+      syncTime(time.currentTime);
     }
-  }, [timer]);
+  }, [time.currentTime]);
 
   useEffect(() => {
-    if (seconds > 0) {
-      let time = seconds;
-      const interval = setInterval(() => {
-        if (time > 0) {
-          time--;
-          setTimer(time);
-        } else {
-          timeUp(true);
-        }
-      }, 1000);
-      return () => clearInterval(interval);
+    if (timerTime >= 0) {
+      setTime({ ...time, currentTime: timerTime });
     }
-  }, [seconds]);
+    if (timerTime === 0) {
+      timeUp(true);
+    }
+  }, [timerTime]);
+
+  useEffect(() => {
+    setTimerTime(time.startTime);
+  }, [time.startTime]);
+
+  const tick = () => {
+    setTimerTime((prevTime: number) => prevTime - 1);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
-      {seconds !== undefined && seconds > 0 && (
-        <>
-          <div className="countdown-container">
-            <div id="timer">
-              <span className="time">{timer}</span>{' '}
-              <span className="text">secs</span>
-            </div>
-          </div>
-          {addTime && (
-            <button onClick={() => addTime(timer, 20)}>+ 20 secs</button>
-          )}
-        </>
+      <div className="countdown-container">
+        <div id="timer">
+          <span className="time">{time.currentTime}</span>{' '}
+          <span className="text">secs</span>
+        </div>
+      </div>
+      {addTime && (
+        <button onClick={() => addTime(time.currentTime, 20)}>+ 20 secs</button>
       )}
     </>
   );
