@@ -44,6 +44,7 @@ const GameContainer = (): React.ReactElement => {
     setLocalToken('');
     handleLogin(true);
     setShowLeaveModal(false);
+    history.push('/');
   };
 
   useEffect(() => {
@@ -127,12 +128,17 @@ const GameContainer = (): React.ReactElement => {
 
     // Recieve API info
     socket.on('info', (infoData: string) => {
+      console.log('info:');
       console.log(infoData);
     });
 
     // Recieve API errors
     socket.on('error', (errorData: string) => {
+      console.log('error:');
       console.log(errorData);
+      if (errorData === 'cool it, hackerman.') {
+        history.push('/');
+      }
     });
 
     // Get API token
@@ -296,7 +302,10 @@ const GameContainer = (): React.ReactElement => {
       {lobbyData.phase === 'LOBBY' ? (
         <Header />
       ) : (
-        <Header onClick={() => setShowLeaveModal(true)} />
+        <Header
+          onClick={() => setShowLeaveModal(true)}
+          to={`/${lobbyData.lobbyCode}`}
+        />
       )}
       <div className="game-styles">{currentPhase()}</div>
     </div>
