@@ -13,17 +13,22 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [timerDone, setTimerDone] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [useTimer, setUseTimer] = useState(false);
   const [time, setTime] = useRecoilState(timerState);
+  const [timerDone, setTimerDone] = useState(false);
 
   // Put time on the timer
   useEffect(() => {
     if (lobbyData?.roundSettings?.seconds !== undefined) {
+      console.log('LOBBY SETTINGS', lobbyData?.roundSettings?.seconds);
       setTime({
         startTime: lobbyData.roundSettings.seconds,
         currentTime: lobbyData.roundSettings.seconds,
       });
+      if (lobbyData.roundSettings.seconds > 0) {
+        setUseTimer(true);
+      }
     }
   }, [lobbyData?.roundSettings?.seconds]);
 
@@ -84,12 +89,14 @@ const Writing = (props: WritingProps): React.ReactElement => {
           When the timer is up, your team will no longer be able to add to their
           definition.
         </p>
-        <Timer
-          seconds={time}
-          timeUp={setTimerDone}
-          syncTime={handleSyncTimer}
-          addTime={handleAddTime}
-        />
+        {useTimer && (
+          <Timer
+            seconds={time}
+            timeUp={setTimerDone}
+            syncTime={handleSyncTimer}
+            addTime={handleAddTime}
+          />
+        )}
         <PlayerList />
         <div className="times-up-container">
           <button className="times-up-button" onClick={handleGoToNextPhase}>
@@ -114,7 +121,9 @@ const Writing = (props: WritingProps): React.ReactElement => {
           Your host has chosen a word. Your job is to come up with a definition.
           Can you hit submit before the timer runs out?
         </p>
-        <Timer seconds={time} timeUp={setTimerDone} syncTime={() => 0} />
+        {useTimer && (
+          <Timer seconds={time} timeUp={setTimerDone} syncTime={() => 0} />
+        )}
         {!isSubmitted && timerDone && (
           <h3 className="times-up">Time&apos;s up!</h3>
         )}

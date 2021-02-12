@@ -30,13 +30,15 @@ const GameContainer = (): React.ReactElement => {
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
-  const resetLobbyData = useResetRecoilState(lobbyState);
-  const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const [, setGuesses] = useLocalStorage('guesses', []);
   const [localToken, setLocalToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [time, setTime] = useRecoilState(timerState);
-  const [tempTime, setTempTime] = useState(0);
+  // Required for socket listener functional updates. Recoil doesn't allow functional updates.
+  const [tempTime, setTempTime] = useState(-1);
+  const resetLobbyData = useResetRecoilState(lobbyState);
+  const resetLobbyCode = useResetRecoilState(lobbyCodeState);
+  const resetTime = useResetRecoilState(timerState);
 
   // Combine reset functions
   const resetGame = () => {
@@ -50,14 +52,26 @@ const GameContainer = (): React.ReactElement => {
     history.push('/');
   };
 
+  useEffect(() => {
+    if (lobbyData.phase !== 'WRITING') {
+      resetTime();
+    }
+  }, [lobbyData]);
+
   // For testing, DELETE later
   useEffect(() => {
     console.log(lobbyData);
   }, [lobbyData]);
+  useEffect(() => {
+    console.log(time);
+  }, [time]);
 
   // Sync recoil timer
   useEffect(() => {
-    setTime({ ...time, startTime: tempTime });
+    if (tempTime >= 0) {
+      setTime({ ...time, startTime: tempTime });
+      console.log('TEMP TIME');
+    }
   }, [tempTime]);
 
   // Make a new socket connection after disconnecting
@@ -161,8 +175,8 @@ const GameContainer = (): React.ReactElement => {
 
     socket.on('synchronize', (seconds: number) => {
       if (lobbyData.host !== playerId) {
-        console.log('sync: ', seconds);
         setTempTime(seconds);
+        console.log('SYNC ', seconds);
       }
     });
   }, []);
