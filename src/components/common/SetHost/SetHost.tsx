@@ -19,6 +19,8 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
       {showModal && (
         <div className="modal">
           <div className="modal-content">
+            <h2>Change Hosts</h2>
+            <p>Click on a name to give them hosting power!</p>
             <div className="players">
               {props.players
                 .filter((player) => player.id !== playerId)
@@ -32,13 +34,15 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
                   </button>
                 ))}
             </div>
-            <button
-              disabled={chosenPlayer === '0'}
-              onClick={() => props.handleSetHost(chosenPlayer)}
-            >
-              Okay
-            </button>
-            <button onClick={() => setShowModal(false)}>Cancel</button>
+            <div className="modal-buttons">
+              <button
+                disabled={chosenPlayer === '0'}
+                onClick={() => props.handleSetHost(chosenPlayer)}
+              >
+                Okay
+              </button>
+              <button onClick={() => setShowModal(false)}>Cancel</button>
+            </div>
           </div>
         </div>
       )}
