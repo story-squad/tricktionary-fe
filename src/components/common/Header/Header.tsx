@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import logo from '../../../assets/TricktionaryLogo.png';
 
 const Header = (props: HeaderProps): React.ReactElement => {
-  const { onClick } = props;
+  const { onClick, to } = props;
 
   return (
     <header>
-      {onClick !== undefined ? (
-        <Link className="home-link" onClick={onClick} to="/">
+      {onClick !== undefined && to !== undefined ? (
+        <Link className="home-link" onClick={onClick} to={to}>
           <img className="trick-logo" src={logo} />
         </Link>
       ) : (
@@ -26,4 +26,5 @@ export default Header;
 
 interface HeaderProps {
   onClick?: () => void;
+  to?: string;
 }
