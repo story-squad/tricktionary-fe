@@ -9,18 +9,18 @@ import Timer from '../../../common/Timer/Timer';
 import { PlayerList } from '../Game';
 
 const Writing = (props: WritingProps): React.ReactElement => {
+  const { time, setTime, handleSyncTimer } = props;
   const lobbyData = useRecoilValue(lobbyState);
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const timerIsOn = Number(lobbyData.roundSettings.seconds) > 0;
-  const [time, setTime] = useState(Number(lobbyData.roundSettings.seconds));
 
+  // Set timer seconds when the phase starts
   useEffect(() => {
-    console.log(lobbyData);
-    console.log(allPlayersHaveWritten());
-  }, [lobbyData]);
+    setTime(Number(lobbyData.roundSettings.seconds));
+  }, []);
 
   const allPlayersHaveWritten = () => {
     let all = true;
@@ -38,6 +38,10 @@ const Writing = (props: WritingProps): React.ReactElement => {
 
   const handleChangeDefinition = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDefinition(e.target.value);
+  };
+
+  const handleAddTime = (currentTime: number, add: number) => {
+    setTime(currentTime + add);
   };
 
   const handleGoToNextPhase = () => {
@@ -75,10 +79,12 @@ const Writing = (props: WritingProps): React.ReactElement => {
           When the timer is up, your team will no longer be able to add to their
           definition.
         </p>
-        <Timer seconds={time} timeUp={setTimerDone} />
-        {timerIsOn && (
-          <button onClick={() => setTime(time + 20)}>+ 20 secs</button>
-        )}
+        <Timer
+          seconds={time}
+          timeUp={setTimerDone}
+          syncTime={handleSyncTimer}
+          addTime={handleAddTime}
+        />
         <PlayerList />
         <div className="times-up-container">
           <button className="times-up-button" onClick={handleGoToNextPhase}>
@@ -103,7 +109,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
           Your host has chosen a word. Your job is to come up with a definition.
           Can you hit submit before the timer runs out?
         </p>
-        <Timer seconds={time} timeUp={setTimerDone} />
+        <Timer seconds={time} timeUp={setTimerDone} syncTime={() => 0} />
         {!isSubmitted && timerDone && (
           <h3 className="times-up">Time&apos;s up!</h3>
         )}
@@ -154,4 +160,7 @@ export default Writing;
 interface WritingProps {
   handleSubmitDefinition: (definition: string) => void;
   handleSetPhase: (phase: string) => void;
+  time: number;
+  setTime: React.Dispatch<React.SetStateAction<number>>;
+  handleSyncTimer: (seconds: number) => void;
 }

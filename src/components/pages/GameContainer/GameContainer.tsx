@@ -34,6 +34,7 @@ const GameContainer = (): React.ReactElement => {
   const [, setGuesses] = useLocalStorage('guesses', []);
   const [localToken, setLocalToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [time, setTime] = useState(0);
 
   // Combine reset functions
   const resetGame = () => {
@@ -149,6 +150,10 @@ const GameContainer = (): React.ReactElement => {
     socket.on('player guess', (definitionKey: number) => {
       console.log('DEFINITION KEY ', definitionKey);
     });
+
+    socket.on('synchronize', (seconds: number) => {
+      console.log('YOU"VE BEEN SYNCED', seconds);
+    });
   }, []);
 
   // Socket event emitters
@@ -207,6 +212,10 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('player guess', playerId, definitionKey);
   };
 
+  const handleSyncTimer = (seconds: number) => {
+    socket.emit('synchronize', seconds);
+  };
+
   // Lobby Settings handlers / State handlers
   const handleSetWord = (
     id: number,
@@ -260,6 +269,9 @@ const GameContainer = (): React.ReactElement => {
           <Writing
             handleSubmitDefinition={handleSubmitDefinition}
             handleSetPhase={handleSetPhase}
+            time={time}
+            setTime={setTime}
+            handleSyncTimer={handleSyncTimer}
           />
         );
       case 'GUESSING':
