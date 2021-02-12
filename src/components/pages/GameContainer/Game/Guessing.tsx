@@ -201,7 +201,14 @@ const Guess = (props: GuessProps): React.ReactElement => {
                 ? 'selected'
                 : ''
             }`}
-            onClick={(e) => handleSelectGuess(e, player.id, definition.id, definition.definitionKey,)}
+            onClick={(e) =>
+              handleSelectGuess(
+                e,
+                player.id,
+                definition.id,
+                definition.definitionKey,
+              )
+            }
             key={key}
           >
             {definition.definitionKey}

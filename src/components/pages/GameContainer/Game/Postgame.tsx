@@ -100,8 +100,12 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
             <DefinitionResult key={key} definitionResult={definitionResult} />
           ))}
         </div>
-        <SetHost players={lobbyData.players} handleSetHost={handleSetHost} />
-        <button onClick={handlePlayAgain}>Play Again</button>
+        <div className="endgame-container">
+          <button className="play-again" onClick={handlePlayAgain}>
+            Play Again
+          </button>
+          <SetHost players={lobbyData.players} handleSetHost={handleSetHost} />
+        </div>
       </Host>
       <Player>
         <h2>It&apos;s time for the results!</h2>

@@ -111,8 +111,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <h3>Choose a word!</h3>
             <div className="pick-word-instructions">
               <p className="pick-instructions">
-                Click on a word to choose to read its definition. If you like
-                that word, ready your team, then click start!
+                Click on a word to read its definition. If you like that word{' '}
+                <i>and</i> your team is ready, click start!
               </p>
               <button className="shuffle-btn sm-btn" onClick={handleGetWords}>
                 Shuffle Words

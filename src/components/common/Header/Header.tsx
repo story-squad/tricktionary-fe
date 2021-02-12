@@ -15,9 +15,8 @@ const Header = (props: HeaderProps): React.ReactElement => {
       ) : (
         <img className="trick-logo" src={logo} />
       )}
-      <p className="welcome-word">
-        The game where the wrong definition could lead you to greatness.
-      </p>
+      <p>Where the wrong definition</p>
+      <p className="welcome-word">could lead you to greatness.</p>
     </header>
   );
 };

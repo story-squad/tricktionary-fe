@@ -160,12 +160,15 @@ a {
     text-align: center;
     display: flex;
     justify-content: flex-start;
-    align-items: baseline;
+    align-items: center;
     border: 1px solid $lt-grey;
     border-radius: 8px;
     margin-bottom: 8px;
-    padding: 8px;
+    padding: 16px 8px 16px 8px;
     box-shadow: $boxshadow;
+    p {
+      margin-bottom: 0;
+    }
     .definition-content {
       align-self: center;
       text-align: left;
@@ -182,7 +185,7 @@ a {
       height: 4rem;
       p {
         width: 4rem;
-        font-size: 3.2rem;
+        font-size: 4rem;
         text-align: center;
         margin: auto;
         font-family: $display-font;
@@ -293,37 +296,123 @@ a {
 
 .definition-result {
   margin: 4rem 0;
-  border: 1px solid $charcoal;
+  border: 2px solid $royal-blue;
   box-shadow: $boxshadow;
   border-radius: 8px;
-  padding: 8px;
   .vote-align {
+    background-color: #f7fbff;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 1.6rem 1.6rem 1.6rem 1.6rem;
+  }
+  .result-definition {
+    background-color: #f7fbff;
+    padding: 1.6rem 1.6rem 1.6rem 1.6rem;
   }
   .result-username {
     color: $charcoal;
+    font-family: $display-font;
+    font-size: 3.2rem;
+    margin-bottom: 8px;
+    &:last-child {
+      color: $red;
+    }
+  }
+  .result-votes {
+    padding: 1.6rem;
+    box-shadow: $boxshadow;
+    background-color: $white;
+    margin-bottom: 0;
+    border-radius: 8px;
+    font-family: $display-font;
   }
   .guess-names {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: baseline;
-    margin: 1rem 1rem 1rem 0;
+    margin: 0.8rem 0 0 0;
+    padding: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    p:first-child {
+      margin-bottom: 0;
+    }
     p.who-voted {
       font-family: $display-font;
       color: $orange;
-      padding: 1rem;
+      padding: 1.6rem 1.6rem 0 1.6rem;
+      margin-bottom: 0;
       width: auto;
     }
   }
   &:last-child {
-    span {
+    .result-username {
+      color: $royal-blue;
+    }
+    span:last-child {
       display: none;
     }
   }
 }
+//play/new host button
+.endgame-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  .play-again {
+    background: $orange;
+    margin-right: 1.6rem;
+  }
+  .selected {
+    background: $orange;
+  }
+}
 
+.modal {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+
+  .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30rem;
+    height: 20rem;
+    max-width: 100%;
+    padding: 2.4rem;
+    background-color: $white;
+    border-radius: 1.6rem;
+    // text-align: center;
+    box-shadow: $boxshadow;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    h2 {
+      color: $red;
+      font-size: 2.4rem;
+      align-self: start;
+    }
+    button:first-child {
+      margin-right: 1.6rem;
+    }
+    p {
+      align-self: start;
+    }
+  }
+
+}
 #definition {
   width: 100%;
 }
