@@ -14,6 +14,8 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const timerIsOn = Number(lobbyData.roundSettings.seconds) > 0;
+  const [time, setTime] = useState(Number(lobbyData.roundSettings.seconds));
 
   useEffect(() => {
     console.log(lobbyData);
@@ -73,10 +75,10 @@ const Writing = (props: WritingProps): React.ReactElement => {
           When the timer is up, your team will no longer be able to add to their
           definition.
         </p>
-        <Timer
-          seconds={lobbyData.roundSettings.seconds}
-          timeUp={setTimerDone}
-        />
+        <Timer seconds={time} timeUp={setTimerDone} />
+        {timerIsOn && (
+          <button onClick={() => setTime(time + 20)}>+ 20 secs</button>
+        )}
         <PlayerList />
         <div className="times-up-container">
           <button className="times-up-button" onClick={handleGoToNextPhase}>
@@ -101,10 +103,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
           Your host has chosen a word. Your job is to come up with a definition.
           Can you hit submit before the timer runs out?
         </p>
-        <Timer
-          seconds={lobbyData.roundSettings.seconds}
-          timeUp={setTimerDone}
-        />
+        <Timer seconds={time} timeUp={setTimerDone} />
         {!isSubmitted && timerDone && (
           <h3 className="times-up">Time&apos;s up!</h3>
         )}
@@ -120,7 +119,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
             }}
           >
             <h2>Type out your best guess!</h2>
-            {Number(lobbyData.roundSettings.seconds) > 0 && (
+            {time > 0 && (
               <p>
                 When the timer is up, you will no longer be able to add to your
                 definition.

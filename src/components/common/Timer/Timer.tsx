@@ -18,7 +18,7 @@ const Timer = (props: TimerProps): React.ReactElement => {
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, []);
+  }, [seconds]);
 
   return (
     <>
