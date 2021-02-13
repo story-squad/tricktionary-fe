@@ -9,15 +9,14 @@ import {
   lobbySettingsState,
   lobbyState,
   playerIdState,
+  timerState,
 } from '../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
+import { MAX_SECONDS } from '../../../utils/constants';
 import { randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
 import { Modal } from '../../common/Modal';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
-
-// Game constants
-const MAX_SECONDS = 120;
 
 // Create a socket connection to API
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
@@ -29,11 +28,15 @@ const GameContainer = (): React.ReactElement => {
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
-  const resetLobbyData = useResetRecoilState(lobbyState);
-  const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const [, setGuesses] = useLocalStorage('guesses', []);
   const [localToken, setLocalToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [time, setTime] = useRecoilState(timerState);
+  // Required for socket listener functional updates. Recoil doesn't allow functional updates.
+  const [tempTime, setTempTime] = useState(-1);
+  const resetLobbyData = useResetRecoilState(lobbyState);
+  const resetLobbyCode = useResetRecoilState(lobbyCodeState);
+  const resetTime = useResetRecoilState(timerState);
 
   // Combine reset functions
   const resetGame = () => {
@@ -48,8 +51,26 @@ const GameContainer = (): React.ReactElement => {
   };
 
   useEffect(() => {
+    if (lobbyData.phase !== 'WRITING') {
+      resetTime();
+    }
+  }, [lobbyData]);
+
+  // For testing, DELETE later
+  useEffect(() => {
     console.log(lobbyData);
   }, [lobbyData]);
+
+  // Sync recoil timer
+  useEffect(() => {
+    if (tempTime >= 0) {
+      let newTime = tempTime;
+      if (newTime > MAX_SECONDS) {
+        newTime = MAX_SECONDS;
+      }
+      setTime({ ...time, startTime: newTime });
+    }
+  }, [tempTime]);
 
   // Make a new socket connection after disconnecting
   useEffect(() => {
@@ -149,6 +170,10 @@ const GameContainer = (): React.ReactElement => {
     socket.on('player guess', (definitionKey: number) => {
       console.log('DEFINITION KEY ', definitionKey);
     });
+
+    socket.on('synchronize', (seconds: number) => {
+      setTempTime(seconds);
+    });
   }, []);
 
   // Socket event emitters
@@ -207,6 +232,10 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('player guess', playerId, definitionKey);
   };
 
+  const handleSyncTimer = (seconds: number) => {
+    socket.emit('synchronize', seconds);
+  };
+
   // Lobby Settings handlers / State handlers
   const handleSetWord = (
     id: number,
@@ -260,6 +289,7 @@ const GameContainer = (): React.ReactElement => {
           <Writing
             handleSubmitDefinition={handleSubmitDefinition}
             handleSetPhase={handleSetPhase}
+            handleSyncTimer={handleSyncTimer}
           />
         );
       case 'GUESSING':

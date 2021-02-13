@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { lobbyState } from '../../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { lobbyState, timerState } from '../../../../state';
+import { MAX_SECONDS } from '../../../../utils/constants';
 import { definitionIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
 import { Modal } from '../../../common/Modal';
@@ -9,16 +10,28 @@ import Timer from '../../../common/Timer/Timer';
 import { PlayerList } from '../Game';
 
 const Writing = (props: WritingProps): React.ReactElement => {
+  const { handleSyncTimer } = props;
   const lobbyData = useRecoilValue(lobbyState);
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [timerDone, setTimerDone] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [useTimer, setUseTimer] = useState(false);
+  const [time, setTime] = useRecoilState(timerState);
+  const [timerDone, setTimerDone] = useState(false);
 
+  // Put time on the timer
   useEffect(() => {
-    console.log(lobbyData);
-    console.log(allPlayersHaveWritten());
-  }, [lobbyData]);
+    if (lobbyData?.roundSettings?.seconds !== undefined) {
+      console.log('LOBBY SETTINGS', lobbyData?.roundSettings?.seconds);
+      setTime({
+        startTime: lobbyData.roundSettings.seconds,
+        currentTime: lobbyData.roundSettings.seconds,
+      });
+      if (lobbyData.roundSettings.seconds > 0) {
+        setUseTimer(true);
+      }
+    }
+  }, [lobbyData?.roundSettings?.seconds]);
 
   const allPlayersHaveWritten = () => {
     let all = true;
@@ -36,6 +49,14 @@ const Writing = (props: WritingProps): React.ReactElement => {
 
   const handleChangeDefinition = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDefinition(e.target.value);
+  };
+
+  const handleAddTime = (time: number, add: number) => {
+    let newTime = time + add;
+    if (newTime > MAX_SECONDS) {
+      newTime = MAX_SECONDS;
+    }
+    setTime({ startTime: newTime, currentTime: newTime });
   };
 
   const handleGoToNextPhase = () => {
@@ -73,10 +94,14 @@ const Writing = (props: WritingProps): React.ReactElement => {
           When the timer is up, your team will no longer be able to add to their
           definition.
         </p>
-        <Timer
-          seconds={lobbyData.roundSettings.seconds}
-          timeUp={setTimerDone}
-        />
+        {useTimer && (
+          <Timer
+            seconds={time}
+            timeUp={setTimerDone}
+            syncTime={handleSyncTimer}
+            addTime={handleAddTime}
+          />
+        )}
         <PlayerList />
         <div className="times-up-container">
           <button className="times-up-button" onClick={handleGoToNextPhase}>
@@ -101,10 +126,9 @@ const Writing = (props: WritingProps): React.ReactElement => {
           Your host has chosen a word. Your job is to come up with a definition.
           Can you hit submit before the timer runs out?
         </p>
-        <Timer
-          seconds={lobbyData.roundSettings.seconds}
-          timeUp={setTimerDone}
-        />
+        {useTimer && (
+          <Timer seconds={time} timeUp={setTimerDone} syncTime={() => 0} />
+        )}
         {!isSubmitted && timerDone && (
           <h3 className="times-up">Time&apos;s up!</h3>
         )}
@@ -120,13 +144,14 @@ const Writing = (props: WritingProps): React.ReactElement => {
             }}
           >
             <h2>Type out your best guess!</h2>
-            {Number(lobbyData.roundSettings.seconds) > 0 && (
+            {time > 0 && (
               <p>
                 When the timer is up, you will no longer be able to add to your
                 definition.
               </p>
             )}
             <input
+              disabled={timerDone}
               id="definition"
               name="definition"
               type="textfield"
@@ -155,4 +180,5 @@ export default Writing;
 interface WritingProps {
   handleSubmitDefinition: (definition: string) => void;
   handleSetPhase: (phase: string) => void;
+  handleSyncTimer: (seconds: number) => void;
 }
