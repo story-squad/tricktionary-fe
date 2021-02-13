@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { lobbyState, timerState } from '../../../../state';
+import { MAX_SECONDS } from '../../../../utils/constants';
 import { definitionIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
 import { Modal } from '../../../common/Modal';
@@ -51,7 +52,11 @@ const Writing = (props: WritingProps): React.ReactElement => {
   };
 
   const handleAddTime = (time: number, add: number) => {
-    setTime({ startTime: time + add, currentTime: time + add });
+    let newTime = time + add;
+    if (newTime > MAX_SECONDS) {
+      newTime = MAX_SECONDS;
+    }
+    setTime({ startTime: newTime, currentTime: newTime });
   };
 
   const handleGoToNextPhase = () => {

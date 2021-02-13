@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { timerState } from '../../../state';
+import { MAX_SECONDS } from '../../../utils/constants';
 
 const Timer = (props: TimerProps): React.ReactElement => {
   const { timeUp, syncTime, addTime } = props;
@@ -18,7 +19,9 @@ const Timer = (props: TimerProps): React.ReactElement => {
 
   // Timer logic. Update Recoil state as the Timer's local state updates
   useEffect(() => {
-    console.log(timerTime);
+    if (timerTime > MAX_SECONDS) {
+      setTimerTime(MAX_SECONDS);
+    }
     if (timerTime > 0) {
       setAllowTimeUp(true);
       timeUp(false);
@@ -63,7 +66,12 @@ const Timer = (props: TimerProps): React.ReactElement => {
         </div>
       </div>
       {addTime && (
-        <button onClick={() => addTime(time.currentTime, 20)}>+ 20 secs</button>
+        <button
+          className="start-btn center"
+          onClick={() => addTime(time.currentTime, 20)}
+        >
+          + 20 secs
+        </button>
       )}
     </>
   );

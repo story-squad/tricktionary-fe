@@ -12,13 +12,11 @@ import {
   timerState,
 } from '../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
+import { MAX_SECONDS } from '../../../utils/constants';
 import { randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
 import { Modal } from '../../common/Modal';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
-
-// Game constants
-const MAX_SECONDS = 120;
 
 // Create a socket connection to API
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
@@ -62,15 +60,15 @@ const GameContainer = (): React.ReactElement => {
   useEffect(() => {
     console.log(lobbyData);
   }, [lobbyData]);
-  useEffect(() => {
-    console.log(time);
-  }, [time]);
 
   // Sync recoil timer
   useEffect(() => {
     if (tempTime >= 0) {
-      setTime({ ...time, startTime: tempTime });
-      console.log('TEMP TIME');
+      let newTime = tempTime;
+      if (newTime > MAX_SECONDS) {
+        newTime = MAX_SECONDS;
+      }
+      setTime({ ...time, startTime: newTime });
     }
   }, [tempTime]);
 
@@ -174,10 +172,7 @@ const GameContainer = (): React.ReactElement => {
     });
 
     socket.on('synchronize', (seconds: number) => {
-      if (lobbyData.host !== playerId) {
-        setTempTime(seconds);
-        console.log('SYNC ', seconds);
-      }
+      setTempTime(seconds);
     });
   }, []);
 
