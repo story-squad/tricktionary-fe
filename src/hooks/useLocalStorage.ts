@@ -1,6 +1,9 @@
 import { useState } from 'react';
 // Hook translated to TS from JS https://usehooks.com/useLocalStorage/
-function useLocalStorage<T>(key: string, initialValue: string): Array<T> {
+export function useLocalStorage<T>(
+  key: string,
+  initialValue: unknown,
+): Array<T> {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
   const [storedValue, setStoredValue] = useState(() => {
@@ -37,4 +40,3 @@ function useLocalStorage<T>(key: string, initialValue: string): Array<T> {
   };
   return [storedValue, setValue];
 }
-export default useLocalStorage;

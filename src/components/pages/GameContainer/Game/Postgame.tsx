@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useLocalStorage } from '../../../../hooks';
 import { lobbyState } from '../../../../state';
-import { guessesState } from '../../../../state/guessesState';
 import { GuessItem, LobbyData, PlayerItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
 import SetHost from '../../../common/SetHost/SetHost';
+import { PlayerList } from '../Game';
 
 // Create a list of definitions, attach players who guessed for each, calculate point gains (UI only), add real definiton to the end
 const getSortedDefinitions = (
@@ -77,28 +78,45 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
   );
-  const guesses = useRecoilValue(guessesState);
+  const [guesses] = useLocalStorage('guesses', []);
   const [sortedDefinitions] = useState<DefinitionResultItem[]>(
-    getSortedDefinitions(lobbyData, guesses, playerDict),
+    getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict),
   );
 
   return (
     <div className="postgame game-page">
-      <h2>Results</h2>
-      <div className="word-display">
-        <p>Word: {lobbyData.word}</p>
-      </div>
       <Host>
+        <h2>It&apos;s time for the results!</h2>
+        <p>
+          Here are the results. They are displayed from least votes to most,
+          with the REAL defintion displayed at the end. The names of who voted
+          for each definiton is also provided.
+        </p>
+        <div className="word-display">
+          <p>{lobbyData.word}</p>
+        </div>
         <div className="round-results">
           {sortedDefinitions.map((definitionResult, key) => (
             <DefinitionResult key={key} definitionResult={definitionResult} />
           ))}
         </div>
-        <SetHost players={lobbyData.players} handleSetHost={handleSetHost} />
-        <button onClick={handlePlayAgain}>Play Again</button>
+        <div className="endgame-container">
+          <button className="play-again" onClick={handlePlayAgain}>
+            Play Again
+          </button>
+          <SetHost players={lobbyData.players} handleSetHost={handleSetHost} />
+        </div>
       </Host>
       <Player>
-        <p>The Host will now read the results!</p>
+        <h2>It&apos;s time for the results!</h2>
+        <p>
+          Your host is now going to read the results! Did you guess the right
+          one? How did your definition do? Did it reign supreme?
+        </p>
+        <div className="word-display">
+          <p>{lobbyData.word}</p>
+        </div>
+        <PlayerList />
       </Player>
     </div>
   );
@@ -108,16 +126,22 @@ const DefinitionResult = (props: DefinitionResultProps): React.ReactElement => {
   const { username, definition, points, guesses } = props.definitionResult;
   return (
     <div className="definition-result">
-      <p className="result-username">
-        {username}: {points} points earned
-      </p>
-      <p>Definition:</p>
-      <p className="result-definition">{definition}</p>
-      {guesses.map((guess, key) => (
-        <div key={key} className="guess-names">
-          <p>{guess}</p>
+      <div className="vote-align">
+        <div className="author-box">
+          <span className="result-username">{username} </span>
+          <span>wrote:</span>
         </div>
-      ))}
+        <p className="result-votes">{points} votes</p>
+      </div>
+      <p className="result-definition">{definition}</p>
+      <p className="who-voted-p">Who voted: </p>
+      <div className="who-voted-box">
+        {guesses.map((guess, key) => (
+          <div key={key} className="guess-names">
+            <p className="who-voted">{guess}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,21 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import resetGame from '../../pages/GameContainer/GameContainer';
 //logo
 import logo from '../../../assets/TricktionaryLogo.png';
 
+const Header = (props: HeaderProps): React.ReactElement => {
+  const { onClick, to } = props;
 
-const Header = (): React.ReactElement => {
   return (
-    <>
-      <header>
-        <Link className="home-link" onClick={() => resetGame()} to="/">
+    <header>
+      {onClick !== undefined && to !== undefined ? (
+        <Link className="home-link" onClick={onClick} to={to}>
           <img className="trick-logo" src={logo} />
         </Link>
-        <p>The game where the wrong definition could lead you to greatness.</p>
-      </header>
-    </>
+      ) : (
+        <img className="trick-logo" src={logo} />
+      )}
+      <p>Where the wrong definition</p>
+      <p className="welcome-word">could lead you to greatness.</p>
+    </header>
   );
 };
 
 export default Header;
+
+interface HeaderProps {
+  onClick?: () => void;
+  to?: string;
+}

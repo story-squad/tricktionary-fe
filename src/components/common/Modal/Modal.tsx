@@ -6,15 +6,19 @@ const Modal = (props: ModalProps): React.ReactElement => {
   return (
     <>
       {visible && (
-        <div className="modal-background">
+        <>
           <div className="modal">
-            <p>{message}</p>
-            <div className="modal-buttons">
-              <button onClick={handleConfirm}>Okay</button>
-              <button onClick={handleCancel}>Cancel</button>
+            <div className="modal-content">
+              <h2>Before you go...</h2>
+              <p>{message}</p>
+              <div className="modal-buttons">
+                <button onClick={handleConfirm}>Okay</button>
+                <button onClick={handleCancel}>Cancel</button>
+              </div>
             </div>
           </div>
-        </div>
+          <div className="modal-overlay"></div>
+        </>
       )}
     </>
   );

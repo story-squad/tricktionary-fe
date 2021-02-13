@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { getWords } from '../../../../api/apiRequests';
+import { useLocalStorage } from '../../../../hooks';
 import { lobbySettingsState, lobbyState } from '../../../../state';
 //styles
 import '../../../../styles/components/pages/Pregame.scss';
 import { WordItem } from '../../../../types/gameTypes';
+import { usernameIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
 import { PlayerList } from '../Game';
@@ -16,21 +18,22 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [isCustom, setIsCustom] = useState(false);
   const [choice, setChoice] = useState(initialChoiceValue);
   const [customInput, setCustomInput] = useState(initialCustomInputValue);
+  const [showEditName, setShowEditName] = useState(false);
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
   const lobbySettings = useRecoilValue(lobbySettingsState);
   const lobbyData = useRecoilValue(lobbyState);
+  const [, setGuesses] = useLocalStorage('guesses', []);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
   );
 
-  console.log('Word Info:', wordSelection);
-
   const getCurrentWord = () =>
     wordSelection.filter((word) => word.id === choice)[0];
 
-  // Get 3 word suggestions automatically
+  // Get 3 word suggestions automatically, reset guesses array from previous game
   useEffect(() => {
     handleGetWords();
+    setGuesses([]);
   }, []);
 
   // Clear choice/input when switching between word selection type
@@ -81,22 +84,35 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     setUseTimer(e.target.checked);
   };
 
+  const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.handleSetUsername(e.target.value);
+  };
+
+  const handleSubmitUsername = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowEditName(false);
+    props.handleUpdateUsername(props.username);
+  };
+
   return (
     <div className="pregame game-page">
       <Host>
-        <p className="room-code">Room Code: {lobbyData.lobbyCode}</p>
+        <h2>Pregame Settings</h2>
+        <p className="welcome-word">
+          Invite your friends, pick a word, set the timer, start the game!
+        </p>
+        <div className="invite-code">
+          <h3>Invite Code:</h3>
+          <p className="room-code">{lobbyData.lobbyCode}</p>
+        </div>
         {/* Word selection */}
         {!isCustom && (
           <>
-            <h2>Please choose a word!</h2>
-            <p className="welcome-word">
-              While you wait for your team, please pick a word. When all members
-              have arrived, press start.
-            </p>
+            <h3>Choose a word!</h3>
             <div className="pick-word-instructions">
               <p className="pick-instructions">
-                Click on a word to choose to read its definition. If you like
-                that word, ready your team, then click start!
+                Click on a word to read its definition. If you like that word{' '}
+                <i>and</i> your team is ready, click start!
               </p>
               <button className="shuffle-btn sm-btn" onClick={handleGetWords}>
                 Shuffle Words
@@ -141,7 +157,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         {/* Custom word form */}
         {isCustom && (
           <>
-            <h2>Bring Your Own Word!</h2>
+            <h2 className="BYOW">Bring Your Own Word!</h2>
             <p>
               While you wait for your team, please enter your word and its
               definition word. When all members have arrived, press start.
@@ -180,7 +196,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         <div className="timer-container">
           <h3 className="timer-title">Set A Timer!</h3>
           <p className="timer-directions">
-            This timer is to deterimite how long player’s have to type.
+            This timer is to deterimine how long players have to type.
           </p>
           {useTimer && (
             <>
@@ -203,18 +219,38 @@ const Pregame = (props: PregameProps): React.ReactElement => {
               checked={useTimer}
               onChange={handleSetUseTimer}
             />
-            <p>Play without a timer</p>
+            <p>Play with a timer</p>
           </div>
         </div>
+        <h2 className="player-h2">Player Lobby</h2>
         <PlayerList />
       </Host>
       <Player>
-        <h2>Wait!</h2>
-        <p>
-          While you wait for your team, please pick a word. When all members
-          have arrived, press start.
-        </p>
-        <p>Waiting on host to start...</p>
+        <h2>Waiting for your team to join...</h2>
+        {!showEditName && (
+          <div className="edit-name-block">
+            <button className="sm-btn" onClick={() => setShowEditName(true)}>
+              Edit Name
+            </button>
+          </div>
+        )}{' '}
+        {showEditName && (
+          <form className="edit-name-form">
+            <label htmlFor="edit-name">Edit Name</label>
+            <input
+              id="edit-name"
+              name="edit-name"
+              value={props.username}
+              onChange={handleChangeUsername}
+            ></input>
+            <button
+              disabled={!usernameIsValid(props.username)}
+              onClick={handleSubmitUsername}
+            >
+              Confirm
+            </button>
+          </form>
+        )}
         <PlayerList />
       </Player>
     </div>
@@ -243,6 +279,9 @@ interface PregameProps {
     definition: string | undefined,
   ) => void;
   handleSetSeconds: (seconds: number) => void;
+  handleSetUsername: (newUsername: string) => void;
+  username: string;
+  handleUpdateUsername: (newUsername: string) => void;
 }
 
 interface WordChoiceProps {
