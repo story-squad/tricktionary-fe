@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
-// local storage hook
 import { useLocalStorage } from '../../../hooks';
 import {
   lobbyCodeState,
