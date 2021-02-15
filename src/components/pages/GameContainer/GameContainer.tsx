@@ -9,7 +9,6 @@ import {
   lobbySettingsState,
   lobbyState,
   playerIdState,
-  timerState,
 } from '../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
 import { MAX_SECONDS } from '../../../utils/constants';
@@ -31,12 +30,9 @@ const GameContainer = (): React.ReactElement => {
   const [, setGuesses] = useLocalStorage('guesses', []);
   const [localToken, setLocalToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
-  const [time, setTime] = useRecoilState(timerState);
-  // Required for socket listener functional updates. Recoil doesn't allow functional updates.
-  const [tempTime, setTempTime] = useState(-1);
+  const [time, setTime] = useState(-1);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
-  const resetTime = useResetRecoilState(timerState);
 
   // Combine reset functions
   const resetGame = () => {
@@ -52,7 +48,7 @@ const GameContainer = (): React.ReactElement => {
 
   useEffect(() => {
     if (lobbyData.phase !== 'WRITING') {
-      resetTime();
+      setTime(-1);
     }
   }, [lobbyData]);
 
@@ -60,17 +56,6 @@ const GameContainer = (): React.ReactElement => {
   useEffect(() => {
     console.log(lobbyData);
   }, [lobbyData]);
-
-  // Sync recoil timer
-  useEffect(() => {
-    if (tempTime >= 0) {
-      let newTime = tempTime;
-      if (newTime > MAX_SECONDS) {
-        newTime = MAX_SECONDS;
-      }
-      setTime({ ...time, startTime: newTime });
-    }
-  }, [tempTime]);
 
   // Make a new socket connection after disconnecting
   useEffect(() => {
@@ -172,7 +157,8 @@ const GameContainer = (): React.ReactElement => {
     });
 
     socket.on('synchronize', (seconds: number) => {
-      setTempTime(seconds);
+      console.log('synchronize');
+      setTime(seconds);
     });
   }, []);
 
@@ -233,7 +219,9 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handleSyncTimer = (seconds: number) => {
-    socket.emit('synchronize', seconds);
+    if (lobbyData.host === playerId) {
+      socket.emit('synchronize', seconds);
+    }
   };
 
   // Lobby Settings handlers / State handlers
@@ -290,6 +278,8 @@ const GameContainer = (): React.ReactElement => {
             handleSubmitDefinition={handleSubmitDefinition}
             handleSetPhase={handleSetPhase}
             handleSyncTimer={handleSyncTimer}
+            time={time}
+            setTime={setTime}
           />
         );
       case 'GUESSING':
