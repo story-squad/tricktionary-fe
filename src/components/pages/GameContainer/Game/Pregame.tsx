@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { getWords } from '../../../../api/apiRequests';
 import { useLocalStorage } from '../../../../hooks';
-import { lobbySettingsState, lobbyState } from '../../../../state';
+import {
+  hostChoiceState,
+  lobbySettingsState,
+  lobbyState,
+} from '../../../../state';
 //styles
 import '../../../../styles/components/pages/Pregame.scss';
 import { WordItem } from '../../../../types/gameTypes';
@@ -26,9 +30,11 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
   );
+  const [hostChoice, setHostChoice] = useRecoilState(hostChoiceState);
 
-  const getCurrentWord = () =>
-    wordSelection.filter((word) => word.id === choice)[0];
+  const getCurrentWord = () => {
+    return wordSelection.filter((word) => word.id === choice)[0];
+  };
 
   // Get 3 word suggestions automatically, reset guesses array from previous game
   useEffect(() => {
@@ -56,12 +62,28 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
   const handleGetWords = () => {
     getWords()
-      .then((res) => setWordSelection(res.data.words))
+      .then((res) => {
+        setWordSelection(res.data.words);
+        setHostChoice({
+          word_id_one: 0,
+          word_id_two: 0,
+          times_shuffled: hostChoice.times_shuffled + 1,
+        });
+        setChoice(0);
+      })
       .catch((err) => console.log(err));
   };
 
   const handleChoose = (id: number) => {
     setChoice(id);
+    const not_chosen_list = wordSelection.filter((word) => word.id !== id);
+    if (not_chosen_list.length > 1) {
+      setHostChoice({
+        ...hostChoice,
+        word_id_one: not_chosen_list[0].id,
+        word_id_two: not_chosen_list[1].id,
+      });
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

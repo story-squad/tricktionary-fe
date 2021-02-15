@@ -55,3 +55,9 @@ export interface TricktionarySettings {
   };
   source: string | undefined;
 }
+
+export interface HostChoice {
+  word_id_one: number;
+  word_id_two: number;
+  times_shuffled: number;
+}

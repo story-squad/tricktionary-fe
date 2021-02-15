@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilState, useResetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 // local storage hook
 import { useLocalStorage } from '../../../hooks';
 import {
+  hostChoiceState,
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
@@ -33,6 +34,7 @@ const GameContainer = (): React.ReactElement => {
   const [time, setTime] = useState(-1);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
+  const hostChoice = useRecoilValue(hostChoiceState);
 
   // Combine reset functions
   const resetGame = () => {
@@ -186,7 +188,8 @@ const GameContainer = (): React.ReactElement => {
 
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault();
-    socket.emit('start game', lobbySettings, lobbyCode);
+    console.log('right spot', hostChoice);
+    socket.emit('start game', lobbySettings, lobbyCode, hostChoice);
   };
 
   const handleSubmitDefinition = (definition: string) => {
