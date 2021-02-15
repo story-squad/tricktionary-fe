@@ -153,7 +153,6 @@ const DefinitionResult = (props: DefinitionResultProps): React.ReactElement => {
             <div className="author-box">
               <span className="result-username">{username} </span>
             </div>
-            <p className="result-votes">oops</p>
           </div>
           <p className="result-definition">No submission!</p>
         </div>
