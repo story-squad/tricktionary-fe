@@ -156,7 +156,6 @@ const GameContainer = (): React.ReactElement => {
     });
 
     socket.on('synchronize', (seconds: number) => {
-      console.log('synchronize');
       setTime(seconds);
     });
   }, []);

@@ -21,7 +21,6 @@ const Writing = (props: WritingProps): React.ReactElement => {
   // Put time on the timer
   useEffect(() => {
     if (lobbyData?.roundSettings?.seconds !== undefined) {
-      console.log('LOBBY SETTINGS', lobbyData?.roundSettings?.seconds);
       setTime(lobbyData.roundSettings.seconds);
       if (lobbyData.roundSettings.seconds > 0) {
         setUseTimer(true);
