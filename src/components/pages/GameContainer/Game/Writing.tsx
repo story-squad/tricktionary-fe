@@ -31,7 +31,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const allPlayersHaveWritten = () => {
     let all = true;
     const players = lobbyData.players.filter(
-      (player) => player.id !== lobbyData.host,
+      (player) => player.id !== lobbyData.host && player.connected,
     );
     for (let i = 0; i < players.length; i++) {
       if (players[i].definition === '') {
