@@ -119,7 +119,6 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           or not. REMEMBER! Read each number before the definition.
         </p>
         <p className="word-display">{lobbyData.word}</p>
-
         {!showGuesses && (
           <div className="definitions">
             <h3>Definitions</h3>
@@ -177,7 +176,14 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         </p>
         <div className="player-guess">
           <h3>Your guess:</h3>
-          <h1>{playerGuess > 0 ? playerGuess : '?'}</h1>
+          {playerGuess.key > 0 ? (
+            <>
+              <p>#{playerGuess.key}</p>
+              <p>{playerGuess.definition}</p>
+            </>
+          ) : (
+            <p>?</p>
+          )}
         </div>
         <PlayerList />
       </Player>
