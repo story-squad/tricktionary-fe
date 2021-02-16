@@ -37,15 +37,17 @@ const GameContainer = (): React.ReactElement => {
   const [localToken, setLocalToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [time, setTime] = useState(-1);
-  const resetLobbyData = useResetRecoilState(lobbyState);
-  const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const hostChoice = useRecoilValue(hostChoiceState);
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
+  const resetLobbyData = useResetRecoilState(lobbyState);
+  const resetLobbyCode = useResetRecoilState(lobbyCodeState);
+  const resetPlayerGuess = useResetRecoilState(playerGuessState);
 
   // Combine reset functions
   const resetGame = () => {
     resetLobbyData();
     resetLobbyCode();
+    resetPlayerGuess();
     setGuesses([]);
     socket.disconnect();
     setLocalToken('');
@@ -160,8 +162,8 @@ const GameContainer = (): React.ReactElement => {
       setLocalToken(newToken);
     });
 
-    socket.on('player guess', (definitionKey: number) => {
-      setPlayerGuess(definitionKey);
+    socket.on('player guess', (definitionSelection: DefinitionSelection) => {
+      setPlayerGuess(definitionSelection);
     });
 
     socket.on('synchronize', (seconds: number) => {
