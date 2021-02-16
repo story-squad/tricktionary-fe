@@ -41,9 +41,7 @@ const getSortedDefinitions = (
   guesses.forEach((guess) => {
     try {
       definitions[guess.guess].guesses.push(playerDict[guess.player]);
-      if (guess.player !== definitions[guess.guess].playerId) {
-        definitions[guess.guess].points += 1;
-      }
+      definitions[guess.guess].points += 1;
     } catch {
       return;
     }
