@@ -8,6 +8,7 @@ import {
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
+  playerGuessState,
   playerIdState,
 } from '../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
@@ -34,6 +35,7 @@ const GameContainer = (): React.ReactElement => {
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const hostChoice = useRecoilValue(hostChoiceState);
+  const [, setPlayerGuess] = useRecoilState(playerGuessState);
 
   // Combine reset functions
   const resetGame = () => {
@@ -154,7 +156,7 @@ const GameContainer = (): React.ReactElement => {
     });
 
     socket.on('player guess', (definitionKey: number) => {
-      console.log('DEFINITION KEY ', definitionKey);
+      setPlayerGuess(definitionKey);
     });
 
     socket.on('synchronize', (seconds: number) => {
