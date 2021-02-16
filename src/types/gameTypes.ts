@@ -36,6 +36,11 @@ export interface DefinitionItem {
   definitionKey: number;
 }
 
+export interface DefinitionSelection {
+  key: number;
+  definition: string;
+}
+
 export interface WordItem {
   id: number;
   word: string;
