@@ -4,6 +4,7 @@ export interface PlayerItem {
   definition: string;
   definitionId: number | undefined;
   points: number;
+  connected: boolean;
 }
 
 export interface LobbyData {
