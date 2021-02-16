@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import shuffle from 'shuffle-array';
 import { useLocalStorage } from '../../../../hooks';
-import { lobbyState } from '../../../../state';
+import { lobbyState, playerGuessState } from '../../../../state';
 import {
   DefinitionItem,
   GuessItem,
@@ -51,6 +51,7 @@ const getPlayerGuess = (choices: GuessItem[], player: PlayerItem): number => {
 const Guessing = (props: GuessingProps): React.ReactElement => {
   const { playerId, handleSubmitGuesses, handleSendGuess } = props;
   const lobbyData = useRecoilValue(lobbyState);
+  const playerGuess = useRecoilValue(playerGuessState);
   // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selection
   const [definitions] = useState(
     getDefinitions(lobbyData.players, playerId, lobbyData.definition),
@@ -175,7 +176,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         </p>
         <div className="player-guess">
           <h3>Your guess:</h3>
-          <h1>0</h1>
+          <h1>{playerGuess > 0 ? playerGuess : '?'}</h1>
         </div>
         <PlayerList />
       </Player>
