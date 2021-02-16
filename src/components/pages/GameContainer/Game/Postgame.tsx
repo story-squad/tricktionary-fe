@@ -41,9 +41,7 @@ const getSortedDefinitions = (
   guesses.forEach((guess) => {
     try {
       definitions[guess.guess].guesses.push(playerDict[guess.player]);
-      if (guess.player !== definitions[guess.guess].playerId) {
-        definitions[guess.guess].points += 1;
-      }
+      definitions[guess.guess].points += 1;
     } catch {
       return;
     }
@@ -137,7 +135,9 @@ const DefinitionResult = (props: DefinitionResultProps): React.ReactElement => {
             <p className="result-votes">{points} votes</p>
           </div>
           <p className="result-definition">{definition}</p>
-          <p className="who-voted-p">Who voted: </p>
+          <p className="who-voted-p">
+            {guesses.length > 0 ? 'Who voted:' : 'No votes'}
+          </p>
           <div className="who-voted-box">
             {guesses.map((guess, key) => (
               <div key={key} className="guess-names">
