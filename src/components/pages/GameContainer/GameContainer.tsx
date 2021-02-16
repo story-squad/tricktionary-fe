@@ -11,7 +11,12 @@ import {
   playerGuessState,
   playerIdState,
 } from '../../../state';
-import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
+import {
+  DefinitionSelection,
+  GuessItem,
+  LobbyData,
+  PlayerItem,
+} from '../../../types/gameTypes';
 import { MAX_SECONDS } from '../../../utils/constants';
 import { randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
@@ -32,15 +37,17 @@ const GameContainer = (): React.ReactElement => {
   const [localToken, setLocalToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [time, setTime] = useState(-1);
-  const resetLobbyData = useResetRecoilState(lobbyState);
-  const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const hostChoice = useRecoilValue(hostChoiceState);
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
+  const resetLobbyData = useResetRecoilState(lobbyState);
+  const resetLobbyCode = useResetRecoilState(lobbyCodeState);
+  const resetPlayerGuess = useResetRecoilState(playerGuessState);
 
   // Combine reset functions
   const resetGame = () => {
     resetLobbyData();
     resetLobbyCode();
+    resetPlayerGuess();
     setGuesses([]);
     socket.disconnect();
     setLocalToken('');
@@ -155,8 +162,8 @@ const GameContainer = (): React.ReactElement => {
       setLocalToken(newToken);
     });
 
-    socket.on('player guess', (definitionKey: number) => {
-      setPlayerGuess(definitionKey);
+    socket.on('player guess', (definitionSelection: DefinitionSelection) => {
+      setPlayerGuess(definitionSelection);
     });
 
     socket.on('synchronize', (seconds: number) => {
@@ -216,8 +223,11 @@ const GameContainer = (): React.ReactElement => {
   };
 
   // Host sends the guess # to the player to display on their screen
-  const handleSendGuess = (playerId: string, definitionKey: number) => {
-    socket.emit('player guess', playerId, definitionKey);
+  const handleSendGuess = (
+    playerId: string,
+    definitionSelection: DefinitionSelection,
+  ) => {
+    socket.emit('player guess', playerId, definitionSelection);
   };
 
   const handleSyncTimer = (seconds: number) => {
