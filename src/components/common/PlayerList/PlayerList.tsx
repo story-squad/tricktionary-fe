@@ -54,16 +54,18 @@ const PlayerList = (): React.ReactElement => {
 
   return (
     <div className="player-lobby">
-      {lobbyData.players.map((player: PlayerItem) => {
-        return (
-          <div className={playerClassName(lobbyData, player)} key={player.id}>
-            <p className="player">
-              {playerUserName(lobbyData, player, playerId)}
-            </p>
-            <p className="player-score">Score:{player.points}</p>
-          </div>
-        );
-      })}
+      {lobbyData.players
+        .filter((player: PlayerItem) => player.connected)
+        .map((player: PlayerItem) => {
+          return (
+            <div className={playerClassName(lobbyData, player)} key={player.id}>
+              <p className="player">
+                {playerUserName(lobbyData, player, playerId)}
+              </p>
+              <p className="player-score">Score:{player.points}</p>
+            </div>
+          );
+        })}
     </div>
   );
 };
