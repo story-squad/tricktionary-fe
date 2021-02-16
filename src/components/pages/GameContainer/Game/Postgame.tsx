@@ -137,7 +137,9 @@ const DefinitionResult = (props: DefinitionResultProps): React.ReactElement => {
             <p className="result-votes">{points} votes</p>
           </div>
           <p className="result-definition">{definition}</p>
-          <p className="who-voted-p">Who voted: </p>
+          <p className="who-voted-p">
+            {guesses.length > 0 ? 'Who voted:' : 'No votes'}
+          </p>
           <div className="who-voted-box">
             {guesses.map((guess, key) => (
               <div key={key} className="guess-names">
