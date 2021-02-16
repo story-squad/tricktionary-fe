@@ -5,6 +5,7 @@ import { useLocalStorage } from '../../../../hooks';
 import { lobbyState, playerGuessState } from '../../../../state';
 import {
   DefinitionItem,
+  DefinitionSelection,
   GuessItem,
   PlayerItem,
 } from '../../../../types/gameTypes';
@@ -85,9 +86,9 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     e: React.MouseEvent,
     playerId: string,
     guessId: number,
-    definitionKey: number,
+    definitionSelection: DefinitionSelection,
   ) => {
-    handleSendGuess(playerId, definitionKey);
+    handleSendGuess(playerId, definitionSelection);
     setGuesses(
       guesses.map((guess: GuessItem) => {
         if (guess.player === playerId) {
@@ -203,12 +204,10 @@ const Guess = (props: GuessProps): React.ReactElement => {
                 : ''
             }`}
             onClick={(e) =>
-              handleSelectGuess(
-                e,
-                player.id,
-                definition.id,
-                definition.definitionKey,
-              )
+              handleSelectGuess(e, player.id, definition.id, {
+                key: definition.definitionKey,
+                definition: definition.content,
+              })
             }
             key={key}
           >
@@ -233,7 +232,10 @@ export default Guessing;
 
 interface GuessingProps {
   handleSubmitGuesses: (guesses: GuessItem[]) => void;
-  handleSendGuess: (playerId: string, definitionKey: number) => void;
+  handleSendGuess: (
+    playerId: string,
+    definitionSelection: DefinitionSelection,
+  ) => void;
   playerId: string;
 }
 
@@ -242,7 +244,7 @@ interface GuessProps {
     e: React.MouseEvent,
     playerId: string,
     guessId: number,
-    definitionKey: number,
+    definitionSelection: DefinitionSelection,
   ) => void;
   definitions: DefinitionItem[];
   player: PlayerItem;

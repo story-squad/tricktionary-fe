@@ -11,7 +11,12 @@ import {
   playerGuessState,
   playerIdState,
 } from '../../../state';
-import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
+import {
+  DefinitionSelection,
+  GuessItem,
+  LobbyData,
+  PlayerItem,
+} from '../../../types/gameTypes';
 import { MAX_SECONDS } from '../../../utils/constants';
 import { randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
@@ -216,8 +221,11 @@ const GameContainer = (): React.ReactElement => {
   };
 
   // Host sends the guess # to the player to display on their screen
-  const handleSendGuess = (playerId: string, definitionKey: number) => {
-    socket.emit('player guess', playerId, definitionKey);
+  const handleSendGuess = (
+    playerId: string,
+    definitionSelection: DefinitionSelection,
+  ) => {
+    socket.emit('player guess', playerId, definitionSelection);
   };
 
   const handleSyncTimer = (seconds: number) => {
