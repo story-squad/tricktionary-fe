@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { playerIdState } from '../../../state';
 import { PlayerItem } from '../../../types/gameTypes';
@@ -6,10 +6,18 @@ import { PlayerItem } from '../../../types/gameTypes';
 const SetHost = (props: SetHostProps): React.ReactElement => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const playerId = useRecoilValue(playerIdState);
-  const [players] = useState(
-    props.players.filter((player) => player.id !== playerId),
-  );
-  const [chosenPlayer, setChosenPlayer] = useState<string>(players[0].id);
+  const [chosenPlayer, setChosenPlayer] = useState<string>('');
+
+  // Update players list on props.players update
+  useEffect(() => {
+    if (props.players.length > 1) {
+      setChosenPlayer(
+        props.players.filter(
+          (player) => player.id !== playerId && player.connected,
+        )[0]?.id,
+      );
+    }
+  }, [props.players]);
 
   const handleSetChosenPlayer = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setChosenPlayer(e.target.value);
@@ -34,11 +42,16 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
               id="players-select"
               onChange={handleSetChosenPlayer}
             >
-              {players.map((player, key) => (
-                <option key={key} value={player.id}>
-                  {player.username}
-                </option>
-              ))}
+              {props.players.length > 1 &&
+                props.players
+                  .filter(
+                    (player) => player.id !== playerId && player.connected,
+                  )
+                  .map((player, key) => (
+                    <option key={key} value={player.id}>
+                      {player.username}
+                    </option>
+                  ))}
             </select>
             <div className="modal-buttons">
               <button
