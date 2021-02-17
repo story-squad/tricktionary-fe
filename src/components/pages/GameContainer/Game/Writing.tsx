@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { lobbyState } from '../../../../state';
+import { lobbyState, playerIdState } from '../../../../state';
 import { MAX_SECONDS } from '../../../../utils/constants';
 import { definitionIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
@@ -17,6 +17,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const [showModal, setShowModal] = useState(false);
   const [useTimer, setUseTimer] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
+  const playerId = useRecoilValue(playerIdState);
 
   // Put time on the timer
   useEffect(() => {
@@ -27,6 +28,16 @@ const Writing = (props: WritingProps): React.ReactElement => {
       }
     }
   }, [lobbyData?.roundSettings?.seconds]);
+
+  // If a player rejoins, check whether they submitted already
+  useEffect(() => {
+    lobbyData.players.forEach((player) => {
+      if (player.id === playerId && player.definition !== '') {
+        setIsSubmitted(true);
+        setDefinition(player.definition);
+      }
+    });
+  }, []);
 
   const allPlayersHaveWritten = () => {
     let all = true;
