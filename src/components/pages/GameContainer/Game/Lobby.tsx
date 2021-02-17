@@ -1,18 +1,26 @@
+import jwt from 'jsonwebtoken';
 import React, { SetStateAction, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useLocalStorage } from '../../../../hooks';
 import '../../../../styles/components/pages/Lobby.scss';
 //styles
 import '../../../../styles/gameContainer.scss';
+import { DecodedToken } from '../../../../types/commonTypes';
 import { usernameIsValid } from '../../../../utils/validation';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
+  const [token] = useLocalStorage<string>('token', '');
 
-  // Join a lobby if the lobbyCode is provided in the URL
+  // Join a game if the lobbyCode is provided in the URL
   useEffect(() => {
+    const decodedToken: DecodedToken = jwt.decode(token) as DecodedToken;
     let lobbyUrl = location.pathname;
     if (lobbyUrl !== '/') {
       lobbyUrl = lobbyUrl.substring(1, 5);
+    }
+    // If the user is entering a new game, join. Else, let the login event handle joining
+    if (lobbyUrl !== decodedToken?.lob) {
       props.handleJoinLobby(null, lobbyUrl);
     }
   }, []);

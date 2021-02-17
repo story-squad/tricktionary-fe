@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from 'react';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { useLocalStorage } from '../../../../hooks';
-import { lobbyState } from '../../../../state';
+import { lobbyState, playerGuessState } from '../../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
@@ -72,6 +72,7 @@ const getPlayerDictionary = (players: PlayerItem[]): PlayerDictionary => {
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
   const { handlePlayAgain, handleSetHost } = props;
+  const resetGuess = useResetRecoilState(playerGuessState);
   const lobbyData = useRecoilValue(lobbyState);
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
@@ -80,6 +81,11 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   const [sortedDefinitions] = useState<DefinitionResultItem[]>(
     getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict),
   );
+
+  // Reset player's guess for next round
+  useEffect(() => {
+    resetGuess();
+  }, []);
 
   return (
     <div className="postgame game-page">

@@ -34,7 +34,7 @@ const GameContainer = (): React.ReactElement => {
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
   const [, setGuesses] = useLocalStorage('guesses', []);
-  const [localToken, setLocalToken] = useLocalStorage('token', '');
+  const [token, setToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [time, setTime] = useState(-1);
   const hostChoice = useRecoilValue(hostChoiceState);
@@ -50,7 +50,7 @@ const GameContainer = (): React.ReactElement => {
     resetPlayerGuess();
     setGuesses([]);
     socket.disconnect();
-    setLocalToken('');
+    setToken('');
     handleLogin(true);
     setShowLeaveModal(false);
     history.push('/');
@@ -159,7 +159,7 @@ const GameContainer = (): React.ReactElement => {
 
     // Get API token
     socket.on('token update', (newToken: string) => {
-      setLocalToken(newToken);
+      setToken(newToken);
     });
 
     socket.on('player guess', (definitionSelection: DefinitionSelection) => {
@@ -173,7 +173,7 @@ const GameContainer = (): React.ReactElement => {
 
   // Socket event emitters
   const handleLogin = (newToken = false) => {
-    socket.emit('login', newToken ? '' : localToken);
+    socket.emit('login', newToken ? '' : token);
   };
 
   const handleCreateLobby = (e: React.MouseEvent) => {

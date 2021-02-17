@@ -36,9 +36,10 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     return wordSelection.filter((word) => word.id === choice)[0];
   };
 
-  // Get 3 word suggestions automatically, reset guesses array from previous game
   useEffect(() => {
+    // Get 3 word suggestions automatically
     handleGetWords();
+    // Reset guesses array from previous game
     setGuesses([]);
   }, []);
 

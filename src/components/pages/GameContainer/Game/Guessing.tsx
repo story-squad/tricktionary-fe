@@ -57,16 +57,22 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   const [definitions] = useState(
     getDefinitions(lobbyData.players, playerId, lobbyData.definition),
   );
-  const [guesses, setGuesses] = useLocalStorage('guesses', []);
+  const [guesses, setGuesses] = useLocalStorage(
+    'guesses',
+    lobbyData.players.map((player) => {
+      return { player: player.id, guess: -1, connected: player.connected };
+    }),
+  );
   const [showModal, setShowModal] = useState(false);
   const [showGuesses, setShowGuesses] = useState(false);
+
   const allPlayersHaveGuessed = () => {
     let all = true;
     const playerGuesses = guesses.filter(
       (guess: GuessItem) => guess.player !== lobbyData.host,
     );
     for (let i = 0; i < playerGuesses.length; i++) {
-      if (playerGuesses[i].guess === -1) {
+      if (playerGuesses[i].guess === -1 && playerGuesses[i].connected) {
         all = false;
         break;
       }
@@ -74,13 +80,38 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     return all;
   };
 
+  // Recalculate guesses when players disconnect/reconnect while keeping guesses for all other players
   useEffect(() => {
-    setGuesses(
-      lobbyData.players.map((player) => {
-        return { player: player.id, guess: -1 };
-      }),
-    );
-  }, []);
+    const guessDict: any = {};
+    const newGuesses: any = [];
+    guesses.forEach((guess: any) => {
+      guessDict[guess.player] = {
+        guess: guess.guess,
+        connected: guess.connected,
+      };
+    });
+    lobbyData.players.forEach((player) => {
+      if (guessDict.hasOwnProperty(player.id)) {
+        guessDict[player.id].connected = player.connected;
+      } else {
+        guessDict[player.id] = {
+          player: player.id,
+          guess: -1,
+          connected: player.connected,
+        };
+      }
+    });
+    for (const playerId in guessDict) {
+      if (guessDict[playerId].connected) {
+        newGuesses.push({
+          player: playerId,
+          guess: guessDict[playerId].guess,
+          connected: guessDict[playerId].connected,
+        });
+      }
+    }
+    setGuesses(newGuesses);
+  }, [lobbyData]);
 
   const handleSelectGuess = (
     e: React.MouseEvent,
@@ -147,7 +178,9 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
             </div>
             <hr />
             {lobbyData.players
-              .filter((player) => player.id !== lobbyData.host)
+              .filter(
+                (player) => player.id !== lobbyData.host && player.connected,
+              )
               .map((player, key) => (
                 <Guess
                   key={key}
