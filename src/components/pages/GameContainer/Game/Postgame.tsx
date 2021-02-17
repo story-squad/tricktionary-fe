@@ -77,15 +77,27 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
   );
-  const [guesses] = useLocalStorage('guesses', []);
-  const [sortedDefinitions] = useState<DefinitionResultItem[]>(
-    getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict),
-  );
+  const [guesses, , reloadGuesses] = useLocalStorage('guesses', []);
+  const [sortedDefinitions, setSortedDefinitions] = useState<
+    DefinitionResultItem[]
+  >(getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict));
 
   // Reset player's guess for next round
   useEffect(() => {
     resetGuess();
   }, []);
+
+  // Create new sorted definitions array when player becomes host and recieves guesses
+  useEffect(() => {
+    console.log('GUESSES UPDATE');
+    setSortedDefinitions(
+      getSortedDefinitions(
+        lobbyData,
+        reloadGuesses() as GuessItem[],
+        playerDict,
+      ),
+    );
+  }, [lobbyData]);
 
   return (
     <div className="postgame game-page">
@@ -171,7 +183,7 @@ export default Postgame;
 
 interface PostgameProps {
   handlePlayAgain: () => void;
-  handleSetHost: (hostId: string) => void;
+  handleSetHost: (hostId: string, guesses: GuessItem[]) => void;
 }
 
 interface DefinitionResultProps {
