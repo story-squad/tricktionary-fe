@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilState, useResetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
-// local storage hook
 import { useLocalStorage } from '../../../hooks';
 import {
+  hostChoiceState,
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
+  playerGuessState,
   playerIdState,
-  timerState,
 } from '../../../state';
-import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
+import {
+  DefinitionSelection,
+  GuessItem,
+  LobbyData,
+  PlayerItem,
+} from '../../../types/gameTypes';
 import { MAX_SECONDS } from '../../../utils/constants';
 import { randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
@@ -29,22 +34,23 @@ const GameContainer = (): React.ReactElement => {
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
   const [, setGuesses] = useLocalStorage('guesses', []);
-  const [localToken, setLocalToken] = useLocalStorage('token', '');
+  const [token, setToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
-  const [time, setTime] = useRecoilState(timerState);
-  // Required for socket listener functional updates. Recoil doesn't allow functional updates.
-  const [tempTime, setTempTime] = useState(-1);
+  const [time, setTime] = useState(-1);
+  const hostChoice = useRecoilValue(hostChoiceState);
+  const [, setPlayerGuess] = useRecoilState(playerGuessState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
-  const resetTime = useResetRecoilState(timerState);
+  const resetPlayerGuess = useResetRecoilState(playerGuessState);
 
   // Combine reset functions
   const resetGame = () => {
     resetLobbyData();
     resetLobbyCode();
+    resetPlayerGuess();
     setGuesses([]);
     socket.disconnect();
-    setLocalToken('');
+    setToken('');
     handleLogin(true);
     setShowLeaveModal(false);
     history.push('/');
@@ -52,7 +58,7 @@ const GameContainer = (): React.ReactElement => {
 
   useEffect(() => {
     if (lobbyData.phase !== 'WRITING') {
-      resetTime();
+      setTime(-1);
     }
   }, [lobbyData]);
 
@@ -60,17 +66,6 @@ const GameContainer = (): React.ReactElement => {
   useEffect(() => {
     console.log(lobbyData);
   }, [lobbyData]);
-
-  // Sync recoil timer
-  useEffect(() => {
-    if (tempTime >= 0) {
-      let newTime = tempTime;
-      if (newTime > MAX_SECONDS) {
-        newTime = MAX_SECONDS;
-      }
-      setTime({ ...time, startTime: newTime });
-    }
-  }, [tempTime]);
 
   // Make a new socket connection after disconnecting
   useEffect(() => {
@@ -164,21 +159,25 @@ const GameContainer = (): React.ReactElement => {
 
     // Get API token
     socket.on('token update', (newToken: string) => {
-      setLocalToken(newToken);
+      setToken(newToken);
     });
 
-    socket.on('player guess', (definitionKey: number) => {
-      console.log('DEFINITION KEY ', definitionKey);
+    socket.on('player guess', (definitionSelection: DefinitionSelection) => {
+      setPlayerGuess(definitionSelection);
     });
 
     socket.on('synchronize', (seconds: number) => {
-      setTempTime(seconds);
+      setTime(seconds);
+    });
+
+    socket.on('welcome host', (guesses: GuessItem[]) => {
+      setGuesses(guesses);
     });
   }, []);
 
   // Socket event emitters
   const handleLogin = (newToken = false) => {
-    socket.emit('login', newToken ? '' : localToken);
+    socket.emit('login', newToken ? '' : token);
   };
 
   const handleCreateLobby = (e: React.MouseEvent) => {
@@ -200,7 +199,7 @@ const GameContainer = (): React.ReactElement => {
 
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault();
-    socket.emit('start game', lobbySettings, lobbyCode);
+    socket.emit('start game', lobbySettings, lobbyCode, hostChoice);
   };
 
   const handleSubmitDefinition = (definition: string) => {
@@ -219,8 +218,8 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('set phase', phase, lobbyCode);
   };
 
-  const handleSetHost = (hostId: string) => {
-    socket.emit('set host', hostId, lobbyCode);
+  const handleSetHost = (hostId: string, guesses: GuessItem[]) => {
+    socket.emit('set host', hostId, lobbyCode, guesses);
   };
 
   const handleUpdateUsername = (newUsername: string) => {
@@ -228,12 +227,17 @@ const GameContainer = (): React.ReactElement => {
   };
 
   // Host sends the guess # to the player to display on their screen
-  const handleSendGuess = (playerId: string, definitionKey: number) => {
-    socket.emit('player guess', playerId, definitionKey);
+  const handleSendGuess = (
+    playerId: string,
+    definitionSelection: DefinitionSelection,
+  ) => {
+    socket.emit('player guess', playerId, definitionSelection);
   };
 
   const handleSyncTimer = (seconds: number) => {
-    socket.emit('synchronize', seconds);
+    if (lobbyData.host === playerId) {
+      socket.emit('synchronize', seconds);
+    }
   };
 
   // Lobby Settings handlers / State handlers
@@ -290,6 +294,8 @@ const GameContainer = (): React.ReactElement => {
             handleSubmitDefinition={handleSubmitDefinition}
             handleSetPhase={handleSetPhase}
             handleSyncTimer={handleSyncTimer}
+            time={time}
+            setTime={setTime}
           />
         );
       case 'GUESSING':

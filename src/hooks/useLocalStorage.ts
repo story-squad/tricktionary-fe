@@ -11,6 +11,9 @@ export function useLocalStorage<T>(
       // Get from local storage by key
       const item = window.localStorage.getItem(key);
       // Parse stored json or if none return initialValue
+      if (item && typeof JSON.parse(item) === 'number') {
+        return String(JSON.parse(item));
+      }
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
       // If error also return initialValue
@@ -38,5 +41,26 @@ export function useLocalStorage<T>(
       console.log(error);
     }
   };
-  return [storedValue, setValue];
+
+  // Reload state from localStorage manually if needed
+  const reloadValue = () => {
+    try {
+      const item = window.localStorage.getItem(key);
+      if (item && typeof JSON.parse(item) === 'number') {
+        setStoredValue(String(JSON.parse(item)));
+        return String(JSON.parse(item));
+      }
+      if (item) {
+        setStoredValue(JSON.parse(item));
+        return JSON.parse(item);
+      } else {
+        return storedValue;
+      }
+    } catch (error) {
+      console.log(error);
+      return storedValue;
+    }
+  };
+
+  return [storedValue, setValue, reloadValue];
 }

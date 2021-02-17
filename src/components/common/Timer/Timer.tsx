@@ -1,47 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { timerState } from '../../../state';
-import { MAX_SECONDS } from '../../../utils/constants';
+import { MAX_SECONDS, TIMER_SYNC_INTERVAL } from '../../../utils/constants';
 
 const Timer = (props: TimerProps): React.ReactElement => {
-  const { timeUp, syncTime, addTime } = props;
-  const [time, setTime] = useRecoilState(timerState);
-  // useState hook is required here to allow interval to decrement state using functional updates. This doesn't work with Recoil.
-  const [timerTime, setTimerTime] = useState(time.startTime);
+  const { time, setTime, timeUp, syncTime, addTime } = props;
   const [allowTimeUp, setAllowTimeUp] = useState(false);
-
-  // Sync host's timer with other players
-  useEffect(() => {
-    if (time.currentTime % 2 === 0) {
-      syncTime(time.currentTime);
-    }
-  }, [time.currentTime]);
 
   // Timer logic. Update Recoil state as the Timer's local state updates
   useEffect(() => {
-    if (timerTime > MAX_SECONDS) {
-      setTimerTime(MAX_SECONDS);
+    // Sync host's timer with other players
+    if (time % TIMER_SYNC_INTERVAL === 0) {
+      syncTime(time);
     }
-    if (timerTime > 0) {
+    if (time > MAX_SECONDS) {
+      setTime(MAX_SECONDS);
+    }
+    if (time > 0) {
       setAllowTimeUp(true);
       timeUp(false);
     }
-    if (timerTime >= 0) {
-      setTime({ ...time, currentTime: timerTime });
-    }
-    if (timerTime === 0 && allowTimeUp) {
+    if (time === 0 && allowTimeUp) {
       timeUp(true);
     }
-  }, [timerTime]);
-
-  // If the host adds time, update the timer
-  useEffect(() => {
-    setTimerTime(time.startTime);
-  }, [time.startTime]);
+  }, [time]);
 
   // Decrement local timer state
   const tick = () => {
-    setTimerTime((prevTime: number) => {
+    setTime((prevTime: number) => {
       if (prevTime > 0) {
         return prevTime - 1;
       } else {
@@ -61,15 +45,12 @@ const Timer = (props: TimerProps): React.ReactElement => {
     <>
       <div className="countdown-container">
         <div id="timer">
-          <span className="time">{time.currentTime}</span>{' '}
+          <span className="time">{time}</span>{' '}
           <span className="text">secs</span>
         </div>
       </div>
       {addTime && (
-        <button
-          className="start-btn center"
-          onClick={() => addTime(time.currentTime, 20)}
-        >
+        <button className="start-btn center" onClick={() => addTime(time, 20)}>
           + 20 secs
         </button>
       )}
@@ -80,7 +61,8 @@ const Timer = (props: TimerProps): React.ReactElement => {
 export default Timer;
 
 interface TimerProps {
-  seconds: number | undefined;
+  time: number;
+  setTime: React.Dispatch<React.SetStateAction<number>>;
   timeUp: (bool: boolean) => void;
   syncTime: (seconds: number) => void;
   addTime?: (currentTime: number, add: number) => void;

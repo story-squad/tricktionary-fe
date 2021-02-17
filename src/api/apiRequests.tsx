@@ -7,3 +7,6 @@ export const getReactions = (): Promise<AxiosResponse> =>
 
 export const getWords = (): Promise<AxiosResponse> =>
   axios.get(`${API}/api/words/scoop/3`);
+
+export const postChoice = (choice: any): Promise<AxiosResponse> =>
+  axios.post(`${API}/api/choice/`);

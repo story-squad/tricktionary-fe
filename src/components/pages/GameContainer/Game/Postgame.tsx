@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from 'react';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { useLocalStorage } from '../../../../hooks';
-import { lobbyState } from '../../../../state';
+import { lobbyState, playerGuessState } from '../../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
@@ -41,9 +41,7 @@ const getSortedDefinitions = (
   guesses.forEach((guess) => {
     try {
       definitions[guess.guess].guesses.push(playerDict[guess.player]);
-      if (guess.player !== definitions[guess.guess].playerId) {
-        definitions[guess.guess].points += 1;
-      }
+      definitions[guess.guess].points += 1;
     } catch {
       return;
     }
@@ -74,14 +72,32 @@ const getPlayerDictionary = (players: PlayerItem[]): PlayerDictionary => {
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
   const { handlePlayAgain, handleSetHost } = props;
+  const resetGuess = useResetRecoilState(playerGuessState);
   const lobbyData = useRecoilValue(lobbyState);
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
   );
-  const [guesses] = useLocalStorage('guesses', []);
-  const [sortedDefinitions] = useState<DefinitionResultItem[]>(
-    getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict),
-  );
+  const [guesses, , reloadGuesses] = useLocalStorage('guesses', []);
+  const [sortedDefinitions, setSortedDefinitions] = useState<
+    DefinitionResultItem[]
+  >(getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict));
+
+  // Reset player's guess for next round
+  useEffect(() => {
+    resetGuess();
+  }, []);
+
+  // Create new sorted definitions array when player becomes host and recieves guesses
+  useEffect(() => {
+    console.log('GUESSES UPDATE');
+    setSortedDefinitions(
+      getSortedDefinitions(
+        lobbyData,
+        reloadGuesses() as GuessItem[],
+        playerDict,
+      ),
+    );
+  }, [lobbyData]);
 
   return (
     <div className="postgame game-page">
@@ -125,24 +141,41 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
 const DefinitionResult = (props: DefinitionResultProps): React.ReactElement => {
   const { username, definition, points, guesses } = props.definitionResult;
   return (
-    <div className="definition-result">
-      <div className="vote-align">
-        <div className="author-box">
-          <span className="result-username">{username} </span>
-          <span>wrote:</span>
-        </div>
-        <p className="result-votes">{points} votes</p>
-      </div>
-      <p className="result-definition">{definition}</p>
-      <p className="who-voted-p">Who voted: </p>
-      <div className="who-voted-box">
-        {guesses.map((guess, key) => (
-          <div key={key} className="guess-names">
-            <p className="who-voted">{guess}</p>
+    <>
+      {definition !== '' ? (
+        // Player submitted a definition
+        <div className="definition-result">
+          <div className="vote-align">
+            <div className="author-box">
+              <span className="result-username">{username} </span>
+              <span>wrote:</span>
+            </div>
+            <p className="result-votes">{points} votes</p>
           </div>
-        ))}
-      </div>
-    </div>
+          <p className="result-definition">{definition}</p>
+          <p className="who-voted-p">
+            {guesses.length > 0 ? 'Who voted:' : 'No votes'}
+          </p>
+          <div className="who-voted-box">
+            {guesses.map((guess, key) => (
+              <div key={key} className="guess-names">
+                <p className="who-voted">{guess}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        // Player didn't submit a definition
+        <div className="definition-result">
+          <div className="vote-align">
+            <div className="author-box">
+              <span className="result-username">{username} </span>
+            </div>
+          </div>
+          <p className="result-definition">No submission!</p>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -150,7 +183,7 @@ export default Postgame;
 
 interface PostgameProps {
   handlePlayAgain: () => void;
-  handleSetHost: (hostId: string) => void;
+  handleSetHost: (hostId: string, guesses: GuessItem[]) => void;
 }
 
 interface DefinitionResultProps {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { lobbyState, timerState } from '../../../../state';
+import { useRecoilValue } from 'recoil';
+import { lobbyState, playerIdState } from '../../../../state';
 import { MAX_SECONDS } from '../../../../utils/constants';
 import { definitionIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
@@ -10,33 +10,39 @@ import Timer from '../../../common/Timer/Timer';
 import { PlayerList } from '../Game';
 
 const Writing = (props: WritingProps): React.ReactElement => {
-  const { handleSyncTimer } = props;
+  const { handleSyncTimer, time, setTime } = props;
   const lobbyData = useRecoilValue(lobbyState);
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [useTimer, setUseTimer] = useState(false);
-  const [time, setTime] = useRecoilState(timerState);
   const [timerDone, setTimerDone] = useState(false);
+  const playerId = useRecoilValue(playerIdState);
 
   // Put time on the timer
   useEffect(() => {
     if (lobbyData?.roundSettings?.seconds !== undefined) {
-      console.log('LOBBY SETTINGS', lobbyData?.roundSettings?.seconds);
-      setTime({
-        startTime: lobbyData.roundSettings.seconds,
-        currentTime: lobbyData.roundSettings.seconds,
-      });
+      setTime(lobbyData.roundSettings.seconds);
       if (lobbyData.roundSettings.seconds > 0) {
         setUseTimer(true);
       }
     }
   }, [lobbyData?.roundSettings?.seconds]);
 
+  // If a player rejoins, check whether they submitted already
+  useEffect(() => {
+    lobbyData.players.forEach((player) => {
+      if (player.id === playerId && player.definition !== '') {
+        setIsSubmitted(true);
+        setDefinition(player.definition);
+      }
+    });
+  }, []);
+
   const allPlayersHaveWritten = () => {
     let all = true;
     const players = lobbyData.players.filter(
-      (player) => player.id !== lobbyData.host,
+      (player) => player.id !== lobbyData.host && player.connected,
     );
     for (let i = 0; i < players.length; i++) {
       if (players[i].definition === '') {
@@ -56,7 +62,8 @@ const Writing = (props: WritingProps): React.ReactElement => {
     if (newTime > MAX_SECONDS) {
       newTime = MAX_SECONDS;
     }
-    setTime({ startTime: newTime, currentTime: newTime });
+    setTime(newTime);
+    handleSyncTimer(newTime);
   };
 
   const handleGoToNextPhase = () => {
@@ -96,7 +103,8 @@ const Writing = (props: WritingProps): React.ReactElement => {
         </p>
         {useTimer && (
           <Timer
-            seconds={time}
+            time={time}
+            setTime={setTime}
             timeUp={setTimerDone}
             syncTime={handleSyncTimer}
             addTime={handleAddTime}
@@ -127,7 +135,12 @@ const Writing = (props: WritingProps): React.ReactElement => {
           Can you hit submit before the timer runs out?
         </p>
         {useTimer && (
-          <Timer seconds={time} timeUp={setTimerDone} syncTime={() => 0} />
+          <Timer
+            time={time}
+            setTime={setTime}
+            timeUp={setTimerDone}
+            syncTime={() => 0}
+          />
         )}
         {!isSubmitted && timerDone && (
           <h3 className="times-up">Time&apos;s up!</h3>
@@ -181,4 +194,6 @@ interface WritingProps {
   handleSubmitDefinition: (definition: string) => void;
   handleSetPhase: (phase: string) => void;
   handleSyncTimer: (seconds: number) => void;
+  time: number;
+  setTime: React.Dispatch<React.SetStateAction<number>>;
 }

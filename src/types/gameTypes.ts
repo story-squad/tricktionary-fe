@@ -4,6 +4,7 @@ export interface PlayerItem {
   definition: string;
   definitionId: number | undefined;
   points: number;
+  connected: boolean;
 }
 
 export interface LobbyData {
@@ -36,6 +37,11 @@ export interface DefinitionItem {
   definitionKey: number;
 }
 
+export interface DefinitionSelection {
+  key: number;
+  definition: string;
+}
+
 export interface WordItem {
   id: number;
   word: string;
@@ -54,4 +60,10 @@ export interface TricktionarySettings {
     list: string[] | undefined;
   };
   source: string | undefined;
+}
+
+export interface HostChoice {
+  word_id_one: number;
+  word_id_two: number;
+  times_shuffled: number;
 }
