@@ -12,8 +12,6 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
   const [chosenPlayer, setChosenPlayer] = useState<string>(players[0].id);
 
   const handleSetChosenPlayer = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
-    console.log(chosenPlayer);
     setChosenPlayer(e.target.value);
   };
 
@@ -34,7 +32,7 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
               className="players"
               name="players-select"
               id="players-select"
-              onChange={(e) => console.log(e.target.value)}
+              onChange={handleSetChosenPlayer}
             >
               {players.map((player, key) => (
                 <option key={key} value={player.id}>
