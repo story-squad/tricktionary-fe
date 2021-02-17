@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useLocalStorage } from '../../../hooks';
 import { playerIdState } from '../../../state';
-import { PlayerItem } from '../../../types/gameTypes';
+import { GuessItem, PlayerItem } from '../../../types/gameTypes';
 
 const SetHost = (props: SetHostProps): React.ReactElement => {
-  const [showModal, setShowModal] = useState<boolean>(false);
   const playerId = useRecoilValue(playerIdState);
+  const [guesses] = useLocalStorage('guesses', []);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [chosenPlayer, setChosenPlayer] = useState<string>('');
 
   // Update players list on props.players update
@@ -56,7 +58,9 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
             <div className="modal-buttons">
               <button
                 disabled={chosenPlayer === '0'}
-                onClick={() => props.handleSetHost(chosenPlayer)}
+                onClick={() =>
+                  props.handleSetHost(chosenPlayer, guesses as GuessItem[])
+                }
               >
                 Okay
               </button>
@@ -73,5 +77,5 @@ export default SetHost;
 
 interface SetHostProps {
   players: PlayerItem[];
-  handleSetHost: (hostId: string) => void;
+  handleSetHost: (hostId: string, guesses: GuessItem[]) => void;
 }

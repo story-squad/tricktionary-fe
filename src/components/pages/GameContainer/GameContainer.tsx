@@ -169,6 +169,10 @@ const GameContainer = (): React.ReactElement => {
     socket.on('synchronize', (seconds: number) => {
       setTime(seconds);
     });
+
+    socket.on('welcome host', (guesses: GuessItem[]) => {
+      setGuesses(guesses);
+    });
   }, []);
 
   // Socket event emitters
@@ -214,8 +218,8 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('set phase', phase, lobbyCode);
   };
 
-  const handleSetHost = (hostId: string) => {
-    socket.emit('set host', hostId, lobbyCode);
+  const handleSetHost = (hostId: string, guesses: GuessItem[]) => {
+    socket.emit('set host', hostId, lobbyCode, guesses);
   };
 
   const handleUpdateUsername = (newUsername: string) => {
