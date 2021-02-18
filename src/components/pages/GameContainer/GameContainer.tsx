@@ -24,6 +24,7 @@ import { randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
 import { Modal } from '../../common/Modal';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
+import Finale from './Game/Finale';
 
 // Create a socket connection to API
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
@@ -340,6 +341,8 @@ const GameContainer = (): React.ReactElement => {
             handleSetFinale={handleSetFinale}
           />
         );
+      case 'FINALE':
+        return <Finale />;
       default:
         return (
           <Lobby
