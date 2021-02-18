@@ -67,3 +67,8 @@ export interface HostChoice {
   word_id_two: number;
   times_shuffled: number;
 }
+
+export interface FinaleDefinition {
+  playerId: string;
+  definition: string;
+}
