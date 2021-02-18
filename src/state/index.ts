@@ -1,3 +1,4 @@
+import { finaleDefinitionsState } from './finaleDefinitionsState';
 import { guessesState } from './guessesState';
 import { hostChoiceState } from './hostChoiceState';
 import { lobbyCodeState } from './lobbyCodeState';
@@ -5,6 +6,7 @@ import { lobbySettingsState } from './lobbySettingsState';
 import { lobbyState } from './lobbyState';
 import { playerGuessState } from './playerGuessState';
 import { playerIdState } from './playerIdState';
+import { revealResultsState } from './revealResultsState';
 import { timerState } from './timerState';
 import { tokenState } from './tokenState';
 
@@ -18,4 +20,6 @@ export {
   timerState,
   hostChoiceState,
   playerGuessState,
+  finaleDefinitionsState,
+  revealResultsState,
 };
