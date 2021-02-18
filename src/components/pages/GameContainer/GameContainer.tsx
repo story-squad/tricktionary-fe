@@ -4,12 +4,14 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 import { useLocalStorage } from '../../../hooks';
 import {
+  finaleDefinitionsState,
   hostChoiceState,
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
   playerGuessState,
   playerIdState,
+  revealResultsState,
 } from '../../../state';
 import {
   DefinitionSelection,
@@ -22,6 +24,7 @@ import { randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
 import { Modal } from '../../common/Modal';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
+import Finale from './Game/Finale';
 
 // Create a socket connection to API
 const socket = io.connect(process.env.REACT_APP_API_URL as string);
@@ -33,11 +36,13 @@ const GameContainer = (): React.ReactElement => {
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
+  const [, setFinaleDefinitions] = useRecoilState(finaleDefinitionsState);
+  const [, setRevealResults] = useRecoilState(revealResultsState);
+  const hostChoice = useRecoilValue(hostChoiceState);
   const [, setGuesses] = useLocalStorage('guesses', []);
   const [token, setToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [time, setTime] = useState(-1);
-  const hostChoice = useRecoilValue(hostChoiceState);
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
@@ -49,6 +54,8 @@ const GameContainer = (): React.ReactElement => {
     resetLobbyCode();
     resetPlayerGuess();
     setGuesses([]);
+    setFinaleDefinitions([]);
+    setRevealResults(false);
     socket.disconnect();
     setToken('');
     handleLogin(true);
@@ -77,11 +84,17 @@ const GameContainer = (): React.ReactElement => {
     handleLogin();
     //// Socket event listeners
     // Update game each phase, push socket data to state, push lobbyCode to URL
-    socket.on('game update', (socketData: LobbyData) => {
-      setLobbyData(socketData);
-      setLobbyCode(socketData.lobbyCode);
-      history.push(`/${socketData.lobbyCode}`);
-    });
+    socket.on(
+      'game update',
+      (socketData: LobbyData, finaleDefinitions = []) => {
+        setLobbyData(socketData);
+        setLobbyCode(socketData.lobbyCode);
+        history.push(`/${socketData.lobbyCode}`);
+        if (finaleDefinitions.length > 0) {
+          setFinaleDefinitions(finaleDefinitions);
+        }
+      },
+    );
 
     // Add a player to the list when they join
     socket.on('add player', (newPlayer: PlayerItem) => {
@@ -173,6 +186,11 @@ const GameContainer = (): React.ReactElement => {
     socket.on('welcome host', (guesses: GuessItem[]) => {
       setGuesses(guesses);
     });
+
+    socket.on('reveal results', (guesses: GuessItem[]) => {
+      setGuesses(guesses);
+      setRevealResults(true);
+    });
   }, []);
 
   // Socket event emitters
@@ -218,8 +236,16 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('set phase', phase, lobbyCode);
   };
 
+  const handleSetFinale = () => {
+    socket.emit('set finale', lobbyCode);
+  };
+
   const handleSetHost = (hostId: string, guesses: GuessItem[]) => {
     socket.emit('set host', hostId, lobbyCode, guesses);
+  };
+
+  const handleRevealResults = (guesses: GuessItem[]) => {
+    socket.emit('reveal results', lobbyCode, guesses);
   };
 
   const handleUpdateUsername = (newUsername: string) => {
@@ -311,8 +337,12 @@ const GameContainer = (): React.ReactElement => {
           <Postgame
             handlePlayAgain={handlePlayAgain}
             handleSetHost={handleSetHost}
+            handleRevealResults={handleRevealResults}
+            handleSetFinale={handleSetFinale}
           />
         );
+      case 'FINALE':
+        return <Finale />;
       default:
         return (
           <Lobby
