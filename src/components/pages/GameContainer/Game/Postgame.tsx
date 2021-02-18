@@ -75,7 +75,12 @@ const getPlayerDictionary = (players: PlayerItem[]): PlayerDictionary => {
 };
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
-  const { handlePlayAgain, handleSetHost } = props;
+  const {
+    handlePlayAgain,
+    handleSetHost,
+    handleRevealResults,
+    handleSetFinale,
+  } = props;
   const resetGuess = useResetRecoilState(playerGuessState);
   const lobbyData = useRecoilValue(lobbyState);
   const revealResults = useRecoilValue(revealResultsState);
@@ -121,10 +126,26 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
           ))}
         </div>
         <div className="endgame-container">
-          <button className="play-again" onClick={handlePlayAgain}>
-            Play Again
-          </button>
-          <SetHost players={lobbyData.players} handleSetHost={handleSetHost} />
+          {!revealResults ? (
+            // Before reveal
+            <>
+              <button onClick={() => handleRevealResults(guesses)}>
+                Reveal Results
+              </button>
+            </>
+          ) : (
+            // After reveal
+            <>
+              <button className="play-again" onClick={handlePlayAgain}>
+                Play Again
+              </button>
+              <button onClick={handleSetFinale}>Go to Finale</button>
+              <SetHost
+                players={lobbyData.players}
+                handleSetHost={handleSetHost}
+              />
+            </>
+          )}
         </div>
       </Host>
       <Player>
