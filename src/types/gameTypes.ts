@@ -7,6 +7,13 @@ export interface PlayerItem {
   connected: boolean;
 }
 
+export interface FinalePlayer {
+  id: string;
+  username: string;
+  points: number;
+  definition: string;
+}
+
 export interface LobbyData {
   definition: string;
   guesses: GuessItem[];
@@ -71,4 +78,10 @@ export interface HostChoice {
 export interface FinaleDefinition {
   playerId: string;
   definition: string;
+}
+
+export interface TopPlayers {
+  first: FinalePlayer;
+  second: FinalePlayer;
+  third: FinalePlayer;
 }
