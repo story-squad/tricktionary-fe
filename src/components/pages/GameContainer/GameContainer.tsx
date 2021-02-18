@@ -336,6 +336,8 @@ const GameContainer = (): React.ReactElement => {
           <Postgame
             handlePlayAgain={handlePlayAgain}
             handleSetHost={handleSetHost}
+            handleRevealResults={handleRevealResults}
+            handleSetFinale={handleSetFinale}
           />
         );
       default:
