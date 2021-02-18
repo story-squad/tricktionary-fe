@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { useLocalStorage } from '../../../../hooks';
-import { lobbyState, playerGuessState } from '../../../../state';
+import {
+  lobbyState,
+  playerGuessState,
+  revealResultsState,
+} from '../../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
@@ -71,9 +75,15 @@ const getPlayerDictionary = (players: PlayerItem[]): PlayerDictionary => {
 };
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
-  const { handlePlayAgain, handleSetHost } = props;
+  const {
+    handlePlayAgain,
+    handleSetHost,
+    handleRevealResults,
+    handleSetFinale,
+  } = props;
   const resetGuess = useResetRecoilState(playerGuessState);
   const lobbyData = useRecoilValue(lobbyState);
+  const revealResults = useRecoilValue(revealResultsState);
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
   );
@@ -87,9 +97,8 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     resetGuess();
   }, []);
 
-  // Create new sorted definitions array when player becomes host and recieves guesses
+  // Create new sorted definitions array when player recieves guesses from host
   useEffect(() => {
-    console.log('GUESSES UPDATE');
     setSortedDefinitions(
       getSortedDefinitions(
         lobbyData,
@@ -117,22 +126,63 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
           ))}
         </div>
         <div className="endgame-container">
-          <button className="play-again" onClick={handlePlayAgain}>
-            Play Again
-          </button>
-          <SetHost players={lobbyData.players} handleSetHost={handleSetHost} />
+          {!revealResults ? (
+            // Before reveal
+            <>
+              <button onClick={() => handleRevealResults(guesses)}>
+                Reveal Results
+              </button>
+            </>
+          ) : (
+            // After reveal
+            <>
+              <button className="play-again" onClick={handlePlayAgain}>
+                Play Again
+              </button>
+              <button onClick={handleSetFinale}>Go to Finale</button>
+              <SetHost
+                players={lobbyData.players}
+                handleSetHost={handleSetHost}
+              />
+            </>
+          )}
         </div>
       </Host>
       <Player>
         <h2>It&apos;s time for the results!</h2>
-        <p>
-          Your host is now going to read the results! Did you guess the right
-          one? How did your definition do? Did it reign supreme?
-        </p>
-        <div className="word-display">
-          <p>{lobbyData.word}</p>
-        </div>
-        <PlayerList />
+        {!revealResults ? (
+          // Before reveal
+          <>
+            <p>
+              Your host is now going to read the results! Did you guess the
+              right one? How did your definition do? Did it reign supreme?
+            </p>
+            <div className="word-display">
+              <p>{lobbyData.word}</p>
+            </div>
+          </>
+        ) : (
+          // After reveal
+          <>
+            <p>
+              Here are the results. They are displayed from least votes to most,
+              with the REAL defintion displayed at the end. The names of who
+              voted for each definiton is also provided.
+            </p>
+            <div className="word-display">
+              <p>{lobbyData.word}</p>
+            </div>
+            <div className="round-results">
+              {sortedDefinitions.map((definitionResult, key) => (
+                <DefinitionResult
+                  key={key}
+                  definitionResult={definitionResult}
+                />
+              ))}
+            </div>
+          </>
+        )}
+        <PlayerList hidePoints={!revealResults} />
       </Player>
     </div>
   );
@@ -184,6 +234,8 @@ export default Postgame;
 interface PostgameProps {
   handlePlayAgain: () => void;
   handleSetHost: (hostId: string, guesses: GuessItem[]) => void;
+  handleSetFinale: () => void;
+  handleRevealResults: (guesses: GuessItem[]) => void;
 }
 
 interface DefinitionResultProps {

@@ -48,7 +48,7 @@ const playerUserName = (
   return username;
 };
 
-const PlayerList = (): React.ReactElement => {
+const PlayerList = (props: PlayerListProps): React.ReactElement => {
   const playerId = useRecoilValue(playerIdState);
   const lobbyData = useRecoilValue(lobbyState);
 
@@ -62,7 +62,9 @@ const PlayerList = (): React.ReactElement => {
               <p className="player">
                 {playerUserName(lobbyData, player, playerId)}
               </p>
-              <p className="player-score">Score:{player.points}</p>
+              <p className="player-score">
+                Score: {props.hidePoints ? '?' : `${player.points}`}
+              </p>
             </div>
           );
         })}
@@ -71,3 +73,7 @@ const PlayerList = (): React.ReactElement => {
 };
 
 export default PlayerList;
+
+interface PlayerListProps {
+  hidePoints?: boolean;
+}
