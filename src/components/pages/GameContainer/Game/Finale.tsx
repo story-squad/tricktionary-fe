@@ -8,7 +8,6 @@ const getTopPlayers = (lobbyData: LobbyData): TopPlayers => {
   lobbyData.players.forEach((player) => {
     playerDict[player.id] = player.username;
   });
-  console.log(lobbyData.topThree[0]);
   // Create and return TopPlayers
   return {
     first: {
