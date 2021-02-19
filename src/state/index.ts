@@ -1,4 +1,3 @@
-import { finaleDefinitionsState } from './finaleDefinitionsState';
 import { guessesState } from './guessesState';
 import { hostChoiceState } from './hostChoiceState';
 import { lobbyCodeState } from './lobbyCodeState';
@@ -20,6 +19,5 @@ export {
   timerState,
   hostChoiceState,
   playerGuessState,
-  finaleDefinitionsState,
   revealResultsState,
 };

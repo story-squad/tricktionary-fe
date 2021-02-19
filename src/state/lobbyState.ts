@@ -20,5 +20,6 @@ export const lobbyState = atom<LobbyData>({
         list: [],
       },
     },
+    topThree: [],
   },
 });
