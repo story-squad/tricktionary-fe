@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { lobbyState } from '../../../../state';
 import { LobbyData, TopPlayers } from '../../../../types/gameTypes';
@@ -8,18 +8,19 @@ const getTopPlayers = (lobbyData: LobbyData): TopPlayers => {
   lobbyData.players.forEach((player) => {
     playerDict[player.id] = player.username;
   });
+  console.log(lobbyData.topThree[0]);
   // Create and return TopPlayers
   return {
     first: {
-      username: playerDict[lobbyData.topThree[0]?.playerId],
+      username: playerDict[lobbyData.topThree[0]?.user_id],
       definition: lobbyData.topThree[0]?.definition,
     },
     second: {
-      username: playerDict[lobbyData.topThree[1]?.playerId],
+      username: playerDict[lobbyData.topThree[1]?.user_id],
       definition: lobbyData.topThree[1]?.definition,
     },
     third: {
-      username: playerDict[lobbyData.topThree[2]?.playerId],
+      username: playerDict[lobbyData.topThree[2]?.user_id],
       definition: lobbyData.topThree[2]?.definition,
     },
   };
@@ -27,7 +28,11 @@ const getTopPlayers = (lobbyData: LobbyData): TopPlayers => {
 
 const Finale = (): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
-  const [topPlayers] = useState(getTopPlayers(lobbyData));
+  const [topPlayers, setTopPlayers] = useState(getTopPlayers(lobbyData));
+
+  useEffect(() => {
+    setTopPlayers(getTopPlayers(lobbyData));
+  }, [lobbyData]);
 
   return (
     <div className="postgame game-page">
