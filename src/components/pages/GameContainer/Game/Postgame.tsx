@@ -106,7 +106,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         playerDict,
       ),
     );
-  }, [lobbyData]);
+  }, [lobbyData, revealResults]);
 
   return (
     <div className="postgame game-page">
