@@ -218,6 +218,8 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
             <p>?</p>
           )}
         </div>
+        <p>Take notes:</p>
+        <textarea maxLength={100} />
         <PlayerList />
       </Player>
     </div>

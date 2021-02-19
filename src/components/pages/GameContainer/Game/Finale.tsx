@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { finaleDefinitionsState, lobbyState } from '../../../../state';
+import { lobbyState } from '../../../../state';
 import {
   FinaleDefinition,
   PlayerItem,
@@ -42,11 +42,8 @@ const getTopPlayers = (
 };
 
 const Finale = (): React.ReactElement => {
-  const finaleDefinitions = useRecoilValue(finaleDefinitionsState);
   const lobbyData = useRecoilValue(lobbyState);
-  const [topPlayers] = useState(
-    getTopPlayers(lobbyData.players, finaleDefinitions),
-  );
+  const [topPlayers] = useState(getTopPlayers(lobbyData));
 
   return (
     <div className="postgame game-page">

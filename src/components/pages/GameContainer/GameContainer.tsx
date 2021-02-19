@@ -4,7 +4,6 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 import { useLocalStorage } from '../../../hooks';
 import {
-  finaleDefinitionsState,
   hostChoiceState,
   lobbyCodeState,
   lobbySettingsState,
@@ -36,7 +35,6 @@ const GameContainer = (): React.ReactElement => {
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
-  const [, setFinaleDefinitions] = useRecoilState(finaleDefinitionsState);
   const [, setRevealResults] = useRecoilState(revealResultsState);
   const hostChoice = useRecoilValue(hostChoiceState);
   const [, setGuesses] = useLocalStorage('guesses', []);
@@ -54,7 +52,6 @@ const GameContainer = (): React.ReactElement => {
     resetLobbyCode();
     resetPlayerGuess();
     setGuesses([]);
-    setFinaleDefinitions([]);
     setRevealResults(false);
     socket.disconnect();
     setToken('');
@@ -84,17 +81,11 @@ const GameContainer = (): React.ReactElement => {
     handleLogin();
     //// Socket event listeners
     // Update game each phase, push socket data to state, push lobbyCode to URL
-    socket.on(
-      'game update',
-      (socketData: LobbyData, finaleDefinitions = []) => {
-        setLobbyData(socketData);
-        setLobbyCode(socketData.lobbyCode);
-        history.push(`/${socketData.lobbyCode}`);
-        if (finaleDefinitions.length > 0) {
-          setFinaleDefinitions(finaleDefinitions);
-        }
-      },
-    );
+    socket.on('game update', (socketData: LobbyData) => {
+      setLobbyData(socketData);
+      setLobbyCode(socketData.lobbyCode);
+      history.push(`/${socketData.lobbyCode}`);
+    });
 
     // Add a player to the list when they join
     socket.on('add player', (newPlayer: PlayerItem) => {
