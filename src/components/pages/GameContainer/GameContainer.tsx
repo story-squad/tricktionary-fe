@@ -180,7 +180,13 @@ const GameContainer = (): React.ReactElement => {
     });
 
     socket.on('synchronize', (seconds: number) => {
-      setTime(seconds);
+      setTime((prevSeconds) => {
+        if (Math.abs(prevSeconds - seconds) > 2) {
+          return seconds;
+        } else {
+          return prevSeconds;
+        }
+      });
     });
 
     socket.on('welcome host', (guesses: GuessItem[]) => {
