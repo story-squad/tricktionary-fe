@@ -75,7 +75,7 @@ export interface HostChoice {
 }
 
 export interface FinaleDefinition {
-  playerId: string;
+  user_id: string;
   definition: string;
 }
 
