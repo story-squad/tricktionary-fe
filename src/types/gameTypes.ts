@@ -8,9 +8,7 @@ export interface PlayerItem {
 }
 
 export interface FinalePlayer {
-  id: string;
   username: string;
-  points: number;
   definition: string;
 }
 
@@ -31,6 +29,7 @@ export interface LobbyData {
       list: unknown[];
     };
   };
+  topThree: FinaleDefinition[];
 }
 
 export interface GuessItem {
