@@ -110,6 +110,10 @@ const Writing = (props: WritingProps): React.ReactElement => {
             addTime={handleAddTime}
           />
         )}
+        <div className="guess-word">
+          <p className="word-label">Your Word:</p>
+          <p className="word">{lobbyData.word}</p>
+        </div>
         <PlayerList />
         <div className="times-up-container">
           <button className="times-up-button" onClick={handleGoToNextPhase}>
