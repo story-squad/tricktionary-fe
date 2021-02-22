@@ -207,6 +207,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           The host will list off the definitions and their numbers. When the
           host calls on you, choose a number.
         </p>
+        <p className="word-display">{lobbyData.word}</p>
         <div className="player-guess">
           <h3>Your guess:</h3>
           {playerGuess.key > 0 ? (
