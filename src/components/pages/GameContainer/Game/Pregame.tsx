@@ -11,6 +11,7 @@ import {
 //styles
 import '../../../../styles/components/pages/Pregame.scss';
 import { WordItem } from '../../../../types/gameTypes';
+import { hasMinimumPlayers } from '../../../../utils/helpers';
 import { usernameIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
 import { Player } from '../../../common/Player';
@@ -175,6 +176,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <button
               className="start-btn center"
               onClick={props.handleStartGame}
+              disabled={!hasMinimumPlayers(lobbyData.players)}
             >
               Start Game!
             </button>
