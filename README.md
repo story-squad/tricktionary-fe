@@ -1,3 +1,34 @@
+# Tricktionary
+
+Tricktionary is a game developed for StorySquad.
+
+This frontend application is a React/TypeScript project that relies heavily on the use of WebSockets.
+We use socket.io to handle player connections and game events.
+
+## Notable Technologies/Dependencies Used
+
+- [yarn](https://yarnpkg.com/)
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [socket.io](https://socket.io/)
+- [Recoil.js](https://recoiljs.org/)
+- [node-sass (SCSS)](https://www.npmjs.com/package/node-sass)
+- [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
+
+## Application Architecture
+
+Here is a basic layout of the application from a frontend perspective:
+
+![](./src/assets/tricktionary_architecture_fe.png)
+
+## Environment Variables for Developers and Deployment
+
+For a list of required environment variables, look in [./src/utils/constants.ts](./src/utils/constants.ts)
+
+---
+
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

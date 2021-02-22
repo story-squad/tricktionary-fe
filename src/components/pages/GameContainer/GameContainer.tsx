@@ -18,7 +18,7 @@ import {
   LobbyData,
   PlayerItem,
 } from '../../../types/gameTypes';
-import { MAX_SECONDS } from '../../../utils/constants';
+import { MAX_SECONDS, REACT_APP_API_URL } from '../../../utils/constants';
 import { randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
 import { Modal } from '../../common/Modal';
@@ -26,7 +26,7 @@ import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 import Finale from './Game/Finale';
 
 // Create a socket connection to API
-const socket = io.connect(process.env.REACT_APP_API_URL as string);
+const socket = io.connect(REACT_APP_API_URL as string);
 
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();
@@ -226,6 +226,7 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handlePlayAgain = () => {
+    console.log('play again', lobbySettings, lobbyCode);
     socket.emit('play again', lobbySettings, lobbyCode);
   };
 
