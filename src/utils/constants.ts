@@ -5,3 +5,5 @@ export const TIMER_SYNC_INTERVAL = Number(process.env.TIMER_SYNC_INTERVAL) || 2;
 // Number of players before the game changes to accommodate larger list of players and definitions
 export const LARGE_GAME_MINIMUM_PLAYERS =
   Number(process.env.LARGE_GAME_MINIMUM_PLAYERS) || 10;
+// Number of players required to start a game. Set to 0 for testing
+export const MINIMUM_PLAYERS = Number(process.env.MINIMUM_PLAYERS) || 0;
