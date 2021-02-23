@@ -7,7 +7,10 @@ import '../../../../styles/components/pages/Lobby.scss';
 //styles
 import '../../../../styles/gameContainer.scss';
 import { DecodedToken } from '../../../../types/commonTypes';
-import { usernameIsValid } from '../../../../utils/validation';
+import {
+  lobbyCodeIsValid,
+  usernameIsValid,
+} from '../../../../utils/validation';
 import { Input } from '../../../common/Input';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
@@ -53,6 +56,13 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
 
   const handleChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.setLobbyCode(e.target.value.toUpperCase());
+    const message = lobbyCodeIsValid(e.target.value).message;
+    if (lobbyCodeIsValid(e.target.value).valid) {
+      clearErrors();
+    }
+    if (!lobbyCodeIsValid(e.target.value).valid) {
+      setError('form', { type: 'manual', message });
+    }
   };
 
   return (
