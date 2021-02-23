@@ -17,7 +17,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
   const [token] = useLocalStorage<string>('token', '');
 
-  //set up the username details
+  //set up the form details
   const {
     register,
     handleSubmit,
