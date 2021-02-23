@@ -6,6 +6,6 @@ export const usernameIsValid = (username: string): any => {
   } else if (username.trim().length >= 12) {
     return { valid: false, message: 'your username is too long' };
   } else {
-    return { valid: true, message: 'good stuff' };
+    return { valid: true, message: '' };
   }
 };

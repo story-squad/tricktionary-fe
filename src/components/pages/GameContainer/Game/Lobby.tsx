@@ -41,9 +41,12 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   }, []);
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const message = usernameIsValid(props.username).message;
     props.handleSetUsername(e.target.value);
-    if (!usernameIsValid(props.username).valid) {
+    const message = usernameIsValid(e.target.value).message;
+    if (usernameIsValid(e.target.value).valid) {
+      clearErrors();
+    }
+    if (!usernameIsValid(e.target.value).valid) {
       setError('form', { type: 'manual', message });
     }
   };
@@ -59,13 +62,6 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         Please enter your name and lobby code to join a game or you can host a
         new game.
       </p>
-      {/* <label htmlFor="username">First Name:</label> */}
-      {/* <input
-        id="username"
-        name="username"
-        value={props.username}
-        onChange={handleChangeUsername}
-      /> */}
       <br />
       <form className="start-game">
         {errors.form && <div>{errors.form.message}</div>}
