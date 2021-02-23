@@ -1,11 +1,11 @@
 export const usernameIsValid = (username: string): any => {
-  if (
-    username.trim().length > 1 &&
-    username.trim().length <= 12 &&
-    !/[^A-Za-z0-9]/.test(username)
-  ) {
-    return true;
+  if (/[^A-Za-z0-9]/.test(username)) {
+    return { valid: false, message: 'Only alphanumeric characters allowed' };
+  } else if (username.trim().length < 2) {
+    return { valid: false, message: 'your username is too short' };
+  } else if (username.trim().length >= 12) {
+    return { valid: false, message: 'your username is too long' };
   } else {
-    return false;
+    return { valid: true, message: 'good stuff' };
   }
 };

@@ -41,7 +41,11 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   }, []);
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const message = usernameIsValid(props.username).message;
     props.handleSetUsername(e.target.value);
+    if (!usernameIsValid(props.username).valid) {
+      setError('form', { type: 'manual', message });
+    }
   };
 
   const handleChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,14 +60,6 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         new game.
       </p>
       {/* <label htmlFor="username">First Name:</label> */}
-      <Input
-        id="username"
-        name="username"
-        value={props.username}
-        label="First Name"
-        register={register}
-        onChange={handleChangeUsername}
-      ></Input>
       {/* <input
         id="username"
         name="username"
@@ -72,6 +68,15 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
       /> */}
       <br />
       <form className="start-game">
+        {errors.form && <div>{errors.form.message}</div>}
+        <Input
+          id="username"
+          name="username"
+          value={props.username}
+          label="First Name"
+          register={register}
+          onChange={handleChangeUsername}
+        ></Input>
         <label htmlFor="lobby-code">Lobby Code</label>
         <input
           id="lobby-code"
@@ -85,7 +90,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         <button
           className="join lobby-button"
           onClick={(e) => props.handleJoinLobby(e, '')}
-          disabled={!usernameIsValid(props.username)}
+          disabled={!usernameIsValid(props.username).valid}
         >
           Join Lobby
         </button>
@@ -93,7 +98,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         <button
           className="host lobby-button"
           onClick={props.handleCreateLobby}
-          disabled={!usernameIsValid(props.username)}
+          disabled={!usernameIsValid(props.username).valid}
         >
           Host New Game
         </button>
