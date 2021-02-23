@@ -54,7 +54,7 @@ const Input = ({
         ) : null}
       </div>
       <div className="message">
-        <span className="red">*</span>{' '}
+        {/* <span className="red">*</span>{' '} */}
         {errors[name] ? errors[name].message : ''}
       </div>
     </div>

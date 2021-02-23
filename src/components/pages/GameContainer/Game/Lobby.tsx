@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import React, { SetStateAction, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import { useLocalStorage } from '../../../../hooks';
 import '../../../../styles/components/pages/Lobby.scss';
@@ -7,10 +8,24 @@ import '../../../../styles/components/pages/Lobby.scss';
 import '../../../../styles/gameContainer.scss';
 import { DecodedToken } from '../../../../types/commonTypes';
 import { usernameIsValid } from '../../../../utils/validation';
+import { Input } from '../../../common/Input';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
   const [token] = useLocalStorage<string>('token', '');
+
+  //set up the username details
+  const {
+    register,
+    handleSubmit,
+    errors,
+    setError,
+    clearErrors,
+    getValues,
+    watch,
+  } = useForm({
+    mode: 'onSubmit',
+  });
 
   // Join a game if the lobbyCode is provided in the URL
   useEffect(() => {
@@ -40,13 +55,21 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         Please enter your name and lobby code to join a game or you can host a
         new game.
       </p>
-      <label htmlFor="username">First Name:</label>
-      <input
+      {/* <label htmlFor="username">First Name:</label> */}
+      <Input
+        id="username"
+        name="username"
+        value={props.username}
+        label="First Name"
+        register={register}
+        onChange={handleChangeUsername}
+      ></Input>
+      {/* <input
         id="username"
         name="username"
         value={props.username}
         onChange={handleChangeUsername}
-      />
+      /> */}
       <br />
       <form className="start-game">
         <label htmlFor="lobby-code">Lobby Code</label>
