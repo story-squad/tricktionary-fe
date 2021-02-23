@@ -2,92 +2,106 @@
 @import '../../globals.scss';
 
 .selected {
-  background-color: $orange;
-  color: $white;
+	background-color: $orange;
+	color: $white;
 }
 
 .pick-word-instructions {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  .pick-instructions {
-    width: 85%;
-    font-size: 1.4rem;
-    margin-bottom: 1.6rem;
-  }
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	.pick-instructions {
+		width: 85%;
+		font-size: 1.4rem;
+		margin-bottom: 1.6rem;
+		@include mid-below {
+			width: 100%;
+		}
+	}
+	@include mid-below {
+		justify-content: center;
+		margin-bottom: 1.6rem;
+	}
 }
 
 .word-block {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  border-radius: 16px;
-  padding: 24px;
-  border: 2px dashed $hover-blue;
-  margin-top: 3.2rem;
-  
-  .word-column {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-  }
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border-radius: 16px;
+	padding: 24px;
+	border: 2px dashed $hover-blue;
+	margin-top: 3.2rem;
+	@include mid-below {
+		flex-direction: column;
+	}
 
-  .word-definition {
-    width: 75%;
+	.word-column {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-evenly;
+	}
 
-    .sm-word {
-      color: $royal-blue;
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 0.8rem;
-    }
-    .word {
-      font-family: $display-font;
-      font-size: 2.4rem;
-      margin: 1.6rem 0;
-    }
-  }
+	.word-definition {
+		width: 75%;
+		@include mid-below {
+			width: 100%;
+		}
+	}
+
+	.sm-word {
+		color: $royal-blue;
+		font-size: 1.4rem;
+		font-weight: 700;
+		margin-bottom: 0.8rem;
+	}
+	.word {
+		font-family: $display-font;
+		font-size: 2.4rem;
+		margin: 1.6rem 0;
+	}
 }
 
 .timer-container {
-  margin-top: 4.8rem;
-  .timer-title {
-    color: $red;
-    font-size: 3.6rem;
-    font-family: $display-font;
-    text-align: center;
-    margin-top: 24px;
-  }
-  .timer-directions {
-    text-align: center;
-  }
-  .timer-itself {
-    border: none;
-    height: 80px;
-    text-align: center;
-    align-items: center;
-    margin: 0 auto;
-    padding-right: 8px;
-    background: $orange;
-    color: $white;
-    font-family: $display-font;
-    font-size: 3.2rem;
-  }
+	margin-top: 4.8rem;
+	.timer-title {
+		color: $red;
+		font-size: 3.6rem;
+		font-family: $display-font;
+		text-align: center;
+		margin-top: 24px;
+	}
+	.timer-directions {
+		text-align: center;
+	}
+	.timer-itself {
+		border: none;
+		height: 80px;
+		text-align: center;
+		align-items: center;
+		margin: 0 auto;
+		padding-right: 8px;
+		background: $orange;
+		color: $white;
+		font-family: $display-font;
+		font-size: 3.2rem;
+	}
 }
 
 input[type='number']::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  background: #eee url('../../../assets/arrows.png') no-repeat 50% 50%;
-  opacity: 1;
-  width: 14px;
-  height: 20px;
-  padding: 0;
-  position: relative;
-  right: 16px;
-  top: 8px;
-  cursor: pointer;
-  display: block;
-  color: $white;
-  text-align: center;
+	-webkit-appearance: none;
+	background: #eee url('../../../assets/arrows.png') no-repeat 50% 50%;
+	opacity: 1;
+	width: 14px;
+	height: 20px;
+	padding: 0;
+	position: relative;
+	right: 16px;
+	top: 8px;
+	cursor: pointer;
+	display: block;
+	color: $white;
+	text-align: center;
 }

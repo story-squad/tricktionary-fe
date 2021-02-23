@@ -35,3 +35,19 @@
     cursor: not-allowed;
   }
 }
+
+@mixin mid-below {
+  @media (max-width: #{$mid}) {
+    @content;
+  }
+}
+@mixin tablet-below {
+  @media (max-width: #{$tablet}) {
+    @content;
+  }
+}
+@mixin large-below {
+  @media (max-width: #{$large}) {
+    @content;
+  }
+}
