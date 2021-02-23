@@ -11,8 +11,11 @@ h2 {
 }
 
 h3 {
-  font-size: 3rem;
+  font-size: 3.2rem;
   margin: 4rem 0 0.8rem;
+  @include mid-below {
+    font-size: 1.8rem;
+  }
 }
 
 h1,
@@ -28,10 +31,17 @@ span {
   font-family: $text-font;
   font-size: 1.6rem;
 }
+
 p {
   font-family: $text-font;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   margin-bottom: 1.6rem;
+}
+
+textarea {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 button {
@@ -140,6 +150,17 @@ a {
   }
 }
 
+.notes {
+  text-align: center;
+  textarea {
+    width: 35rem;
+    height: 10rem;
+    max-width: 100%;
+    border-radius: 8px;
+    border: 2px solid $black;
+  }
+}
+
 .word-display {
   margin: 0 auto;
   text-align: center;
@@ -175,6 +196,9 @@ a {
     box-shadow: $boxshadow;
     p {
       margin-bottom: 0;
+      @include mid-below {
+        text-align: left;
+      }
     }
     .definition-content {
       align-self: center;
@@ -203,8 +227,11 @@ a {
 }
 
 .submit-definition {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.6rem;
   button {
-    float: right;
+    align-self: flex-end;
   }
 }
 
@@ -343,6 +370,9 @@ a {
     font-family: $display-font;
     font-size: 3.2rem;
     margin-bottom: 8px;
+    @include mid-below {
+      font-size: 1.8rem;
+    }
     &:last-child {
       color: $red;
     }
@@ -382,14 +412,22 @@ a {
     }
   }
 }
+
 //play/new host button
 .endgame-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  .after-reveal {
+    display: flex;
+    flex-direction: column;
+  }
   .play-again {
     background: $orange;
     margin-right: 1.6rem;
+    @include mid-below {
+      margin: 0 0 1.6rem 0;
+    }
   }
   .selected {
     background: $orange;
@@ -448,9 +486,12 @@ a {
     border-radius: 1rem;
     padding: 2rem;
     width: 11rem;
-	text-align: center;
+    text-align: center;
     border: 1px solid black;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    @include mid-below {
+      width: 11rem;
+    }
     p {
       width: 100%;
       display: flex;
@@ -462,6 +503,13 @@ a {
     font-size: 4.8rem;
     width: 20%;
   }
+  .add-time.center {
+    background-color: $white;
+    color: $black;
+    height: auto;
+    font-family: $display-font;
+    text-decoration: underline;
+  }
 }
 
 .player-submitted {
@@ -469,12 +517,18 @@ a {
   border: 1px solid black;
   border-radius: 8px;
   margin-bottom: 16px;
+
   h3 {
     margin-top: 0;
   }
   p {
     text-align: center;
+    margin-bottom: 0;
   }
+}
+
+.player-guess {
+  text-align: center;
 }
 
 .times-up-container {
@@ -491,8 +545,11 @@ a {
   }
 }
 
-h2.player-h2 {
-  font-size: 1.8rem;
+.player-display {
+  margin-top: 1.6rem;
+  h2.player-h2 {
+    font-size: 1.8rem;
+  }
 }
 
 .player-lobby {

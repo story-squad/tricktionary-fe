@@ -114,7 +114,10 @@ const Writing = (props: WritingProps): React.ReactElement => {
           <p className="word-label">Your Word:</p>
           <p className="word">{lobbyData.word}</p>
         </div>
-        <PlayerList />
+        <div className="player-display">
+          <h2 className="player-h2">Players</h2>
+          <PlayerList />
+        </div>
         <div className="times-up-container">
           <button className="times-up-button" onClick={handleGoToNextPhase}>
             Start Guessing Phase
@@ -185,8 +188,10 @@ const Writing = (props: WritingProps): React.ReactElement => {
             <p>{definition}</p>
           </div>
         )}
-        <h2 className="player-h2">Player list:</h2>
-        <PlayerList />
+        <div className="player-display">
+          <h2 className="player-h2">Players</h2>
+          <PlayerList />
+        </div>
       </Player>
     </div>
   );

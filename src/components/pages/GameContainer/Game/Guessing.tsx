@@ -212,17 +212,24 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         <div className="player-guess">
           <h3>Your guess:</h3>
           {playerGuess.key > 0 ? (
-            <>
-              <p>#{playerGuess.key}</p>
+            <div className="definition">
+              <div className="definition-key">
+                <p>#{playerGuess.key}</p>
+              </div>
               <p>{playerGuess.definition}</p>
-            </>
+            </div>
           ) : (
-            <p>?</p>
+            <p>No Guess yet</p>
           )}
         </div>
-        <p>Take notes:</p>
-        <textarea maxLength={100} />
-        <PlayerList />
+        <div className="notes">
+          <h3>Listen to the definitions. Take some notes:</h3>
+          <textarea maxLength={100} />
+        </div>
+        <div className="player-display">
+          <h2 className="player-h2">Players</h2>
+          <PlayerList />
+        </div>
       </Player>
     </div>
   );
