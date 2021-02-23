@@ -7,8 +7,10 @@ import {
   DefinitionItem,
   DefinitionSelection,
   GuessItem,
+  HandleSelectGuessParams,
   PlayerItem,
 } from '../../../../types/gameTypes';
+import { isLargeGame } from '../../../../utils/helpers';
 import { Host } from '../../../common/Host';
 import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
@@ -114,7 +116,6 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   }, [lobbyData]);
 
   const handleSelectGuess = (
-    e: React.MouseEvent,
     playerId: string,
     guessId: number,
     definitionSelection: DefinitionSelection,
@@ -207,6 +208,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           The host will list off the definitions and their numbers. When the
           host calls on you, choose a number.
         </p>
+        <p className="word-display">{lobbyData.word}</p>
         <div className="player-guess">
           <h3>Your guess:</h3>
           {playerGuess.key > 0 ? (
@@ -228,6 +230,18 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
 const Guess = (props: GuessProps): React.ReactElement => {
   const { player, definitions, handleSelectGuess, guesses } = props;
+  const { players } = useRecoilValue(lobbyState);
+
+  const handleSelectWithOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value !== 'none') {
+      const params: HandleSelectGuessParams = JSON.parse(e.target.value);
+      handleSelectGuess(
+        params.playerId,
+        params.guessId,
+        params.definitionSelection,
+      );
+    }
+  };
 
   const chosenDefinition = definitions.filter(
     (definition) => definition.id === getPlayerGuess(guesses, player),
@@ -237,24 +251,54 @@ const Guess = (props: GuessProps): React.ReactElement => {
     <>
       <div className="guess">
         <p className="guess-name">{player.username}</p>
-        {definitions.map((definition, key) => (
-          <button
-            className={`${
-              getPlayerGuess(guesses, player) === definition.id
-                ? 'selected'
-                : ''
-            }`}
-            onClick={(e) =>
-              handleSelectGuess(e, player.id, definition.id, {
-                key: definition.definitionKey,
-                definition: definition.content,
-              })
-            }
-            key={key}
+        {!isLargeGame(players) ? (
+          // Use button display for small games
+          definitions.map((definition, key) => (
+            <button
+              className={`${
+                getPlayerGuess(guesses, player) === definition.id
+                  ? 'selected'
+                  : ''
+              }`}
+              onClick={() =>
+                handleSelectGuess(player.id, definition.id, {
+                  key: definition.definitionKey,
+                  definition: definition.content,
+                })
+              }
+              key={key}
+            >
+              {definition.definitionKey}
+            </button>
+          ))
+        ) : (
+          // Use select/option display for large games
+          <select
+            name="guess-select"
+            id="guess-select"
+            onChange={handleSelectWithOptions}
           >
-            {definition.definitionKey}
-          </button>
-        ))}
+            {
+              // show default "None" option until an option is picked
+              !chosenDefinition && <option value="none">None</option>
+            }
+            {definitions.map((definition, key) => (
+              <option
+                value={JSON.stringify({
+                  playerId: player.id,
+                  guessId: definition.id,
+                  definitionSelection: {
+                    key: definition.definitionKey,
+                    definition: definition.content,
+                  },
+                })}
+                key={key}
+              >
+                {definition.definitionKey}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
       <div className="show-guess">
         {chosenDefinition && (
@@ -282,7 +326,6 @@ interface GuessingProps {
 
 interface GuessProps {
   handleSelectGuess: (
-    e: React.MouseEvent,
     playerId: string,
     guessId: number,
     definitionSelection: DefinitionSelection,

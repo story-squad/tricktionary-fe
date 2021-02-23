@@ -84,3 +84,9 @@ export interface TopPlayers {
   second: FinalePlayer;
   third: FinalePlayer;
 }
+
+export interface HandleSelectGuessParams {
+  playerId: string;
+  guessId: number;
+  definitionSelection: DefinitionSelection;
+}
