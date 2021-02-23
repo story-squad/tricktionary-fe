@@ -82,7 +82,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
           label="First Name"
           register={register}
           onChange={handleChangeUsername}
-        ></Input>
+        />
         <label htmlFor="lobby-code">Lobby Code</label>
         <input
           id="lobby-code"
