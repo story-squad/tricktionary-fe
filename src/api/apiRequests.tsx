@@ -1,12 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
-
-const API = process.env.REACT_APP_API_URL;
+import { REACT_APP_API_URL } from '../utils/constants';
 
 export const getReactions = (): Promise<AxiosResponse> =>
-  axios.get(`${API}/api/reactions`);
+  axios.get(`${REACT_APP_API_URL}/api/reactions`);
 
 export const getWords = (): Promise<AxiosResponse> =>
-  axios.get(`${API}/api/words/scoop/3`);
-
-export const postChoice = (choice: any): Promise<AxiosResponse> =>
-  axios.post(`${API}/api/choice/`);
+  axios.get(`${REACT_APP_API_URL}/api/words/scoop/3`);
