@@ -292,6 +292,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
               label="Edit Name"
               register={register}
               onChange={handleChangeUsername}
+              autoFocus={true}
             />
             <button
               disabled={!usernameIsValid(props.username).valid}
