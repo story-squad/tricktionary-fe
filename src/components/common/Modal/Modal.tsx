@@ -13,7 +13,11 @@ const Modal = (props: ModalProps): React.ReactElement => {
               <p>{message}</p>
               <div className="modal-buttons">
                 <button onClick={handleConfirm}>Okay</button>
-                <button onClick={handleCancel}>Cancel</button>
+                {handleCancel ? (
+                  <button onClick={handleCancel}>Cancel</button>
+                ) : (
+                  <button disabled>Cancel</button>
+                )}
               </div>
             </div>
           </div>
@@ -31,5 +35,5 @@ interface ModalProps {
   message: string;
   header: string;
   handleConfirm: () => void | (() => (args: unknown) => void);
-  handleCancel: () => void | (() => (args: unknown) => void);
+  handleCancel?: () => void | (() => (args: unknown) => void);
 }
