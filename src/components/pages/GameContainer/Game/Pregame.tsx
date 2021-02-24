@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { getWords } from '../../../../api/apiRequests';
 import { useLocalStorage } from '../../../../hooks';
@@ -14,6 +15,7 @@ import { WordItem } from '../../../../types/gameTypes';
 import { hasMinimumPlayers } from '../../../../utils/helpers';
 import { usernameIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
+import { Input } from '../../../common/Input';
 import { Player } from '../../../common/Player';
 import { PlayerList } from '../Game';
 
@@ -39,6 +41,18 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     return wordSelection.filter((word) => word.id === choice)[0];
   };
 
+  //set up the form details
+  const {
+    register,
+    handleSubmit,
+    errors,
+    setError,
+    clearErrors,
+    getValues,
+    watch,
+  } = useForm({
+    mode: 'onSubmit',
+  });
   useEffect(() => {
     // Get 3 word suggestions automatically
     handleGetWords();
@@ -113,6 +127,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.handleSetUsername(e.target.value);
+    const message = usernameIsValid(e.target.value).message;
+    if (usernameIsValid(e.target.value).valid) {
+      clearErrors();
+    }
+    if (!usernameIsValid(e.target.value).valid) {
+      setError('form', { type: 'manual', message });
+    }
   };
 
   const handleSubmitUsername = (e: React.MouseEvent) => {
@@ -264,15 +285,17 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         )}{' '}
         {showEditName && (
           <form className="edit-name-form">
-            <label htmlFor="edit-name">Edit Name</label>
-            <input
-              id="edit-name"
-              name="edit-name"
+            {errors.form && <div>{errors.form.message}</div>}
+            <Input
+              id="username"
+              name="username"
               value={props.username}
+              label="Edit Name"
+              register={register}
               onChange={handleChangeUsername}
-            ></input>
+            />
             <button
-              disabled={!usernameIsValid(props.username)}
+              disabled={!usernameIsValid(props.username).valid}
               onClick={handleSubmitUsername}
             >
               Confirm

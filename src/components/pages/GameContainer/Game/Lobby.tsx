@@ -1,16 +1,34 @@
 import jwt from 'jsonwebtoken';
 import React, { SetStateAction, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import { useLocalStorage } from '../../../../hooks';
 import '../../../../styles/components/pages/Lobby.scss';
 //styles
 import '../../../../styles/gameContainer.scss';
 import { DecodedToken } from '../../../../types/commonTypes';
-import { usernameIsValid } from '../../../../utils/validation';
+import {
+  lobbyCodeIsValid,
+  usernameIsValid,
+} from '../../../../utils/validation';
+import { Input } from '../../../common/Input';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
   const [token] = useLocalStorage<string>('token', '');
+
+  //set up the form details
+  const {
+    register,
+    handleSubmit,
+    errors,
+    setError,
+    clearErrors,
+    getValues,
+    watch,
+  } = useForm({
+    mode: 'onSubmit',
+  });
 
   // Join a game if the lobbyCode is provided in the URL
   useEffect(() => {
@@ -27,10 +45,24 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.handleSetUsername(e.target.value);
+    const message = usernameIsValid(e.target.value).message;
+    if (usernameIsValid(e.target.value).valid) {
+      clearErrors();
+    }
+    if (!usernameIsValid(e.target.value).valid) {
+      setError('form', { type: 'manual', message });
+    }
   };
 
   const handleChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.setLobbyCode(e.target.value.toUpperCase());
+    const message = lobbyCodeIsValid(e.target.value).message;
+    if (lobbyCodeIsValid(e.target.value).valid) {
+      clearErrors();
+    }
+    if (!lobbyCodeIsValid(e.target.value).valid) {
+      setError('form', { type: 'manual', message });
+    }
   };
 
   return (
@@ -40,15 +72,17 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         Please enter your name and lobby code to join a game or you can host a
         new game.
       </p>
-      <label htmlFor="username">First Name:</label>
-      <input
-        id="username"
-        name="username"
-        value={props.username}
-        onChange={handleChangeUsername}
-      />
       <br />
       <form className="start-game">
+        {errors.form && <div>{errors.form.message}</div>}
+        <Input
+          id="username"
+          name="username"
+          value={props.username}
+          label="First Name"
+          register={register}
+          onChange={handleChangeUsername}
+        />
         <label htmlFor="lobby-code">Lobby Code</label>
         <input
           id="lobby-code"
@@ -62,7 +96,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         <button
           className="join lobby-button"
           onClick={(e) => props.handleJoinLobby(e, '')}
-          disabled={!usernameIsValid(props.username)}
+          disabled={!usernameIsValid(props.username).valid}
         >
           Join Lobby
         </button>
@@ -70,7 +104,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         <button
           className="host lobby-button"
           onClick={props.handleCreateLobby}
-          disabled={!usernameIsValid(props.username)}
+          disabled={!usernameIsValid(props.username).valid}
         >
           Host New Game
         </button>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
 import { lobbyState, playerIdState } from '../../../../state';
 import { MAX_SECONDS } from '../../../../utils/constants';
 import { definitionIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
+import { Input } from '../../../common/Input';
 import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
 import Timer from '../../../common/Timer/Timer';
@@ -18,6 +20,19 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const [useTimer, setUseTimer] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
   const playerId = useRecoilValue(playerIdState);
+
+  //set up the form details
+  const {
+    register,
+    // handleSubmit,
+    errors,
+    setError,
+    clearErrors,
+    getValues,
+    watch,
+  } = useForm({
+    mode: 'onSubmit',
+  });
 
   // Put time on the timer
   useEffect(() => {
@@ -55,6 +70,13 @@ const Writing = (props: WritingProps): React.ReactElement => {
 
   const handleChangeDefinition = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDefinition(e.target.value);
+    const message = definitionIsValid(e.target.value).message;
+    if (definitionIsValid(e.target.value).valid) {
+      clearErrors();
+    }
+    if (!definitionIsValid(e.target.value).valid) {
+      setError('form', { type: 'manual', message });
+    }
   };
 
   const handleAddTime = (time: number, add: number) => {
@@ -170,16 +192,20 @@ const Writing = (props: WritingProps): React.ReactElement => {
                 definition.
               </p>
             )}
-            <input
-              disabled={timerDone}
+            {errors.form && <div>{errors.form.message}</div>}
+            <Input
               id="definition"
               name="definition"
-              type="textfield"
               value={definition}
+              label="definition"
+              register={register}
               onChange={handleChangeDefinition}
+              disabled={timerDone}
             />
             <br />
-            <button disabled={!definitionIsValid(definition)}>Submit</button>
+            <button disabled={!definitionIsValid(definition).valid}>
+              Submit
+            </button>
           </form>
         )}
         {isSubmitted && (
