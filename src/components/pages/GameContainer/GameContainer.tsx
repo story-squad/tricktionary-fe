@@ -360,6 +360,7 @@ const GameContainer = (): React.ReactElement => {
   return (
     <div className="game-container">
       <Modal
+        header={'Before You Go...'}
         message={'Would you like to leave the current game?'}
         handleConfirm={resetGame}
         handleCancel={() => setShowLeaveModal(false)}

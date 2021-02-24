@@ -156,6 +156,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
                   handleSetHost={handleSetHost}
                 />
                 <Modal
+                  header={'Host Changed'}
                   message={'You are now the Host.'}
                   visible={showNewHostModal}
                   handleConfirm={() => setShowNewHostModal(false)}

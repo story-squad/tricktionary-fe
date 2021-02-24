@@ -197,6 +197,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           </div>
         )}
         <Modal
+          header={'Continue?'}
           message={`You haven't selected a guess for every player. Continue anyway?`}
           handleConfirm={() => handleSubmitGuesses(guesses)}
           handleCancel={() => setShowModal(false)}

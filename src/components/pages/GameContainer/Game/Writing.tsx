@@ -151,6 +151,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
           )}
         </div>
         <Modal
+          header={'Continue?'}
           message={modalMessage()}
           handleConfirm={() => props.handleSetPhase('GUESSING')}
           handleCancel={() => setShowModal(false)}
