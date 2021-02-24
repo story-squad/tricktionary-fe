@@ -12,7 +12,9 @@ const Modal = (props: ModalProps): React.ReactElement => {
               <h2>{header}</h2>
               <p>{message}</p>
               <div className="modal-buttons">
-                <button onClick={handleConfirm}>Okay</button>
+                <button onClick={handleConfirm} autoFocus={true}>
+                  Okay
+                </button>
                 {handleCancel ? (
                   <button onClick={handleCancel}>Cancel</button>
                 ) : (
