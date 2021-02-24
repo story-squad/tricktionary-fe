@@ -34,7 +34,7 @@ const getSortedDefinitions = (
   });
   // Add real definition
   definitions[0] = {
-    username: 'Real Definition',
+    username: `Real Definition for ${lobbyData.word}`,
     playerId: '0',
     definition: lobbyData.definition,
     definitionId: 0,
