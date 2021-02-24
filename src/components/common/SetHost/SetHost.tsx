@@ -27,7 +27,7 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
   };
 
   const handleOnClick = () => {
-    if (connectedOtherPlayers().length > 1) {
+    if (connectedOtherPlayers().length > 0) {
       props.handleSetHost(chosenPlayer, guesses as GuessItem[]);
     } else {
       setShowModal(false);
@@ -46,7 +46,7 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
         <div className="modal">
           <div className="modal-content">
             <h2>Change Hosts</h2>
-            {connectedOtherPlayers().length > 1 ? (
+            {connectedOtherPlayers().length > 0 ? (
               <>
                 <p>Click on a name to give them hosting power!</p>
                 <select
