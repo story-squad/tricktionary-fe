@@ -276,14 +276,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       </Host>
       <Player>
         <h2>Waiting for your team to join...</h2>
-        {!showEditName && (
+        {!showEditName ? (
           <div className="edit-name-block">
             <button className="sm-btn" onClick={() => setShowEditName(true)}>
               Edit Name
             </button>
           </div>
-        )}{' '}
-        {showEditName && (
+        ) : (
           <form className="edit-name-form">
             {errors.form && <div>{errors.form.message}</div>}
             <Input
