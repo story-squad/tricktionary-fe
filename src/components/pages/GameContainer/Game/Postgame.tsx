@@ -202,7 +202,9 @@ const DefinitionResult = (props: DefinitionResultProps): React.ReactElement => {
               <span className="result-username">{username} </span>
               <span>wrote:</span>
             </div>
-            <p className="result-votes">{points} votes</p>
+            <p className="result-votes">
+              {points} vote{points === 1 ? '' : 's'}
+            </p>
           </div>
           <p className="result-definition">{definition}</p>
           <p className="who-voted-p">
