@@ -9,6 +9,12 @@ export const definitionIsValid = (definition: string): any => {
       message:
         'Only the english alphabet, numbers, and punctuation allowed in the definition',
     };
+  } else if (definition.length >= 250) {
+    return {
+      valid: false,
+      message:
+        'your definition is too long. It must be less than 250 characters',
+    };
   } else {
     return { valid: true, message: '' };
   }
