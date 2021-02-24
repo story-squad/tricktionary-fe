@@ -11,6 +11,7 @@ import {
   playerGuessState,
   playerIdState,
   revealResultsState,
+  showNewHostModalState,
 } from '../../../state';
 import {
   DefinitionSelection,
@@ -41,6 +42,7 @@ const GameContainer = (): React.ReactElement => {
   const [token, setToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [time, setTime] = useState(-1);
+  const [, setShowNewHostModal] = useRecoilState(showNewHostModalState);
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
@@ -182,6 +184,7 @@ const GameContainer = (): React.ReactElement => {
 
     socket.on('welcome host', (guesses: GuessItem[]) => {
       setGuesses(guesses);
+      setShowNewHostModal(true);
     });
 
     socket.on('reveal results', (guesses: GuessItem[]) => {
@@ -226,7 +229,6 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handlePlayAgain = () => {
-    console.log('play again', lobbySettings, lobbyCode);
     socket.emit('play again', lobbySettings, lobbyCode);
   };
 
