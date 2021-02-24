@@ -202,6 +202,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
               register={register}
               onChange={handleChangeDefinition}
               disabled={timerDone}
+              autoFocus={true}
             />
             <br />
             <button disabled={!definitionIsValid(definition).valid}>
