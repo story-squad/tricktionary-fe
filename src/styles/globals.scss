@@ -65,8 +65,15 @@ $black: #000;
   background-color: $purpleblue;
 }
 
-.App > div:not(.modal-wrapper):not(.cookie-popup) {
+// Put footer at the bottom
+.App {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.App > div:not(.modal-wrapper):not(.cookie-popup) {
   background-color: $purpleblue;
   display: flex;
   flex-flow: column nowrap;
