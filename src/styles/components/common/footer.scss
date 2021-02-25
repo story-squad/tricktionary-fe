@@ -6,6 +6,9 @@ footer {
   padding: 2rem;
   background: $white;
 
+  @include large-below {
+    flex-direction: column;
+  }
   .flex-container {
     display: flex;
     height: 5rem;
