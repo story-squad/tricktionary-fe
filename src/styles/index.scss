@@ -1,17 +1,18 @@
 // Meyer CSS Reset
-@import './reset.css';
+@import "./reset.css";
 
 // Import Global Variables/Mixins
-@import './globals.scss';
-@import './mixins.scss';
+@import "./globals.scss";
+@import "./mixins.scss";
 
 // Google Font Imports
-@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Oswald:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bangers&family=Oswald:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 // Page Component Stylesheets
-@import './components/pages/landingPage.scss';
-@import './components//common/cookiePopup.scss';
+@import "./components/pages/landingPage.scss";
+@import "./components//common/cookiePopup.scss";
 
 // Common Component Stylesheets
-@import './general.scss';
-@import './components/common/header.scss';
+@import "./general.scss";
+@import "./components/common/header.scss";
+@import "./components/common/footer.scss";

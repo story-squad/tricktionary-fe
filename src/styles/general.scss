@@ -1,7 +1,19 @@
 // General styles across components
-// For testing, update later
 *:focus {
   outline: none;
+}
+
+//hide labels, from Manuel Matuzović:
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
 }
 
 h1,
