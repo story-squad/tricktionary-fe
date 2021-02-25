@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const Footer = (): React.ReactElement => {
   return (
@@ -7,9 +6,14 @@ const Footer = (): React.ReactElement => {
       <div className="top-left">
         <p>
           Brought to you by{' '}
-          <Link to="/" className="display-font">
+          <a
+            href="https://www.storysquad.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="display-font"
+          >
             Story Squad
-          </Link>
+          </a>
         </p>
         <p className="tagline">
           &quot;Human connection through creative expression.&quot;
