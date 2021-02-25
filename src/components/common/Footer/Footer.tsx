@@ -8,11 +8,8 @@ const Footer = (): React.ReactElement => {
         <p>Human connection through creative expression</p>
       </div>
       <div className="bottom-right">
-        <p>Sign up for email updates</p>
         <form id="email-update-form">
-          <label className="visually-hidden" htmlFor="email-input">
-            Email Subscription Sign Up
-          </label>
+          <label htmlFor="email-input">Sign up for email updates</label>
           <div className="flex-container">
             <input
               id="email-input"
