@@ -90,7 +90,12 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         });
         setChoice(0);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        props.setError(
+          'there was an issue while getting your words. Please try again',
+        );
+      });
   };
 
   const handleChoose = (id: number) => {
@@ -333,6 +338,7 @@ interface PregameProps {
   handleSetUsername: (newUsername: string) => void;
   username: string;
   handleUpdateUsername: (newUsername: string) => void;
+  setError: any;
 }
 
 interface WordChoiceProps {

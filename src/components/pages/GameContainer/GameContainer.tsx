@@ -42,6 +42,7 @@ const GameContainer = (): React.ReactElement => {
   const [token, setToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [time, setTime] = useState(-1);
+  const [error, setError] = useState('');
   const [, setShowNewHostModal] = useRecoilState(showNewHostModalState);
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
   const resetLobbyData = useResetRecoilState(lobbyState);
@@ -70,7 +71,7 @@ const GameContainer = (): React.ReactElement => {
 
   // For testing, DELETE later
   useEffect(() => {
-    console.log(lobbyData);
+    console.log('lobbydata', lobbyData);
   }, [lobbyData]);
 
   // Make a new socket connection after disconnecting
@@ -156,10 +157,19 @@ const GameContainer = (): React.ReactElement => {
 
     // Recieve API errors
     socket.on('error', (errorData: string) => {
-      console.log('error:');
       console.log(errorData);
-      if (errorData === 'cool it, hackerman.') {
+      setError(errorData);
+      if (
+        errorData ===
+        'The lobby code you entered does not correspond to an active room'
+      ) {
         history.push('/');
+      }
+      if (
+        errorData === 'The lobby code you entered is not long enough' &&
+        lobbyData.lobbyCode === ''
+      ) {
+        setError('');
       }
     });
 
@@ -312,6 +322,7 @@ const GameContainer = (): React.ReactElement => {
             username={username}
             handleSetUsername={handleSetUsername}
             handleUpdateUsername={handleUpdateUsername}
+            setError={setError}
           />
         );
       case 'WRITING':
@@ -374,6 +385,7 @@ const GameContainer = (): React.ReactElement => {
           to={`/${lobbyData.lobbyCode}`}
         />
       )}
+      {error && <div>{error}</div>}
       <div className="game-styles">{currentPhase()}</div>
     </div>
   );
