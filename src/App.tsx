@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { CookiePopup } from './components/common/CookiePopup';
+import { Footer } from './components/common/Footer';
 import { GameContainer } from './components/pages/GameContainer';
 
 const App = (): React.ReactElement => {
@@ -10,6 +11,7 @@ const App = (): React.ReactElement => {
       <Switch>
         <Route path="/" component={GameContainer} />
       </Switch>
+      <Footer />
     </div>
   );
 };
