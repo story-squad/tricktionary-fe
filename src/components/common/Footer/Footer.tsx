@@ -10,16 +10,18 @@ const Footer = (): React.ReactElement => {
       <div className="bottom-right">
         <p>Sign up for email updates</p>
         <form id="email-update-form">
-          <label className="hidden-label" htmlFor="email-input">
+          <label className="visually-hidden" htmlFor="email-input">
             Email Subscription Sign Up
           </label>
-          <input
-            id="email-input"
-            name="email-input"
-            type="email"
-            placeholder="Your Email"
-          />
-          <button>Sign Up</button>
+          <div className="flex-container">
+            <input
+              id="email-input"
+              name="email-input"
+              type="email"
+              placeholder="Your Email"
+            />
+            <button>Sign Up</button>
+          </div>
           <p className="email-disclaimer">
             You can opt out of your email subscription at any time.
           </p>
