@@ -1,11 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = (): React.ReactElement => {
   return (
     <footer>
       <div className="top-left">
-        <p>Brought to you by StorySquad</p>
-        <p>Human connection through creative expression</p>
+        <p>
+          Brought to you by{' '}
+          <Link to="/" className="display-font">
+            Story Squad
+          </Link>
+        </p>
+        <p className="tagline">
+          &quot;Human connection through creative expression.&quot;
+        </p>
       </div>
       <div className="bottom-right">
         <form id="email-update-form">
