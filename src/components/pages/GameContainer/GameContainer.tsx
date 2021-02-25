@@ -20,7 +20,7 @@ import {
   PlayerItem,
 } from '../../../types/gameTypes';
 import { MAX_SECONDS, REACT_APP_API_URL } from '../../../utils/constants';
-import { randomUsername } from '../../../utils/helpers';
+import { errorCodeChecker, randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
 import { Modal } from '../../common/Modal';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
@@ -69,10 +69,10 @@ const GameContainer = (): React.ReactElement => {
     }
   }, [lobbyData]);
 
-  // For testing, DELETE later
-  useEffect(() => {
-    console.log('lobbydata', lobbyData);
-  }, [lobbyData]);
+  // // For testing, DELETE later
+  // useEffect(() => {
+  //   console.log('lobbydata', lobbyData);
+  // }, [lobbyData]);
 
   // Make a new socket connection after disconnecting
   useEffect(() => {
@@ -156,19 +156,16 @@ const GameContainer = (): React.ReactElement => {
     });
 
     // Recieve API errors
-    socket.on('error', (errorData: string) => {
-      console.log(errorData);
+    socket.on('error', (code: number, errorData: string) => {
+      const devMessage = errorCodeChecker(code);
+      console.log(
+        `You have received development error code ${code} ${devMessage}`,
+      );
       setError(errorData);
-      if (
-        errorData ===
-        'The lobby code you entered does not correspond to an active room'
-      ) {
+      if (code === 2000) {
         history.push('/');
       }
-      if (
-        errorData === 'The lobby code you entered is not long enough' &&
-        lobbyData.lobbyCode === ''
-      ) {
+      if (code === 2000 && lobbyData.lobbyCode === '') {
         setError('');
       }
     });
