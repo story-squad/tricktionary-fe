@@ -34,25 +34,28 @@ const Finale = (): React.ReactElement => {
   }, [lobbyData]);
 
   return (
-    <div className="postgame game-page">
-      {topPlayers.second.username !== undefined && (
-        <div className="example-podium second-place">
-          <p>{topPlayers.second.username}</p>
-          <p>{topPlayers.second.definition}</p>
-        </div>
-      )}
-      {topPlayers.first.username !== undefined && (
-        <div className="example-podium first-place">
-          <p>{topPlayers.first.username}</p>
-          <p>{topPlayers.first.definition}</p>
-        </div>
-      )}
-      {topPlayers.third.username !== undefined && (
-        <div className="example-podium third-place">
-          <p>{topPlayers.third.username}</p>
-          <p>{topPlayers.third.definition}</p>
-        </div>
-      )}
+    <div className="finale game-page">
+      <div className="place-bars">
+        {topPlayers.second.username !== undefined && (
+          <div className="example-podium second-place">
+            <p>{topPlayers.second.username}</p>
+            <p>{topPlayers.second.definition}</p>
+          </div>
+        )}
+        {topPlayers.first.username !== undefined && (
+          <div className="example-podium first-place">
+            <p>{topPlayers.first.username}</p>
+            <p>{topPlayers.first.definition}</p>
+          </div>
+        )}
+        {topPlayers.third.username !== undefined && (
+          <div className="example-podium third-place">
+            <p>{topPlayers.third.username}</p>
+            <p>{topPlayers.third.definition}</p>
+          </div>
+        )}
+      </div>
+      <div className="podium">&nbsp;</div>
     </div>
   );
 };

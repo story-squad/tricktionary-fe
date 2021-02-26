@@ -146,10 +146,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
           ) : (
             // After reveal
             <div className="after-reveal">
-              <button className="play-again" onClick={handlePlayAgain}>
-                Play Again
-              </button>
-              <div>
+              <div className="after-container">
                 <button onClick={handleSetFinale}>Go to Finale</button>
                 <SetHost
                   players={lobbyData.players}
@@ -162,6 +159,9 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
                   handleConfirm={() => setShowNewHostModal(false)}
                 />
               </div>
+              <button className="play-again" onClick={handlePlayAgain}>
+                Play Again
+              </button>
             </div>
           )}
         </div>
