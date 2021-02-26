@@ -9,3 +9,5 @@ export const LARGE_GAME_MINIMUM_PLAYERS =
   Number(process.env.LARGE_GAME_MINIMUM_PLAYERS) || 9;
 // Number of players required to start a game. Set to 0 for testing
 export const MINIMUM_PLAYERS = Number(process.env.MINIMUM_PLAYERS) || 0;
+export const MAX_DEFINITION_LENGTH =
+  Number(process.env.MAX_DEFINITION_LENGTH) || 250;

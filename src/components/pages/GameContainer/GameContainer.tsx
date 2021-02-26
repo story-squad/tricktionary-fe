@@ -20,7 +20,7 @@ import {
   PlayerItem,
 } from '../../../types/gameTypes';
 import { MAX_SECONDS, REACT_APP_API_URL } from '../../../utils/constants';
-import { randomUsername } from '../../../utils/helpers';
+import { errorCodeChecker, randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
 import { Modal } from '../../common/Modal';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
@@ -42,6 +42,7 @@ const GameContainer = (): React.ReactElement => {
   const [token, setToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [time, setTime] = useState(-1);
+  const [error, setError] = useState('');
   const [, setShowNewHostModal] = useRecoilState(showNewHostModalState);
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
   const resetLobbyData = useResetRecoilState(lobbyState);
@@ -68,10 +69,10 @@ const GameContainer = (): React.ReactElement => {
     }
   }, [lobbyData]);
 
-  // For testing, DELETE later
-  useEffect(() => {
-    console.log(lobbyData);
-  }, [lobbyData]);
+  // // For testing, DELETE later
+  // useEffect(() => {
+  //   console.log('lobbydata', lobbyData);
+  // }, [lobbyData]);
 
   // Make a new socket connection after disconnecting
   useEffect(() => {
@@ -155,11 +156,17 @@ const GameContainer = (): React.ReactElement => {
     });
 
     // Recieve API errors
-    socket.on('error', (errorData: string) => {
-      console.log('error:');
-      console.log(errorData);
-      if (errorData === 'cool it, hackerman.') {
+    socket.on('error', (code: number, errorData: string) => {
+      const devMessage = errorCodeChecker(code);
+      console.log(
+        `You have received development error code ${code} ${devMessage}`,
+      );
+      setError(errorData);
+      if (code === 2000) {
         history.push('/');
+      }
+      if (code === 2000 && lobbyData.lobbyCode === '') {
+        setError('');
       }
     });
 
@@ -312,6 +319,7 @@ const GameContainer = (): React.ReactElement => {
             username={username}
             handleSetUsername={handleSetUsername}
             handleUpdateUsername={handleUpdateUsername}
+            setError={setError}
           />
         );
       case 'WRITING':
@@ -374,6 +382,7 @@ const GameContainer = (): React.ReactElement => {
           to={`/${lobbyData.lobbyCode}`}
         />
       )}
+      {error && <div>{error}</div>}
       <div className="game-styles">{currentPhase()}</div>
     </div>
   );
