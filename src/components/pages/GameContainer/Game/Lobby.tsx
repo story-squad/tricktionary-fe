@@ -45,23 +45,39 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.handleSetUsername(e.target.value);
-    const message = usernameIsValid(e.target.value).message;
+    const lobbyMessage = lobbyCodeIsValid(props.lobbyCode).message;
+    const userMessage = usernameIsValid(e.target.value).message;
     if (usernameIsValid(e.target.value).valid) {
-      clearErrors();
+      if (lobbyCodeIsValid(props.lobbyCode).valid) {
+        //if both the username and lobbycode are valid then clear the form error
+        clearErrors();
+      } else {
+        //if the username is good and the lobbycode is invalid then use the lobbycode error
+        setError('form', { type: 'manual', message: lobbyMessage });
+      }
     }
     if (!usernameIsValid(e.target.value).valid) {
-      setError('form', { type: 'manual', message });
+      //if the username is invalid use the username error
+      setError('form', { type: 'manual', message: userMessage });
     }
   };
 
   const handleChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.setLobbyCode(e.target.value.toUpperCase());
-    const message = lobbyCodeIsValid(e.target.value).message;
+    const lobbyMessage = lobbyCodeIsValid(e.target.value).message;
+    const userMessage = usernameIsValid(props.username).message;
     if (lobbyCodeIsValid(e.target.value).valid) {
-      clearErrors();
+      if (usernameIsValid(props.username).valid) {
+        //if both the username and lobbycode are valid then clear the form error
+        clearErrors();
+      } else {
+        //if the lobby is good and the username is invalid use the username error
+        setError('form', { type: 'manual', message: userMessage });
+      }
     }
     if (!lobbyCodeIsValid(e.target.value).valid) {
-      setError('form', { type: 'manual', message });
+      //if the username is good and the lobbycode is invalid then use the lobbycode error
+      setError('form', { type: 'manual', message: lobbyMessage });
     }
   };
 
@@ -74,7 +90,6 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
       </p>
       <br />
       <form className="start-game">
-        {errors.form && <div>{errors.form.message}</div>}
         <Input
           id="username"
           name="username"
@@ -93,6 +108,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
           placeholder="Enter lobby code to join a game!"
         />
         <br />
+        {errors.form && <p>{errors.form.message}</p>}
         <button
           className="join lobby-button"
           onClick={(e) => props.handleJoinLobby(e, '')}
