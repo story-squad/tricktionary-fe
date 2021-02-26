@@ -10,7 +10,9 @@ import {
   HandleSelectGuessParams,
   PlayerItem,
 } from '../../../../types/gameTypes';
+import { MAX_NOTES_LENGTH } from '../../../../utils/constants';
 import { isLargeGame } from '../../../../utils/helpers';
+import { CharCounter } from '../../../common/CharCounter';
 import { Host } from '../../../common/Host';
 import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
@@ -67,6 +69,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   );
   const [showModal, setShowModal] = useState(false);
   const [showGuesses, setShowGuesses] = useState(false);
+  const [notes, setNotes] = useState('');
 
   const allPlayersHaveGuessed = () => {
     let all = true;
@@ -225,7 +228,14 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         </div>
         <div className="notes">
           <h3>Listen to the definitions. Take some notes:</h3>
-          <textarea maxLength={100} />
+          <div className="char-counter-wrapper max-width-35-center">
+            <textarea
+              maxLength={MAX_NOTES_LENGTH}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+            <CharCounter string={notes} max={MAX_NOTES_LENGTH} />
+          </div>
         </div>
         <div className="player-display">
           <h2 className="player-h2">Players</h2>

@@ -7,10 +7,12 @@ import '../../../../styles/components/pages/Lobby.scss';
 //styles
 import '../../../../styles/gameContainer.scss';
 import { DecodedToken } from '../../../../types/commonTypes';
+import { MAX_USERNAME_LENGTH } from '../../../../utils/constants';
 import {
   lobbyCodeIsValid,
   usernameIsValid,
 } from '../../../../utils/validation';
+import { CharCounter } from '../../../common/CharCounter';
 import { Input } from '../../../common/Input';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
@@ -90,14 +92,18 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
       </p>
       <br />
       <form className="start-game">
-        <Input
-          id="username"
-          name="username"
-          value={props.username}
-          label="First Name"
-          register={register}
-          onChange={handleChangeUsername}
-        />
+        <div className="char-counter-wrapper">
+          <Input
+            id="username"
+            name="username"
+            value={props.username}
+            label="First Name"
+            register={register}
+            onChange={handleChangeUsername}
+            maxLength={MAX_USERNAME_LENGTH}
+          />
+          <CharCounter string={props.username} max={MAX_USERNAME_LENGTH} />
+        </div>
         <label htmlFor="lobby-code">Lobby Code</label>
         <input
           id="lobby-code"
