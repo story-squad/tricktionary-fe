@@ -10,9 +10,10 @@
 
 // Page Component Stylesheets
 @import "./components/pages/landingPage.scss";
-@import "./components//common/cookiePopup.scss";
 
 // Common Component Stylesheets
 @import "./general.scss";
 @import "./components/common/header.scss";
 @import "./components/common/footer.scss";
+@import "./components/common/charCounter.scss";
+@import "./components/common/cookiePopup.scss";
