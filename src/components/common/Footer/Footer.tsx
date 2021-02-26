@@ -1,4 +1,5 @@
 import React from 'react';
+import { EmailInput } from '../EmailInput';
 
 const Footer = (): React.ReactElement => {
   return (
@@ -20,20 +21,12 @@ const Footer = (): React.ReactElement => {
         </p>
       </div>
       <div className="bottom-right">
+        <p className="email-disclaimer">Get email updates from Story Squad</p>
         <form id="email-update-form">
-          <label htmlFor="email-input">Sign up for email updates</label>
+          {/* <label htmlFor="email-input">Sign up for email updates</label> */}
           <div className="flex-container">
-            <input
-              id="email-input"
-              name="email-input"
-              type="email"
-              placeholder="Your Email"
-            />
-            <button>Sign Up</button>
+            <EmailInput />
           </div>
-          <p className="email-disclaimer">
-            You can opt out of your email subscription at any time.
-          </p>
         </form>
       </div>
     </footer>
