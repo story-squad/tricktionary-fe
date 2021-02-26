@@ -75,3 +75,7 @@ $black: #000;
   display: flex;
   flex-flow: column nowrap;
 }
+
+textarea {
+  font-family: $text-font;
+}

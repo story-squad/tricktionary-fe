@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
 import { lobbyState, playerIdState } from '../../../../state';
-import { MAX_SECONDS } from '../../../../utils/constants';
+import {
+  MAX_DEFINITION_LENGTH,
+  MAX_SECONDS,
+} from '../../../../utils/constants';
 import { definitionIsValid } from '../../../../utils/validation';
+import { CharCounter } from '../../../common/CharCounter';
 import { Host } from '../../../common/Host';
 import { Input } from '../../../common/Input';
 import { Modal } from '../../../common/Modal';
@@ -194,16 +198,20 @@ const Writing = (props: WritingProps): React.ReactElement => {
               </p>
             )}
             {errors.form && <div>{errors.form.message}</div>}
-            <Input
-              id="definition"
-              name="definition"
-              value={definition}
-              label="definition"
-              register={register}
-              onChange={handleChangeDefinition}
-              disabled={timerDone}
-              autoFocus={true}
-            />
+            <div className="char-counter-wrapper higher">
+              <Input
+                id="definition"
+                name="definition"
+                value={definition}
+                label="definition"
+                register={register}
+                onChange={handleChangeDefinition}
+                disabled={timerDone}
+                autoFocus={true}
+                maxLength={MAX_DEFINITION_LENGTH}
+              />
+              <CharCounter string={definition} max={MAX_DEFINITION_LENGTH} />
+            </div>
             <br />
             <button disabled={!definitionIsValid(definition).valid}>
               Submit
