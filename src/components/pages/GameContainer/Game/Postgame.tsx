@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useLocalStorage } from '../../../../hooks';
 import {
   lobbyState,
   playerGuessState,
   revealResultsState,
+  showNewHostModalState,
 } from '../../../../state';
 import { GuessItem, LobbyData, PlayerItem } from '../../../../types/gameTypes';
 import { Host } from '../../../common/Host';
+import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
-import SetHost from '../../../common/SetHost/SetHost';
+import { SetHost } from '../../../common/SetHost';
 import { PlayerList } from '../Game';
 
 // Create a list of definitions, attach players who guessed for each, calculate point gains (UI only), add real definiton to the end
@@ -34,7 +36,7 @@ const getSortedDefinitions = (
   });
   // Add real definition
   definitions[0] = {
-    username: 'Real Definition',
+    username: `Real Definition for ${lobbyData.word}`,
     playerId: '0',
     definition: lobbyData.definition,
     definitionId: 0,
@@ -82,6 +84,9 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     handleSetFinale,
   } = props;
   const resetGuess = useResetRecoilState(playerGuessState);
+  const [showNewHostModal, setShowNewHostModal] = useRecoilState(
+    showNewHostModalState,
+  );
   const lobbyData = useRecoilValue(lobbyState);
   const revealResults = useRecoilValue(revealResultsState);
   const [playerDict] = useState<PlayerDictionary>(
@@ -91,6 +96,11 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   const [sortedDefinitions, setSortedDefinitions] = useState<
     DefinitionResultItem[]
   >(getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict));
+
+  //DELETE
+  useEffect(() => {
+    console.log(showNewHostModal);
+  }, [showNewHostModal]);
 
   // Reset player's guess for next round
   useEffect(() => {
@@ -141,6 +151,12 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
                 <SetHost
                   players={lobbyData.players}
                   handleSetHost={handleSetHost}
+                />
+                <Modal
+                  header={'Host Changed'}
+                  message={'You are now the Host.'}
+                  visible={showNewHostModal}
+                  handleConfirm={() => setShowNewHostModal(false)}
                 />
               </div>
               <button className="play-again" onClick={handlePlayAgain}>
@@ -202,7 +218,9 @@ const DefinitionResult = (props: DefinitionResultProps): React.ReactElement => {
               <span className="result-username">{username} </span>
               <span>wrote:</span>
             </div>
-            <p className="result-votes">{points} votes</p>
+            <p className="result-votes">
+              {points} vote{points === 1 ? '' : 's'}
+            </p>
           </div>
           <p className="result-definition">{definition}</p>
           <p className="who-voted-p">
