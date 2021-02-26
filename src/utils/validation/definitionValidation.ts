@@ -16,6 +16,11 @@ export const definitionIsValid = (definition: string): any => {
       message:
         'your definition is too long. It must be less than 250 characters',
     };
+  } else if (definition.length < 1) {
+    return {
+      valid: false,
+      message: '',
+    };
   } else {
     return { valid: true, message: '' };
   }
