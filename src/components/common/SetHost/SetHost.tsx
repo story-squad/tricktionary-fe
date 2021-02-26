@@ -17,7 +17,7 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
 
   // Update players list on props.players update
   useEffect(() => {
-    if (props.players.length > 1) {
+    if (props.players.length >= 1) {
       setChosenPlayer(connectedOtherPlayers()[0]?.id);
     }
   }, [props.players]);
@@ -27,7 +27,7 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
   };
 
   const handleOnClick = () => {
-    if (connectedOtherPlayers().length > 1) {
+    if (connectedOtherPlayers().length >= 1) {
       props.handleSetHost(chosenPlayer, guesses as GuessItem[]);
     } else {
       setShowModal(false);
@@ -46,11 +46,11 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
         <div className="modal">
           <div className="modal-content">
             <h2>Change Hosts</h2>
-            {connectedOtherPlayers().length > 1 ? (
+            {connectedOtherPlayers().length >= 1 ? (
               <>
                 <p>Click on a name to give them hosting power!</p>
                 <select
-                  className="players"
+                  className="host-dropdown"
                   name="players-select"
                   id="players-select"
                   onChange={handleSetChosenPlayer}

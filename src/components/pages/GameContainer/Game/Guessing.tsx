@@ -223,7 +223,8 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           )}
         </div>
         <div className="notes">
-          <h3>Listen to the definitions. Take some notes:</h3>
+          <h3>Listen to the definitions.</h3>
+          <p>Take some notes!</p>
           <textarea maxLength={100} />
         </div>
         <div className="player-display">
