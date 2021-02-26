@@ -207,10 +207,14 @@ a {
     margin-bottom: 8px;
     padding: 16px 8px 16px 8px;
     box-shadow: $boxshadow;
+
     p {
       margin-bottom: 0;
       @include mid-below {
         text-align: left;
+      }
+      &:last-of-type {
+        word-break: break-word;
       }
     }
     .definition-content {
@@ -234,6 +238,7 @@ a {
         margin: auto;
         font-family: $display-font;
         color: $red;
+        word-break: unset;
       }
     }
   }
@@ -377,6 +382,7 @@ a {
   .result-definition {
     background-color: #f7fbff;
     padding: 1.6rem 1.6rem 1.6rem 1.6rem;
+    word-wrap: break-word;
   }
   .result-username {
     color: $charcoal;
@@ -530,6 +536,7 @@ a {
   border: 1px solid black;
   border-radius: 8px;
   margin-bottom: 16px;
+  word-wrap: break-word;
 
   h3 {
     margin-top: 0;
@@ -648,6 +655,7 @@ a {
 .show-guess {
   p.guess-choice {
     text-align: center;
+    word-wrap: break-word;
   }
 }
 
