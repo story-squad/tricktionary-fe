@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useForm } from 'react-hook-form';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { getWords } from '../../../../api/apiRequests';
 import { useLocalStorage } from '../../../../hooks';
 import {
   hostChoiceState,
   lobbySettingsState,
   lobbyState,
+  revealResultsState,
 } from '../../../../state';
 //styles
 import '../../../../styles/components/pages/Pregame.scss';
 import { WordItem } from '../../../../types/gameTypes';
+import { hasMinimumPlayers } from '../../../../utils/helpers';
 import { usernameIsValid } from '../../../../utils/validation';
 import { Host } from '../../../common/Host';
+import { Input } from '../../../common/Input';
 import { Player } from '../../../common/Player';
 import { PlayerList } from '../Game';
 
@@ -25,22 +29,36 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [showEditName, setShowEditName] = useState(false);
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
   const lobbySettings = useRecoilValue(lobbySettingsState);
+  const [hostChoice, setHostChoice] = useRecoilState(hostChoiceState);
   const lobbyData = useRecoilValue(lobbyState);
   const [, setGuesses] = useLocalStorage('guesses', []);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
   );
-  const [hostChoice, setHostChoice] = useRecoilState(hostChoiceState);
+  const resetRevealResults = useResetRecoilState(revealResultsState);
 
   const getCurrentWord = () => {
     return wordSelection.filter((word) => word.id === choice)[0];
   };
 
+  //set up the form details
+  const {
+    register,
+    handleSubmit,
+    errors,
+    setError,
+    clearErrors,
+    getValues,
+    watch,
+  } = useForm({
+    mode: 'onSubmit',
+  });
   useEffect(() => {
     // Get 3 word suggestions automatically
     handleGetWords();
-    // Reset guesses array from previous game
+    // Reset previous game states
     setGuesses([]);
+    resetRevealResults();
   }, []);
 
   // Clear choice/input when switching between word selection type
@@ -72,7 +90,12 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         });
         setChoice(0);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        props.setError(
+          'there was an issue while getting your words. Please try again',
+        );
+      });
   };
 
   const handleChoose = (id: number) => {
@@ -109,6 +132,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.handleSetUsername(e.target.value);
+    const message = usernameIsValid(e.target.value).message;
+    if (usernameIsValid(e.target.value).valid) {
+      clearErrors();
+    }
+    if (!usernameIsValid(e.target.value).valid) {
+      setError('form', { type: 'manual', message });
+    }
   };
 
   const handleSubmitUsername = (e: React.MouseEvent) => {
@@ -172,6 +202,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <button
               className="start-btn center"
               onClick={props.handleStartGame}
+              disabled={!hasMinimumPlayers(lobbyData.players)}
             >
               Start Game!
             </button>
@@ -250,24 +281,26 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       </Host>
       <Player>
         <h2>Waiting for your team to join...</h2>
-        {!showEditName && (
+        {!showEditName ? (
           <div className="edit-name-block">
             <button className="sm-btn" onClick={() => setShowEditName(true)}>
               Edit Name
             </button>
           </div>
-        )}{' '}
-        {showEditName && (
+        ) : (
           <form className="edit-name-form">
-            <label htmlFor="edit-name">Edit Name</label>
-            <input
-              id="edit-name"
-              name="edit-name"
+            {errors.form && <div>{errors.form.message}</div>}
+            <Input
+              id="username"
+              name="username"
               value={props.username}
+              label="Edit Name"
+              register={register}
               onChange={handleChangeUsername}
-            ></input>
+              autoFocus={true}
+            />
             <button
-              disabled={!usernameIsValid(props.username)}
+              disabled={!usernameIsValid(props.username).valid}
               onClick={handleSubmitUsername}
             >
               Confirm
@@ -305,6 +338,7 @@ interface PregameProps {
   handleSetUsername: (newUsername: string) => void;
   username: string;
   handleUpdateUsername: (newUsername: string) => void;
+  setError: any;
 }
 
 interface WordChoiceProps {

@@ -10,19 +10,28 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [chosenPlayer, setChosenPlayer] = useState<string>('');
 
+  const connectedOtherPlayers = () =>
+    props.players.filter(
+      (player) => player.id !== playerId && player.connected,
+    );
+
   // Update players list on props.players update
   useEffect(() => {
-    if (props.players.length > 1) {
-      setChosenPlayer(
-        props.players.filter(
-          (player) => player.id !== playerId && player.connected,
-        )[0]?.id,
-      );
+    if (props.players.length >= 1) {
+      setChosenPlayer(connectedOtherPlayers()[0]?.id);
     }
   }, [props.players]);
 
   const handleSetChosenPlayer = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setChosenPlayer(e.target.value);
+  };
+
+  const handleOnClick = () => {
+    if (connectedOtherPlayers().length >= 1) {
+      props.handleSetHost(chosenPlayer, guesses as GuessItem[]);
+    } else {
+      setShowModal(false);
+    }
   };
 
   return (
@@ -37,31 +46,27 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
         <div className="modal">
           <div className="modal-content">
             <h2>Change Hosts</h2>
-            <p>Click on a name to give them hosting power!</p>
-            <select
-              className="players"
-              name="players-select"
-              id="players-select"
-              onChange={handleSetChosenPlayer}
-            >
-              {props.players.length > 1 &&
-                props.players
-                  .filter(
-                    (player) => player.id !== playerId && player.connected,
-                  )
-                  .map((player, key) => (
+            {connectedOtherPlayers().length >= 1 ? (
+              <>
+                <p>Click on a name to give them hosting power!</p>
+                <select
+                  className="host-dropdown"
+                  name="players-select"
+                  id="players-select"
+                  onChange={handleSetChosenPlayer}
+                >
+                  {connectedOtherPlayers().map((player, key) => (
                     <option key={key} value={player.id}>
                       {player.username}
                     </option>
                   ))}
-            </select>
+                </select>
+              </>
+            ) : (
+              <p>There are currently no other players in the game.</p>
+            )}
             <div className="modal-buttons">
-              <button
-                disabled={chosenPlayer === '0'}
-                onClick={() =>
-                  props.handleSetHost(chosenPlayer, guesses as GuessItem[])
-                }
-              >
+              <button disabled={chosenPlayer === '0'} onClick={handleOnClick}>
                 Okay
               </button>
               <button onClick={() => setShowModal(false)}>Cancel</button>

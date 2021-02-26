@@ -10,6 +10,8 @@ import {
   lobbyState,
   playerGuessState,
   playerIdState,
+  revealResultsState,
+  showNewHostModalState,
 } from '../../../state';
 import {
   DefinitionSelection,
@@ -17,14 +19,15 @@ import {
   LobbyData,
   PlayerItem,
 } from '../../../types/gameTypes';
-import { MAX_SECONDS } from '../../../utils/constants';
-import { randomUsername } from '../../../utils/helpers';
+import { MAX_SECONDS, REACT_APP_API_URL } from '../../../utils/constants';
+import { errorCodeChecker, randomUsername } from '../../../utils/helpers';
 import { Header } from '../../common/Header';
 import { Modal } from '../../common/Modal';
 import { Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
+import Finale from './Game/Finale';
 
 // Create a socket connection to API
-const socket = io.connect(process.env.REACT_APP_API_URL as string);
+const socket = io.connect(REACT_APP_API_URL as string);
 
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();
@@ -33,11 +36,14 @@ const GameContainer = (): React.ReactElement => {
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
+  const [, setRevealResults] = useRecoilState(revealResultsState);
+  const hostChoice = useRecoilValue(hostChoiceState);
   const [, setGuesses] = useLocalStorage('guesses', []);
   const [token, setToken] = useLocalStorage('token', '');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [time, setTime] = useState(-1);
-  const hostChoice = useRecoilValue(hostChoiceState);
+  const [error, setError] = useState('');
+  const [, setShowNewHostModal] = useRecoilState(showNewHostModalState);
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
@@ -49,6 +55,7 @@ const GameContainer = (): React.ReactElement => {
     resetLobbyCode();
     resetPlayerGuess();
     setGuesses([]);
+    setRevealResults(false);
     socket.disconnect();
     setToken('');
     handleLogin(true);
@@ -62,10 +69,10 @@ const GameContainer = (): React.ReactElement => {
     }
   }, [lobbyData]);
 
-  // For testing, DELETE later
-  useEffect(() => {
-    console.log(lobbyData);
-  }, [lobbyData]);
+  // // For testing, DELETE later
+  // useEffect(() => {
+  //   console.log('lobbydata', lobbyData);
+  // }, [lobbyData]);
 
   // Make a new socket connection after disconnecting
   useEffect(() => {
@@ -149,11 +156,17 @@ const GameContainer = (): React.ReactElement => {
     });
 
     // Recieve API errors
-    socket.on('error', (errorData: string) => {
-      console.log('error:');
-      console.log(errorData);
-      if (errorData === 'cool it, hackerman.') {
+    socket.on('error', (code: number, errorData: string) => {
+      const devMessage = errorCodeChecker(code);
+      console.log(
+        `You have received development error code ${code} ${devMessage}`,
+      );
+      setError(errorData);
+      if (code === 2000) {
         history.push('/');
+      }
+      if (code === 2000 && lobbyData.lobbyCode === '') {
+        setError('');
       }
     });
 
@@ -167,11 +180,23 @@ const GameContainer = (): React.ReactElement => {
     });
 
     socket.on('synchronize', (seconds: number) => {
-      setTime(seconds);
+      setTime((prevSeconds) => {
+        if (Math.abs(prevSeconds - seconds) > 2) {
+          return seconds;
+        } else {
+          return prevSeconds;
+        }
+      });
     });
 
     socket.on('welcome host', (guesses: GuessItem[]) => {
       setGuesses(guesses);
+      setShowNewHostModal(true);
+    });
+
+    socket.on('reveal results', (guesses: GuessItem[]) => {
+      setGuesses(guesses);
+      setRevealResults(true);
     });
   }, []);
 
@@ -218,8 +243,16 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('set phase', phase, lobbyCode);
   };
 
+  const handleSetFinale = () => {
+    socket.emit('set finale', lobbyCode);
+  };
+
   const handleSetHost = (hostId: string, guesses: GuessItem[]) => {
     socket.emit('set host', hostId, lobbyCode, guesses);
+  };
+
+  const handleRevealResults = (guesses: GuessItem[]) => {
+    socket.emit('reveal results', lobbyCode, guesses);
   };
 
   const handleUpdateUsername = (newUsername: string) => {
@@ -286,6 +319,7 @@ const GameContainer = (): React.ReactElement => {
             username={username}
             handleSetUsername={handleSetUsername}
             handleUpdateUsername={handleUpdateUsername}
+            setError={setError}
           />
         );
       case 'WRITING':
@@ -311,8 +345,12 @@ const GameContainer = (): React.ReactElement => {
           <Postgame
             handlePlayAgain={handlePlayAgain}
             handleSetHost={handleSetHost}
+            handleRevealResults={handleRevealResults}
+            handleSetFinale={handleSetFinale}
           />
         );
+      case 'FINALE':
+        return <Finale />;
       default:
         return (
           <Lobby
@@ -330,6 +368,7 @@ const GameContainer = (): React.ReactElement => {
   return (
     <div className="game-container">
       <Modal
+        header={'Before You Go...'}
         message={'Would you like to leave the current game?'}
         handleConfirm={resetGame}
         handleCancel={() => setShowLeaveModal(false)}
@@ -343,6 +382,7 @@ const GameContainer = (): React.ReactElement => {
           to={`/${lobbyData.lobbyCode}`}
         />
       )}
+      {error && <div>{error}</div>}
       <div className="game-styles">{currentPhase()}</div>
     </div>
   );

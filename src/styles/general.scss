@@ -1,7 +1,19 @@
 // General styles across components
-// For testing, update later
 *:focus {
   outline: none;
+}
+
+//hide labels, from Manuel Matuzović:
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
 }
 
 h1,
@@ -11,8 +23,11 @@ h2 {
 }
 
 h3 {
-  font-size: 3rem;
+  font-size: 3.2rem;
   margin: 4rem 0 0.8rem;
+  @include mid-below {
+    font-size: 1.8rem;
+  }
 }
 
 h1,
@@ -28,10 +43,18 @@ span {
   font-family: $text-font;
   font-size: 1.6rem;
 }
+
 p {
   font-family: $text-font;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   margin-bottom: 1.6rem;
+}
+
+textarea {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  resize: none;
 }
 
 button {
@@ -111,6 +134,10 @@ a {
   display: block;
   width: 19rem;
 
+  @include mid-below {
+    width: auto;
+  }
+
   &.writing {
     border-style: dashed;
     border-radius: 8px;
@@ -121,6 +148,9 @@ a {
     margin-bottom: 0;
     font-size: 2.4rem;
     font-family: $display-font;
+    @include mid-below {
+      font-size: 1.8rem;
+    }
     &.single-word {
       text-align: center;
       font-size: 4.8rem;
@@ -130,6 +160,17 @@ a {
   .definition {
     font-weight: 300;
     border: 1px dashed $dark-blue;
+  }
+}
+
+.notes {
+  text-align: center;
+  textarea {
+    width: 35rem;
+    height: 10rem;
+    max-width: 100%;
+    border-radius: 8px;
+    border: 2px solid $black;
   }
 }
 
@@ -166,8 +207,15 @@ a {
     margin-bottom: 8px;
     padding: 16px 8px 16px 8px;
     box-shadow: $boxshadow;
+
     p {
       margin-bottom: 0;
+      @include mid-below {
+        text-align: left;
+      }
+      &:last-of-type {
+        word-break: break-word;
+      }
     }
     .definition-content {
       align-self: center;
@@ -190,14 +238,18 @@ a {
         margin: auto;
         font-family: $display-font;
         color: $red;
+        word-break: unset;
       }
     }
   }
 }
 
 .submit-definition {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.6rem;
   button {
-    float: right;
+    align-self: flex-end;
   }
 }
 
@@ -263,6 +315,9 @@ a {
   border-radius: 16px;
   padding: 24px;
   border: 2px dashed $royal-blue;
+  @include mid-below {
+    width: 100%;
+  }
   .word {
     font-size: 4.8rem;
     font-family: $display-font;
@@ -286,6 +341,9 @@ a {
 }
 
 .timer-container {
+  @include mid-below {
+    margin-top: 1.6rem;
+  }
   .timer-wrap {
     display: flex;
     flex-direction: row;
@@ -299,9 +357,9 @@ a {
   border: 2px solid $royal-blue;
   box-shadow: $boxshadow;
   border-radius: 8px;
-  padding-bottom: .8rem;
+  padding-bottom: 0.8rem;
   .who-voted-p {
-    padding: 0 1.6rem .8rem 1.6rem;
+    padding: 0 1.6rem 0.8rem 1.6rem;
     margin-bottom: 0;
   }
 
@@ -324,12 +382,16 @@ a {
   .result-definition {
     background-color: #f7fbff;
     padding: 1.6rem 1.6rem 1.6rem 1.6rem;
+    word-wrap: break-word;
   }
   .result-username {
     color: $charcoal;
     font-family: $display-font;
     font-size: 3.2rem;
     margin-bottom: 8px;
+    @include mid-below {
+      font-size: 1.8rem;
+    }
     &:last-child {
       color: $red;
     }
@@ -369,20 +431,38 @@ a {
     }
   }
 }
+
 //play/new host button
 .endgame-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  .after-reveal {
+	width: 100%;
+    display: flex;
+    flex-direction: column;
+	.after-container {
+		display: flex;
+		justify-content: space-evenly;
+
+	}
+  }
   .play-again {
     background: $orange;
-    margin-right: 1.6rem;
+    margin: 1.6rem 0 0 0;
   }
   .selected {
     background: $orange;
   }
 }
 
+.host-dropdown {
+  width: 16rem;
+  height: 5rem;
+  border-radius: 8px;
+  margin-bottom: 1.6rem;
+  padding-left: 0.8rem;
+}
 .modal {
   position: fixed;
   z-index: 1;
@@ -401,7 +481,7 @@ a {
     width: 30rem;
     height: 20rem;
     max-width: 100%;
-    padding: 2.4rem;
+    padding: 1.6rem;
     background-color: $white;
     border-radius: 1.6rem;
     // text-align: center;
@@ -434,8 +514,13 @@ a {
     display: inline-block;
     border-radius: 1rem;
     padding: 2rem;
+    width: 11rem;
+    text-align: center;
     border: 1px solid black;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    @include mid-below {
+      width: 11rem;
+    }
     p {
       width: 100%;
       display: flex;
@@ -447,6 +532,13 @@ a {
     font-size: 4.8rem;
     width: 20%;
   }
+  .add-time.center {
+    background-color: $white;
+    color: $black;
+    height: auto;
+    font-family: $display-font;
+    text-decoration: underline;
+  }
 }
 
 .player-submitted {
@@ -454,12 +546,19 @@ a {
   border: 1px solid black;
   border-radius: 8px;
   margin-bottom: 16px;
+  word-wrap: break-word;
+
   h3 {
     margin-top: 0;
   }
   p {
     text-align: center;
+    margin-bottom: 0;
   }
+}
+
+.player-guess {
+  text-align: center;
 }
 
 .times-up-container {
@@ -476,8 +575,11 @@ a {
   }
 }
 
-h2.player-h2 {
-  font-size: 1.8rem;
+.player-display {
+  margin-top: 1.6rem;
+  h2.player-h2 {
+    font-size: 1.8rem;
+  }
 }
 
 .player-lobby {
@@ -494,10 +596,13 @@ h2.player-h2 {
     background: $white;
     border: 2px solid $black;
     border-radius: 8px;
-    padding: 12px 26px;
+    padding: 16px 24px;
     box-sizing: border-box;
     margin-right: 8px;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    @include mid-below {
+      padding: 8px 16px;
+    }
     &.submitted {
       background-color: $green;
       color: $white;
@@ -506,10 +611,16 @@ h2.player-h2 {
     .player {
       font-family: $display-font;
       margin-bottom: 8px;
+      @include mid-below {
+        font-size: 1.4rem;
+      }
     }
     p.player-score {
       margin: 0 auto;
       font-size: 1.4rem;
+      @include mid-below {
+        font-size: 1.2rem;
+      }
     }
   }
 }
@@ -554,6 +665,7 @@ h2.player-h2 {
 .show-guess {
   p.guess-choice {
     text-align: center;
+    word-wrap: break-word;
   }
 }
 

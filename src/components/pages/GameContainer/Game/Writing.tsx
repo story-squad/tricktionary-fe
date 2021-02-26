@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
 import { lobbyState, playerIdState } from '../../../../state';
-import { MAX_SECONDS } from '../../../../utils/constants';
+import {
+  MAX_DEFINITION_LENGTH,
+  MAX_SECONDS,
+} from '../../../../utils/constants';
 import { definitionIsValid } from '../../../../utils/validation';
+import { CharCounter } from '../../../common/CharCounter';
 import { Host } from '../../../common/Host';
+import { Input } from '../../../common/Input';
 import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
 import Timer from '../../../common/Timer/Timer';
@@ -18,6 +24,19 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const [useTimer, setUseTimer] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
   const playerId = useRecoilValue(playerIdState);
+
+  //set up the form details
+  const {
+    register,
+    // handleSubmit,
+    errors,
+    setError,
+    clearErrors,
+    getValues,
+    watch,
+  } = useForm({
+    mode: 'onSubmit',
+  });
 
   // Put time on the timer
   useEffect(() => {
@@ -55,6 +74,13 @@ const Writing = (props: WritingProps): React.ReactElement => {
 
   const handleChangeDefinition = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDefinition(e.target.value);
+    const message = definitionIsValid(e.target.value).message;
+    if (definitionIsValid(e.target.value).valid) {
+      clearErrors();
+    }
+    if (!definitionIsValid(e.target.value).valid) {
+      setError('form', { type: 'manual', message });
+    }
   };
 
   const handleAddTime = (time: number, add: number) => {
@@ -110,7 +136,14 @@ const Writing = (props: WritingProps): React.ReactElement => {
             addTime={handleAddTime}
           />
         )}
-        <PlayerList />
+        <div className="guess-word">
+          <p className="word-label">Your Word:</p>
+          <p className="word">{lobbyData.word}</p>
+        </div>
+        <div className="player-display">
+          <h2 className="player-h2">Players</h2>
+          <PlayerList />
+        </div>
         <div className="times-up-container">
           <button className="times-up-button" onClick={handleGoToNextPhase}>
             Start Guessing Phase
@@ -122,6 +155,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
           )}
         </div>
         <Modal
+          header={'Continue?'}
           message={modalMessage()}
           handleConfirm={() => props.handleSetPhase('GUESSING')}
           handleCancel={() => setShowModal(false)}
@@ -163,16 +197,25 @@ const Writing = (props: WritingProps): React.ReactElement => {
                 definition.
               </p>
             )}
-            <input
-              disabled={timerDone}
-              id="definition"
-              name="definition"
-              type="textfield"
-              value={definition}
-              onChange={handleChangeDefinition}
-            />
+            {errors.form && <div>{errors.form.message}</div>}
+            <div className="char-counter-wrapper higher">
+              <Input
+                id="definition"
+                name="definition"
+                value={definition}
+                label="definition"
+                register={register}
+                onChange={handleChangeDefinition}
+                disabled={timerDone}
+                autoFocus={true}
+                maxLength={MAX_DEFINITION_LENGTH}
+              />
+              <CharCounter string={definition} max={MAX_DEFINITION_LENGTH} />
+            </div>
             <br />
-            <button disabled={!definitionIsValid(definition)}>Submit</button>
+            <button disabled={!definitionIsValid(definition).valid}>
+              Submit
+            </button>
           </form>
         )}
         {isSubmitted && (
@@ -181,8 +224,10 @@ const Writing = (props: WritingProps): React.ReactElement => {
             <p>{definition}</p>
           </div>
         )}
-        <h2 className="player-h2">Player list:</h2>
-        <PlayerList />
+        <div className="player-display">
+          <h2 className="player-h2">Players</h2>
+          <PlayerList />
+        </div>
       </Player>
     </div>
   );

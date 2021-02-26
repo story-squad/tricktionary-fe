@@ -3759,6 +3759,14 @@ convert-source-map@^0.3.3:
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-0.3.5.tgz#f1d802950af7dd2631a1febe0596550c86ab3190"
   integrity sha1-8dgClQr33SYxof6+BZZVDIarMZA=
 
+convertkit-react@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/convertkit-react/-/convertkit-react-1.5.0.tgz#d4840a0d86445cc41650bb3880d71d8aa3af6589"
+  integrity sha512-i3/0/J671QZAsSKHr/BHKESkvuSd/jOK/TfgPOPoF5BFipVS82SKhnw+xmdfunUUWPpMrkaN0F4f5VnBy0FfNg==
+  dependencies:
+    prop-types "^15.7.2"
+    react "^17.0.1"
+
 cookie-signature@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.0.6.tgz#e303a882b342cc3ee8ca513a79999734dab3ae2c"
@@ -9776,6 +9784,11 @@ react-hook-form@^6.12.0:
   version "6.12.0"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.12.0.tgz#0c4f2085711a400df7b3c7fd924d7fe6b06563d7"
   integrity sha512-5eSuWVra5f4dMSllJ6qrlkh7I/KrXd3bJen8Jsp2Ig2+3qOyeOl83cTsvDxo0KsSctsmvJBaZIwuPZRtklOc4A==
+
+react-icons@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.2.0.tgz#6dda80c8a8f338ff96a1851424d63083282630d0"
+  integrity sha512-rmzEDFt+AVXRzD7zDE21gcxyBizD/3NqjbX6cmViAgdqfJ2UiLer8927/QhhrXQV7dEj/1EGuOTPp7JnLYVJKQ==
 
 react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"

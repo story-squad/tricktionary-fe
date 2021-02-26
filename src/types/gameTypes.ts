@@ -7,6 +7,11 @@ export interface PlayerItem {
   connected: boolean;
 }
 
+export interface FinalePlayer {
+  username: string;
+  definition: string;
+}
+
 export interface LobbyData {
   definition: string;
   guesses: GuessItem[];
@@ -24,6 +29,7 @@ export interface LobbyData {
       list: unknown[];
     };
   };
+  topThree: FinaleDefinition[];
 }
 
 export interface GuessItem {
@@ -66,4 +72,21 @@ export interface HostChoice {
   word_id_one: number;
   word_id_two: number;
   times_shuffled: number;
+}
+
+export interface FinaleDefinition {
+  user_id: string;
+  definition: string;
+}
+
+export interface TopPlayers {
+  first: FinalePlayer;
+  second: FinalePlayer;
+  third: FinalePlayer;
+}
+
+export interface HandleSelectGuessParams {
+  playerId: string;
+  guessId: number;
+  definitionSelection: DefinitionSelection;
 }
