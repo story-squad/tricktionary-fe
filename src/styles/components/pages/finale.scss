@@ -1,0 +1,18 @@
+.game-page {
+    &.finale {
+        background-color: black;
+        display: flex;
+        flex-direction: column;
+        .place-bars {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+        .podium {
+            margin: 0 auto;
+            height: 3.5rem;
+            width: 86rem;
+            background-color: teal;
+        }
+    }
+}
