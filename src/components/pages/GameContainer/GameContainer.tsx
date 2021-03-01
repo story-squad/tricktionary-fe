@@ -198,6 +198,11 @@ const GameContainer = (): React.ReactElement => {
       setGuesses(guesses);
       setRevealResults(true);
     });
+
+    // After a disconnection occurs, refresh the game on reconnection
+    socket.on('pulse check', () => {
+      handleLogin();
+    });
   }, []);
 
   // Socket event emitters
