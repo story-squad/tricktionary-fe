@@ -3,6 +3,9 @@ import { useRecoilValue } from 'recoil';
 import { lobbyState } from '../../../../state';
 import { LobbyData, TopPlayers } from '../../../../types/gameTypes';
 
+//import assets
+import finaleBanner from '../../../../assets/finaleBanner.png';
+
 const getTopPlayers = (lobbyData: LobbyData): TopPlayers => {
   const playerDict: { [key: string]: string } = {};
   lobbyData.players.forEach((player) => {
@@ -35,6 +38,7 @@ const Finale = (): React.ReactElement => {
 
   return (
     <div className="finale game-page">
+      <img className="finale-banner" src={finaleBanner} />
       <div className="place-bars">
         {topPlayers.second.username !== undefined && (
           <div className="second-place-stack stack">
@@ -54,7 +58,7 @@ const Finale = (): React.ReactElement => {
               <p>{topPlayers.first.definition}</p>
             </div>
             <div className="example-podium first-place">
-              <div className="place-img">
+              <div className="place-img first-img">
                 <p className="first-name">{topPlayers.first.username}</p>
               </div>
             </div>
