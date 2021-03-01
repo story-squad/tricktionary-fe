@@ -97,11 +97,6 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     DefinitionResultItem[]
   >(getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict));
 
-  //DELETE
-  useEffect(() => {
-    console.log(showNewHostModal);
-  }, [showNewHostModal]);
-
   // Reset player's guess for next round
   useEffect(() => {
     resetGuess();
