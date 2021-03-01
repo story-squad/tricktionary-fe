@@ -22,3 +22,9 @@ export const MAX_USERNAME_LENGTH =
 
 // Number of characters allowed in note-taking on Guessing phase
 export const MAX_NOTES_LENGTH = Number(process.env.MAX_NOTES_LENGTH) || 100;
+
+// For Tricktionary team to host public Zoom meeting
+export const PUBLIC_MEETING_URL = process.env.PUBLIC_MEETING_URL || '';
+
+// For Tricktionary team to host public livestream
+export const PUBLIC_STREAM_URL = process.env.PUBLIC_STREAM_URL || '';
