@@ -90,6 +90,7 @@ const GameContainer = (): React.ReactElement => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
       history.push(`/${socketData.lobbyCode}`);
+      setError('');
     });
 
     // Add a player to the list when they join
