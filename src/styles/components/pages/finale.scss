@@ -8,6 +8,10 @@
     .finale-banner {
         margin-top: -200px;
         width: 100rem;
+        @include mid-below {
+            margin-top: -120px;
+            width: 35rem;
+          }
     }
     .place-bars {
         margin: 72px auto 0 auto;
@@ -51,6 +55,9 @@
             z-index: 9;
             margin-bottom: -112px;
             padding: 0 9.6rem;
+            @include mid-below {
+                padding: 0 6.4rem;
+            }
             &.second-img {
                 background-image: url('../../../assets/secondplacestar.svg');    
             }

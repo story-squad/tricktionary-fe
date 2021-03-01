@@ -168,6 +168,8 @@ a {
 
   @include mid-below {
     width: auto;
+    padding: 4px 8px;
+    margin: 0 4px;
   }
 
   &.writing {
@@ -181,7 +183,7 @@ a {
     font-size: 2.4rem;
     font-family: $display-font;
     @include mid-below {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
     }
     &.single-word {
       text-align: center;

@@ -3,9 +3,6 @@ import React, { SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import { useLocalStorage } from '../../../../hooks';
-import '../../../../styles/components/pages/Lobby.scss';
-//styles
-import '../../../../styles/gameContainer.scss';
 import { DecodedToken } from '../../../../types/commonTypes';
 import { MAX_USERNAME_LENGTH } from '../../../../utils/constants';
 import {
