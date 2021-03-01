@@ -32,13 +32,17 @@
             }
         }
         .place-img {
-            max-width: 100%;
-            background-image: url(../../../assets/firstplacestar.svg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 10rem;
+            background-image: url('../../../assets/firstplacestar.svg');
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
 
             p {
-                text-align: center;
-                color: #fff;
-                margin-top: -16px;
+                margin: 0;
             }
         }
         .example-podium {
