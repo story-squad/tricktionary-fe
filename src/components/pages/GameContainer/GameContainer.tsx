@@ -76,7 +76,9 @@ const GameContainer = (): React.ReactElement => {
 
   // Make a new socket connection after disconnecting
   useEffect(() => {
-    socket.connect();
+    if (socket.disconnected) {
+      socket.connect();
+    }
   }, [socket.disconnected]);
 
   useEffect(() => {
