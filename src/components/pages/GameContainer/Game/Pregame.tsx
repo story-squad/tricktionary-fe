@@ -291,7 +291,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           </div>
         ) : (
           <form className="edit-name-form">
-            {errors.form && <div>{errors.form.message}</div>}
+            {errors.form && <p className="error">{errors.form.message}</p>}
             <div className="char-counter-wrapper higher">
               <Input
                 id="username"

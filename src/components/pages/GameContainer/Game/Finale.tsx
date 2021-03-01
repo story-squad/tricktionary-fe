@@ -37,21 +37,39 @@ const Finale = (): React.ReactElement => {
     <div className="finale game-page">
       <div className="place-bars">
         {topPlayers.second.username !== undefined && (
-          <div className="example-podium second-place">
-            <p>{topPlayers.second.username}</p>
-            <p>{topPlayers.second.definition}</p>
+          <div className="second-place-stack stack">
+            <div className="def-card second-def-card">
+              <p className="second-name">{topPlayers.second.definition}</p>
+            </div>
+            <div className="example-podium second-place">
+              <div className="second-place-img second-img">
+                <p>{topPlayers.second.username}</p>
+              </div>
+            </div>
           </div>
         )}
         {topPlayers.first.username !== undefined && (
-          <div className="example-podium first-place">
-            <p>{topPlayers.first.username}</p>
-            <p>{topPlayers.first.definition}</p>
+          <div className="first-place-stack stack">
+            <div className="def-card first-def-card">
+              <p>{topPlayers.first.definition}</p>
+            </div>
+            <div className="example-podium first-place">
+              <div className="place-img">
+                <p className="first-name">{topPlayers.first.username}</p>
+              </div>
+            </div>
           </div>
         )}
         {topPlayers.third.username !== undefined && (
-          <div className="example-podium third-place">
-            <p>{topPlayers.third.username}</p>
-            <p>{topPlayers.third.definition}</p>
+          <div className="third-place-stack stack">
+            <div className="def-card third-def-card">
+              <p>{topPlayers.third.definition}</p>
+            </div>
+            <div className="example-podium third-place">
+              <div className="place-img third-img">
+                <p className="third-name">{topPlayers.third.username}</p>
+              </div>
+            </div>
           </div>
         )}
       </div>

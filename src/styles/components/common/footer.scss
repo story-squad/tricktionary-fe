@@ -5,6 +5,7 @@ footer {
   align-items: center;
   padding: 2rem;
   background: $white;
+  margin-top: 4rem;
 
   @include large-below {
     flex-direction: column;
