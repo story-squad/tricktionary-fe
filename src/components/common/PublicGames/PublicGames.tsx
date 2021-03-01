@@ -12,12 +12,16 @@ const PublicGames = (): React.ReactElement => {
           <h2>Play a Game With the Tricktionary Team</h2>
           {PUBLIC_MEETING_URL !== '' && (
             <>
-              <a href={PUBLIC_MEETING_URL}>Join us on Zoom</a>
+              <a href={PUBLIC_MEETING_URL} target="_blank" rel="noreferrer">
+                Join us on Zoom
+              </a>
               <br />
             </>
           )}
           {PUBLIC_STREAM_URL !== '' && (
-            <a href={PUBLIC_STREAM_URL}>Watch our livestream</a>
+            <a href={PUBLIC_STREAM_URL} target="_blank" rel="noreferrer">
+              Watch our livestream
+            </a>
           )}
         </div>
       )}
