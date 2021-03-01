@@ -12,8 +12,10 @@ import {
 //styles
 import '../../../../styles/components/pages/Pregame.scss';
 import { WordItem } from '../../../../types/gameTypes';
+import { MAX_USERNAME_LENGTH } from '../../../../utils/constants';
 import { hasMinimumPlayers } from '../../../../utils/helpers';
 import { usernameIsValid } from '../../../../utils/validation';
+import { CharCounter } from '../../../common/CharCounter';
 import { Host } from '../../../common/Host';
 import { Input } from '../../../common/Input';
 import { Player } from '../../../common/Player';
@@ -290,15 +292,19 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         ) : (
           <form className="edit-name-form">
             {errors.form && <p className="error">{errors.form.message}</p>}
-            <Input
-              id="username"
-              name="username"
-              value={props.username}
-              label="Edit Name"
-              register={register}
-              onChange={handleChangeUsername}
-              autoFocus={true}
-            />
+            <div className="char-counter-wrapper higher">
+              <Input
+                id="username"
+                name="username"
+                value={props.username}
+                label="Edit Name"
+                register={register}
+                onChange={handleChangeUsername}
+                autoFocus={true}
+                maxLength={MAX_USERNAME_LENGTH}
+              />
+              <CharCounter string={props.username} max={MAX_USERNAME_LENGTH} />
+            </div>
             <button
               disabled={!usernameIsValid(props.username).valid}
               onClick={handleSubmitUsername}

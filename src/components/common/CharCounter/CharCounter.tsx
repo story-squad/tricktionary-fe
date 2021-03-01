@@ -2,12 +2,12 @@ import React from 'react';
 
 const CharCounter = (props: CharCounterProps): React.ReactElement => {
   const className = () => {
-    return props.string.length >= props.max ? 'full' : '';
+    return props.max - props.string.length <= 0 ? 'full' : '';
   };
 
   return (
     <div className="char-counter">
-      <p className={className()}>{`${props.string.length}/${props.max}`}</p>
+      <p className={className()}>{props.max - props.string.length}</p>
     </div>
   );
 };

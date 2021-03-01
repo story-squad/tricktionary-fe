@@ -113,12 +113,14 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
           maxLength={4}
           placeholder="Enter lobby code to join a game!"
         />
-
         {errors.form && <p className="error">{errors.form.message}</p>}
         <button
           className="join lobby-button"
           onClick={(e) => props.handleJoinLobby(e, '')}
-          disabled={!usernameIsValid(props.username).valid}
+          disabled={
+            !usernameIsValid(props.username).valid ||
+            props.lobbyCode.length !== 4
+          }
         >
           Join Lobby
         </button>
