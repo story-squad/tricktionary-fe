@@ -63,15 +63,15 @@ const GameContainer = (): React.ReactElement => {
     history.push('/');
   };
 
+  // For testing, DELETE later
+  useEffect(() => {
+    console.log('lobbydata', lobbyData);
+  }, [lobbyData]);
+
   useEffect(() => {
     if (lobbyData.phase !== 'WRITING') {
       setTime(-1);
     }
-  }, [lobbyData]);
-
-  // For testing, DELETE later
-  useEffect(() => {
-    console.log('lobbydata', lobbyData);
   }, [lobbyData]);
 
   // Make a new socket connection after disconnecting
