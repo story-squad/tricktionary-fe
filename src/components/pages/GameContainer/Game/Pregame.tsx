@@ -9,8 +9,6 @@ import {
   lobbyState,
   revealResultsState,
 } from '../../../../state';
-//styles
-import '../../../../styles/components/pages/Pregame.scss';
 import { WordItem } from '../../../../types/gameTypes';
 import { MAX_USERNAME_LENGTH } from '../../../../utils/constants';
 import { hasMinimumPlayers } from '../../../../utils/helpers';
