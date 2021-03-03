@@ -22,6 +22,10 @@ label {
   display: block;
 }
 
+strong {
+  font-weight: 600;
+}
+
 // Font Variables
 $text-font: "Roboto", sans-serif;
 $display-font: "Luckiest Guy", sans-serif;
@@ -58,16 +62,15 @@ $lt-grey: #c4c4c4;
 $black: #000;
 
 //new colors
-$neon-green: #D5FF2E;
-$sky-blue: #1DA1F2;
+$neon-green: #d5ff2e;
+$sky-blue: #1da1f2;
 //finale colors
-$gold: #FFD645;
-$gold-outline: #FFB800;
-$silver: #C4C4C4;
-$silver-outline: #8C8B8B; 
-$bronze: #E08C29;
-$bronze-outline: #9F4C00;
-
+$gold: #ffd645;
+$gold-outline: #ffb800;
+$silver: #c4c4c4;
+$silver-outline: #8c8b8b;
+$bronze: #e08c29;
+$bronze-outline: #9f4c00;
 
 #root {
   font-size: 16px;
