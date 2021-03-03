@@ -150,8 +150,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
   return (
     <div className="pregame game-page">
+      <h2>Step 1: Setup</h2>
       <Host>
-        <h2>Step 1: Setup</h2>
         <HostStepOne />
         <p className="welcome-word">
           Invite your friends, pick a word, set the timer, start the game!
@@ -282,7 +282,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         <PlayerList />
       </Host>
       <Player>
-        <h2>Step 1: Setup</h2>
         <PlayerStepOne />
         {!showEditName ? (
           <div className="edit-name-block">
