@@ -16,6 +16,7 @@ import { usernameIsValid } from '../../../../utils/validation';
 import { CharCounter } from '../../../common/CharCounter';
 import { Host } from '../../../common/Host';
 import { Input } from '../../../common/Input';
+import { HostStepOne, PlayerStepOne } from '../../../common/Instructions';
 import { Player } from '../../../common/Player';
 import { PlayerList } from '../Game';
 
@@ -150,7 +151,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   return (
     <div className="pregame game-page">
       <Host>
-        <h2>Pregame Settings</h2>
+        <h2>Step 1: Setup</h2>
+        <HostStepOne />
         <p className="welcome-word">
           Invite your friends, pick a word, set the timer, start the game!
         </p>
@@ -280,7 +282,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         <PlayerList />
       </Host>
       <Player>
-        <h2>Waiting for your team to join...</h2>
+        <h2>Step 1: Setup</h2>
+        <PlayerStepOne />
         {!showEditName ? (
           <div className="edit-name-block">
             <button className="sm-btn" onClick={() => setShowEditName(true)}>
