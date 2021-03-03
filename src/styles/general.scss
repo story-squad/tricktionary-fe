@@ -469,6 +469,21 @@ a {
 //error
 .error {
   position:absolute;
+  text-align: center;
+  color: $red;
+  font-family: $display-font;
+}
+
+.outside-error {
+  margin: 0 auto 1.6rem auto;
+  width: auto;
+  text-align: center;
+  background-color: $white;
+  border-radius: 16px;
+  padding: 8px 16px 8px 16px;
+  font-size: 1.8rem;
+  color: $red;
+  font-family: $display-font;
 }
 
 //play/new host button

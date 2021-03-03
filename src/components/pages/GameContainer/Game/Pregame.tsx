@@ -93,7 +93,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       .catch((err) => {
         console.log(err);
         props.setError(
-          'there was an issue while getting your words. Please try again',
+          'There was an issue while getting your words. Please try again',
         );
       });
   };

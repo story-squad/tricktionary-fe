@@ -376,7 +376,7 @@ const GameContainer = (): React.ReactElement => {
   return (
     <div className="game-container">
       <Modal
-        header={'Before You Go...'}
+        header={'HEY!'}
         message={'Would you like to leave the current game?'}
         handleConfirm={resetGame}
         handleCancel={() => setShowLeaveModal(false)}
@@ -390,7 +390,7 @@ const GameContainer = (): React.ReactElement => {
           to={`/${lobbyData.lobbyCode}`}
         />
       )}
-      {error && <div>{error}</div>}
+      {error && <p className="outside-error">{error}</p>}
       <div className="game-styles">{currentPhase()}</div>
     </div>
   );
