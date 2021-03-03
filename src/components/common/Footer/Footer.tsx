@@ -7,14 +7,11 @@ const Footer = (): React.ReactElement => {
       <div className="top">
         <p className="email-disclaimer">Get email updates from Story Squad</p>
         <form id="email-update-form">
-          {/* <label htmlFor="email-input">Sign up for email updates</label> */}
           <EmailInput />
         </form>
       </div>
       <div className="bottom">
-        <p className="tagline">
-          &quot;Human connection through creative expression.&quot;
-        </p>
+        <p className="tagline">Human connection through creative expression</p>
         <p>
           Brought to you by{' '}
           <a

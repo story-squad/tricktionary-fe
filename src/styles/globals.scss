@@ -22,6 +22,10 @@ label {
   display: block;
 }
 
+strong {
+  font-weight: 600;
+}
+
 // Font Variables
 $text-font: 'Roboto', sans-serif;
 $display-font: 'Luckiest Guy', sans-serif;
