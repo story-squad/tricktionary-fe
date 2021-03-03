@@ -115,13 +115,16 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
 
   return (
     <div className="postgame game-page">
+      <h2>The Results!</h2>
       <Host>
-        <h2>It&apos;s time for the results!</h2>
-        <p>
-          Here are the results. They are displayed from least votes to most,
-          with the REAL defintion displayed at the end. The names of who voted
-          for each definiton is also provided.
-        </p>
+        {!revealResults && (
+          // Hide after reveal
+          <p>
+            Players can’t see the results yet, so it’s up to you to read them
+            with pizzaz! We suggest saying, “The honorable mentions are...” for
+            the definitions with no votes
+          </p>
+        )}
         <div className="word-display">
           <p>{lobbyData.word}</p>
         </div>
@@ -162,7 +165,6 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         </div>
       </Host>
       <Player>
-        <h2>It&apos;s time for the results!</h2>
         {!revealResults ? (
           // Before reveal
           <>
@@ -177,11 +179,6 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         ) : (
           // After reveal
           <>
-            <p>
-              Here are the results. They are displayed from least votes to most,
-              with the REAL defintion displayed at the end. The names of who
-              voted for each definiton is also provided.
-            </p>
             <div className="word-display">
               <p>{lobbyData.word}</p>
             </div>
