@@ -20,8 +20,25 @@
         flex-direction: row;
         justify-content: space-evenly;
         align-items: flex-end;
-        .first-place-stack {
-            margin: 0 72px;
+        @include mid-below {
+            flex-direction: column;
+            align-items: center;
+          }
+        .stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            &.first-place-stack {
+                margin: 0 72px;
+            }
+            @include mid-below {
+                //where stack media query goes
+              }
+        }
+        .stack:nth-child(2) {
+            @include mid-below {
+                order: -1;
+              }
         }
         .def-card {
             background-color: $white;
@@ -87,6 +104,9 @@
             display: flex;
             justify-content: center;
             align-items: flex-end;
+            @include mid-below {
+                width: 10rem;
+              }
             &.first-place {
                 height: 20rem;
                 background-color: $gold;
@@ -132,5 +152,8 @@
         height: 3.5rem;
         width: 100%;
         background-color: rgb(0, 158, 158);
+        @include mid-below {
+            display: none;
+          }
     }
 }

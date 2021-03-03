@@ -31,7 +31,7 @@
   }
   &:disabled,
   &.disabled {
-    background-color: #c4c4c4;
+    background-color: $lt-grey;
     cursor: not-allowed;
   }
 }

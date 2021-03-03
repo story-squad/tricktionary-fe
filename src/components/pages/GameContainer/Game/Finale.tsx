@@ -41,19 +41,19 @@ const Finale = (): React.ReactElement => {
       <img className="finale-banner" src={finaleBanner} />
       <div className="place-bars">
         {topPlayers.second.username !== undefined && (
-          <div className="second-place-stack stack">
+          <div className="stack second-place-stack">
             <div className="def-card second-def-card">
               <p className="second-name">{topPlayers.second.definition}</p>
             </div>
             <div className="example-podium second-place">
               <div className="second-place-img second-img">
-                <p>{topPlayers.second.username}</p>
+                <p className="second-name">{topPlayers.second.username}</p>
               </div>
             </div>
           </div>
         )}
         {topPlayers.first.username !== undefined && (
-          <div className="first-place-stack stack">
+          <div className="stack first-place-stack">
             <div className="def-card first-def-card">
               <p>{topPlayers.first.definition}</p>
             </div>
@@ -65,7 +65,7 @@ const Finale = (): React.ReactElement => {
           </div>
         )}
         {topPlayers.third.username !== undefined && (
-          <div className="third-place-stack stack">
+          <div className="stack third-place-stack">
             <div className="def-card third-def-card">
               <p>{topPlayers.third.definition}</p>
             </div>

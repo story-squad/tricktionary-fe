@@ -39,12 +39,12 @@ const playerUserName = (
 ) => {
   let username = '';
   if (player.id === playerId) {
-    username += '(You) ';
+    username += '(You)';
+  }
+  if (lobbyData.host === player.id) {
+    username += '(host)';
   }
   username += player.username;
-  if (lobbyData.host === player.id) {
-    username += '***';
-  }
   return username;
 };
 
