@@ -4,7 +4,17 @@ import { EmailInput } from '../EmailInput';
 const Footer = (): React.ReactElement => {
   return (
     <footer>
-      <div className="top-left">
+      <div className="top">
+        <p className="email-disclaimer">Get email updates from Story Squad</p>
+        <form id="email-update-form">
+          {/* <label htmlFor="email-input">Sign up for email updates</label> */}
+          <EmailInput />
+        </form>
+      </div>
+      <div className="bottom">
+        <p className="tagline">
+          &quot;Human connection through creative expression.&quot;
+        </p>
         <p>
           Brought to you by{' '}
           <a
@@ -16,18 +26,6 @@ const Footer = (): React.ReactElement => {
             Story Squad
           </a>
         </p>
-        <p className="tagline">
-          &quot;Human connection through creative expression.&quot;
-        </p>
-      </div>
-      <div className="bottom-right">
-        <p className="email-disclaimer">Get email updates from Story Squad</p>
-        <form id="email-update-form">
-          {/* <label htmlFor="email-input">Sign up for email updates</label> */}
-          <div className="flex-container">
-            <EmailInput />
-          </div>
-        </form>
       </div>
     </footer>
   );
