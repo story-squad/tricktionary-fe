@@ -122,11 +122,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
   return (
     <div className="writing game-page">
       <Host>
-        <h2>Your team is typing out their best definitions</h2>
-        <p>
-          When the timer is up, your team will no longer be able to add to their
-          definition.
-        </p>
+        <h2>Players are writing their definitions...</h2>
         {useTimer && (
           <Timer
             time={time}
@@ -163,10 +159,14 @@ const Writing = (props: WritingProps): React.ReactElement => {
         />
       </Host>
       <Player>
-        <h2>Type out your best guess</h2>
+        <h2>It&apos;s Time to Get Creative!</h2>
         <p>
-          Your host has chosen a word. Your job is to come up with a convincing
-          fake definition. Can you hit submit before the timer runs out?
+          When the game starts,{' '}
+          <strong>
+            compose your best trick defintion to get other players to vote for
+            it.
+          </strong>{' '}
+          Click “submit” before the time runs out!
         </p>
         {useTimer && (
           <Timer
