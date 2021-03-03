@@ -136,6 +136,11 @@ const Writing = (props: WritingProps): React.ReactElement => {
             addTime={handleAddTime}
           />
         )}
+        {timerDone && (
+          <p className="times-up">
+            Time&apos;s up for players to submit! Start the next phase.
+          </p>
+        )}
         <div className="guess-word">
           <p className="word-label">Your Word:</p>
           <p className="word">{lobbyData.word}</p>
@@ -148,11 +153,6 @@ const Writing = (props: WritingProps): React.ReactElement => {
           <button className="times-up-button" onClick={handleGoToNextPhase}>
             Start Guessing Phase
           </button>
-          {timerDone && (
-            <p className="times-up">
-              Time&apos;s up for players to submit! Start the next phase.
-            </p>
-          )}
         </div>
         <Modal
           header={'Continue?'}
