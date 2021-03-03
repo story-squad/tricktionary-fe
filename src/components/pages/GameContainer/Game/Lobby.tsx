@@ -11,6 +11,14 @@ import {
 } from '../../../../utils/validation';
 import { CharCounter } from '../../../common/CharCounter';
 import { Input } from '../../../common/Input';
+import {
+  HostStepOne,
+  HostStepThree,
+  HostStepTwo,
+  PlayerStepOne,
+  PlayerStepThree,
+  PlayerStepTwo,
+} from '../../../common/Instructions';
 import { PublicGames } from '../../../common/PublicGames';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
@@ -83,6 +91,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
 
   return (
     <>
+      <PublicGames />
       <div className="lobby game-page">
         <h2>Welcome!</h2>
         <p>
@@ -133,7 +142,18 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
           </button>
         </form>
       </div>
-      <PublicGames />
+      <div className="game-page margin-top">
+        <h2>How to Play</h2>
+        <PlayerStepOne />
+        <PlayerStepTwo />
+        <PlayerStepThree />
+      </div>
+      <div className="game-page margin-top">
+        <h2>How to Host a Game</h2>
+        <HostStepOne />
+        <HostStepTwo />
+        <HostStepThree />
+      </div>
     </>
   );
 };
