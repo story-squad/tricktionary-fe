@@ -14,7 +14,7 @@ import { MAX_NOTES_LENGTH } from '../../../../utils/constants';
 import { isLargeGame } from '../../../../utils/helpers';
 import { CharCounter } from '../../../common/CharCounter';
 import { Host } from '../../../common/Host';
-import { HostStepTwo, PlayerStepTwo } from '../../../common/Instructions';
+import { PlayerStepTwo } from '../../../common/Instructions';
 import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
 import { PlayerList } from '../../../common/PlayerList';
@@ -147,53 +147,71 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   return (
     <div className="guessing game-page">
       <Host>
-        <h2>Read Each Number and Its Definition</h2>
-        <HostStepTwo />
         <p className="word-display">{lobbyData.word}</p>
         {!showGuesses && (
-          <div className="definitions">
-            <h3>Definitions</h3>
-            {definitions.map((definition, key) => (
-              <div key={key} className="definition">
-                <div className="definition-key">
-                  <p>#{definition.definitionKey}</p>
+          // Showing definitions
+          <>
+            <h2>Read Each Number and Its Definition</h2>
+            <p>
+              The contestants have submitted their trick definitions. Now you
+              need to summon your best gameshow host voice and read the number
+              and definition from the list below. Once you finish, read through
+              the same numbered list AGAIN.
+            </p>
+            <div className="definitions">
+              <h3>Definitions</h3>
+              {definitions.map((definition, key) => (
+                <div key={key} className="definition">
+                  <div className="definition-key">
+                    <p>#{definition.definitionKey}</p>
+                  </div>
+                  <p>{definition.content}</p>
                 </div>
-                <p>{definition.content}</p>
-              </div>
-            ))}
-            <button
-              className="submit-guesses"
-              onClick={() => setShowGuesses(true)}
-            >
-              Start Voting
-            </button>
-          </div>
+              ))}
+              <button
+                className="submit-guesses"
+                onClick={() => setShowGuesses(true)}
+              >
+                Start Voting
+              </button>
+            </div>
+          </>
         )}
         {showGuesses && (
-          <div className="guesses">
-            <h3>Player Guesses</h3>
-            <div className="voting-label">
-              <h3>Name:</h3>
-              <h3>Vote:</h3>
+          // Showing votes
+          <>
+            <h2>It’s Time to Vote!</h2>
+            <p>
+              Call on each contestant and ask for the number of their vote.
+              Input their selection and confirm by reading the definition aloud.
+              Example: &quot;Number 3, the squishy remains of rotten
+              fruit.&quot;
+            </p>
+            <div className="guesses">
+              <h3>Player Guesses</h3>
+              <div className="voting-label">
+                <h3>Name:</h3>
+                <h3>Vote:</h3>
+              </div>
+              <hr />
+              {lobbyData.players
+                .filter(
+                  (player) => player.id !== lobbyData.host && player.connected,
+                )
+                .map((player, key) => (
+                  <Guess
+                    key={key}
+                    definitions={definitions as DefinitionItem[]}
+                    player={player}
+                    handleSelectGuess={handleSelectGuess}
+                    guesses={guesses}
+                  />
+                ))}
+              <button className="submit-guesses" onClick={handleSubmit}>
+                Submit Guesses
+              </button>
             </div>
-            <hr />
-            {lobbyData.players
-              .filter(
-                (player) => player.id !== lobbyData.host && player.connected,
-              )
-              .map((player, key) => (
-                <Guess
-                  key={key}
-                  definitions={definitions as DefinitionItem[]}
-                  player={player}
-                  handleSelectGuess={handleSelectGuess}
-                  guesses={guesses}
-                />
-              ))}
-            <button className="submit-guesses" onClick={handleSubmit}>
-              Submit Guesses
-            </button>
-          </div>
+          </>
         )}
         <Modal
           header={'Continue?'}
