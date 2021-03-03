@@ -135,7 +135,7 @@ a {
     font-size: 3.2rem;
     margin-bottom: 4px;
     @include mid-below {
-      font-size: 2.4rem;
+      font-size: 1.8rem;
     }
   }
 
@@ -375,29 +375,7 @@ a {
   }
 }
 
-.timesup-alert {
-  position: absolute;
-  width: 100%;
-  height: fit-content;
-  .times-up {
-    text-align: center;
-    margin-top: 2.4rem;
-    font-size: 3.2rem;
-    color: $red;
-    animation: blinker 1s linear infinite;
-  }
-}
-
-@keyframes blinker {
-  50% {
-    opacity: 0;
-  }
-}
-
 .timer-container {
-  @include mid-below {
-    margin-top: 1.6rem;
-  }
   .timer-wrap {
     display: flex;
     flex-direction: row;
@@ -638,15 +616,23 @@ a {
 
 .times-up-container {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 24px;
+  .times-up {
+    text-align: center;
+    margin: 0 0 2.4rem 0;
+    font-size: 2.4rem;
+    font-family: $display-font;
+    color: $red;
+    animation: blinker 1s linear infinite;
+  }
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
   .times-up-button {
     margin: 0 auto;
     background-color: $orange;
-  }
-  .times-up {
-    margin-top: 8px;
-    color: $red;
-    font-family: $display-font;
   }
 }
 

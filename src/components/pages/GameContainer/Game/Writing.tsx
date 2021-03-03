@@ -145,16 +145,14 @@ const Writing = (props: WritingProps): React.ReactElement => {
           <PlayerList />
         </div>
         <div className="times-up-container">
-          <button className="times-up-button" onClick={handleGoToNextPhase}>
-            Start Guessing Phase
-          </button>
           {timerDone && (
-            <div className="timesup-alert">
             <p className="times-up">
               Time&apos;s up for players to submit! Start the next phase.
             </p>
-            </div>
           )}
+          <button className="times-up-button" onClick={handleGoToNextPhase}>
+            Start Guessing Phase
+          </button>
         </div>
         <Modal
           header={'Continue?'}
@@ -178,9 +176,11 @@ const Writing = (props: WritingProps): React.ReactElement => {
             syncTime={() => 0}
           />
         )}
-        {!isSubmitted && timerDone && (
-          <h3 className="times-up">Time&apos;s up!</h3>
-        )}
+        <div className="times-up-container">
+          {!isSubmitted && timerDone && (
+            <p className="times-up">Time&apos;s up!</p>
+          )}
+        </div>
         <div className="guess-word">
           <p className="word-label">Your Word:</p>
           <p className="word">{lobbyData.word}</p>
