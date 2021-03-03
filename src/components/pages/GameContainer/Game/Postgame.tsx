@@ -115,14 +115,15 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
 
   return (
     <div className="postgame game-page">
-      <h2>The Results!</h2>
+      <h2>It’s Time for the Results!</h2>
       <Host>
         {!revealResults && (
           // Hide after reveal
           <p>
             Players can’t see the results yet, so it’s up to you to read them
-            with pizzaz! We suggest saying, “The honorable mentions are...” for
-            the definitions with no votes
+            with pizzaz! Say, “Remember, you get one point if you vote for the
+            right definition and 1 point if yours ensnares someone else&apos;s
+            vote. Let&apos;s reveal the results.
           </p>
         )}
         <div className="word-display">
