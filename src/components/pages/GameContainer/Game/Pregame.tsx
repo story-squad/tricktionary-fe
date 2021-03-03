@@ -150,12 +150,9 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
   return (
     <div className="pregame game-page">
-      <h2>Step 1: Setup</h2>
       <Host>
+        <h2>Step 1: Choose a Word</h2>
         <HostStepOne />
-        <p className="welcome-word">
-          Invite your friends, pick a word, set the timer, start the game!
-        </p>
         <div className="invite-code">
           <h3>Invite Code:</h3>
           <p className="room-code">{lobbyData.lobbyCode}</p>
@@ -163,7 +160,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         {/* Word selection */}
         {!isCustom && (
           <>
-            <h3>Choose a word!</h3>
+            <h3>Choose a word</h3>
             <div className="pick-word-instructions">
               <p className="pick-instructions">
                 Click on a word to read its definition. If you like that word{' '}
@@ -206,14 +203,14 @@ const Pregame = (props: PregameProps): React.ReactElement => {
               onClick={props.handleStartGame}
               disabled={!hasMinimumPlayers(lobbyData.players)}
             >
-              Start Game!
+              Start Game
             </button>
           </div>
         )}
         {/* Custom word form */}
         {isCustom && (
           <>
-            <h2 className="BYOW">Bring Your Own Word!</h2>
+            <h3 className="BYOW">Bring Your Own Word</h3>
             <p>
               While you wait for your team, please enter your word and its
               definition word. When all members have arrived, press start.
@@ -243,14 +240,14 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                   {isCustom ? 'Pick One of Our Words' : 'Bring Your Own Word'}
                 </button>
                 <button className="start-btn" onClick={props.handleStartGame}>
-                  Start Game!
+                  Start Game
                 </button>
               </div>
             </div>
           </>
         )}
         <div className="timer-container">
-          <h3 className="timer-title">Set A Timer!</h3>
+          <h3 className="timer-title">Set A Timer</h3>
           <p className="timer-directions">
             This timer is to deterimine how long players have to type.
           </p>
@@ -282,6 +279,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         <PlayerList />
       </Host>
       <Player>
+        <h2>The Lobby is filling up...</h2>
         <PlayerStepOne />
         {!showEditName ? (
           <div className="edit-name-block">
