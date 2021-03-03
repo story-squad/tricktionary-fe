@@ -390,6 +390,7 @@ const GameContainer = (): React.ReactElement => {
           to={`/${lobbyData.lobbyCode}`}
         />
       )}
+      {/* This error exists as visual feedback for the user following any failed API calls or websocket handlers */}
       {error && <p className="outside-error">{error}</p>}
       <div className="game-styles">{currentPhase()}</div>
     </div>
