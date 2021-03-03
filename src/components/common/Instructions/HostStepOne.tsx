@@ -3,7 +3,6 @@ import React from 'react';
 const HostStepOne = (): React.ReactElement => {
   return (
     <div className="instructions-step">
-      <h3>Step 1: Setup</h3>
       <p>
         Choose a word while your friends are joining the lobby. Set a timer and
         read the word aloud to your friends. Then say,{' '}
