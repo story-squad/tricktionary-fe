@@ -15,7 +15,7 @@ const Footer = (): React.ReactElement => {
         <p>
           Brought to you by{' '}
           <a
-            href="https://www.storysquad.app/"
+            href="https://info.tricktionary.monster/"
             target="_blank"
             rel="noreferrer"
             className="display-font"
