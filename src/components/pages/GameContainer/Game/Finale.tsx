@@ -47,7 +47,7 @@ const Finale = (): React.ReactElement => {
             </div>
             <div className="example-podium second-place">
               <div className="second-place-img second-img">
-                <p>{topPlayers.second.username}</p>
+                <p className="second-name">{topPlayers.second.username}</p>
               </div>
             </div>
           </div>
