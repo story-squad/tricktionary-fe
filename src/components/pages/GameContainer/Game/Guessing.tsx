@@ -145,7 +145,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
   return (
     <div className="guessing game-page">
-      <h2>Time for your team to guess!</h2>
+      <h2>Step 2: Voting</h2>
       <Host>
         <p>
           This is where the fun happens! Here are the definitions your players
