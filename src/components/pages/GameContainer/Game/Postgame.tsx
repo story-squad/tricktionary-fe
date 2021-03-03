@@ -123,7 +123,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
           for each definiton is also provided.
         </p>
         <div className="word-display">
-          <p>{lobbyData.word}</p>
+          <p className="word">{lobbyData.word}</p>
         </div>
         <div className="round-results">
           {sortedDefinitions.map((definitionResult, key) => (

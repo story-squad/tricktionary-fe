@@ -64,6 +64,9 @@ button {
     background: $orange;
     p.word {
       color: $white;
+      @include mid-below {
+        font-size: 1.8rem;
+      }
     }
   }
   &.sm-btn {
@@ -129,7 +132,7 @@ a {
   }
   h2 {
     color: $red;
-    font-size: 3.6rem;
+    font-size: 3.2rem;
     margin-bottom: 4px;
     @include mid-below {
       font-size: 2.4rem;
@@ -221,14 +224,18 @@ a {
   border-radius: 1rem;
   width: fit-content;
   max-width: 100%;
-  p.word-display {
-    font-size: 3.6rem;
-    font-family: $display-font;
-  }
+
   p {
     font-size: 3.6rem;
     font-family: $display-font;
     margin-bottom: 0;
+    &.word-display {
+      font-size: 3.6rem;
+      font-family: $display-font;
+    }
+    &.word {
+      color: $hover-blue;
+    }
   }
 }
 
@@ -362,16 +369,23 @@ a {
     font-family: $display-font;
     color: $hover-blue;
     margin-bottom: 0;
+    @include mid-below {
+      font-size: 3.2rem;
+    }
   }
 }
 
-.times-up {
-  text-align: center;
+.timesup-alert {
   position: absolute;
-  margin-top: 2.4rem;
-  font-size: 3.2rem;
-  color: $red;
-  animation: blinker 1s linear infinite;
+  width: 100%;
+  height: fit-content;
+  .times-up {
+    text-align: center;
+    margin-top: 2.4rem;
+    font-size: 3.2rem;
+    color: $red;
+    animation: blinker 1s linear infinite;
+  }
 }
 
 @keyframes blinker {
@@ -661,7 +675,11 @@ a {
     margin: 0 8px 8px 0;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
     @include mid-below {
+      flex-direction: row;
+      justify-content: space-evenly;
+      width: 100%;
       padding: 8px 16px;
+      margin: 0 0 8px 0;
     }
     &.submitted {
       color: $white;
@@ -675,6 +693,7 @@ a {
       margin-bottom: 8px;
       @include mid-below {
         font-size: 1.4rem;
+        margin-bottom: 0;
       }
     }
     p.player-score {
@@ -682,6 +701,7 @@ a {
       font-size: 1.4rem;
       @include mid-below {
         font-size: 1.2rem;
+        margin-bottom: 0;
       }
     }
   }
