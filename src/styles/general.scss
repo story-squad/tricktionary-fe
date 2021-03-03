@@ -156,6 +156,12 @@ a {
   &p.welcome-word {
     font-size: 1.4rem;
   }
+  &.margin-top {
+    margin-top: 4rem;
+  }
+  &.margin-bottom {
+    margin-bottom: 4rem;
+  }
 }
 
 .word-list {
@@ -466,7 +472,7 @@ a {
 
 //error
 .error {
-  position:absolute;
+  position: absolute;
   text-align: center;
   color: $red;
   font-family: $display-font;
@@ -490,14 +496,13 @@ a {
   flex-direction: row;
   justify-content: center;
   .after-reveal {
-	width: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-	.after-container {
-		display: flex;
-		justify-content: space-evenly;
-
-	}
+    .after-container {
+      display: flex;
+      justify-content: space-evenly;
+    }
   }
   .play-again {
     background: $orange;

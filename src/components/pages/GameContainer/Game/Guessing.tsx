@@ -14,6 +14,7 @@ import { MAX_NOTES_LENGTH } from '../../../../utils/constants';
 import { isLargeGame } from '../../../../utils/helpers';
 import { CharCounter } from '../../../common/CharCounter';
 import { Host } from '../../../common/Host';
+import { HostStepTwo, PlayerStepTwo } from '../../../common/Instructions';
 import { Modal } from '../../../common/Modal';
 import { Player } from '../../../common/Player';
 import { PlayerList } from '../../../common/PlayerList';
@@ -145,14 +146,9 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
   return (
     <div className="guessing game-page">
-      <h2>Time for your team to guess!</h2>
       <Host>
-        <p>
-          This is where the fun happens! Here are the definitions your players
-          have submitted. To make sure all definitions are read, click on each
-          definition to highlight it. That way you know whether you’ve read it
-          or not. REMEMBER! Read each number before the definition.
-        </p>
+        <h2>Read Each Number and Its Definition</h2>
+        <HostStepTwo />
         <p className="word-display">{lobbyData.word}</p>
         {!showGuesses && (
           <div className="definitions">
@@ -208,10 +204,8 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         />
       </Host>
       <Player>
-        <p>
-          The host will list off the definitions and their numbers. When the
-          host calls on you, choose a number.
-        </p>
+        <h2>It’s Time to Vote</h2>
+        <PlayerStepTwo />
         <p className="word-display">{lobbyData.word}</p>
         <div className="player-guess">
           <h3>Your guess:</h3>
