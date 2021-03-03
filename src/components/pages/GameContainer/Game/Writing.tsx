@@ -122,7 +122,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
   return (
     <div className="writing game-page">
       <Host>
-        <h2>Your team is typing out their best definitions:</h2>
+        <h2>Your team is typing out their best definitions</h2>
         <p>
           When the timer is up, your team will no longer be able to add to their
           definition.
@@ -163,10 +163,10 @@ const Writing = (props: WritingProps): React.ReactElement => {
         />
       </Host>
       <Player>
-        <h2>First thought = Best thought!</h2>
+        <h2>Type out your best guess</h2>
         <p>
-          Your host has chosen a word. Your job is to come up with a definition.
-          Can you hit submit before the timer runs out?
+          Your host has chosen a word. Your job is to come up with a convincing
+          fake definition. Can you hit submit before the timer runs out?
         </p>
         {useTimer && (
           <Timer
@@ -190,13 +190,6 @@ const Writing = (props: WritingProps): React.ReactElement => {
               handleSubmit(e, definition);
             }}
           >
-            <h2>Type out your best guess!</h2>
-            {time > 0 && (
-              <p>
-                When the timer is up, you will no longer be able to add to your
-                definition.
-              </p>
-            )}
             {errors.form && <div>{errors.form.message}</div>}
             <div className="char-counter-wrapper higher">
               <Input
