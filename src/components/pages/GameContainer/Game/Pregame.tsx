@@ -7,13 +7,13 @@ import {
   hostChoiceState,
   lobbySettingsState,
   lobbyState,
-  revealResultsState
+  revealResultsState,
 } from '../../../../state';
 import { WordItem } from '../../../../types/gameTypes';
 import {
   MAX_CUSTOM_WORD_LENGTH,
   MAX_DEFINITION_LENGTH,
-  MAX_USERNAME_LENGTH
+  MAX_USERNAME_LENGTH,
 } from '../../../../utils/constants';
 import { hasMinimumPlayers } from '../../../../utils/helpers';
 import { usernameIsValid } from '../../../../utils/validation';
