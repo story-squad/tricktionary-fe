@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { getWords } from '../../../../api/apiRequests';
-import { useLocalStorage } from '../../../../hooks';
+import { getWords } from '../../../../../api/apiRequests';
+import { useLocalStorage } from '../../../../../hooks';
 import {
   hostChoiceState,
   lobbySettingsState,
   lobbyState,
   revealResultsState,
-} from '../../../../state';
-import { WordItem } from '../../../../types/gameTypes';
+} from '../../../../../state';
+import { WordItem } from '../../../../../types/gameTypes';
 import {
   MAX_CUSTOM_WORD_LENGTH,
   MAX_DEFINITION_LENGTH,
   MAX_USERNAME_LENGTH,
-} from '../../../../utils/constants';
-import { hasMinimumPlayers } from '../../../../utils/helpers';
-import { usernameIsValid } from '../../../../utils/validation';
-import { CharCounter } from '../../../common/CharCounter';
-import { Host } from '../../../common/Host';
-import { Input } from '../../../common/Input';
-import { HostStepOne, PlayerStepOne } from '../../../common/Instructions';
-import { Player } from '../../../common/Player';
-import { PlayerList } from '../Game';
+} from '../../../../../utils/constants';
+import { hasMinimumPlayers } from '../../../../../utils/helpers';
+import { initialGuesses } from '../../../../../utils/localStorageInitialValues';
+import { usernameIsValid } from '../../../../../utils/validation';
+import { CharCounter } from '../../../../common/CharCounter';
+import { Host } from '../../../../common/Host';
+import { Input } from '../../../../common/Input';
+import { HostStepOne, PlayerStepOne } from '../../../../common/Instructions';
+import { Player } from '../../../../common/Player';
+import { PlayerList } from '../../../../common/PlayerList';
+import { WordChoice } from './WordChoice';
 
 const initialChoiceValue = -1;
 const initialCustomInputValue = { word: '', definition: '' };
@@ -36,7 +38,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const lobbySettings = useRecoilValue(lobbySettingsState);
   const [hostChoice, setHostChoice] = useRecoilState(hostChoiceState);
   const lobbyData = useRecoilValue(lobbyState);
-  const [, setGuesses] = useLocalStorage('guesses', []);
+  const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
   );
@@ -47,15 +49,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   };
 
   //set up the form details
-  const {
-    register,
-    handleSubmit,
-    errors,
-    setError,
-    clearErrors,
-    getValues,
-    watch,
-  } = useForm({
+  const { register, errors, setError, clearErrors } = useForm({
     mode: 'onSubmit',
   });
   useEffect(() => {
@@ -161,7 +155,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           <h3>Invite Code:</h3>
           <p className="room-code">{lobbyData.lobbyCode}</p>
         </div>
-        {/* Word selection */}
+        {/* Suggested words selection */}
         {!isCustom && (
           <>
             <h3>Choose a word</h3>
@@ -333,18 +327,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   );
 };
 
-const WordChoice = (props: WordChoiceProps): React.ReactElement => {
-  const { word, handleChoose, choice } = props;
-  const className = `word-choice${word.id === choice ? ' selected' : ''}`;
-  return (
-    <>
-      <button onClick={() => handleChoose(word.id)} className={className}>
-        <p className="word">{word.word}</p>
-      </button>
-    </>
-  );
-};
-
 export default Pregame;
 
 interface PregameProps {
@@ -359,14 +341,4 @@ interface PregameProps {
   username: string;
   handleUpdateUsername: (newUsername: string) => void;
   setError: any;
-}
-
-interface WordChoiceProps {
-  word: {
-    id: number;
-    word: string;
-    definition: string;
-  };
-  handleChoose: (id: number) => void;
-  choice: number;
 }

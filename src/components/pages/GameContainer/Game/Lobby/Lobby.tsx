@@ -2,15 +2,16 @@ import jwt from 'jsonwebtoken';
 import React, { SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
-import { useLocalStorage } from '../../../../hooks';
-import { DecodedToken } from '../../../../types/commonTypes';
-import { MAX_USERNAME_LENGTH } from '../../../../utils/constants';
+import { useLocalStorage } from '../../../../../hooks';
+import { DecodedToken } from '../../../../../types/commonTypes';
+import { MAX_USERNAME_LENGTH } from '../../../../../utils/constants';
+import { initialToken } from '../../../../../utils/localStorageInitialValues';
 import {
   lobbyCodeIsValid,
   usernameIsValid,
-} from '../../../../utils/validation';
-import { CharCounter } from '../../../common/CharCounter';
-import { Input } from '../../../common/Input';
+} from '../../../../../utils/validation';
+import { CharCounter } from '../../../../common/CharCounter';
+import { Input } from '../../../../common/Input';
 import {
   HostStepOne,
   HostStepThree,
@@ -18,23 +19,15 @@ import {
   PlayerStepOne,
   PlayerStepThree,
   PlayerStepTwo,
-} from '../../../common/Instructions';
-import { PublicGames } from '../../../common/PublicGames';
+} from '../../../../common/Instructions';
+import { PublicGames } from '../../../../common/PublicGames';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
-  const [token] = useLocalStorage<string>('token', '');
+  const [token] = useLocalStorage<string>('token', initialToken);
 
   //set up the form details
-  const {
-    register,
-    handleSubmit,
-    errors,
-    setError,
-    clearErrors,
-    getValues,
-    watch,
-  } = useForm({
+  const { register, errors, setError, clearErrors } = useForm({
     mode: 'onSubmit',
   });
 

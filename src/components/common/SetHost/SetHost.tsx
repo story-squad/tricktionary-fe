@@ -3,10 +3,11 @@ import { useRecoilValue } from 'recoil';
 import { useLocalStorage } from '../../../hooks';
 import { playerIdState } from '../../../state';
 import { GuessItem, PlayerItem } from '../../../types/gameTypes';
+import { initialGuesses } from '../../../utils/localStorageInitialValues';
 
 const SetHost = (props: SetHostProps): React.ReactElement => {
   const playerId = useRecoilValue(playerIdState);
-  const [guesses] = useLocalStorage('guesses', []);
+  const [guesses] = useLocalStorage('guesses', initialGuesses);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [chosenPlayer, setChosenPlayer] = useState<string>('');
 

@@ -37,6 +37,12 @@ export interface GuessItem {
   player: string;
 }
 
+export interface GuessItemWithConnected {
+  guess: number;
+  player: string;
+  connected: boolean;
+}
+
 export interface DefinitionItem {
   content: string;
   id: number;
@@ -89,4 +95,21 @@ export interface HandleSelectGuessParams {
   playerId: string;
   guessId: number;
   definitionSelection: DefinitionSelection;
+}
+
+export interface DefinitionResultItem {
+  username: string;
+  playerId: string;
+  definition: string;
+  definitionId: number;
+  guesses: string[];
+  points: number;
+}
+
+export interface PlayerDictionary {
+  [Key: string]: string;
+}
+
+export interface DefinitionDictionary {
+  [Key: number]: DefinitionResultItem;
 }
