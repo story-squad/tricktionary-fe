@@ -106,10 +106,6 @@ export interface DefinitionResultItem {
   points: number;
 }
 
-export interface DefinitionResultProps {
-  definitionResult: DefinitionResultItem;
-}
-
 export interface PlayerDictionary {
   [Key: string]: string;
 }
