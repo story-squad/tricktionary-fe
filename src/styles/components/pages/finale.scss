@@ -12,8 +12,8 @@
         margin-top: -190px;
         width: 100rem;
         @include mid-below {
-            margin-top: -40px;
-            width: 36rem;
+            margin-top: -48px;
+            width: 37rem;
         }
     }
     .place-bars {
@@ -169,10 +169,12 @@
                     -webkit-text-stroke: 1px $sky-blue;
                     }
                 &.third-name {
+                    color: $sky-blue;
                     font-size: 2.4rem;
                     -webkit-text-stroke-width: 1px;
                     }
                 &.second-name {
+                    color: $sky-blue;
                     font-size: 2.4rem;
                     -webkit-text-stroke-width: 1px;
                 }
