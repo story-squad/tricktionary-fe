@@ -1,9 +1,9 @@
-@import '../../mixins.scss';
-@import '../../globals.scss';
+@import "../../mixins.scss";
+@import "../../globals.scss";
 
 .selected {
-	background-color: $orange;
-	color: $white;
+	background-color: $neon-green;
+	color: $dark-cerulean;
 }
 
 .pick-word-instructions {
@@ -32,7 +32,7 @@
 	justify-content: space-between;
 	border-radius: 16px;
 	padding: 24px;
-	border: 2px dashed $hover-blue;
+	border: 2px dashed $sky-blue;
 	margin-top: 3.2rem;
 	@include mid-below {
 		flex-direction: column;
@@ -67,7 +67,6 @@
 .timer-container {
 	margin-top: 4.8rem;
 	.timer-title {
-		color: $red;
 		font-family: $display-font;
 		text-align: center;
 		margin-top: 24px;
@@ -82,16 +81,16 @@
 		align-items: center;
 		margin: 0 auto;
 		padding-right: 8px;
-		background: $orange;
+		background: $burnt-orange;
 		color: $white;
 		font-family: $display-font;
 		font-size: 3.2rem;
 	}
 }
 
-input[type='number']::-webkit-inner-spin-button {
+input[type="number"]::-webkit-inner-spin-button {
 	-webkit-appearance: none;
-	background: #eee url('../../../assets/arrows.png') no-repeat 50% 50%;
+	background: #eee url("../../../assets/arrows.png") no-repeat 50% 50%;
 	opacity: 1;
 	width: 14px;
 	height: 20px;

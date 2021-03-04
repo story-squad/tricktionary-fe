@@ -34,18 +34,20 @@ h1,
 h2,
 h3 {
   font-family: $display-font;
+  color: $sky-blue;
 }
 
 label,
 input,
 button,
 span {
+  color: $nero;
   font-family: $text-font;
   font-size: 1.6rem;
 }
 
 p {
-  color: $black;
+  color: $nero;
   font-family: $text-font;
   font-size: 1.4rem;
   margin-bottom: 1.6rem;
@@ -61,16 +63,16 @@ textarea {
 button {
   @include button;
   &.selected {
-    background: $orange;
+    background: $neon-green;
     p.word {
-      color: $white;
+      color: $dark-cerulean;
       @include mid-below {
         font-size: 1.8rem;
       }
     }
   }
   &.sm-btn {
-    background: $otherblue;
+    background: $sky-blue;
     font-size: 1.2rem;
     height: 2.4rem;
     padding: 0 8px;
@@ -83,9 +85,8 @@ button {
   }
   &.start-btn {
     box-sizing: border-box;
-    background: $green;
+    background: $burnt-orange;
     font-size: 1.8rem;
-    font-family: $display-font;
     height: 5rem;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
   }
@@ -109,11 +110,11 @@ input {
 }
 
 a {
-  color: $blue;
+  color: $sky-blue;
 }
 .or {
   font-family: $display-font;
-  color: $red;
+  color: $sky-blue;
   text-align: center;
   font-size: 1.8rem;
   vertical-align: middle;
@@ -131,7 +132,6 @@ a {
     padding: 2.4rem 2.4rem;
   }
   h2 {
-    color: $red;
     font-size: 3.2rem;
     margin-bottom: 4px;
     @include mid-below {
@@ -198,7 +198,7 @@ a {
     &.single-word {
       text-align: center;
       font-size: 4.8rem;
-      color: $hover-blue;
+      color: $sky-blue;
     }
   }
   .definition {
@@ -214,7 +214,7 @@ a {
     height: 10rem;
     max-width: 100%;
     border-radius: 8px;
-    border: 2px solid $black;
+    border: 2px solid $nero;
   }
 }
 
@@ -223,26 +223,14 @@ a {
   word-break: break-word;
   text-align: center;
   padding: 2rem;
-  color: $hover-blue;
   font-size: 3.6rem;
   font-family: $display-font;
-  border: 2px dashed $dark-blue;
+  border: 2px dashed $dark-cerulean;
   border-radius: 1rem;
   width: fit-content;
   max-width: 100%;
-
-  p {
-    font-size: 3.6rem;
-    font-family: $display-font;
-    margin-bottom: 0;
-    &.word-display {
-      font-size: 3.6rem;
-      font-family: $display-font;
-    }
-    &.word {
-      color: $hover-blue;
-    }
-  }
+  background: $neon-green;
+  color: $dark-cerulean;
 }
 
 .guessing {
@@ -276,7 +264,7 @@ a {
       display: flex;
       justify-content: center;
       margin: 0 2rem 0 0;
-      color: $black;
+      color: $nero;
       background: $white;
       border-radius: 8px;
       width: 4rem;
@@ -287,7 +275,7 @@ a {
         text-align: center;
         margin: auto;
         font-family: $display-font;
-        color: $red;
+        color: $sky-blue;
         word-break: unset;
       }
     }
@@ -309,7 +297,6 @@ a {
   justify-content: center;
   h3 {
     margin-top: 0;
-    color: $red;
   }
   .invite-code {
     width: auto;
@@ -322,7 +309,7 @@ a {
     border: 2px dashed $dark-blue;
     margin: 24px;
     h3 {
-      color: $black;
+      color: $nero;
       margin-top: 0;
       font-size: 1.8rem;
     }
@@ -330,7 +317,7 @@ a {
       font-family: $display-font;
       font-size: 4.8rem;
       margin: 0;
-      color: $hover-blue;
+      color: $sky-blue;
     }
   }
 }
@@ -341,7 +328,7 @@ a {
   .edit-name {
     width: 150px;
     height: 50px;
-    background-color: $otherblue;
+    background-color: $sky-blue;
   }
 }
 
@@ -354,7 +341,7 @@ a {
   border: 2px solid $dark-blue;
   .button {
     float: right;
-    color: $otherblue;
+    color: $sky-blue;
   }
 }
 
@@ -366,18 +353,21 @@ a {
   margin: 24px auto;
   border-radius: 16px;
   padding: 24px;
-  border: 2px dashed $royal-blue;
+  border: 2px dashed $dark-cerulean;
+  background: $neon-green;
   @include mid-below {
     width: 100%;
   }
   .word {
     font-size: 4.8rem;
     font-family: $display-font;
-    color: $hover-blue;
     margin-bottom: 0;
     @include mid-below {
       font-size: 3.2rem;
     }
+  }
+  p {
+    color: $dark-cerulean;
   }
 }
 
@@ -392,7 +382,7 @@ a {
 
 .definition-result {
   margin: 4rem 0;
-  border: 2px solid $royal-blue;
+  border: 2px solid $dark-cerulean;
   box-shadow: $boxshadow;
   border-radius: 8px;
   padding-bottom: 0.8rem;
@@ -431,7 +421,7 @@ a {
       font-size: 1.8rem;
     }
     &:last-child {
-      color: $red;
+      color: $sky-blue;
     }
   }
   .result-votes {
@@ -455,14 +445,14 @@ a {
     }
     p.who-voted {
       font-family: $display-font;
-      color: $orange;
+      color: $burnt-orange;
       margin-bottom: 0;
       width: auto;
     }
   }
   &:last-child {
     .result-username {
-      color: $royal-blue;
+      color: $dark-cerulean;
     }
     span:last-child {
       display: none;
@@ -474,7 +464,7 @@ a {
 .error {
   position: absolute;
   text-align: center;
-  color: $red;
+  color: $burnt-orange;
   font-family: $display-font;
 }
 
@@ -486,7 +476,7 @@ a {
   border-radius: 16px;
   padding: 8px 16px 8px 16px;
   font-size: 1.8rem;
-  color: $red;
+  color: $burnt-orange;
   font-family: $display-font;
 }
 
@@ -505,11 +495,11 @@ a {
     }
   }
   .play-again {
-    background: $orange;
+    background: $burnt-orange;
     margin: 1.6rem 0 0 0;
   }
   .selected {
-    background: $orange;
+    background: $neon-green;
   }
 }
 
@@ -548,7 +538,6 @@ a {
     justify-content: space-between;
     align-items: center;
     h2 {
-      color: $red;
       font-size: 2.4rem;
       align-self: start;
     }
@@ -592,7 +581,7 @@ a {
   }
   .add-time.center {
     background-color: $white;
-    color: $black;
+    color: $nero;
     height: auto;
     font-family: $display-font;
     text-decoration: underline;
@@ -627,7 +616,7 @@ a {
     margin: 0 0 2.4rem 0;
     font-size: 2.4rem;
     font-family: $display-font;
-    color: $red;
+    color: $burnt-orange;
     animation: blinker 1s linear infinite;
   }
   @keyframes blinker {
@@ -637,7 +626,7 @@ a {
   }
   .times-up-button {
     margin: 0 auto;
-    background-color: $orange;
+    background-color: $burnt-orange;
   }
 }
 
@@ -673,10 +662,11 @@ a {
       margin: 0 0 8px 0;
     }
     &.submitted {
-      color: $white;
-      border: 2px solid $green;
+      color: $dark-cerulean;
+      border: 2px solid $dark-cerulean;
+      background: $neon-green;
       p {
-        color: $green;
+        color: $dark-cerulean;
       }
     }
     .player {
@@ -726,9 +716,9 @@ a {
       margin: 4px;
 
       &.selected {
-        background-color: $blue;
-        color: $white;
-        border: 2px solid $blue;
+        background-color: $neon-green;
+        color: $dark-cerulean;
+        border: 2px solid $dark-cerulean;
         box-shadow: $boxshadow;
       }
     }
@@ -759,6 +749,6 @@ a {
 .submit-guesses {
   display: flex;
   margin: 0 auto;
-  background-color: $orange;
+  background-color: $burnt-orange;
   margin-top: 4.8rem;
 }

@@ -1,20 +1,19 @@
-@import '../../mixins.scss';
-@import '../../globals.scss';
+@import "../../mixins.scss";
+@import "../../globals.scss";
 
 .lobby-button {
   width: 100%;
 }
 
-.host.lobby-button{
-    // border: 1px solid $dark-blue;
-    background-color: $orange;
-    color: $white;
-    font-weight: 700;
-    &:disabled {
-      background-color: $lt-grey;
-    }
+.host.lobby-button {
+  background-color: $burnt-orange;
+  color: $white;
+  font-weight: 700;
+  &:disabled {
+    background-color: $lt-grey;
+  }
 }
 
-.join.lobby-button{
+.join.lobby-button {
   margin-top: 40px;
 }
