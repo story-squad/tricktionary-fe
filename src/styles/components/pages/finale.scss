@@ -10,7 +10,7 @@
         width: 100rem;
         @include mid-below {
             margin-top: -120px;
-            width: 35rem;
+            width: 100%;
           }
     }
     .place-bars {
@@ -23,6 +23,7 @@
         @include mid-below {
             flex-direction: column;
             align-items: center;
+            width: 100%;
           }
         .stack {
             display: flex;
@@ -32,7 +33,8 @@
                 margin: 0 72px;
             }
             @include mid-below {
-                //where stack media query goes
+                align-items: start;
+                width: 100%;
               }
         }
         .stack:nth-child(2) {
@@ -70,10 +72,12 @@
             background-size: contain;
             background-repeat: no-repeat;
             z-index: 9;
-            margin-bottom: -112px;
+            margin-bottom: -11.2rem;
             padding: 0 9.6rem;
             @include mid-below {
-                padding: 0 6.4rem;
+                margin: 0;
+                height: 0;
+                padding: 4rem 0;
             }
             &.second-img {
                 background-image: url('../../../assets/secondplacestar.svg');    
@@ -88,6 +92,10 @@
                 -webkit-text-stroke: 2px $sky-blue;
                 margin: 0;
                 text-align: center;
+                @include mid-below {
+                    font-size: 2.4rem;
+                    -webkit-text-stroke: 1px $sky-blue;
+                  }
                 &.third-name {
                     font-size: 2.4rem;
                     -webkit-text-stroke-width: 1px;
@@ -104,14 +112,15 @@
             display: flex;
             justify-content: center;
             align-items: flex-end;
+            border-bottom: none;
             @include mid-below {
-                width: 10rem;
+                width: 26rem;
+                border-radius: 0 8px 8px 0;
               }
             &.first-place {
                 height: 20rem;
                 background-color: $gold;
                 border: 4px solid $gold-outline;
-                border-bottom: none;
                 background-image: url('../../../assets/1stribbon.png');
                 background-position: 50% 10%;
                 background-repeat: no-repeat;
@@ -120,7 +129,6 @@
                 height: 16rem;
                 background-color: $silver;
                 border: 4px solid $silver-outline;
-                border-bottom: none;
                 background-image: url('../../../assets/2ndribbon.png');
                 background-position: 50% 10%;
                 background-repeat: no-repeat;
