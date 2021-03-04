@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 //import assets
 import finaleBanner from '../../../../assets/finaleBanner.png';
@@ -29,11 +29,7 @@ const getTopPlayers = (lobbyData: LobbyData): TopPlayers => {
 
 const Finale = (): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
-  const [topPlayers, setTopPlayers] = useState(getTopPlayers(lobbyData));
-
-  useEffect(() => {
-    setTopPlayers(getTopPlayers(lobbyData));
-  }, [lobbyData]);
+  const [topPlayers] = useState(getTopPlayers(lobbyData));
 
   return (
     <>
