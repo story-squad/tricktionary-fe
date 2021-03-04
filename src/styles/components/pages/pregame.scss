@@ -44,6 +44,12 @@
 		justify-content: space-evenly;
 	}
 
+	#word {
+		@include mid-below {
+			width: 100%;
+		}
+	}
+
 	.word-definition {
 		width: 75%;
 		@include mid-below {
