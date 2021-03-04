@@ -32,7 +32,6 @@ const Finale = (): React.ReactElement => {
   const [topPlayers] = useState(getTopPlayers(lobbyData));
 
   return (
-    <>
       <div className="finale game-page">
         <img className="finale-banner" src={finaleBanner} />
         <div className="place-bars">
@@ -74,8 +73,7 @@ const Finale = (): React.ReactElement => {
           )}
         </div>
         <div className="podium">&nbsp;</div>
-      </div>
-      <br />
+              {/* <br />
       <p className="feedback">
         {`We're still in beta-testing and we'd love to hear any ideas you have!`}{' '}
         <a
@@ -86,8 +84,8 @@ const Finale = (): React.ReactElement => {
           {' '}
           Feedback Form
         </a>
-      </p>
-    </>
+      </p> */}
+      </div>
   );
 };
 
