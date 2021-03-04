@@ -5,12 +5,17 @@
     flex-direction: column;
     align-items: center;
     padding: 8rem 0 0 0;
+    margin-top: 60px;
+    @include mid-below {
+        margin: 24px 0 0 0;
+        padding: 0 0 4rem 0;
+      }
     .finale-banner {
-        margin-top: -200px;
+        margin-top: -190px;
         width: 100rem;
         @include mid-below {
-            margin-top: -120px;
-            width: 100%;
+            margin-top: -40px;
+            width: 36rem;
           }
     }
     .place-bars {
@@ -24,6 +29,7 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
+            margin-top: 32px;
           }
         .stack {
             display: flex;
@@ -35,6 +41,7 @@
             @include mid-below {
                 align-items: start;
                 width: 100%;
+                margin-top: 40px;
               }
         }
         .stack:nth-child(2) {
@@ -48,7 +55,10 @@
             padding: 8px;
             margin: 0 0 2.4rem 0;
             width: 20rem;
-            word-break: break-all;
+            word-break: break-word;
+            @include mid-below {
+                margin: 0 auto 2.4rem 32px;
+            }
             p {
                 margin-bottom: 0;
             }
@@ -71,13 +81,12 @@
             background-position: center;
             background-size: contain;
             background-repeat: no-repeat;
-            z-index: 9;
+            z-index: 0;
             margin-bottom: -11.2rem;
             padding: 0 9.6rem;
             @include mid-below {
                 margin: 0;
-                height: 0;
-                padding: 4rem 0;
+                height: 10.6rem;
             }
             &.second-img {
                 background-image: url('../../../assets/secondplacestar.svg');    
@@ -112,26 +121,35 @@
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            border-bottom: none;
+            background-position: 50% 10%;
+            background-repeat: no-repeat;
             @include mid-below {
                 width: 26rem;
                 border-radius: 0 8px 8px 0;
-              }
+                align-items: flex-start;
+                background-position: 50% 100%;
+            }
             &.first-place {
                 height: 20rem;
                 background-color: $gold;
                 border: 4px solid $gold-outline;
+                border-bottom: none;
                 background-image: url('../../../assets/1stribbon.png');
-                background-position: 50% 10%;
-                background-repeat: no-repeat;
+                @include mid-below {
+                    border-left: none;
+                    border-bottom: 4px solid $gold-outline;
+                }
             }
             &.second-place {
                 height: 16rem;
                 background-color: $silver;
                 border: 4px solid $silver-outline;
+                border-bottom: none;
                 background-image: url('../../../assets/2ndribbon.png');
-                background-position: 50% 10%;
-                background-repeat: no-repeat;
+                @include mid-below {
+                    border-left: none;
+                    border-bottom: 4px solid $silver-outline;
+                }
                 .place-img {
                     height: 8rem;
                     margin-bottom: -56px;
@@ -143,8 +161,10 @@
                 border: 4px solid $bronze-outline;
                 border-bottom: none;
                 background-image: url('../../../assets/3rdribbon.png');
-                background-position: 50% 10%;
-                background-repeat: no-repeat;
+                @include mid-below {
+                    border-left: none;
+                    border-bottom: 4px solid $bronze-outline;
+                }
                 .place-img {
                     height: 6rem;
                     margin-bottom: -48px;
