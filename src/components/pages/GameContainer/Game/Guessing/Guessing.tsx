@@ -31,7 +31,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     getDefinitions(lobbyData.players, playerId, lobbyData.definition),
   );
   // Array of player's guesses with connected status
-  const [guessesWithConnected, setGuessesWithConnected] = useLocalStorage(
+  const [guesses, setGuesses] = useLocalStorage(
     'guesses',
     getGuessesWithConnected(lobbyData),
   );
@@ -41,9 +41,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
   // Recalculate guesses when players disconnect/reconnect
   useEffect(() => {
-    setGuessesWithConnected(
-      recalculateGuessesWithConnected(lobbyData, guessesWithConnected),
-    );
+    setGuesses(recalculateGuessesWithConnected(lobbyData, guesses));
   }, [lobbyData]);
 
   const handleSelectGuess = (
@@ -52,8 +50,8 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     definitionSelection: DefinitionSelection,
   ) => {
     handleSendGuess(playerId, definitionSelection);
-    setGuessesWithConnected(
-      guessesWithConnected.map((guess: GuessItem) => {
+    setGuesses(
+      guesses.map((guess: GuessItem) => {
         if (guess.player === playerId) {
           return { ...guess, guess: guessId };
         } else {
@@ -64,8 +62,8 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   };
 
   const handleSubmit = () => {
-    if (allPlayersHaveGuessed(lobbyData, guessesWithConnected)) {
-      handleSubmitGuesses(guessesWithConnected);
+    if (allPlayersHaveGuessed(lobbyData, guesses)) {
+      handleSubmitGuesses(guesses);
     } else {
       setShowModal(true);
     }
@@ -131,7 +129,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
                     definitions={definitions as DefinitionItem[]}
                     player={player}
                     handleSelectGuess={handleSelectGuess}
-                    guesses={guessesWithConnected}
+                    guesses={guesses}
                   />
                 ))}
               <button className="submit-guesses" onClick={handleSubmit}>
@@ -143,7 +141,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         <Modal
           header={'Continue?'}
           message={`You haven't selected a guess for every player. Continue anyway?`}
-          handleConfirm={() => handleSubmitGuesses(guessesWithConnected)}
+          handleConfirm={() => handleSubmitGuesses(guesses)}
           handleCancel={() => setShowModal(false)}
           visible={showModal}
         />
