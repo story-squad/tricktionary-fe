@@ -26,15 +26,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const playerId = useRecoilValue(playerIdState);
 
   //set up the form details
-  const {
-    register,
-    // handleSubmit,
-    errors,
-    setError,
-    clearErrors,
-    getValues,
-    watch,
-  } = useForm({
+  const { register, errors, setError, clearErrors } = useForm({
     mode: 'onSubmit',
   });
 
