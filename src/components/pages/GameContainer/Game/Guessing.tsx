@@ -251,11 +251,8 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
             <CharCounter string={notes} max={MAX_NOTES_LENGTH} />
           </div>
         </div>
-        <div className="player-display">
-          <h2 className="player-h2">Players</h2>
-          <PlayerList />
-        </div>
       </Player>
+      <PlayerList />
     </div>
   );
 };

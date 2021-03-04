@@ -193,8 +193,8 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
             </div>
           </>
         )}
-        <PlayerList hidePoints={!revealResults} />
       </Player>
+      <PlayerList hidePoints={!revealResults} />
     </div>
   );
 };
