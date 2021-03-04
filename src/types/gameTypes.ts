@@ -37,6 +37,12 @@ export interface GuessItem {
   player: string;
 }
 
+export interface GuessItemWithConnected {
+  guess: number;
+  player: string;
+  connected: boolean;
+}
+
 export interface DefinitionItem {
   content: string;
   id: number;
