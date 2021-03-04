@@ -63,20 +63,22 @@ const GameContainer = (): React.ReactElement => {
     history.push('/');
   };
 
+  // For testing, DELETE later
+  // useEffect(() => {
+  //   console.log('lobbydata', lobbyData);
+  // }, [lobbyData]);
+
   useEffect(() => {
     if (lobbyData.phase !== 'WRITING') {
       setTime(-1);
     }
   }, [lobbyData]);
 
-  // // For testing, DELETE later
-  // useEffect(() => {
-  //   console.log('lobbydata', lobbyData);
-  // }, [lobbyData]);
-
   // Make a new socket connection after disconnecting
   useEffect(() => {
-    socket.connect();
+    if (socket.disconnected) {
+      socket.connect();
+    }
   }, [socket.disconnected]);
 
   useEffect(() => {
@@ -88,6 +90,7 @@ const GameContainer = (): React.ReactElement => {
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
       history.push(`/${socketData.lobbyCode}`);
+      setError('');
     });
 
     // Add a player to the list when they join
@@ -197,6 +200,11 @@ const GameContainer = (): React.ReactElement => {
     socket.on('reveal results', (guesses: GuessItem[]) => {
       setGuesses(guesses);
       setRevealResults(true);
+    });
+
+    // After a disconnection occurs, refresh the game on reconnection
+    socket.on('pulse check', () => {
+      handleLogin();
     });
   }, []);
 
@@ -368,7 +376,7 @@ const GameContainer = (): React.ReactElement => {
   return (
     <div className="game-container">
       <Modal
-        header={'Before You Go...'}
+        header={'HEY!'}
         message={'Would you like to leave the current game?'}
         handleConfirm={resetGame}
         handleCancel={() => setShowLeaveModal(false)}
@@ -382,7 +390,7 @@ const GameContainer = (): React.ReactElement => {
           to={`/${lobbyData.lobbyCode}`}
         />
       )}
-      {error && <div>{error}</div>}
+      {error && <p className="outside-error">{error}</p>}
       <div className="game-styles">{currentPhase()}</div>
     </div>
   );

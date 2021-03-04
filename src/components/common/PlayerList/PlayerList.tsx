@@ -41,10 +41,10 @@ const playerUserName = (
   if (player.id === playerId) {
     username += '(You) ';
   }
-  username += player.username;
   if (lobbyData.host === player.id) {
-    username += '***';
+    username += '(Host) ';
   }
+  username += player.username;
   return username;
 };
 
@@ -53,21 +53,27 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
 
   return (
-    <div className="player-lobby">
-      {lobbyData.players
-        .filter((player: PlayerItem) => player.connected)
-        .map((player: PlayerItem) => {
-          return (
-            <div className={playerClassName(lobbyData, player)} key={player.id}>
-              <p className="player">
-                {playerUserName(lobbyData, player, playerId)}
-              </p>
-              <p className="player-score">
-                Score: {props.hidePoints ? '?' : `${player.points}`}
-              </p>
-            </div>
-          );
-        })}
+    <div className="player-display">
+      <h2 className="player-h2">Players</h2>
+      <div className="player-lobby">
+        {lobbyData.players
+          .filter((player: PlayerItem) => player.connected)
+          .map((player: PlayerItem) => {
+            return (
+              <div
+                className={playerClassName(lobbyData, player)}
+                key={player.id}
+              >
+                <p className="player">
+                  {playerUserName(lobbyData, player, playerId)}
+                </p>
+                <p className="player-score">
+                  Score: {props.hidePoints ? '?' : `${player.points}`}
+                </p>
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 };

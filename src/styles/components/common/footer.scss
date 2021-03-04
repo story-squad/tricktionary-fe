@@ -1,19 +1,74 @@
 footer {
-  height: 12rem;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  padding: 2rem;
+  padding: 16px 0 16px 0;
   background: $white;
+  margin: 2.4rem 0 0 0;
 
-  @include large-below {
-    flex-direction: column;
-  }
   .flex-container {
     display: flex;
-    height: 5rem;
+    height: 4rem;
   }
   .display-font {
     font-family: $display-font;
+    text-decoration: none;
+  }
+
+  .bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1.6rem;
+
+    p {
+      font-weight: 700;
+      font-size: 1.6rem;
+      margin: 0;
+    }
+    .tagline {
+      font-style: italic;
+      font-weight: 500;
+      margin: 0 0 4px 0;
+    }
+  }
+
+  .top {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    p.email-disclaimer {
+      margin-bottom: 8px;
+    }
+
+    .ck-fm {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      text-align: center;
+
+      @include mid-below {
+        flex-direction: column;
+      }
+
+      input#ck-email {
+        height: 3.2rem;
+        margin: 0 0 0 1.6rem;
+        padding: 8px;
+      }
+
+      button {
+        height: 3.2rem;
+        padding: 0 16px 0 16px;
+        margin: 0 0 0 8px;
+
+      @include mid-below {
+        margin-top: 8px;
+      }
+      }
+    }
   }
 }

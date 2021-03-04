@@ -122,11 +122,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
   return (
     <div className="writing game-page">
       <Host>
-        <h2>Your team is typing out their best definitions:</h2>
-        <p>
-          When the timer is up, your team will no longer be able to add to their
-          definition.
-        </p>
+        <h2>Players are writing their definitions...</h2>
         {useTimer && (
           <Timer
             time={time}
@@ -140,19 +136,15 @@ const Writing = (props: WritingProps): React.ReactElement => {
           <p className="word-label">Your Word:</p>
           <p className="word">{lobbyData.word}</p>
         </div>
-        <div className="player-display">
-          <h2 className="player-h2">Players</h2>
-          <PlayerList />
-        </div>
         <div className="times-up-container">
-          <button className="times-up-button" onClick={handleGoToNextPhase}>
-            Start Guessing Phase
-          </button>
           {timerDone && (
             <p className="times-up">
               Time&apos;s up for players to submit! Start the next phase.
             </p>
           )}
+          <button className="times-up-button" onClick={handleGoToNextPhase}>
+            Start Guessing Phase
+          </button>
         </div>
         <Modal
           header={'Continue?'}
@@ -163,10 +155,14 @@ const Writing = (props: WritingProps): React.ReactElement => {
         />
       </Host>
       <Player>
-        <h2>First thought = Best thought!</h2>
+        <h2>It&apos;s Time to Get Creative!</h2>
         <p>
-          Your host has chosen a word. Your job is to come up with a definition.
-          Can you hit submit before the timer runs out?
+          When the game starts,{' '}
+          <strong>
+            compose your best trick defintion to get other players to vote for
+            it.
+          </strong>{' '}
+          Click “submit” before the time runs out!
         </p>
         {useTimer && (
           <Timer
@@ -176,9 +172,11 @@ const Writing = (props: WritingProps): React.ReactElement => {
             syncTime={() => 0}
           />
         )}
-        {!isSubmitted && timerDone && (
-          <h3 className="times-up">Time&apos;s up!</h3>
-        )}
+        <div className="times-up-container">
+          {!isSubmitted && timerDone && (
+            <p className="times-up">Time&apos;s up!</p>
+          )}
+        </div>
         <div className="guess-word">
           <p className="word-label">Your Word:</p>
           <p className="word">{lobbyData.word}</p>
@@ -190,20 +188,13 @@ const Writing = (props: WritingProps): React.ReactElement => {
               handleSubmit(e, definition);
             }}
           >
-            <h2>Type out your best guess!</h2>
-            {time > 0 && (
-              <p>
-                When the timer is up, you will no longer be able to add to your
-                definition.
-              </p>
-            )}
             {errors.form && <div>{errors.form.message}</div>}
             <div className="char-counter-wrapper higher">
               <Input
                 id="definition"
                 name="definition"
                 value={definition}
-                label="definition"
+                label="Your best definition"
                 register={register}
                 onChange={handleChangeDefinition}
                 disabled={timerDone}
@@ -224,11 +215,8 @@ const Writing = (props: WritingProps): React.ReactElement => {
             <p>{definition}</p>
           </div>
         )}
-        <div className="player-display">
-          <h2 className="player-h2">Players</h2>
-          <PlayerList />
-        </div>
       </Player>
+      <PlayerList />
     </div>
   );
 };

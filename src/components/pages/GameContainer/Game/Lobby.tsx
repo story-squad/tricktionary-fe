@@ -3,9 +3,6 @@ import React, { SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import { useLocalStorage } from '../../../../hooks';
-import '../../../../styles/components/pages/Lobby.scss';
-//styles
-import '../../../../styles/gameContainer.scss';
 import { DecodedToken } from '../../../../types/commonTypes';
 import { MAX_USERNAME_LENGTH } from '../../../../utils/constants';
 import {
@@ -14,6 +11,15 @@ import {
 } from '../../../../utils/validation';
 import { CharCounter } from '../../../common/CharCounter';
 import { Input } from '../../../common/Input';
+import {
+  HostStepOne,
+  HostStepThree,
+  HostStepTwo,
+  PlayerStepOne,
+  PlayerStepThree,
+  PlayerStepTwo,
+} from '../../../common/Instructions';
+import { PublicGames } from '../../../common/PublicGames';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
@@ -84,54 +90,77 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   };
 
   return (
-    <div className="lobby game-page">
-      <h2>Welcome!</h2>
-      <p>
-        Please enter your name and lobby code to join a game or you can host a
-        new game.
-      </p>
-      <br />
-      <form className="start-game">
-        <div className="char-counter-wrapper">
-          <Input
-            id="username"
-            name="username"
-            value={props.username}
-            label="First Name"
-            register={register}
-            onChange={handleChangeUsername}
-            maxLength={MAX_USERNAME_LENGTH}
-          />
-          <CharCounter string={props.username} max={MAX_USERNAME_LENGTH} />
-        </div>
-        <label htmlFor="lobby-code">Lobby Code</label>
-        <input
-          id="lobby-code"
-          name="lobby-code"
-          value={props.lobbyCode}
-          onChange={handleChangeCode}
-          maxLength={4}
-          placeholder="Enter lobby code to join a game!"
-        />
+    <>
+      <PublicGames />
+      <div className="lobby game-page">
+        <h2>Welcome!</h2>
+        <p>
+          Please enter your name and lobby code to join a game or you can host a
+          new game.
+        </p>
         <br />
-        {errors.form && <p>{errors.form.message}</p>}
-        <button
-          className="join lobby-button"
-          onClick={(e) => props.handleJoinLobby(e, '')}
-          disabled={!usernameIsValid(props.username).valid}
-        >
-          Join Lobby
-        </button>
-        <p className="or">- OR -</p>
-        <button
-          className="host lobby-button"
-          onClick={props.handleCreateLobby}
-          disabled={!usernameIsValid(props.username).valid}
-        >
-          Host New Game
-        </button>
-      </form>
-    </div>
+        <form className="start-game">
+          <div className="char-counter-wrapper">
+            <Input
+              id="username"
+              name="username"
+              value={props.username}
+              label="First Name"
+              register={register}
+              onChange={handleChangeUsername}
+              maxLength={MAX_USERNAME_LENGTH}
+            />
+            <CharCounter string={props.username} max={MAX_USERNAME_LENGTH} />
+          </div>
+          <label htmlFor="lobby-code">Lobby Code</label>
+          <input
+            id="lobby-code"
+            name="lobby-code"
+            value={props.lobbyCode}
+            onChange={handleChangeCode}
+            maxLength={4}
+            placeholder="Enter lobby code to join a game!"
+          />
+          {errors.form && <p className="error">*{errors.form.message}</p>}
+          <button
+            className="join lobby-button"
+            onClick={(e) => props.handleJoinLobby(e, '')}
+            disabled={
+              !usernameIsValid(props.username).valid ||
+              props.lobbyCode.length !== 4
+            }
+          >
+            Join Lobby
+          </button>
+          <p className="or">- OR -</p>
+          <button
+            className="host lobby-button"
+            onClick={props.handleCreateLobby}
+            disabled={!usernameIsValid(props.username).valid}
+          >
+            Host New Game
+          </button>
+        </form>
+      </div>
+      <div className="game-page margin-top">
+        <h2>How to Play</h2>
+        <h3>Step 1: Setup</h3>
+        <PlayerStepOne />
+        <h3>Step 2: Voting</h3>
+        <PlayerStepTwo />
+        <h3>Step 3: Results</h3>
+        <PlayerStepThree />
+      </div>
+      <div className="game-page margin-top">
+        <h2>How to Host a Game</h2>
+        <h3>Step 1: Setup</h3>
+        <HostStepOne />
+        <h3>Step 2: Voting</h3>
+        <HostStepTwo />
+        <h3>Step 3: Results</h3>
+        <HostStepThree />
+      </div>
+    </>
   );
 };
 

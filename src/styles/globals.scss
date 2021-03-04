@@ -22,9 +22,13 @@ label {
   display: block;
 }
 
+strong {
+  font-weight: 600;
+}
+
 // Font Variables
 $text-font: "Roboto", sans-serif;
-$display-font: "Bangers", sans-serif;
+$display-font: "Luckiest Guy", sans-serif;
 
 // Media Query Sizes
 $mid: 500px;
@@ -55,11 +59,26 @@ $lime: #bfd349;
 $royal-blue: #162ca7;
 $purpleblue: #40537f;
 $lt-grey: #c4c4c4;
-$black: #000;
+$black: #000000de;
+
+//new colors
+$neon-green: #d5ff2e;
+$sky-blue: #1da1f2;
+$dark-cerulean: #064165;
+$burnt-orange: #ff7f35;
+$nero: #141414;
+
+//finale colors
+$gold: #ffd645;
+$gold-outline: #ffb800;
+$silver: #c4c4c4;
+$silver-outline: #8c8b8b;
+$bronze: #e08c29;
+$bronze-outline: #9f4c00;
 
 #root {
   font-size: 16px;
-  background-color: $purpleblue;
+  background-color: $dark-cerulean;
 }
 
 // Put footer at the bottom
@@ -71,7 +90,6 @@ $black: #000;
 }
 
 .App > div:not(.modal-wrapper):not(.cookie-popup) {
-  background-color: $purpleblue;
   display: flex;
   flex-flow: column nowrap;
 }

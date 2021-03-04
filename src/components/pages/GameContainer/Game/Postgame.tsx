@@ -97,11 +97,6 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     DefinitionResultItem[]
   >(getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict));
 
-  //DELETE
-  useEffect(() => {
-    console.log(showNewHostModal);
-  }, [showNewHostModal]);
-
   // Reset player's guess for next round
   useEffect(() => {
     resetGuess();
@@ -120,16 +115,18 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
 
   return (
     <div className="postgame game-page">
+      <h2>It’s Time for the Results!</h2>
       <Host>
-        <h2>It&apos;s time for the results!</h2>
-        <p>
-          Here are the results. They are displayed from least votes to most,
-          with the REAL defintion displayed at the end. The names of who voted
-          for each definiton is also provided.
-        </p>
-        <div className="word-display">
-          <p>{lobbyData.word}</p>
-        </div>
+        {!revealResults && (
+          // Hide after reveal
+          <p>
+            Players can’t see the results yet, so it’s up to you to read them
+            with pizzaz! Say, “Remember, you get one point if you vote for the
+            right definition and 1 point if yours ensnares someone else&apos;s
+            vote. Let&apos;s reveal the results.
+          </p>
+        )}
+        <p className="word-display">{lobbyData.word}</p>
         <div className="round-results">
           {sortedDefinitions.map((definitionResult, key) => (
             <DefinitionResult key={key} definitionResult={definitionResult} />
@@ -167,7 +164,6 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         </div>
       </Host>
       <Player>
-        <h2>It&apos;s time for the results!</h2>
         {!revealResults ? (
           // Before reveal
           <>
@@ -175,21 +171,12 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
               Your host is now going to read the results! Did you guess the
               right one? How did your definition do? Did it reign supreme?
             </p>
-            <div className="word-display">
-              <p>{lobbyData.word}</p>
-            </div>
+            <p className="word-display">{lobbyData.word}</p>
           </>
         ) : (
           // After reveal
           <>
-            <p>
-              Here are the results. They are displayed from least votes to most,
-              with the REAL defintion displayed at the end. The names of who
-              voted for each definiton is also provided.
-            </p>
-            <div className="word-display">
-              <p>{lobbyData.word}</p>
-            </div>
+            <p className="word-display">{lobbyData.word}</p>
             <div className="round-results">
               {sortedDefinitions.map((definitionResult, key) => (
                 <DefinitionResult
@@ -200,8 +187,8 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
             </div>
           </>
         )}
-        <PlayerList hidePoints={!revealResults} />
       </Player>
+      <PlayerList hidePoints={!revealResults} />
     </div>
   );
 };

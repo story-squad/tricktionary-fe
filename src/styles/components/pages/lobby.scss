@@ -1,0 +1,19 @@
+@import "../../mixins.scss";
+@import "../../globals.scss";
+
+.lobby-button {
+  width: 100%;
+}
+
+.host.lobby-button {
+  background-color: $burnt-orange;
+  color: $white;
+  font-weight: 700;
+  &:disabled {
+    background-color: $lt-grey;
+  }
+}
+
+.join.lobby-button {
+  margin-top: 40px;
+}

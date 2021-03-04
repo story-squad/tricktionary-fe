@@ -5,16 +5,16 @@ header {
   max-width: 100%;
   flex-direction: column;
   align-items: flex-start;
-  background-color: $purpleblue;
   padding: 0.8rem 0;
   color: $white;
 
   .trick-logo {
     display: block;
-    width: 200px;
+    width: 22rem;
   }
 
   p {
+    color: $white;
     margin-top: 8px;
     margin-left: 1.6rem;
     margin-bottom: 0;
