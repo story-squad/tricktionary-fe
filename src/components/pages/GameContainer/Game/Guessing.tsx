@@ -147,7 +147,6 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   return (
     <div className="guessing game-page">
       <Host>
-        <p className="word-display">{lobbyData.word}</p>
         {!showGuesses && (
           // Showing definitions
           <>
@@ -158,6 +157,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
               and definition from the list below. Once you finish, read through
               the same numbered list AGAIN.
             </p>
+            <p className="word-display">{lobbyData.word}</p>
             <div className="definitions">
               <h3>Definitions</h3>
               {definitions.map((definition, key) => (
@@ -187,6 +187,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
               Example: &quot;Number 3, the squishy remains of rotten
               fruit.&quot;
             </p>
+            <p className="word-display">{lobbyData.word}</p>
             <div className="guesses">
               <h3>Player Guesses</h3>
               <div className="voting-label">
