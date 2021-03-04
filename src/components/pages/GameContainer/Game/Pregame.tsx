@@ -245,7 +245,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                     maxLength={MAX_DEFINITION_LENGTH}
                   />
                   <CharCounter
-                    string={customInput.word}
+                    string={customInput.definition}
                     max={MAX_DEFINITION_LENGTH}
                   />
                 </div>
