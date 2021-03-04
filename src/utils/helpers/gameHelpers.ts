@@ -5,6 +5,7 @@ import {
   GuessItemWithConnected,
   LobbyData,
   PlayerItem,
+  TopPlayers,
 } from '../../types/gameTypes';
 import { LARGE_GAME_MINIMUM_PLAYERS, MINIMUM_PLAYERS } from '../constants';
 
@@ -116,4 +117,26 @@ export const allPlayersHaveGuessed = (
     }
   }
   return all;
+};
+
+// Create and return TopPlayers object from array lobbyData.topPlayers
+export const getTopPlayers = (lobbyData: LobbyData): TopPlayers => {
+  const playerDict: { [key: string]: string } = {};
+  lobbyData.players.forEach((player) => {
+    playerDict[player.id] = player.username;
+  });
+  return {
+    first: {
+      username: playerDict[lobbyData.topThree[0]?.user_id],
+      definition: lobbyData.topThree[0]?.definition,
+    },
+    second: {
+      username: playerDict[lobbyData.topThree[1]?.user_id],
+      definition: lobbyData.topThree[1]?.definition,
+    },
+    third: {
+      username: playerDict[lobbyData.topThree[2]?.user_id],
+      definition: lobbyData.topThree[2]?.definition,
+    },
+  };
 };

@@ -2,29 +2,7 @@ import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import finaleBanner from '../../../../../assets/finaleBanner.png';
 import { lobbyState } from '../../../../../state';
-import { LobbyData, TopPlayers } from '../../../../../types/gameTypes';
-
-const getTopPlayers = (lobbyData: LobbyData): TopPlayers => {
-  const playerDict: { [key: string]: string } = {};
-  lobbyData.players.forEach((player) => {
-    playerDict[player.id] = player.username;
-  });
-  // Create and return TopPlayers
-  return {
-    first: {
-      username: playerDict[lobbyData.topThree[0]?.user_id],
-      definition: lobbyData.topThree[0]?.definition,
-    },
-    second: {
-      username: playerDict[lobbyData.topThree[1]?.user_id],
-      definition: lobbyData.topThree[1]?.definition,
-    },
-    third: {
-      username: playerDict[lobbyData.topThree[2]?.user_id],
-      definition: lobbyData.topThree[2]?.definition,
-    },
-  };
-};
+import { getTopPlayers } from '../../../../../utils/helpers';
 
 const Finale = (): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
