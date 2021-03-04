@@ -80,6 +80,7 @@
             background-position: 50% 100%;
         }
         &.first-place {
+            margin: 0 8rem 0 8rem;
             height: 20rem;
             background-color: $gold;
             border: 4px solid $gold-outline;
@@ -88,6 +89,7 @@
             background-position: 50% 10%;
             background-repeat: no-repeat;
             @include mid-below {
+                margin: 0;
                 width: 28rem;
                 border-left: none;
                 border-bottom: 4px solid $gold-outline;
@@ -171,12 +173,12 @@
                 &.third-name {
                     color: $sky-blue;
                     font-size: 2.4rem;
-                    -webkit-text-stroke-width: 1px;
+                    -webkit-text-stroke: 1px $neon-green;
                     }
                 &.second-name {
                     color: $sky-blue;
                     font-size: 2.4rem;
-                    -webkit-text-stroke-width: 1px;
+                    -webkit-text-stroke: 1px $neon-green;
                 }
             }
         }
