@@ -293,8 +293,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <p>Play with a timer</p>
           </div>
         </div>
-        <h2 className="player-h2">Player Lobby</h2>
-        <PlayerList />
       </Host>
       <Player>
         <h2>The Lobby is filling up...</h2>
@@ -329,8 +327,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             </button>
           </form>
         )}
-        <PlayerList />
       </Player>
+      <PlayerList />
     </div>
   );
 };

@@ -136,10 +136,6 @@ const Writing = (props: WritingProps): React.ReactElement => {
           <p className="word-label">Your Word:</p>
           <p className="word">{lobbyData.word}</p>
         </div>
-        <div className="player-display">
-          <h2 className="player-h2">Players</h2>
-          <PlayerList />
-        </div>
         <div className="times-up-container">
           {timerDone && (
             <p className="times-up">
@@ -219,11 +215,8 @@ const Writing = (props: WritingProps): React.ReactElement => {
             <p>{definition}</p>
           </div>
         )}
-        <div className="player-display">
-          <h2 className="player-h2">Players</h2>
-          <PlayerList />
-        </div>
       </Player>
+      <PlayerList />
     </div>
   );
 };

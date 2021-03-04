@@ -64,6 +64,10 @@ $black: #000000de;
 //new colors
 $neon-green: #d5ff2e;
 $sky-blue: #1da1f2;
+$dark-cerulean: #064165;
+$burnt-orange: #ff7f35;
+$nero: #141414;
+
 //finale colors
 $gold: #ffd645;
 $gold-outline: #ffb800;
@@ -74,7 +78,7 @@ $bronze-outline: #9f4c00;
 
 #root {
   font-size: 16px;
-  background-color: $purpleblue;
+  background-color: $dark-cerulean;
 }
 
 // Put footer at the bottom
@@ -86,7 +90,6 @@ $bronze-outline: #9f4c00;
 }
 
 .App > div:not(.modal-wrapper):not(.cookie-popup) {
-  background-color: $purpleblue;
   display: flex;
   flex-flow: column nowrap;
 }
