@@ -23,6 +23,7 @@ import { Input } from '../../../../common/Input';
 import { HostStepOne, PlayerStepOne } from '../../../../common/Instructions';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
+import { WordChoice } from './WordChoice';
 
 const initialChoiceValue = -1;
 const initialCustomInputValue = { word: '', definition: '' };
@@ -153,7 +154,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           <h3>Invite Code:</h3>
           <p className="room-code">{lobbyData.lobbyCode}</p>
         </div>
-        {/* Suggested words */}
+        {/* Suggested words selection */}
         {!isCustom && (
           <>
             <h3>Choose a word</h3>
@@ -325,18 +326,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   );
 };
 
-const WordChoice = (props: WordChoiceProps): React.ReactElement => {
-  const { word, handleChoose, choice } = props;
-  const className = `word-choice${word.id === choice ? ' selected' : ''}`;
-  return (
-    <>
-      <button onClick={() => handleChoose(word.id)} className={className}>
-        <p className="word">{word.word}</p>
-      </button>
-    </>
-  );
-};
-
 export default Pregame;
 
 interface PregameProps {
@@ -351,14 +340,4 @@ interface PregameProps {
   username: string;
   handleUpdateUsername: (newUsername: string) => void;
   setError: any;
-}
-
-interface WordChoiceProps {
-  word: {
-    id: number;
-    word: string;
-    definition: string;
-  };
-  handleChoose: (id: number) => void;
-  choice: number;
 }
