@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { useLocalStorage } from '../../../../../hooks';
 import { DecodedToken } from '../../../../../types/commonTypes';
 import { MAX_USERNAME_LENGTH } from '../../../../../utils/constants';
+import { initialToken } from '../../../../../utils/localStorageInitialValues';
 import {
   lobbyCodeIsValid,
   usernameIsValid,
@@ -23,7 +24,7 @@ import { PublicGames } from '../../../../common/PublicGames';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
-  const [token] = useLocalStorage<string>('token', '');
+  const [token] = useLocalStorage<string>('token', initialToken);
 
   //set up the form details
   const { register, errors, setError, clearErrors } = useForm({

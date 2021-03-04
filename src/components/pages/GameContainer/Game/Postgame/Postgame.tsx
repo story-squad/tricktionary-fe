@@ -16,6 +16,7 @@ import {
   getPlayerDictionary,
   getSortedDefinitions,
 } from '../../../../../utils/helpers';
+import { initialToken } from '../../../../../utils/localStorageInitialValues';
 import { Host } from '../../../../common/Host';
 import { Modal } from '../../../../common/Modal';
 import { Player } from '../../../../common/Player';
@@ -39,7 +40,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
   );
-  const [guesses, , reloadGuesses] = useLocalStorage('guesses', []);
+  const [guesses, , reloadGuesses] = useLocalStorage('guesses', initialToken);
   const [sortedDefinitions, setSortedDefinitions] = useState<
     DefinitionResultItem[]
   >(getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict));

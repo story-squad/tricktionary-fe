@@ -20,7 +20,12 @@ import {
   PlayerItem,
 } from '../../../types/gameTypes';
 import { MAX_SECONDS, REACT_APP_API_URL } from '../../../utils/constants';
-import { errorCodeChecker, randomUsername } from '../../../utils/helpers';
+import { errorCodeChecker } from '../../../utils/helpers';
+import {
+  initialGuesses,
+  initialToken,
+  randomUsername,
+} from '../../../utils/localStorageInitialValues';
 import { Header } from '../../common/Header';
 import { Modal } from '../../common/Modal';
 import { Finale, Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
@@ -37,8 +42,8 @@ const GameContainer = (): React.ReactElement => {
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
   const [, setRevealResults] = useRecoilState(revealResultsState);
   const hostChoice = useRecoilValue(hostChoiceState);
-  const [, setGuesses] = useLocalStorage('guesses', []);
-  const [token, setToken] = useLocalStorage('token', '');
+  const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
+  const [token, setToken] = useLocalStorage('token', initialToken);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [time, setTime] = useState(-1);
   const [error, setError] = useState('');

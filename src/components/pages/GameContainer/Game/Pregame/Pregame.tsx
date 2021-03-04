@@ -16,6 +16,7 @@ import {
   MAX_USERNAME_LENGTH,
 } from '../../../../../utils/constants';
 import { hasMinimumPlayers } from '../../../../../utils/helpers';
+import { initialGuesses } from '../../../../../utils/localStorageInitialValues';
 import { usernameIsValid } from '../../../../../utils/validation';
 import { CharCounter } from '../../../../common/CharCounter';
 import { Host } from '../../../../common/Host';
@@ -37,7 +38,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const lobbySettings = useRecoilValue(lobbySettingsState);
   const [hostChoice, setHostChoice] = useRecoilState(hostChoiceState);
   const lobbyData = useRecoilValue(lobbyState);
-  const [, setGuesses] = useLocalStorage('guesses', []);
+  const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
   );

@@ -12,14 +12,6 @@ import {
 } from '../../types/gameTypes';
 import { LARGE_GAME_MINIMUM_PLAYERS, MINIMUM_PLAYERS } from '../constants';
 
-export const randomUsername = (): string => {
-  let random: number | string = Math.floor(Math.random() * 9999);
-  if (random < 1000) {
-    random = `0${random}`;
-  }
-  return `Player${random}`;
-};
-
 // Check if the number of definitions submitted makes the game "large"
 export const isLargeGame = (players: PlayerItem[]): boolean => {
   return (
