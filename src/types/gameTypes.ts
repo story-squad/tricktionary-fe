@@ -96,3 +96,24 @@ export interface HandleSelectGuessParams {
   guessId: number;
   definitionSelection: DefinitionSelection;
 }
+
+export interface DefinitionResultItem {
+  username: string;
+  playerId: string;
+  definition: string;
+  definitionId: number;
+  guesses: string[];
+  points: number;
+}
+
+export interface DefinitionResultProps {
+  definitionResult: DefinitionResultItem;
+}
+
+export interface PlayerDictionary {
+  [Key: string]: string;
+}
+
+export interface DefinitionDictionary {
+  [Key: number]: DefinitionResultItem;
+}
