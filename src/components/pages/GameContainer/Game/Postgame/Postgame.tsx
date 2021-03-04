@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { useLocalStorage } from '../../../../hooks';
+import { useLocalStorage } from '../../../../../hooks';
 import {
   lobbyState,
   playerGuessState,
   revealResultsState,
   showNewHostModalState,
-} from '../../../../state';
-import { GuessItem, LobbyData, PlayerItem } from '../../../../types/gameTypes';
-import { Host } from '../../../common/Host';
-import { Modal } from '../../../common/Modal';
-import { Player } from '../../../common/Player';
-import { SetHost } from '../../../common/SetHost';
-import { PlayerList } from '../Game';
+} from '../../../../../state';
+import {
+  GuessItem,
+  LobbyData,
+  PlayerItem,
+} from '../../../../../types/gameTypes';
+import { Host } from '../../../../common/Host';
+import { Modal } from '../../../../common/Modal';
+import { Player } from '../../../../common/Player';
+import { PlayerList } from '../../../../common/PlayerList';
+import { SetHost } from '../../../../common/SetHost';
 
 // Create a list of definitions, attach players who guessed for each, calculate point gains (UI only), add real definiton to the end
 const getSortedDefinitions = (

@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import shuffle from 'shuffle-array';
-import { useLocalStorage } from '../../../../hooks';
-import { lobbyState, playerGuessState } from '../../../../state';
+import { useLocalStorage } from '../../../../../hooks';
+import { lobbyState, playerGuessState } from '../../../../../state';
 import {
   DefinitionItem,
   DefinitionSelection,
   GuessItem,
   HandleSelectGuessParams,
   PlayerItem,
-} from '../../../../types/gameTypes';
-import { MAX_NOTES_LENGTH } from '../../../../utils/constants';
-import { isLargeGame } from '../../../../utils/helpers';
-import { CharCounter } from '../../../common/CharCounter';
-import { Host } from '../../../common/Host';
-import { PlayerStepTwo } from '../../../common/Instructions';
-import { Modal } from '../../../common/Modal';
-import { Player } from '../../../common/Player';
-import { PlayerList } from '../../../common/PlayerList';
+} from '../../../../../types/gameTypes';
+import { MAX_NOTES_LENGTH } from '../../../../../utils/constants';
+import { isLargeGame } from '../../../../../utils/helpers';
+import { CharCounter } from '../../../../common/CharCounter';
+import { Host } from '../../../../common/Host';
+import { PlayerStepTwo } from '../../../../common/Instructions';
+import { Modal } from '../../../../common/Modal';
+import { Player } from '../../../../common/Player';
+import { PlayerList } from '../../../../common/PlayerList';
 
 // Non-state functions
 

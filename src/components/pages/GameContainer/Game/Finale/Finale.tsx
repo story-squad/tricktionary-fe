@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-//import assets
-import finaleBanner from '../../../../assets/finaleBanner.png';
-import { lobbyState } from '../../../../state';
-import { LobbyData, TopPlayers } from '../../../../types/gameTypes';
+import finaleBanner from '../../../../../assets/finaleBanner.png';
+import { lobbyState } from '../../../../../state';
+import { LobbyData, TopPlayers } from '../../../../../types/gameTypes';
 
 const getTopPlayers = (lobbyData: LobbyData): TopPlayers => {
   const playerDict: { [key: string]: string } = {};

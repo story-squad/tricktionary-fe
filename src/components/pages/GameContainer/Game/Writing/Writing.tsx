@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
-import { lobbyState, playerIdState } from '../../../../state';
+import { lobbyState, playerIdState } from '../../../../../state';
 import {
   MAX_DEFINITION_LENGTH,
   MAX_SECONDS,
-} from '../../../../utils/constants';
-import { definitionIsValid } from '../../../../utils/validation';
-import { CharCounter } from '../../../common/CharCounter';
-import { Host } from '../../../common/Host';
-import { Input } from '../../../common/Input';
-import { Modal } from '../../../common/Modal';
-import { Player } from '../../../common/Player';
-import Timer from '../../../common/Timer/Timer';
-import { PlayerList } from '../Game';
+} from '../../../../../utils/constants';
+import { definitionIsValid } from '../../../../../utils/validation';
+import { CharCounter } from '../../../../common/CharCounter';
+import { Host } from '../../../../common/Host';
+import { Input } from '../../../../common/Input';
+import { Modal } from '../../../../common/Modal';
+import { Player } from '../../../../common/Player';
+import { PlayerList } from '../../../../common/PlayerList';
+import Timer from '../../../../common/Timer/Timer';
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const { handleSyncTimer, time, setTime } = props;

@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { getWords } from '../../../../api/apiRequests';
-import { useLocalStorage } from '../../../../hooks';
+import { getWords } from '../../../../../api/apiRequests';
+import { useLocalStorage } from '../../../../../hooks';
 import {
   hostChoiceState,
   lobbySettingsState,
   lobbyState,
   revealResultsState,
-} from '../../../../state';
-import { WordItem } from '../../../../types/gameTypes';
+} from '../../../../../state';
+import { WordItem } from '../../../../../types/gameTypes';
 import {
   MAX_CUSTOM_WORD_LENGTH,
   MAX_DEFINITION_LENGTH,
   MAX_USERNAME_LENGTH,
-} from '../../../../utils/constants';
-import { hasMinimumPlayers } from '../../../../utils/helpers';
-import { usernameIsValid } from '../../../../utils/validation';
-import { CharCounter } from '../../../common/CharCounter';
-import { Host } from '../../../common/Host';
-import { Input } from '../../../common/Input';
-import { HostStepOne, PlayerStepOne } from '../../../common/Instructions';
-import { Player } from '../../../common/Player';
-import { PlayerList } from '../Game';
+} from '../../../../../utils/constants';
+import { hasMinimumPlayers } from '../../../../../utils/helpers';
+import { usernameIsValid } from '../../../../../utils/validation';
+import { CharCounter } from '../../../../common/CharCounter';
+import { Host } from '../../../../common/Host';
+import { Input } from '../../../../common/Input';
+import { HostStepOne, PlayerStepOne } from '../../../../common/Instructions';
+import { Player } from '../../../../common/Player';
+import { PlayerList } from '../../../../common/PlayerList';
 
 const initialChoiceValue = -1;
 const initialCustomInputValue = { word: '', definition: '' };
