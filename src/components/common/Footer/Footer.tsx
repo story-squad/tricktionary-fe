@@ -6,9 +6,9 @@ const Footer = (): React.ReactElement => {
     <footer>
       <div className="top">
         <p className="email-disclaimer">Get email updates from Story Squad</p>
-        <form id="email-update-form">
+        <div id="email-update-form">
           <EmailInput />
-        </form>
+        </div>
       </div>
       <div className="bottom">
         <p className="tagline">Human connection through creative expression</p>
