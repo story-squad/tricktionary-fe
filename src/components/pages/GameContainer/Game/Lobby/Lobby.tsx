@@ -26,15 +26,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   const [token] = useLocalStorage<string>('token', '');
 
   //set up the form details
-  const {
-    register,
-    handleSubmit,
-    errors,
-    setError,
-    clearErrors,
-    getValues,
-    watch,
-  } = useForm({
+  const { register, errors, setError, clearErrors } = useForm({
     mode: 'onSubmit',
   });
 
