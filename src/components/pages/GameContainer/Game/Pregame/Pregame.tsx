@@ -153,7 +153,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           <h3>Invite Code:</h3>
           <p className="room-code">{lobbyData.lobbyCode}</p>
         </div>
-        {/* Word selection */}
+        {/* Suggested words */}
         {!isCustom && (
           <>
             <h3>Choose a word</h3>
