@@ -229,6 +229,20 @@ a {
   border-radius: 1rem;
   width: fit-content;
   max-width: 100%;
+
+  p {
+    font-size: 3.6rem;
+    font-family: $display-font;
+    margin-bottom: 0;
+    color: $hover-blue;
+    &.word-display {
+      font-size: 3.6rem;
+      font-family: $display-font;
+    }
+    &.word {
+      color: $hover-blue;
+    }
+  }
   background: $neon-green;
   color: $dark-cerulean;
 }
@@ -406,6 +420,16 @@ a {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     padding: 1.6rem 1.6rem 1.6rem 1.6rem;
+    @include mid-below {
+      flex-direction: column-reverse;
+      padding-bottom: 0;
+    }
+    .author-box {
+      @include mid-below {
+        margin-top: 8px;
+        text-align: center;
+      }
+    }
   }
   .result-definition {
     background-color: #f7fbff;
@@ -656,7 +680,7 @@ a {
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
     @include mid-below {
       flex-direction: row;
-      justify-content: space-evenly;
+      justify-content: space-between;
       width: 100%;
       padding: 8px 16px;
       margin: 0 0 8px 0;
@@ -682,7 +706,7 @@ a {
       font-size: 1.4rem;
       @include mid-below {
         font-size: 1.2rem;
-        margin-bottom: 0;
+        margin: 0;
       }
     }
   }
