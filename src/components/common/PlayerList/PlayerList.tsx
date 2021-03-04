@@ -42,7 +42,7 @@ const playerUserName = (
     username += '(You) ';
   }
   if (lobbyData.host === player.id) {
-    username += '(host)';
+    username += '(Host) ';
   }
   username += player.username;
   return username;

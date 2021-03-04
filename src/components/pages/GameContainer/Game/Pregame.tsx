@@ -10,7 +10,11 @@ import {
   revealResultsState,
 } from '../../../../state';
 import { WordItem } from '../../../../types/gameTypes';
-import { MAX_USERNAME_LENGTH } from '../../../../utils/constants';
+import {
+  MAX_CUSTOM_WORD_LENGTH,
+  MAX_DEFINITION_LENGTH,
+  MAX_USERNAME_LENGTH,
+} from '../../../../utils/constants';
 import { hasMinimumPlayers } from '../../../../utils/helpers';
 import { usernameIsValid } from '../../../../utils/validation';
 import { CharCounter } from '../../../common/CharCounter';
@@ -218,19 +222,33 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <div className="word-block">
               <div className="word-column col-a">
                 <label htmlFor="word">Word:</label>
-                <input
-                  id="word"
-                  name="word"
-                  value={customInput.word}
-                  onChange={handleInputChange}
-                />
+                <div className="char-counter-wrapper higher">
+                  <input
+                    id="word"
+                    name="word"
+                    value={customInput.word}
+                    onChange={handleInputChange}
+                    maxLength={MAX_CUSTOM_WORD_LENGTH}
+                  />
+                  <CharCounter
+                    string={customInput.word}
+                    max={MAX_CUSTOM_WORD_LENGTH}
+                  />
+                </div>
                 <label htmlFor="definition">Definition:</label>
-                <input
-                  id="definition"
-                  name="definition"
-                  value={customInput.definition}
-                  onChange={handleInputChange}
-                />
+                <div className="char-counter-wrapper higher">
+                  <input
+                    id="definition"
+                    name="definition"
+                    value={customInput.definition}
+                    onChange={handleInputChange}
+                    maxLength={MAX_DEFINITION_LENGTH}
+                  />
+                  <CharCounter
+                    string={customInput.definition}
+                    max={MAX_DEFINITION_LENGTH}
+                  />
+                </div>
               </div>
               <div className="word-column col-b">
                 <button
