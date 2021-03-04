@@ -64,9 +64,9 @@ const GameContainer = (): React.ReactElement => {
   };
 
   // For testing, DELETE later
-  useEffect(() => {
-    console.log('lobbydata', lobbyData);
-  }, [lobbyData]);
+  // useEffect(() => {
+  //   console.log('lobbydata', lobbyData);
+  // }, [lobbyData]);
 
   useEffect(() => {
     if (lobbyData.phase !== 'WRITING') {
