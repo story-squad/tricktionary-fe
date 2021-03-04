@@ -26,6 +26,10 @@ export const MAX_USERNAME_LENGTH =
 export const MAX_NOTES_LENGTH =
   Number(process.env.REACT_APP_MAX_NOTES_LENGTH) || 100;
 
+// Number of characters allowed in Host's custom word
+export const MAX_CUSTOM_WORD_LENGTH =
+  Number(process.env.REACT_APP_MAX_CUSTOM_WORD_LENGTH) || 45;
+
 // For Tricktionary team to host public Zoom meeting
 export const PUBLIC_MEETING_URL =
   process.env.REACT_APP_PUBLIC_MEETING_URL || '';
