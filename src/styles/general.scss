@@ -79,7 +79,7 @@ button {
   }
   &.choose-word.sm-btn {
     display: block;
-    margin: 0 auto;
+    margin: 0 auto 16px auto;
     height: auto;
     padding: 8px 16px;
   }
@@ -174,7 +174,6 @@ a {
   background: $white;
   border: 1px solid $dark-blue;
   display: block;
-  width: 19rem;
 
   @include mid-below {
     width: auto;
