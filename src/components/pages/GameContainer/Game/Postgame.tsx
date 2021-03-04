@@ -126,9 +126,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
             vote. Let&apos;s reveal the results.
           </p>
         )}
-        <div className="word-display">
-          <p className="word">{lobbyData.word}</p>
-        </div>
+        <p className="word-display">{lobbyData.word}</p>
         <div className="round-results">
           {sortedDefinitions.map((definitionResult, key) => (
             <DefinitionResult key={key} definitionResult={definitionResult} />
@@ -173,16 +171,12 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
               Your host is now going to read the results! Did you guess the
               right one? How did your definition do? Did it reign supreme?
             </p>
-            <div className="word-display">
-              <p>{lobbyData.word}</p>
-            </div>
+            <p className="word-display">{lobbyData.word}</p>
           </>
         ) : (
           // After reveal
           <>
-            <div className="word-display">
-              <p>{lobbyData.word}</p>
-            </div>
+            <p className="word-display">{lobbyData.word}</p>
             <div className="round-results">
               {sortedDefinitions.map((definitionResult, key) => (
                 <DefinitionResult
