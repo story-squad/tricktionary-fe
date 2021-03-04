@@ -1,58 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import shuffle from 'shuffle-array';
 import { useLocalStorage } from '../../../../../hooks';
 import { lobbyState, playerGuessState } from '../../../../../state';
 import {
   DefinitionItem,
   DefinitionSelection,
   GuessItem,
-  HandleSelectGuessParams,
-  PlayerItem,
 } from '../../../../../types/gameTypes';
 import { MAX_NOTES_LENGTH } from '../../../../../utils/constants';
-import { isLargeGame } from '../../../../../utils/helpers';
+import {
+  allPlayersHaveGuessed,
+  getDefinitions,
+  recalculateGuessesWithConnected,
+} from '../../../../../utils/helpers';
+import { getGuessesWithConnected } from '../../../../../utils/localStorageInitialValues';
 import { CharCounter } from '../../../../common/CharCounter';
 import { Host } from '../../../../common/Host';
 import { PlayerStepTwo } from '../../../../common/Instructions';
 import { Modal } from '../../../../common/Modal';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
-
-// Non-state functions
-
-// Get a shuffled list of definitions + the correct one
-const getDefinitions = (
-  players: PlayerItem[],
-  playerId: string,
-  definition: string,
-) => {
-  let definitions = players
-    .filter(
-      (player: PlayerItem) =>
-        player.id !== playerId && player.definition !== '',
-    )
-    .map((player: PlayerItem) => {
-      return {
-        content: player.definition,
-        id: player.definitionId,
-        definitionKey: 0,
-      };
-    });
-  definitions.push({ id: 0, content: definition, definitionKey: 0 });
-  definitions = shuffle(definitions);
-  definitions = definitions.map((definition, idx) => {
-    return { ...definition, definitionKey: idx + 1 };
-  });
-  return definitions;
-};
-
-const getPlayerGuess = (choices: GuessItem[], player: PlayerItem): number => {
-  const found = choices.find((choice) => choice.player === player.id);
-  return found?.guess as number;
-};
-
-// Components
+import { Guess } from './Guess';
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
   const { playerId, handleSubmitGuesses, handleSendGuess } = props;
@@ -62,61 +30,20 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   const [definitions] = useState(
     getDefinitions(lobbyData.players, playerId, lobbyData.definition),
   );
-  const [guesses, setGuesses] = useLocalStorage(
+  // Array of player's guesses with connected status
+  const [guessesWithConnected, setGuessesWithConnected] = useLocalStorage(
     'guesses',
-    lobbyData.players.map((player) => {
-      return { player: player.id, guess: -1, connected: player.connected };
-    }),
+    getGuessesWithConnected(lobbyData),
   );
   const [showModal, setShowModal] = useState(false);
   const [showGuesses, setShowGuesses] = useState(false);
   const [notes, setNotes] = useState('');
 
-  const allPlayersHaveGuessed = () => {
-    let all = true;
-    const playerGuesses = guesses.filter(
-      (guess: GuessItem) => guess.player !== lobbyData.host,
-    );
-    for (let i = 0; i < playerGuesses.length; i++) {
-      if (playerGuesses[i].guess === -1 && playerGuesses[i].connected) {
-        all = false;
-        break;
-      }
-    }
-    return all;
-  };
-
-  // Recalculate guesses when players disconnect/reconnect while keeping guesses for all other players
+  // Recalculate guesses when players disconnect/reconnect
   useEffect(() => {
-    const guessDict: any = {};
-    const newGuesses: any = [];
-    guesses.forEach((guess: any) => {
-      guessDict[guess.player] = {
-        guess: guess.guess,
-        connected: guess.connected,
-      };
-    });
-    lobbyData.players.forEach((player) => {
-      if (guessDict.hasOwnProperty(player.id)) {
-        guessDict[player.id].connected = player.connected;
-      } else {
-        guessDict[player.id] = {
-          player: player.id,
-          guess: -1,
-          connected: player.connected,
-        };
-      }
-    });
-    for (const playerId in guessDict) {
-      if (guessDict[playerId].connected) {
-        newGuesses.push({
-          player: playerId,
-          guess: guessDict[playerId].guess,
-          connected: guessDict[playerId].connected,
-        });
-      }
-    }
-    setGuesses(newGuesses);
+    setGuessesWithConnected(
+      recalculateGuessesWithConnected(lobbyData, guessesWithConnected),
+    );
   }, [lobbyData]);
 
   const handleSelectGuess = (
@@ -125,8 +52,8 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
     definitionSelection: DefinitionSelection,
   ) => {
     handleSendGuess(playerId, definitionSelection);
-    setGuesses(
-      guesses.map((guess: GuessItem) => {
+    setGuessesWithConnected(
+      guessesWithConnected.map((guess: GuessItem) => {
         if (guess.player === playerId) {
           return { ...guess, guess: guessId };
         } else {
@@ -137,8 +64,8 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   };
 
   const handleSubmit = () => {
-    if (allPlayersHaveGuessed()) {
-      handleSubmitGuesses(guesses);
+    if (allPlayersHaveGuessed(lobbyData, guessesWithConnected)) {
+      handleSubmitGuesses(guessesWithConnected);
     } else {
       setShowModal(true);
     }
@@ -147,7 +74,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   return (
     <div className="guessing game-page">
       <Host>
-        {!showGuesses && (
+        {!showGuesses ? (
           // Showing definitions
           <>
             <h2>Read Each Number and Its Definition</h2>
@@ -160,7 +87,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
             <p className="word-display">{lobbyData.word}</p>
             <div className="definitions">
               <h3>Definitions</h3>
-              {definitions.map((definition, key) => (
+              {definitions.map((definition: DefinitionItem, key: number) => (
                 <div key={key} className="definition">
                   <div className="definition-key">
                     <p>#{definition.definitionKey}</p>
@@ -176,8 +103,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
               </button>
             </div>
           </>
-        )}
-        {showGuesses && (
+        ) : (
           // Showing votes
           <>
             <h2>It’s Time to Vote!</h2>
@@ -205,7 +131,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
                     definitions={definitions as DefinitionItem[]}
                     player={player}
                     handleSelectGuess={handleSelectGuess}
-                    guesses={guesses}
+                    guesses={guessesWithConnected}
                   />
                 ))}
               <button className="submit-guesses" onClick={handleSubmit}>
@@ -217,7 +143,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         <Modal
           header={'Continue?'}
           message={`You haven't selected a guess for every player. Continue anyway?`}
-          handleConfirm={() => handleSubmitGuesses(guesses)}
+          handleConfirm={() => handleSubmitGuesses(guessesWithConnected)}
           handleCancel={() => setShowModal(false)}
           visible={showModal}
         />
@@ -257,91 +183,6 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   );
 };
 
-const Guess = (props: GuessProps): React.ReactElement => {
-  const { player, definitions, handleSelectGuess, guesses } = props;
-  const { players } = useRecoilValue(lobbyState);
-
-  const handleSelectWithOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value !== 'none') {
-      const params: HandleSelectGuessParams = JSON.parse(e.target.value);
-      handleSelectGuess(
-        params.playerId,
-        params.guessId,
-        params.definitionSelection,
-      );
-    }
-  };
-
-  const chosenDefinition = definitions.filter(
-    (definition) => definition.id === getPlayerGuess(guesses, player),
-  )[0]?.content;
-
-  return (
-    <>
-      <div className="guess">
-        <p className="guess-name">{player.username}</p>
-        {!isLargeGame(players) ? (
-          // Use button display for small games
-          definitions.map((definition, key) => (
-            <button
-              className={`${
-                getPlayerGuess(guesses, player) === definition.id
-                  ? 'selected'
-                  : ''
-              }`}
-              onClick={() =>
-                handleSelectGuess(player.id, definition.id, {
-                  key: definition.definitionKey,
-                  definition: definition.content,
-                })
-              }
-              key={key}
-            >
-              {definition.definitionKey}
-            </button>
-          ))
-        ) : (
-          // Use select/option display for large games
-          <select
-            name="guess-select"
-            id="guess-select"
-            onChange={handleSelectWithOptions}
-          >
-            {
-              // show default "None" option until an option is picked
-              !chosenDefinition && <option value="none">None</option>
-            }
-            {definitions.map((definition, key) => (
-              <option
-                value={JSON.stringify({
-                  playerId: player.id,
-                  guessId: definition.id,
-                  definitionSelection: {
-                    key: definition.definitionKey,
-                    definition: definition.content,
-                  },
-                })}
-                key={key}
-              >
-                {definition.definitionKey}
-              </option>
-            ))}
-          </select>
-        )}
-      </div>
-      <div className="show-guess">
-        {chosenDefinition && (
-          <div>
-            <p>Chosen Definition: </p>
-            <p className="guess-choice">{chosenDefinition}</p>
-          </div>
-        )}
-      </div>
-      <hr />
-    </>
-  );
-};
-
 export default Guessing;
 
 interface GuessingProps {
@@ -351,15 +192,4 @@ interface GuessingProps {
     definitionSelection: DefinitionSelection,
   ) => void;
   playerId: string;
-}
-
-interface GuessProps {
-  handleSelectGuess: (
-    playerId: string,
-    guessId: number,
-    definitionSelection: DefinitionSelection,
-  ) => void;
-  definitions: DefinitionItem[];
-  player: PlayerItem;
-  guesses: GuessItem[];
 }
