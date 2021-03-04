@@ -47,15 +47,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   };
 
   //set up the form details
-  const {
-    register,
-    handleSubmit,
-    errors,
-    setError,
-    clearErrors,
-    getValues,
-    watch,
-  } = useForm({
+  const { register, errors, setError, clearErrors } = useForm({
     mode: 'onSubmit',
   });
   useEffect(() => {
