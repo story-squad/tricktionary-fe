@@ -280,17 +280,17 @@ a {
       color: $nero;
       background: $white;
       border-radius: 8px;
-      width: 4rem;
       height: 4rem;
       p {
-        width: 4rem;
+        width: 6.5rem;
         font-size: 4rem;
-        text-align: center;
-        margin: auto;
         font-family: $display-font;
         color: $sky-blue;
-        word-break: unset;
       }
+    }
+
+    .definition-guess {
+      text-align: left;
     }
   }
 }

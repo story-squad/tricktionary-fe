@@ -90,7 +90,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
                   <div className="definition-key">
                     <p>#{definition.definitionKey}</p>
                   </div>
-                  <p>{definition.content}</p>
+                  <p className="definition-guess">{definition.content}</p>
                 </div>
               ))}
               <button
@@ -157,7 +157,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
               <div className="definition-key">
                 <p>#{playerGuess.key}</p>
               </div>
-              <p>{playerGuess.definition}</p>
+              <p className="definition-guess">{playerGuess.definition}</p>
             </div>
           ) : (
             <p>No Guess yet</p>
