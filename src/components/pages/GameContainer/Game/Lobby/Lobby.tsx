@@ -86,8 +86,8 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
     <>
       <PublicGames />
       <div className="lobby game-page">
-        <h2>Welcome!</h2>
-        <p>
+        <h2>Welcome to Tricktionary!</h2>
+        <p className="instructions">
           Please enter your name and lobby code to join a game or you can host a
           new game.
         </p>
@@ -115,24 +115,26 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
             placeholder="Enter lobby code to join a game!"
           />
           {errors.form && <p className="error">*{errors.form.message}</p>}
-          <button
-            className="join lobby-button"
-            onClick={(e) => props.handleJoinLobby(e, '')}
-            disabled={
-              !usernameIsValid(props.username).valid ||
-              props.lobbyCode.length !== 4
-            }
-          >
-            Join Lobby
-          </button>
-          <p className="or">- OR -</p>
-          <button
-            className="host lobby-button"
-            onClick={props.handleCreateLobby}
-            disabled={!usernameIsValid(props.username).valid}
-          >
-            Host New Game
-          </button>
+          <div className="start-buttons">
+            <button
+              className="join lobby-button"
+              onClick={(e) => props.handleJoinLobby(e, '')}
+              disabled={
+                !usernameIsValid(props.username).valid ||
+                props.lobbyCode.length !== 4
+              }
+            >
+              Join Lobby
+            </button>
+            <p className="or">- OR -</p>
+            <button
+              className="host lobby-button"
+              onClick={props.handleCreateLobby}
+              disabled={!usernameIsValid(props.username).valid}
+            >
+              Host New Game
+            </button>
+          </div>
         </form>
       </div>
       <div className="game-page margin-top">

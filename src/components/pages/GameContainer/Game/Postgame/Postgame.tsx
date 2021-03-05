@@ -67,7 +67,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
       <Host>
         {!revealResults && (
           // Hide after reveal
-          <p>
+          <p className="instructions">
             Players can’t see the results yet, so it’s up to you to read them
             with pizzaz! Say, “Remember, you get one point if you vote for the
             right definition and 1 point if yours ensnares someone else&apos;s
@@ -115,7 +115,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         {!revealResults ? (
           // Before reveal
           <>
-            <p>
+            <p className="instructions">
               Your host is now going to read the results! Did you guess the
               right one? How did your definition do? Did it reign supreme?
             </p>

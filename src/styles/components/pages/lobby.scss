@@ -2,13 +2,16 @@
 @import "../../globals.scss";
 
 .lobby-button {
-  width: 100%;
+  width: 40rem;
+  max-width: 100%;
 }
 
 .host.lobby-button {
-  background-color: $burnt-orange;
-  color: $white;
+  color: $burnt-orange;
+  background-color: $white;
   font-weight: 700;
+  border: 1px solid $burnt-orange;
+  box-sizing: border-box;
   &:disabled {
     background-color: $lt-grey;
   }
@@ -17,3 +20,13 @@
 .join.lobby-button {
   margin-top: 40px;
 }
+
+.lobby.game-page {
+  padding-left: 12.5rem;
+  padding-right: 12.5rem;
+}
+
+.start-buttons {
+  text-align: center;
+}
+
