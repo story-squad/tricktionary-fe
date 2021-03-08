@@ -14,6 +14,7 @@ import { Modal } from '../../../../common/Modal';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
 import Timer from '../../../../common/Timer/Timer';
+import { TwitterButton } from '../../../../common/TwitterButton';
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const { handleSyncTimer, time, setTime } = props;
@@ -205,6 +206,9 @@ const Writing = (props: WritingProps): React.ReactElement => {
           <div className="player-submitted">
             <h3>You submitted:</h3>
             <p>{definition}</p>
+            <TwitterButton
+              message={`${lobbyData.word} means ${definition} ... or does it?`}
+            />
           </div>
         )}
       </Player>
