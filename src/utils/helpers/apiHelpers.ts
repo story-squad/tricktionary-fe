@@ -1,6 +1,6 @@
 import { getReactions } from '../../api/apiRequests';
 import { ReactionItem } from '../../types/commonTypes';
-import { EMOJI_IDS } from '../constants';
+import { REACTION_IDS } from '../constants';
 
 // GET reactions/emojis from API then filter using .env list
 export const getSelectedReactions = async (): Promise<ReactionItem[]> => {
@@ -9,7 +9,7 @@ export const getSelectedReactions = async (): Promise<ReactionItem[]> => {
     .then(
       (res) =>
         (emojis = res.data.available.filter((reaction: ReactionItem) =>
-          JSON.parse(EMOJI_IDS).includes(reaction.id),
+          JSON.parse(REACTION_IDS).includes(reaction.id),
         )),
     )
     .catch((err) => console.log(err));
