@@ -38,4 +38,4 @@ export const PUBLIC_MEETING_URL =
 export const PUBLIC_STREAM_URL = process.env.REACT_APP_PUBLIC_STREAM_URL || '';
 
 // Reaction IDs to be used in the emoji-smash feature, JSON-formatted list
-export const EMOJI_IDS = process.env.REACT_APP_EMOJI_IDS || '[1, 2, 3]';
+export const REACTION_IDS = process.env.REACT_APP_REACTION_IDS || '[8, 13, 42]';
