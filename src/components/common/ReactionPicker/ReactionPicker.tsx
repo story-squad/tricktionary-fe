@@ -1,44 +1,37 @@
 import React, { useState } from 'react';
+import { postReaction } from '../../../api/apiRequests';
 import { ReactionItem } from '../../../types/commonTypes';
+import { LobbyData } from '../../../types/gameTypes';
 
 const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
-  const { reactions, cb, id } = props;
-  const [modalOn, setModalOn] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const pickReaction = (reaction: number) => {
-    setModalOn(false);
-    cb({ reaction: `${reaction}`, id: `${id}` });
-  };
-
-  const handleSetModal = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setModalOn(!modalOn);
+  const onClick = (reactionId: number) => {
+    setSubmitted(true);
+    postReaction({
+      user_id: props.playerId,
+      round_id: props.lobbyData.roundId,
+      reaction_id: reactionId,
+      definition_id: props.definitionId,
+      game_finished: false,
+    });
   };
 
   return (
-    <div className="reaction-picker">
-      <button onClick={handleSetModal}>Reaction Picker</button>
-      {modalOn && (
-        <div className="reaction-modal">
-          {reactions.map((reaction) => (
-            <Reaction
-              key={reaction.id}
-              reaction={reaction}
-              pickReaction={pickReaction}
-            />
-          ))}
-        </div>
-      )}
+    <div className="reaction-picker-container">
+      <div className="reaction-picker">
+        {props.reactions.map((reaction, key) => (
+          <button
+            className="reaction-btn"
+            key={key}
+            onClick={() => onClick(reaction.id)}
+            disabled={submitted}
+          >
+            {reaction.content}
+          </button>
+        ))}
+      </div>
     </div>
-  );
-};
-
-const Reaction = (props: ReactionProps): React.ReactElement => {
-  const { reaction, pickReaction } = props;
-  return (
-    <button className="reaction" onClick={() => pickReaction(reaction.id)}>
-      {reaction.content}
-    </button>
   );
 };
 
@@ -46,16 +39,7 @@ export default ReactionPicker;
 
 interface ReactionPickerProps {
   reactions: ReactionItem[];
-  cb: (arg0: ReactionDefinitionIdStrings) => void;
-  id: number;
-}
-
-interface ReactionProps {
-  reaction: ReactionItem;
-  pickReaction: (id: number) => void;
-}
-
-export interface ReactionDefinitionIdStrings {
-  reaction: string;
-  id: string;
+  playerId: string;
+  lobbyData: LobbyData;
+  definitionId: number;
 }
