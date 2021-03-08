@@ -10,3 +10,8 @@ export interface DecodedToken {
   pid: string;
   sub: string;
 }
+
+export interface ReactionItem {
+  id: number;
+  content: string;
+}

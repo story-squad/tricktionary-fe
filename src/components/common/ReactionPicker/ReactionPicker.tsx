@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ReactionItem } from '../../../types/commonTypes';
 
 const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
   const { reactions, cb, id } = props;
@@ -52,11 +53,6 @@ interface ReactionPickerProps {
 interface ReactionProps {
   reaction: ReactionItem;
   pickReaction: (id: number) => void;
-}
-
-export interface ReactionItem {
-  id: number;
-  content: string;
 }
 
 export interface ReactionDefinitionIdStrings {
