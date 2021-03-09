@@ -1,0 +1,12 @@
+.twitter-share-button {
+  line-height: 4rem;
+  font-size: 3rem;
+  font-family: $text-font;
+  text-align: center;
+  text-decoration: none;
+  span {
+    margin-left: 0.5rem;
+    font-size: 2rem;
+    color: $sky-blue;
+  }
+}
