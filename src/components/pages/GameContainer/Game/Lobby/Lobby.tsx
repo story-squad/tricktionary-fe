@@ -11,6 +11,7 @@ import {
   usernameIsValid,
 } from '../../../../../utils/validation';
 import { CharCounter } from '../../../../common/CharCounter';
+import { Expander } from '../../../../common/Expander';
 import { Input } from '../../../../common/Input';
 import {
   HostStepOne,
@@ -86,6 +87,22 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
     <>
       <PublicGames />
       <div className="lobby game-page">
+        <Expander headerText={'Learn How to Play'} closeText={'Close'}>
+          <h2>How to Host a Game</h2>
+          <h3>Step 1: Setup</h3>
+          <HostStepOne />
+          <h3>Step 2: Voting</h3>
+          <HostStepTwo />
+          <h3>Step 3: Results</h3>
+          <HostStepThree />
+          <h2>How to Play</h2>
+          <h3>Step 1: Setup</h3>
+          <PlayerStepOne />
+          <h3>Step 2: Voting</h3>
+          <PlayerStepTwo />
+          <h3>Step 3: Results</h3>
+          <PlayerStepThree />
+        </Expander>
         <h2>Welcome to Tricktionary!</h2>
         <p className="instructions">
           Please enter your name and lobby code to join a game or you can host a
@@ -136,24 +153,6 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
             </button>
           </div>
         </form>
-      </div>
-      <div className="game-page margin-top">
-        <h2>How to Play</h2>
-        <h3>Step 1: Setup</h3>
-        <PlayerStepOne />
-        <h3>Step 2: Voting</h3>
-        <PlayerStepTwo />
-        <h3>Step 3: Results</h3>
-        <PlayerStepThree />
-      </div>
-      <div className="game-page margin-top">
-        <h2>How to Host a Game</h2>
-        <h3>Step 1: Setup</h3>
-        <HostStepOne />
-        <h3>Step 2: Voting</h3>
-        <HostStepTwo />
-        <h3>Step 3: Results</h3>
-        <HostStepThree />
       </div>
     </>
   );

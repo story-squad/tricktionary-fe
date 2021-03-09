@@ -1,4 +1,4 @@
-export interface HostPlayerProps {
+export interface HOCProps {
   children: React.ReactNode;
 }
 
