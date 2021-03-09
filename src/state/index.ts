@@ -5,6 +5,7 @@ import { lobbySettingsState } from './lobbySettingsState';
 import { lobbyState } from './lobbyState';
 import { playerGuessState } from './playerGuessState';
 import { playerIdState } from './playerIdState';
+import { reactionsState } from './reactionsState';
 import { revealResultsState } from './revealResultsState';
 import { showNewHostModalState } from './showNewHostModalState';
 import { timerState } from './timerState';
@@ -22,4 +23,5 @@ export {
   playerGuessState,
   revealResultsState,
   showNewHostModalState,
+  reactionsState,
 };
