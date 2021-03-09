@@ -4,6 +4,7 @@ import { useLocalStorage } from '../../../../../hooks';
 import {
   lobbyState,
   playerGuessState,
+  reactionsState,
   revealResultsState,
   showNewHostModalState,
 } from '../../../../../state';
@@ -16,6 +17,7 @@ import {
   getPlayerDictionary,
   getSortedDefinitions,
 } from '../../../../../utils/helpers';
+import { getSelectedReactions } from '../../../../../utils/helpers/apiHelpers';
 import { initialToken } from '../../../../../utils/localStorageInitialValues';
 import { Host } from '../../../../common/Host';
 import { Modal } from '../../../../common/Modal';
@@ -35,6 +37,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   const [showNewHostModal, setShowNewHostModal] = useRecoilState(
     showNewHostModalState,
   );
+  const [, setReactions] = useRecoilState(reactionsState);
   const lobbyData = useRecoilValue(lobbyState);
   const revealResults = useRecoilValue(revealResultsState);
   const [playerDict] = useState<PlayerDictionary>(
@@ -48,6 +51,11 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   // Reset player's guess for next round
   useEffect(() => {
     resetGuess();
+    getSelectedReactions()
+      .then((res) => {
+        setReactions(res);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   // Create new sorted definitions array when player recieves guesses from host
@@ -66,7 +74,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
       <h2>It’s Time for the Results!</h2>
       <Host>
         {!revealResults && (
-          // Hide after reveal
+          // Show before reveal
           <p>
             Players can’t see the results yet, so it’s up to you to read them
             with pizzaz! Say, “Remember, you get one point if you vote for the
@@ -77,7 +85,11 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         <p className="word-display">{lobbyData.word}</p>
         <div className="round-results">
           {sortedDefinitions.map((definitionResult, key) => (
-            <DefinitionResult key={key} definitionResult={definitionResult} />
+            <DefinitionResult
+              key={key}
+              definitionResult={definitionResult}
+              showReactions={revealResults}
+            />
           ))}
         </div>
         <div className="endgame-container">
@@ -130,6 +142,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
                 <DefinitionResult
                   key={key}
                   definitionResult={definitionResult}
+                  showReactions={true}
                 />
               ))}
             </div>
