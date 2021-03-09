@@ -76,7 +76,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           // Showing definitions
           <>
             <h2>Read Each Number and Its Definition</h2>
-            <p>
+            <p className="instructions">
               The contestants have submitted their trick definitions. Now you
               need to summon your best gameshow host voice and read the number
               and definition from the list below. Once you finish, read through
@@ -90,7 +90,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
                   <div className="definition-key">
                     <p>#{definition.definitionKey}</p>
                   </div>
-                  <p>{definition.content}</p>
+                  <p className="definition-guess">{definition.content}</p>
                 </div>
               ))}
               <button
@@ -105,7 +105,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           // Showing votes
           <>
             <h2>It’s Time to Vote!</h2>
-            <p>
+            <p className="instructions">
               Call on each contestant and ask for the number of their vote.
               Input their selection and confirm by reading the definition aloud.
               Example: &quot;Number 3, the squishy remains of rotten
@@ -157,7 +157,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
               <div className="definition-key">
                 <p>#{playerGuess.key}</p>
               </div>
-              <p>{playerGuess.definition}</p>
+              <p className="definition-guess">{playerGuess.definition}</p>
             </div>
           ) : (
             <p>No Guess yet</p>

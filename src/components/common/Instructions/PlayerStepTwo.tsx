@@ -3,7 +3,7 @@ import React from 'react';
 const HostStepTwo = (): React.ReactElement => {
   return (
     <div className="instructions-step">
-      <p>
+      <p className="instructions">
         Listen carefully to your host for the number of the definition you think
         is real. When the host calls on you, vote!
       </p>
