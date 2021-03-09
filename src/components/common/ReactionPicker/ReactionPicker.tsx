@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { postReaction } from '../../../api/apiRequests';
-import { ReactionItem } from '../../../types/commonTypes';
-import { LobbyData } from '../../../types/gameTypes';
+import { lobbyState, playerIdState, reactionsState } from '../../../state';
 
 const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
   const [submitted, setSubmitted] = useState(false);
+  const [selected, setSelected] = useState<number>(0);
+  const playerId = useRecoilValue(playerIdState);
+  const lobbyData = useRecoilValue(lobbyState);
+  const reactions = useRecoilValue(reactionsState);
+
+  const className = (id: number) => {
+    return `reaction-btn${selected === id ? ' selected' : ''}`;
+  };
 
   const onClick = (reactionId: number) => {
     setSubmitted(true);
+    setSelected(reactionId);
     postReaction({
-      user_id: props.playerId,
-      round_id: props.lobbyData.roundId,
+      user_id: playerId,
+      round_id: lobbyData.roundId,
       reaction_id: reactionId,
       definition_id: props.definitionId,
       game_finished: false,
@@ -20,14 +29,14 @@ const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
   return (
     <div className="reaction-picker-container">
       <div className="reaction-picker">
-        {props.reactions.map((reaction, key) => (
+        {reactions.map((reaction, key) => (
           <button
-            className="reaction-btn"
+            className={className(reaction.id)}
             key={key}
             onClick={() => onClick(reaction.id)}
             disabled={submitted}
           >
-            {reaction.content}
+            <span className="content">{reaction.content}</span>
           </button>
         ))}
       </div>
@@ -38,8 +47,5 @@ const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
 export default ReactionPicker;
 
 interface ReactionPickerProps {
-  reactions: ReactionItem[];
-  playerId: string;
-  lobbyData: LobbyData;
   definitionId: number;
 }
