@@ -1,10 +1,18 @@
 import React from 'react';
 import { DefinitionResultItem } from '../../../../../types/gameTypes';
+import { ReactionPicker } from '../../../../common/ReactionPicker';
 
 export const DefinitionResult = (
   props: DefinitionResultProps,
 ): React.ReactElement => {
-  const { username, definition, points, guesses } = props.definitionResult;
+  const {
+    username,
+    definition,
+    points,
+    guesses,
+    definitionId,
+  } = props.definitionResult;
+  const { showReactions } = props;
 
   return (
     <>
@@ -31,6 +39,7 @@ export const DefinitionResult = (
               </div>
             ))}
           </div>
+          {showReactions && <ReactionPicker definitionId={definitionId} />}
         </div>
       ) : (
         // Player didn't submit a definition
@@ -49,4 +58,5 @@ export const DefinitionResult = (
 
 interface DefinitionResultProps {
   definitionResult: DefinitionResultItem;
+  showReactions?: boolean;
 }
