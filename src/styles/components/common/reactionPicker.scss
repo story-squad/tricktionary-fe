@@ -1,0 +1,33 @@
+.reaction-picker-container {
+  width: 100%;
+
+  .reaction-picker {
+    display: flex;
+    justify-content: center;
+
+    .reaction-btn {
+      margin: 0 0.2rem;
+      padding: 0;
+      background: none;
+
+      .content {
+        font-size: 3rem;
+      }
+      &.selected {
+        background: $sky-blue;
+      }
+      &:hover {
+        filter: brightness(1.1);
+      }
+      &:active {
+        filter: brightness(1.2);
+      }
+      &:disabled {
+        .content {
+          -webkit-filter: grayscale(1);
+          filter: grayscale(1);
+        }
+      }
+    }
+  }
+}
