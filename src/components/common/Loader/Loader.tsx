@@ -9,8 +9,10 @@ const Loader = (): React.ReactElement => {
     <>
       {console.log(isLoading)}
       {isLoading && (
-        <div className="loader">
-          <h2>Loader Temp</h2>
+        <div className="loader-container">
+          <div className="loader">
+            <h2>Loading</h2>
+          </div>
         </div>
       )}
     </>
