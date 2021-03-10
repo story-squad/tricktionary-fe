@@ -30,6 +30,11 @@ export interface LobbyData {
     };
   };
   topThree: FinaleDefinition[];
+  reactions: any;
+}
+
+export interface ReactionsDictionary {
+  [key: number]: { [key: number]: number };
 }
 
 export interface GuessItem {
