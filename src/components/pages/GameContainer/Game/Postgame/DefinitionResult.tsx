@@ -39,7 +39,9 @@ export const DefinitionResult = (
               </div>
             ))}
           </div>
-          {showReactions && <ReactionPicker definitionId={definitionId} />}
+          {showReactions && definitionId !== 0 && (
+            <ReactionPicker definitionId={definitionId} />
+          )}
         </div>
       ) : (
         // Player didn't submit a definition
