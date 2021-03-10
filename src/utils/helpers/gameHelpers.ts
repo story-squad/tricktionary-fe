@@ -218,3 +218,17 @@ export const createReactionsDictionary = (
   });
   return dict;
 };
+
+export const addReaction = (
+  reactions: any,
+  definitionId: number,
+  reactionId: number,
+): any => {
+  if (
+    reactions.hasOwnProperty(definitionId) &&
+    reactions[definitionId].hasOwnProperty(reactionId)
+  ) {
+    reactions[definitionId][reactionId] += 1;
+  }
+  return reactions;
+};
