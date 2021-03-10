@@ -1,4 +1,5 @@
 import shuffle from 'shuffle-array';
+import { ReactionItem } from '../../types/commonTypes';
 import {
   DefinitionDictionary,
   DefinitionItem,
@@ -196,6 +197,24 @@ export const getPlayerDictionary = (
   const dict: PlayerDictionary = {};
   players.forEach((player) => {
     dict[player.id] = player.username;
+  });
+  return dict;
+};
+
+// Create initial dictionary to map reactions of each type to all definitions. { definitionId: { reaction.id: 0, ... } }
+export const createReactionsDictionary = (
+  players: PlayerItem[],
+  reactions: ReactionItem[],
+): any => {
+  const dict: any = {};
+  const reactionDict: any = {};
+  reactions.forEach((reaction) => {
+    reactionDict[reaction.id] = 0;
+  });
+  players.forEach((player) => {
+    if (player.definitionId) {
+      dict[player.definitionId] = reactionDict;
+    }
   });
   return dict;
 };
