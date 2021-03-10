@@ -1,18 +1,18 @@
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { lobbyState, playerIdState, reactionsState } from '../../../state';
-import { addReaction, getReactionCount } from '../../../utils/helpers';
+import { useRecoilValue } from 'recoil';
+import {
+  handleSendReactionFn,
+  lobbyState,
+  playerIdState,
+  reactionsState,
+} from '../../../state';
+import { getReactionCount } from '../../../utils/helpers';
 
 const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
   const myId = useRecoilValue(playerIdState);
   const reactions = useRecoilValue(reactionsState);
-  const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
-
-  const onClick = (definitionId: number, reactionId: number) => {
-    setLobbyData((oldLobbyData) =>
-      addReaction(oldLobbyData, definitionId, reactionId),
-    );
-  };
+  const handleSendReaction = useRecoilValue(handleSendReactionFn);
+  const lobbyData = useRecoilValue(lobbyState);
 
   return (
     <div className="reaction-picker-container">
@@ -21,7 +21,9 @@ const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
           <div className="reaction" key={key}>
             <button
               className="reaction-btn"
-              onClick={() => onClick(props.definitionId, reaction.id)}
+              onClick={() =>
+                handleSendReaction(props.definitionId, reaction.id)
+              }
               disabled={props.playerId === myId}
             >
               <span className="content">{reaction.content}</span>
