@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 import { useLocalStorage } from '../../../hooks';
 import {
+  handleSendReactionFn,
   hostChoiceState,
   isLoadingState,
   lobbyCodeState,
@@ -52,6 +53,7 @@ const GameContainer = (): React.ReactElement => {
   const [error, setError] = useState('');
   const [, setShowNewHostModal] = useRecoilState(showNewHostModalState);
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
+  const [, setHandleSendReactionFn] = useRecoilState(handleSendReactionFn);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetPlayerGuess = useResetRecoilState(playerGuessState);
@@ -91,6 +93,9 @@ const GameContainer = (): React.ReactElement => {
   useEffect(() => {
     // Get token from localStorage if it exists, log in
     handleLogin();
+    // Set up Recoil-stored handler functions
+    setHandleSendReactionFn(handleSendReaction);
+
     //// Socket event listeners
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
