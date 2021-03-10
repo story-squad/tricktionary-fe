@@ -1,30 +1,17 @@
-import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { postReaction } from '../../../api/apiRequests';
+import React from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { lobbyState, playerIdState, reactionsState } from '../../../state';
-import { getReactionCount } from '../../../utils/helpers';
+import { addReaction, getReactionCount } from '../../../utils/helpers';
 
 const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
-  const [submitted, setSubmitted] = useState(false);
-  const [selected, setSelected] = useState<number>(0);
-  const playerId = useRecoilValue(playerIdState);
-  const lobbyData = useRecoilValue(lobbyState);
+  const myId = useRecoilValue(playerIdState);
   const reactions = useRecoilValue(reactionsState);
+  const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
 
-  const className = (id: number) => {
-    return `reaction-btn${selected === id ? ' selected' : ''}`;
-  };
-
-  const onClick = (reactionId: number) => {
-    setSubmitted(true);
-    setSelected(reactionId);
-    postReaction({
-      user_id: playerId,
-      round_id: lobbyData.roundId,
-      reaction_id: reactionId,
-      definition_id: props.definitionId,
-      game_finished: false,
-    });
+  const onClick = (definitionId: number, reactionId: number) => {
+    setLobbyData((oldLobbyData) =>
+      addReaction(oldLobbyData, definitionId, reactionId),
+    );
   };
 
   return (
@@ -33,9 +20,9 @@ const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
         {reactions.map((reaction, key) => (
           <div className="reaction" key={key}>
             <button
-              className={className(reaction.id)}
-              onClick={() => onClick(reaction.id)}
-              disabled={submitted}
+              className="reaction-btn"
+              onClick={() => onClick(props.definitionId, reaction.id)}
+              disabled={props.playerId === myId}
             >
               <span className="content">{reaction.content}</span>
             </button>
@@ -57,4 +44,5 @@ export default ReactionPicker;
 
 interface ReactionPickerProps {
   definitionId: number;
+  playerId: string;
 }

@@ -7,6 +7,7 @@ export const DefinitionResult = (
 ): React.ReactElement => {
   const {
     username,
+    playerId,
     definition,
     points,
     guesses,
@@ -40,7 +41,7 @@ export const DefinitionResult = (
             ))}
           </div>
           {showReactions && definitionId !== 0 && (
-            <ReactionPicker definitionId={definitionId} />
+            <ReactionPicker definitionId={definitionId} playerId={playerId} />
           )}
         </div>
       ) : (
