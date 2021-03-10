@@ -2,7 +2,9 @@ import jwt from 'jsonwebtoken';
 import React, { SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import { useLocalStorage } from '../../../../../hooks';
+import { isLoadingState } from '../../../../../state';
 import { DecodedToken } from '../../../../../types/commonTypes';
 import { MAX_USERNAME_LENGTH } from '../../../../../utils/constants';
 import { initialToken } from '../../../../../utils/localStorageInitialValues';
@@ -26,6 +28,7 @@ import { PublicGames } from '../../../../common/PublicGames';
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
   const [token] = useLocalStorage<string>('token', initialToken);
+  const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
 
   //set up the form details
   const { register, errors, setError, clearErrors } = useForm({
@@ -83,6 +86,11 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
     }
   };
 
+  const handleJoinByClick = (e: React.MouseEvent) => {
+    setIsLoading(true);
+    props.handleJoinLobby(e, '');
+  };
+
   return (
     <>
       <PublicGames />
@@ -135,10 +143,11 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
           <div className="start-buttons">
             <button
               className="join lobby-button"
-              onClick={(e) => props.handleJoinLobby(e, '')}
+              onClick={handleJoinByClick}
               disabled={
                 !usernameIsValid(props.username).valid ||
-                props.lobbyCode.length !== 4
+                props.lobbyCode.length !== 4 ||
+                isLoading
               }
             >
               Join Lobby
@@ -147,7 +156,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
             <button
               className="host lobby-button"
               onClick={props.handleCreateLobby}
-              disabled={!usernameIsValid(props.username).valid}
+              disabled={!usernameIsValid(props.username).valid || isLoading}
             >
               Host New Game
             </button>
