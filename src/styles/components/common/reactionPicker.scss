@@ -1,5 +1,6 @@
 .reaction-picker-container {
   width: 100%;
+  height: 6rem;
 
   .reaction-picker {
     display: flex;
@@ -9,6 +10,7 @@
       margin: 0 0.2rem;
       padding: 0;
       background: none;
+      transition-duration: 0.05s;
 
       .content {
         font-size: 3rem;
@@ -20,7 +22,7 @@
         filter: brightness(1.1);
       }
       &:active {
-        filter: brightness(1.2);
+        transform: scale(1.2, 1.2);
       }
       &:disabled {
         .content {
@@ -29,5 +31,10 @@
         }
       }
     }
+  }
+  .count {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 1.6rem;
   }
 }
