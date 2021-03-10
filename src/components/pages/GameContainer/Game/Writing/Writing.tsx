@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
-import { lobbyState, playerIdState } from '../../../../../state';
+import {
+  isLoadingState,
+  lobbyState,
+  playerIdState,
+} from '../../../../../state';
 import {
   MAX_DEFINITION_LENGTH,
   MAX_SECONDS,
@@ -19,6 +23,7 @@ import { TwitterButton } from '../../../../common/TwitterButton';
 const Writing = (props: WritingProps): React.ReactElement => {
   const { handleSyncTimer, time, setTime } = props;
   const lobbyData = useRecoilValue(lobbyState);
+  const isLoading = useRecoilValue(isLoadingState);
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -135,7 +140,11 @@ const Writing = (props: WritingProps): React.ReactElement => {
               Time&apos;s up for players to submit! Start the next phase.
             </p>
           )}
-          <button className="times-up-button" onClick={handleGoToNextPhase}>
+          <button
+            className="times-up-button"
+            onClick={handleGoToNextPhase}
+            disabled={isLoading}
+          >
             Start Guessing Phase
           </button>
         </div>

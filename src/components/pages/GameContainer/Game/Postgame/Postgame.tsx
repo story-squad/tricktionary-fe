@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useLocalStorage } from '../../../../../hooks';
 import {
+  isLoadingState,
   lobbyState,
   playerGuessState,
   reactionsState,
@@ -40,6 +41,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   const [, setReactions] = useRecoilState(reactionsState);
   const lobbyData = useRecoilValue(lobbyState);
   const revealResults = useRecoilValue(revealResultsState);
+  const isLoading = useRecoilValue(isLoadingState);
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
   );
@@ -104,7 +106,9 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
             // After reveal
             <div className="after-reveal">
               <div className="after-container">
-                <button onClick={handleSetFinale}>Go to Finale</button>
+                <button onClick={handleSetFinale} disabled={isLoading}>
+                  Go to Finale
+                </button>
                 <SetHost
                   players={lobbyData.players}
                   handleSetHost={handleSetHost}
@@ -116,7 +120,11 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
                   handleConfirm={() => setShowNewHostModal(false)}
                 />
               </div>
-              <button className="play-again" onClick={handlePlayAgain}>
+              <button
+                className="play-again"
+                onClick={handlePlayAgain}
+                disabled={isLoading}
+              >
                 Play Again
               </button>
             </div>
