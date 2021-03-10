@@ -151,6 +151,7 @@ const GameContainer = (): React.ReactElement => {
 
     // New round with same players, retain points
     socket.on('play again', (socketData: LobbyData) => {
+      setIsLoading(false);
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
     });
