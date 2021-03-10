@@ -219,19 +219,28 @@ export const createReactionsDictionary = (
   return dict;
 };
 
-// Increment reaction and return new reaction object
+// Increment reaction and return new lobbyData object
 export const addReaction = (
-  reactions: any,
+  lobbyData: LobbyData,
   definitionId: number,
   reactionId: number,
 ): any => {
   if (
-    reactions.hasOwnProperty(definitionId) &&
-    reactions[definitionId].hasOwnProperty(reactionId)
+    lobbyData.reactions.hasOwnProperty(definitionId) &&
+    lobbyData.reactions[definitionId].hasOwnProperty(reactionId)
   ) {
-    reactions[definitionId][reactionId] += 1;
+    return {
+      ...lobbyData,
+      reactions: {
+        ...lobbyData.reactions,
+        [definitionId]: {
+          ...lobbyData.reactions[definitionId],
+          [reactionId]: lobbyData.reactions[definitionId][reactionId] + 1,
+        },
+      },
+    };
   }
-  return reactions;
+  return lobbyData;
 };
 
 // Get reaction count with definitionId and reactionId
