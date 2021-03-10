@@ -21,7 +21,7 @@ import {
   PlayerItem,
 } from '../../../types/gameTypes';
 import { MAX_SECONDS, REACT_APP_API_URL } from '../../../utils/constants';
-import { errorCodeChecker } from '../../../utils/helpers';
+import { addReaction, errorCodeChecker } from '../../../utils/helpers';
 import {
   initialGuesses,
   initialToken,
@@ -220,6 +220,13 @@ const GameContainer = (): React.ReactElement => {
     socket.on('pulse check', () => {
       handleLogin();
     });
+
+    // Increment reaction when other Player clicks a reaction on Postgame
+    socket.on('get reaction', (definitionId: number, reactionId: number) => {
+      setLobbyData((prevLobbyData) =>
+        addReaction(prevLobbyData, definitionId, reactionId),
+      );
+    });
   }, []);
 
   // Socket event emitters
@@ -285,6 +292,10 @@ const GameContainer = (): React.ReactElement => {
 
   const handleUpdateUsername = (newUsername: string) => {
     socket.emit('update username', newUsername);
+  };
+
+  const handleSendReaction = (definitionId: number, reactionId: number) => {
+    socket.emit('send reaction', definitionId, reactionId);
   };
 
   // Host sends the guess # to the player to display on their screen
