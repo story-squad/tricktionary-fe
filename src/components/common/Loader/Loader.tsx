@@ -7,7 +7,6 @@ const Loader = (): React.ReactElement => {
 
   return (
     <>
-      {console.log(isLoading)}
       {isLoading && (
         <div className="loader-container">
           <div className="loader">
