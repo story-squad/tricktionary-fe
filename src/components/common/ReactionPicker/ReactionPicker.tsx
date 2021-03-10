@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { postReaction } from '../../../api/apiRequests';
 import { lobbyState, playerIdState, reactionsState } from '../../../state';
+import { getReactionCount } from '../../../utils/helpers';
 
 const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
   const [submitted, setSubmitted] = useState(false);
@@ -30,14 +31,22 @@ const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
     <div className="reaction-picker-container">
       <div className="reaction-picker">
         {reactions.map((reaction, key) => (
-          <button
-            className={className(reaction.id)}
-            key={key}
-            onClick={() => onClick(reaction.id)}
-            disabled={submitted}
-          >
-            <span className="content">{reaction.content}</span>
-          </button>
+          <div className="reaction" key={key}>
+            <button
+              className={className(reaction.id)}
+              onClick={() => onClick(reaction.id)}
+              disabled={submitted}
+            >
+              <span className="content">{reaction.content}</span>
+            </button>
+            <p className="count">
+              {getReactionCount(
+                lobbyData.reactions,
+                props.definitionId,
+                reaction.id,
+              )}
+            </p>
+          </div>
         ))}
       </div>
     </div>
