@@ -6,6 +6,5 @@ export const handleSendReactionFn = atom<HandleSendReactionFn>({
 });
 
 type HandleSendReactionFn =
-  | undefined
   | (() => null)
   | ((definitionId: number, reactionId: number) => void);
