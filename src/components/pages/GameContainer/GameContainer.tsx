@@ -188,10 +188,12 @@ const GameContainer = (): React.ReactElement => {
       setToken(newToken);
     });
 
+    // Receive your guess from the Host
     socket.on('player guess', (definitionSelection: DefinitionSelection) => {
       setPlayerGuess(definitionSelection);
     });
 
+    // Sync your time with the Host
     socket.on('synchronize', (seconds: number) => {
       setTime((prevSeconds) => {
         if (Math.abs(prevSeconds - seconds) > 2) {
@@ -202,11 +204,13 @@ const GameContainer = (): React.ReactElement => {
       });
     });
 
+    // Become the new Host
     socket.on('welcome host', (guesses: GuessItem[]) => {
       setGuesses(guesses);
       setShowNewHostModal(true);
     });
 
+    // Get the round results from Host when they click 'reveal'
     socket.on('reveal results', (guesses: GuessItem[]) => {
       setGuesses(guesses);
       setRevealResults(true);
