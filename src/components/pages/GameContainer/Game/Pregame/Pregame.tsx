@@ -5,6 +5,7 @@ import { getWords } from '../../../../../api/apiRequests';
 import { useLocalStorage } from '../../../../../hooks';
 import {
   hostChoiceState,
+  isLoadingState,
   lobbySettingsState,
   lobbyState,
   revealResultsState,
@@ -38,6 +39,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const lobbySettings = useRecoilValue(lobbySettingsState);
   const [hostChoice, setHostChoice] = useRecoilState(hostChoiceState);
   const lobbyData = useRecoilValue(lobbyState);
+  const isLoading = useRecoilValue(isLoadingState);
   const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
@@ -199,7 +201,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <button
               className="start-btn center"
               onClick={props.handleStartGame}
-              disabled={!hasMinimumPlayers(lobbyData.players)}
+              disabled={!hasMinimumPlayers(lobbyData.players) || isLoading}
             >
               Start Game
             </button>
@@ -251,7 +253,15 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 >
                   {isCustom ? 'Pick One of Our Words' : 'Bring Your Own Word'}
                 </button>
-                <button className="start-btn" onClick={props.handleStartGame}>
+                <button
+                  className="start-btn"
+                  onClick={props.handleStartGame}
+                  disabled={
+                    customInput.word.trim() === '' ||
+                    customInput.definition.trim() === '' ||
+                    isLoading
+                  }
+                >
                   Start Game
                 </button>
               </div>

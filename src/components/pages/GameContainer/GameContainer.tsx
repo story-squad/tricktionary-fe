@@ -5,6 +5,7 @@ import io from 'socket.io-client';
 import { useLocalStorage } from '../../../hooks';
 import {
   hostChoiceState,
+  isLoadingState,
   lobbyCodeState,
   lobbySettingsState,
   lobbyState,
@@ -27,6 +28,7 @@ import {
   randomUsername,
 } from '../../../utils/localStorageInitialValues';
 import { Header } from '../../common/Header';
+import { Loader } from '../../common/Loader';
 import { Modal } from '../../common/Modal';
 import { Finale, Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
@@ -39,6 +41,7 @@ const GameContainer = (): React.ReactElement => {
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
+  const [, setIsLoading] = useRecoilState(isLoadingState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
   const [, setRevealResults] = useRecoilState(revealResultsState);
   const hostChoice = useRecoilValue(hostChoiceState);
@@ -68,9 +71,9 @@ const GameContainer = (): React.ReactElement => {
   };
 
   // For testing, DELETE later
-  // useEffect(() => {
-  //   console.log('lobbydata', lobbyData);
-  // }, [lobbyData]);
+  useEffect(() => {
+    console.log('lobbydata', lobbyData);
+  }, [lobbyData]);
 
   useEffect(() => {
     if (lobbyData.phase !== 'WRITING') {
@@ -91,6 +94,7 @@ const GameContainer = (): React.ReactElement => {
     //// Socket event listeners
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
+      setIsLoading(false);
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
       history.push(`/${socketData.lobbyCode}`);
@@ -147,6 +151,7 @@ const GameContainer = (): React.ReactElement => {
 
     // New round with same players, retain points
     socket.on('play again', (socketData: LobbyData) => {
+      setIsLoading(false);
       setLobbyData(socketData);
       setLobbyCode(socketData.lobbyCode);
     });
@@ -165,6 +170,7 @@ const GameContainer = (): React.ReactElement => {
     // Recieve API errors
     socket.on('error', (code: number, errorData: string) => {
       const devMessage = errorCodeChecker(code);
+      setIsLoading(false);
       console.log(
         `You have received development error code ${code} ${devMessage}`,
       );
@@ -219,6 +225,7 @@ const GameContainer = (): React.ReactElement => {
 
   const handleCreateLobby = (e: React.MouseEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     socket.emit('create lobby', username.trim());
   };
 
@@ -236,6 +243,7 @@ const GameContainer = (): React.ReactElement => {
 
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     socket.emit('start game', lobbySettings, lobbyCode, hostChoice);
   };
 
@@ -244,18 +252,22 @@ const GameContainer = (): React.ReactElement => {
   };
 
   const handleSubmitGuesses = (guesses: GuessItem[]) => {
+    setIsLoading(true);
     socket.emit('guess', lobbyCode, guesses);
   };
 
   const handlePlayAgain = () => {
+    setIsLoading(true);
     socket.emit('play again', lobbySettings, lobbyCode);
   };
 
   const handleSetPhase = (phase: string) => {
+    setIsLoading(true);
     socket.emit('set phase', phase, lobbyCode);
   };
 
   const handleSetFinale = () => {
+    setIsLoading(true);
     socket.emit('set finale', lobbyCode);
   };
 
@@ -379,6 +391,7 @@ const GameContainer = (): React.ReactElement => {
 
   return (
     <div className="game-container">
+      <Loader />
       <Modal
         header={'HEY!'}
         message={'Would you like to leave the current game?'}

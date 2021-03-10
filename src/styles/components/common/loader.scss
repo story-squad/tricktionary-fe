@@ -1,0 +1,21 @@
+.loader-container {
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  z-index: 5;
+  top: 0;
+  left: 0;
+
+  .loader {
+    width: 100vw;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    bottom: 50%;
+
+    h2 {
+      text-shadow: 0.1rem 0.1rem rgb(0, 0, 0.4);
+    }
+  }
+}
