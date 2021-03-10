@@ -15,20 +15,11 @@
       .content {
         font-size: 3rem;
       }
-      &.selected {
-        background: $sky-blue;
-      }
       &:hover {
         filter: brightness(1.1);
       }
       &:active {
         transform: scale(1.2, 1.2);
-      }
-      &:disabled {
-        .content {
-          -webkit-filter: grayscale(1);
-          filter: grayscale(1);
-        }
       }
     }
   }
