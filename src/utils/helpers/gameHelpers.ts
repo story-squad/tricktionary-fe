@@ -219,6 +219,7 @@ export const createReactionsDictionary = (
   return dict;
 };
 
+// Increment reaction and return new reaction object
 export const addReaction = (
   reactions: any,
   definitionId: number,
@@ -231,4 +232,20 @@ export const addReaction = (
     reactions[definitionId][reactionId] += 1;
   }
   return reactions;
+};
+
+// Get reaction count with definitionId and reactionId
+export const getReactionCount = (
+  reactions: any,
+  definitionId: number,
+  reactionId: number,
+): number => {
+  if (
+    reactions.hasOwnProperty(definitionId) &&
+    reactions[definitionId].hasOwnProperty(reactionId)
+  ) {
+    return reactions[definitionId][reactionId];
+  } else {
+    return 0;
+  }
 };
