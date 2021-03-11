@@ -77,6 +77,7 @@ const GameContainer = (): React.ReactElement => {
     console.log('lobbydata', lobbyData);
   }, [lobbyData]);
 
+  // Reset timer
   useEffect(() => {
     if (lobbyData.phase !== 'WRITING') {
       setTime(-1);
@@ -93,10 +94,11 @@ const GameContainer = (): React.ReactElement => {
   useEffect(() => {
     // Get token from localStorage if it exists, log in
     handleLogin();
-    // Set up Recoil-stored handler functions
+
+    /* Set up Recoil-stored handler functions */
     setHandleSendReactionFn(handleSendReaction);
 
-    //// Socket event listeners
+    /* Socket event listeners */
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
       setIsLoading(false);
@@ -234,7 +236,7 @@ const GameContainer = (): React.ReactElement => {
     });
   }, []);
 
-  // Socket event emitters
+  /* Socket event emitters */
   const handleLogin = (newToken = false) => {
     socket.emit('login', newToken ? '' : token);
   };
@@ -299,10 +301,6 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('update username', newUsername);
   };
 
-  const handleSendReaction = (definitionId: number, reactionId: number) => {
-    socket.emit('send reaction', definitionId, reactionId);
-  };
-
   // Host sends the guess # to the player to display on their screen
   const handleSendGuess = (
     playerId: string,
@@ -317,7 +315,18 @@ const GameContainer = (): React.ReactElement => {
     }
   };
 
-  // Lobby Settings handlers / State handlers
+  /* 
+  Recoil-stored handlers 
+  Use regular function syntax to hoist 
+  Return the anonymous function you want to be stored in atom 
+  */
+  function handleSendReaction() {
+    return (definitionId: number, reactionId: number) => {
+      socket.emit('send reaction', definitionId, reactionId);
+    };
+  }
+
+  /* Lobby Settings handlers / State handlers */
   const handleSetWord = (
     id: number,
     word: string | undefined = undefined,
