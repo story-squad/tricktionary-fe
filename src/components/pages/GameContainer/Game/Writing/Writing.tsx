@@ -121,6 +121,14 @@ const Writing = (props: WritingProps): React.ReactElement => {
     <div className="writing game-page">
       <Host>
         <h2>Players are writing their definitions...</h2>
+        <p className="instructions">
+          If you’re playing with a timer, warn your players when they have 30,
+          15, 10, and 5 seconds left
+        </p>
+        <div className="guess-word">
+          <h2 className="word-label">The word is:</h2>
+          <p className="word">{lobbyData.word}</p>
+        </div>
         {useTimer && (
           <Timer
             time={time}
@@ -130,22 +138,19 @@ const Writing = (props: WritingProps): React.ReactElement => {
             addTime={handleAddTime}
           />
         )}
-        <div className="guess-word">
-          <p className="word-label">Your Word:</p>
-          <p className="word">{lobbyData.word}</p>
-        </div>
         <div className="times-up-container">
           {timerDone && (
             <p className="times-up">
               Time&apos;s up for players to submit! Start the next phase.
             </p>
           )}
+          <PlayerList />
           <button
             className="times-up-button"
             onClick={handleGoToNextPhase}
             disabled={isLoading}
           >
-            Start Guessing Phase
+            Read the Definitions!
           </button>
         </div>
         <Modal
@@ -220,8 +225,8 @@ const Writing = (props: WritingProps): React.ReactElement => {
             />
           </div>
         )}
+        <PlayerList />
       </Player>
-      <PlayerList />
     </div>
   );
 };

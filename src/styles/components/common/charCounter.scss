@@ -20,6 +20,9 @@
 }
 
 .char-counter {
+  p {
+    color: $lt-grey;
+  }
   p.full {
     color: $burnt-orange;
   }

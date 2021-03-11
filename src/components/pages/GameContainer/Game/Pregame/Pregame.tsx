@@ -22,7 +22,11 @@ import { usernameIsValid } from '../../../../../utils/validation';
 import { CharCounter } from '../../../../common/CharCounter';
 import { Host } from '../../../../common/Host';
 import { Input } from '../../../../common/Input';
-import { HostStepOne, PlayerStepOne } from '../../../../common/Instructions';
+import {
+  HostStepOne,
+  HostStepOneA,
+  PlayerStepOne,
+} from '../../../../common/Instructions';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
 import { WordChoice } from './WordChoice';
@@ -151,20 +155,18 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   return (
     <div className="pregame game-page">
       <Host>
-        <h2>Step 1: Choose a Word</h2>
-        <HostStepOne />
-        <div className="invite-code">
-          <h3>Invite Code:</h3>
-          <p className="room-code">{lobbyData.lobbyCode}</p>
-        </div>
         {/* Suggested words selection */}
         {!isCustom && (
           <>
-            <h3>Choose a word</h3>
+            <h2>Step 1: Choose a Word</h2>
+            <HostStepOne />
+            <div className="invite-code">
+              <h3>Invite Code:</h3>
+              <p className="room-code">{lobbyData.lobbyCode}</p>
+            </div>
             <div className="pick-word-instructions">
-              <p className="pick-instructions">
-                Click on a word to read its definition. If you like that word{' '}
-                and your team is ready, click start!
+              <p className="instructions">
+                Click on a word to see its definition.
               </p>
               <button className="shuffle-btn sm-btn" onClick={handleGetWords}>
                 Shuffle Words
@@ -180,13 +182,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 />
               ))}
             </div>
-            <p className="or">- OR -</p>
-            <button
-              className="choose-word sm-btn"
-              onClick={() => setIsCustom(!isCustom)}
-            >
-              {isCustom ? 'Pick One of Our Words' : 'Bring Your Own Word'}
-            </button>
           </>
         )}
         {/* Selected word information */}
@@ -198,25 +193,19 @@ const Pregame = (props: PregameProps): React.ReactElement => {
               <p className="sm-word">Definition:</p>
               <p className="definition">{getCurrentWord()?.definition}</p>
             </div>
-            <button
-              className="start-btn center"
-              onClick={props.handleStartGame}
-              disabled={!hasMinimumPlayers(lobbyData.players) || isLoading}
-            >
-              Start Game
-            </button>
           </div>
         )}
         {/* Custom word form */}
         {isCustom && (
           <>
-            <h3 className="BYOW">Bring Your Own Word</h3>
-            <p>
-              While you wait for your team, please enter your word and its
-              definition word. When all members have arrived, press start.
-            </p>
+            <h2>Step 1: Bring Your Own Word</h2>
+            <HostStepOneA />
+            <div className="invite-code">
+              <h3>Invite Code:</h3>
+              <p className="room-code">{lobbyData.lobbyCode}</p>
+            </div>
             <div className="word-block">
-              <div className="word-column col-a">
+              <div className="word-column">
                 <label htmlFor="word">Word:</label>
                 <div className="char-counter-wrapper higher">
                   <input
@@ -246,35 +235,25 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                   />
                 </div>
               </div>
-              <div className="word-column col-b">
-                <button
-                  className="choose-word sm-btn"
-                  onClick={() => setIsCustom(!isCustom)}
-                >
-                  {isCustom ? 'Pick One of Our Words' : 'Bring Your Own Word'}
-                </button>
-                <button
-                  className="start-btn"
-                  onClick={props.handleStartGame}
-                  disabled={
-                    customInput.word.trim() === '' ||
-                    customInput.definition.trim() === '' ||
-                    isLoading
-                  }
-                >
-                  Start Game
-                </button>
-              </div>
             </div>
           </>
         )}
+        <div className="use-own-words">
+          <p>Don&apos;t like our words?</p>
+          <button
+            className="choose-word sm-btn"
+            onClick={() => setIsCustom(!isCustom)}
+          >
+            {isCustom ? 'Pick One of Our Words' : 'Bring Your Own Word'}
+          </button>
+        </div>
         <div className="timer-container">
-          <h3 className="timer-title">Set A Timer</h3>
+          <h3 className="timer-title">Step 2: Set A Timer</h3>
           <p className="timer-directions">
             This timer is to deterimine how long players have to type.
           </p>
           {useTimer && (
-            <>
+            <div className="quantity-wrapper">
               <input
                 className="timer-itself"
                 type="number"
@@ -285,7 +264,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 id="seconds"
                 name="seconds"
               />
-            </>
+            </div>
           )}
           <div className="timer-wrap">
             <input
@@ -294,13 +273,22 @@ const Pregame = (props: PregameProps): React.ReactElement => {
               checked={useTimer}
               onChange={handleSetUseTimer}
             />
-            <p>Play with a timer</p>
+            <p>Play with timer</p>
           </div>
         </div>
+        <PlayerList />
+        <button
+          className="start-btn center"
+          onClick={props.handleStartGame}
+          disabled={!hasMinimumPlayers(lobbyData.players)}
+        >
+          Start Game
+        </button>
       </Host>
       <Player>
         <h2>The Lobby is filling up...</h2>
         <PlayerStepOne />
+        <PlayerList />
         {!showEditName ? (
           <div className="edit-name-block">
             <button className="sm-btn" onClick={() => setShowEditName(true)}>
@@ -332,7 +320,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           </form>
         )}
       </Player>
-      <PlayerList />
     </div>
   );
 };
