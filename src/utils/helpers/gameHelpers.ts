@@ -1,5 +1,9 @@
 import shuffle from 'shuffle-array';
-import { ReactionItem } from '../../types/commonTypes';
+import {
+  DoubleNumberDict,
+  NumberNumberDict,
+  ReactionItem,
+} from '../../types/commonTypes';
 import {
   DefinitionDictionary,
   DefinitionItem,
@@ -205,9 +209,9 @@ export const getPlayerDictionary = (
 export const createReactionsDictionary = (
   players: PlayerItem[],
   reactions: ReactionItem[],
-): any => {
-  const dict: any = {};
-  const reactionDict: any = {};
+): DoubleNumberDict => {
+  const dict: DoubleNumberDict = {};
+  const reactionDict: NumberNumberDict = {};
   reactions.forEach((reaction) => {
     reactionDict[reaction.id] = 0;
   });
@@ -224,7 +228,7 @@ export const addReaction = (
   lobbyData: LobbyData,
   definitionId: number,
   reactionId: number,
-): any => {
+): LobbyData => {
   if (
     lobbyData?.reactions?.hasOwnProperty(definitionId) &&
     lobbyData.reactions[definitionId].hasOwnProperty(reactionId)
@@ -245,7 +249,7 @@ export const addReaction = (
 
 // Get reaction count with definitionId and reactionId
 export const getReactionCount = (
-  reactions: any,
+  reactions: DoubleNumberDict,
   definitionId: number,
   reactionId: number,
 ): number => {

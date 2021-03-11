@@ -1,3 +1,5 @@
+import { DoubleNumberDict } from './commonTypes';
+
 export interface PlayerItem {
   id: string;
   username: string;
@@ -30,7 +32,7 @@ export interface LobbyData {
     };
   };
   topThree: FinaleDefinition[];
-  reactions: any;
+  reactions: DoubleNumberDict;
 }
 
 export interface ReactionsDictionary {
