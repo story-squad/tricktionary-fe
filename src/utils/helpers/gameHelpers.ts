@@ -1,5 +1,10 @@
 import shuffle from 'shuffle-array';
 import {
+  DoubleNumberDict,
+  NumberNumberDict,
+  ReactionItem,
+} from '../../types/commonTypes';
+import {
   DefinitionDictionary,
   DefinitionItem,
   DefinitionResultItem,
@@ -198,4 +203,62 @@ export const getPlayerDictionary = (
     dict[player.id] = player.username;
   });
   return dict;
+};
+
+// Create initial dictionary to map reactions of each type to all definitions. { definitionId: { reaction.id: 0, ... } }
+export const createReactionsDictionary = (
+  players: PlayerItem[],
+  reactions: ReactionItem[],
+): DoubleNumberDict => {
+  const dict: DoubleNumberDict = {};
+  const reactionDict: NumberNumberDict = {};
+  reactions.forEach((reaction) => {
+    reactionDict[reaction.id] = 0;
+  });
+  players.forEach((player) => {
+    if (player.definitionId) {
+      dict[player.definitionId] = reactionDict;
+    }
+  });
+  return dict;
+};
+
+// Increment reaction and return new lobbyData object
+export const addReaction = (
+  lobbyData: LobbyData,
+  definitionId: number,
+  reactionId: number,
+): LobbyData => {
+  if (
+    lobbyData?.reactions?.hasOwnProperty(definitionId) &&
+    lobbyData.reactions[definitionId].hasOwnProperty(reactionId)
+  ) {
+    return {
+      ...lobbyData,
+      reactions: {
+        ...lobbyData.reactions,
+        [definitionId]: {
+          ...lobbyData.reactions[definitionId],
+          [reactionId]: lobbyData.reactions[definitionId][reactionId] + 1,
+        },
+      },
+    };
+  }
+  return lobbyData;
+};
+
+// Get reaction count with definitionId and reactionId
+export const getReactionCount = (
+  reactions: DoubleNumberDict,
+  definitionId: number,
+  reactionId: number,
+): number => {
+  if (
+    reactions?.hasOwnProperty(definitionId) &&
+    reactions[definitionId].hasOwnProperty(reactionId)
+  ) {
+    return reactions[definitionId][reactionId];
+  } else {
+    return 0;
+  }
 };

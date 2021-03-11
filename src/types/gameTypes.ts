@@ -1,3 +1,5 @@
+import { DoubleNumberDict } from './commonTypes';
+
 export interface PlayerItem {
   id: string;
   username: string;
@@ -30,6 +32,11 @@ export interface LobbyData {
     };
   };
   topThree: FinaleDefinition[];
+  reactions: DoubleNumberDict;
+}
+
+export interface ReactionsDictionary {
+  [key: number]: { [key: number]: number };
 }
 
 export interface GuessItem {
