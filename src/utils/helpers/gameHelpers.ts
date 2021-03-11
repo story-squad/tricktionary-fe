@@ -226,7 +226,7 @@ export const addReaction = (
   reactionId: number,
 ): any => {
   if (
-    lobbyData.reactions.hasOwnProperty(definitionId) &&
+    lobbyData?.reactions?.hasOwnProperty(definitionId) &&
     lobbyData.reactions[definitionId].hasOwnProperty(reactionId)
   ) {
     return {
@@ -250,7 +250,7 @@ export const getReactionCount = (
   reactionId: number,
 ): number => {
   if (
-    reactions.hasOwnProperty(definitionId) &&
+    reactions?.hasOwnProperty(definitionId) &&
     reactions[definitionId].hasOwnProperty(reactionId)
   ) {
     return reactions[definitionId][reactionId];
