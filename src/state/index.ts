@@ -1,4 +1,5 @@
 import { guessesState } from './guessesState';
+import { handleSendReactionFn } from './handleSendReactionFn';
 import { hostChoiceState } from './hostChoiceState';
 import { isLoadingState } from './isLoadingState';
 import { lobbyCodeState } from './lobbyCodeState';
@@ -26,4 +27,5 @@ export {
   showNewHostModalState,
   reactionsState,
   isLoadingState,
+  handleSendReactionFn,
 };

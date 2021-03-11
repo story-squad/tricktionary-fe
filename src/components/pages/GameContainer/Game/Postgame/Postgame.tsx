@@ -15,6 +15,7 @@ import {
   PlayerDictionary,
 } from '../../../../../types/gameTypes';
 import {
+  createReactionsDictionary,
   getPlayerDictionary,
   getSortedDefinitions,
 } from '../../../../../utils/helpers';
@@ -38,8 +39,8 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   const [showNewHostModal, setShowNewHostModal] = useRecoilState(
     showNewHostModalState,
   );
-  const [, setReactions] = useRecoilState(reactionsState);
-  const lobbyData = useRecoilValue(lobbyState);
+  const [reactions, setReactions] = useRecoilState(reactionsState);
+  const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const revealResults = useRecoilValue(revealResultsState);
   const isLoading = useRecoilValue(isLoadingState);
   const [playerDict] = useState<PlayerDictionary>(
@@ -59,6 +60,14 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  // Create empty reactions dictionary to count reactions for each definition
+  useEffect(() => {
+    setLobbyData({
+      ...lobbyData,
+      reactions: createReactionsDictionary(lobbyData.players, reactions),
+    });
+  }, [reactions]);
 
   // Create new sorted definitions array when player recieves guesses from host
   useEffect(() => {
