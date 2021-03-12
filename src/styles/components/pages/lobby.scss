@@ -1,5 +1,10 @@
-@import "../../mixins.scss";
-@import "../../globals.scss";
+.lobby.game-page {
+  padding-left: 12.5rem;
+  padding-right: 12.5rem;
+  @include mid-below {
+    padding: 1.6rem 2.4rem;
+  }
+}
 
 .lobby-button {
   width: 40rem;
@@ -19,11 +24,6 @@
 
 .join.lobby-button {
   margin-top: 40px;
-}
-
-.lobby.game-page {
-  padding-left: 12.5rem;
-  padding-right: 12.5rem;
 }
 
 .start-buttons {
