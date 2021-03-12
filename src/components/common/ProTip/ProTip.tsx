@@ -1,10 +1,19 @@
 import React from 'react';
+import proTips from '../../../utils/text/proTips.json';
 
 const ProTip = (props: ProTipProps): React.ReactElement => {
+  const tipMessage = () => {
+    if (props.message) {
+      return props.message;
+    } else {
+      return proTips[Math.floor(Math.random() * proTips.length)];
+    }
+  };
+
   return (
     <div className="pro-tip">
       <h3>Pro Tip:</h3>
-      <p>{props.message}</p>
+      <p>{tipMessage()}</p>
     </div>
   );
 };
@@ -12,5 +21,5 @@ const ProTip = (props: ProTipProps): React.ReactElement => {
 export default ProTip;
 
 interface ProTipProps {
-  message: string;
+  message?: string;
 }
