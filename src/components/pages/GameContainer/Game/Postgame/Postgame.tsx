@@ -25,6 +25,7 @@ import { Host } from '../../../../common/Host';
 import { Modal } from '../../../../common/Modal';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
+import { ProTip } from '../../../../common/ProTip';
 import { SetHost } from '../../../../common/SetHost';
 import { DefinitionResult } from './DefinitionResult';
 
@@ -82,6 +83,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
 
   return (
     <div className="postgame game-page">
+      <ProTip />
       <h2>It’s Time for the Results!</h2>
       <Host>
         {!revealResults && (

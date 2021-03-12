@@ -17,6 +17,7 @@ import { Input } from '../../../../common/Input';
 import { Modal } from '../../../../common/Modal';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
+import { ProTip } from '../../../../common/ProTip';
 import Timer from '../../../../common/Timer/Timer';
 import { TwitterButton } from '../../../../common/TwitterButton';
 
@@ -119,6 +120,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
 
   return (
     <div className="writing game-page">
+      <ProTip />
       <Host>
         <h2>Players are writing their definitions...</h2>
         <p className="instructions">
