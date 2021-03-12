@@ -1,0 +1,19 @@
+.pro-tip {
+  position: absolute;
+  left: 2.4rem;
+  top: 20rem;
+
+  p {
+    width: 20rem;
+    color: $white;
+  }
+  @include x-large-below {
+    top: 2.4rem;
+    left: 30rem;
+
+    p {
+      width: unset;
+      max-width: 60rem;
+    }
+  }
+}
