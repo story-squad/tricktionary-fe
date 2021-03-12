@@ -29,6 +29,7 @@ import {
 } from '../../../../common/Instructions';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
+import { ProTip } from '../../../../common/ProTip';
 import { WordChoice } from './WordChoice';
 
 const initialChoiceValue = -1;
@@ -154,6 +155,11 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
   return (
     <div className="pregame game-page">
+      <ProTip
+        message={
+          'This is a really really really really really really really long message'
+        }
+      />
       <Host>
         {/* Suggested words selection */}
         {!isCustom && (
