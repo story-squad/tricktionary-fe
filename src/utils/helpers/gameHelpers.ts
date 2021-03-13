@@ -15,7 +15,9 @@ import {
   PlayerItem,
   TopPlayers,
 } from '../../types/gameTypes';
+import finaleText from '../../utils/text/finaleText.json';
 import { LARGE_GAME_MINIMUM_PLAYERS, MINIMUM_PLAYERS } from '../constants';
+import { getRandomFromArray } from './commonHelpers';
 
 // Check if the number of definitions submitted makes the game "large"
 export const isLargeGame = (players: PlayerItem[]): boolean => {
@@ -129,14 +131,17 @@ export const getTopPlayers = (lobbyData: LobbyData): TopPlayers => {
     first: {
       username: playerDict[lobbyData.topThree[0]?.user_id],
       definition: lobbyData.topThree[0]?.definition,
+      word: lobbyData.topThree[0]?.word,
     },
     second: {
       username: playerDict[lobbyData.topThree[1]?.user_id],
       definition: lobbyData.topThree[1]?.definition,
+      word: lobbyData.topThree[1]?.word,
     },
     third: {
       username: playerDict[lobbyData.topThree[2]?.user_id],
       definition: lobbyData.topThree[2]?.definition,
+      word: lobbyData.topThree[2]?.word,
     },
   };
 };
@@ -261,4 +266,12 @@ export const getReactionCount = (
   } else {
     return 0;
   }
+};
+
+// Put together semi-randomized string for users with no definition on the Finale podium
+export const getFinaleNoDefinitionText = (): string => {
+  let text = getRandomFromArray(finaleText.funEmojis);
+  text += ' ' + finaleText.noDefinition;
+  text += ' ' + getRandomFromArray(finaleText.funWords) + '!';
+  return text;
 };

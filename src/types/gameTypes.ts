@@ -12,6 +12,7 @@ export interface PlayerItem {
 export interface FinalePlayer {
   username: string;
   definition: string;
+  word: string;
 }
 
 export interface LobbyData {
@@ -90,6 +91,7 @@ export interface HostChoice {
 export interface FinaleDefinition {
   user_id: string;
   definition: string;
+  word: string;
 }
 
 export interface TopPlayers {
