@@ -55,3 +55,8 @@
     @content;
   }
 }
+@mixin x2-large-below {
+  @media (max-width: #{$x2-large}) {
+    @content;
+  }
+}
