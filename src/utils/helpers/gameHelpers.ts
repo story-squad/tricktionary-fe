@@ -268,6 +268,7 @@ export const getReactionCount = (
   }
 };
 
+// Put together semi-randomized string for users with no definition on the Finale podium
 export const getFinaleNoDefinitionText = (): string => {
   let text = getRandomFromArray(finaleText.funEmojis);
   text += ' ' + finaleText.noDefinition;
