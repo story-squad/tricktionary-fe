@@ -543,7 +543,7 @@ a {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 30rem;
-    height: 20rem;
+    min-height: 20rem;
     max-width: 100%;
     padding: 1.6rem;
     background-color: $white;
@@ -590,8 +590,6 @@ a {
   text-align: center;
 }
 
-
-
 .player-display {
   margin: 4rem auto 4rem auto;
   width: 61rem;
@@ -605,7 +603,7 @@ a {
     }
   }
   @include mid-below {
-    margin-top: .8rem;
+    margin-top: 0.8rem;
   }
 }
 
