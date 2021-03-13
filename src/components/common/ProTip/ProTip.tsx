@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import proTipImg from '../../../assets/proTip.svg';
 import proTips from '../../../utils/text/proTips.json';
 
 const ProTip = (props: ProTipProps): React.ReactElement => {
@@ -9,7 +10,7 @@ const ProTip = (props: ProTipProps): React.ReactElement => {
 
   return (
     <div className="pro-tip">
-      <h3>Pro Tip:</h3>
+      <img src={proTipImg} alt="Pro Tip:" role="heading" aria-level={3} />
       <p>{tipMessage}</p>
     </div>
   );
