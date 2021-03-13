@@ -15,6 +15,7 @@ const Finale = (): React.ReactElement => {
         {topPlayers.second.username !== undefined && (
           <div className="stack second-place-stack">
             <div className="def-card second-def-card">
+              <p>{topPlayers.second.word} does not mean:</p>
               <p className="second-name">{topPlayers.second.definition}</p>
             </div>
             <div className="example-podium second-place">
@@ -27,6 +28,7 @@ const Finale = (): React.ReactElement => {
         {topPlayers.first.username !== undefined && (
           <div className="stack first-place-stack">
             <div className="def-card first-def-card">
+              <p>{topPlayers.first.word} does not mean:</p>
               <p>{topPlayers.first.definition}</p>
             </div>
             <div className="example-podium first-place">
@@ -39,6 +41,7 @@ const Finale = (): React.ReactElement => {
         {topPlayers.third.username !== undefined && (
           <div className="stack third-place-stack">
             <div className="def-card third-def-card">
+              <p>{topPlayers.third.word} does not mean:</p>
               <p>{topPlayers.third.definition}</p>
             </div>
             <div className="example-podium third-place">
