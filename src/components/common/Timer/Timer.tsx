@@ -45,7 +45,7 @@ const Timer = (props: TimerProps): React.ReactElement => {
     <>
       <div className="countdown-container">
         <p>Timer</p>
-          <span className="time">{time}</span>{' '}
+        <span className="time">{time}</span>{' '}
         {addTime && (
           <button className="add-time center" onClick={() => addTime(time, 20)}>
             Add 20 seconds

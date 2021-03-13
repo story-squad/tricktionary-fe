@@ -24,6 +24,7 @@ import { PlayerStepTwo } from '../../../../common/Instructions';
 import { Modal } from '../../../../common/Modal';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
+import { ProTip } from '../../../../common/ProTip';
 import { Guess } from './Guess';
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
@@ -76,6 +77,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
   return (
     <div className="guessing game-page">
+      <ProTip />
       <Host>
         {!showGuesses ? (
           // Showing definitions
