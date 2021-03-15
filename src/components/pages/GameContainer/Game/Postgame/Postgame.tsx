@@ -26,7 +26,7 @@ import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
 import { ProTip } from '../../../../common/ProTip';
 import { SetHost } from '../../../../common/SetHost';
-import { DefinitionResult } from '../DefinitionResult/';
+import { DefinitionResult } from './DefinitionResult';
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
   const {

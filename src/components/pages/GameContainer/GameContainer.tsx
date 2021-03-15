@@ -12,7 +12,6 @@ import {
   lobbyState,
   playerGuessState,
   playerIdState,
-  revealResultsState,
   showNewHostModalState,
 } from '../../../state';
 import {
@@ -44,7 +43,6 @@ const GameContainer = (): React.ReactElement => {
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [, setIsLoading] = useRecoilState(isLoadingState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
-  const [, setRevealResults] = useRecoilState(revealResultsState);
   const hostChoice = useRecoilValue(hostChoiceState);
   const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
   const [token, setToken] = useLocalStorage('token', initialToken);
@@ -64,7 +62,6 @@ const GameContainer = (): React.ReactElement => {
     resetLobbyCode();
     resetPlayerGuess();
     setGuesses([]);
-    setRevealResults(false);
     socket.disconnect();
     setToken('');
     handleLogin(true);
@@ -220,7 +217,6 @@ const GameContainer = (): React.ReactElement => {
     // Get the round results from Host when they click 'reveal'
     socket.on('reveal results', (guesses: GuessItem[]) => {
       setGuesses(guesses);
-      setRevealResults(true);
     });
 
     // After a disconnection occurs, refresh the game on reconnection
@@ -393,7 +389,7 @@ const GameContainer = (): React.ReactElement => {
             handleSendGuess={handleSendGuess}
           />
         );
-      case 'RESULTS':
+      case 'POSTGAME' || 'RESULTS':
         return (
           <Postgame
             handlePlayAgain={handlePlayAgain}

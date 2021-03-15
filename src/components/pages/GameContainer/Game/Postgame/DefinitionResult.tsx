@@ -2,7 +2,9 @@ import React from 'react';
 import { DefinitionResultItem } from '../../../../../types/gameTypes';
 import { ReactionPicker } from '../../../../common/ReactionPicker';
 
-const DefinitionResult = (props: DefinitionResultProps): React.ReactElement => {
+export const DefinitionResult = (
+  props: DefinitionResultProps,
+): React.ReactElement => {
   const {
     username,
     playerId,
@@ -56,8 +58,6 @@ const DefinitionResult = (props: DefinitionResultProps): React.ReactElement => {
     </>
   );
 };
-
-export default DefinitionResult;
 
 interface DefinitionResultProps {
   definitionResult: DefinitionResultItem;
