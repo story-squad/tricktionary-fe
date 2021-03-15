@@ -282,7 +282,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <p>Play with timer</p>
           </div>
         </div>
-        <PlayerList />
+        <div className="start-instructions">
+          <h2>Important!</h2>
+          <p className="instructions">
+            Wait for all players to enter the Lobby before starting.
+          </p>
+          <PlayerList />
+        </div>
         <button
           className="start-btn center"
           onClick={props.handleStartGame}
