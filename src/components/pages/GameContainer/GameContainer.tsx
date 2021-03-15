@@ -259,8 +259,7 @@ const GameContainer = (): React.ReactElement => {
     localStorage.setItem('username', username.trim());
   };
 
-  const handleStartGame = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleStartGame = () => {
     setIsLoading(true);
     socket.emit('start game', lobbySettings, lobbyCode, hostChoice);
   };
