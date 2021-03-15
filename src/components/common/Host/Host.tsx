@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { lobbyState, playerIdState } from '../../../state';
-import { HostPlayerProps } from '../../../types/commonTypes';
+import { HOCProps } from '../../../types/commonTypes';
 
-const Host = (props: HostPlayerProps): React.ReactElement => {
+const Host = (props: HOCProps): React.ReactElement => {
   const { children } = props;
   const lobbyData = useRecoilValue(lobbyState);
   const playerId = useRecoilValue(playerIdState);

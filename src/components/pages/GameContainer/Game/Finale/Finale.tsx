@@ -1,31 +1,11 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-//import assets
-import finaleBanner from '../../../../assets/finaleBanner.png';
-import { lobbyState } from '../../../../state';
-import { LobbyData, TopPlayers } from '../../../../types/gameTypes';
-
-const getTopPlayers = (lobbyData: LobbyData): TopPlayers => {
-  const playerDict: { [key: string]: string } = {};
-  lobbyData.players.forEach((player) => {
-    playerDict[player.id] = player.username;
-  });
-  // Create and return TopPlayers
-  return {
-    first: {
-      username: playerDict[lobbyData.topThree[0]?.user_id],
-      definition: lobbyData.topThree[0]?.definition,
-    },
-    second: {
-      username: playerDict[lobbyData.topThree[1]?.user_id],
-      definition: lobbyData.topThree[1]?.definition,
-    },
-    third: {
-      username: playerDict[lobbyData.topThree[2]?.user_id],
-      definition: lobbyData.topThree[2]?.definition,
-    },
-  };
-};
+import finaleBanner from '../../../../../assets/finaleBanner.png';
+import { lobbyState } from '../../../../../state';
+import {
+  getFinaleNoDefinitionText,
+  getTopPlayers,
+} from '../../../../../utils/helpers';
 
 const Finale = (): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
@@ -33,12 +13,20 @@ const Finale = (): React.ReactElement => {
 
   return (
     <div className="finale game-page">
+      {console.log(topPlayers)}
       <img className="finale-banner" src={finaleBanner} />
       <div className="place-bars">
         {topPlayers.second.username !== undefined && (
           <div className="stack second-place-stack">
             <div className="def-card second-def-card">
-              <p className="second-name">{topPlayers.second.definition}</p>
+              {topPlayers.second.definition !== undefined ? (
+                <p>
+                  {topPlayers.second.word} does not mean:{' '}
+                  {topPlayers.second.definition}
+                </p>
+              ) : (
+                <p>{getFinaleNoDefinitionText()}</p>
+              )}
             </div>
             <div className="example-podium second-place">
               <div className="place-img second-img">
@@ -50,7 +38,14 @@ const Finale = (): React.ReactElement => {
         {topPlayers.first.username !== undefined && (
           <div className="stack first-place-stack">
             <div className="def-card first-def-card">
-              <p>{topPlayers.first.definition}</p>
+              {topPlayers.first.definition !== undefined ? (
+                <p>
+                  {topPlayers.first.word} does not mean:{' '}
+                  {topPlayers.first.definition}
+                </p>
+              ) : (
+                <p>{getFinaleNoDefinitionText()}</p>
+              )}
             </div>
             <div className="example-podium first-place">
               <div className="place-img first-img">
@@ -62,7 +57,14 @@ const Finale = (): React.ReactElement => {
         {topPlayers.third.username !== undefined && (
           <div className="stack third-place-stack">
             <div className="def-card third-def-card">
-              <p>{topPlayers.third.definition}</p>
+              {topPlayers.third.definition !== undefined ? (
+                <p>
+                  {topPlayers.third.word} does not mean:{' '}
+                  {topPlayers.third.definition}
+                </p>
+              ) : (
+                <p>{getFinaleNoDefinitionText()}</p>
+              )}
             </div>
             <div className="example-podium third-place">
               <div className="place-img third-img">

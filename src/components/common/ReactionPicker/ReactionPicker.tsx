@@ -1,65 +1,50 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
+import {
+  handleSendReactionFn,
+  lobbyState,
+  playerIdState,
+  reactionsState,
+} from '../../../state';
+import { getReactionCount } from '../../../utils/helpers';
 
 const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
-  const { reactions, cb, id } = props;
-  const [modalOn, setModalOn] = useState(false);
-
-  const pickReaction = (reaction: number) => {
-    setModalOn(false);
-    cb({ reaction: `${reaction}`, id: `${id}` });
-  };
-
-  const handleSetModal = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setModalOn(!modalOn);
-  };
+  const myId = useRecoilValue(playerIdState);
+  const reactions = useRecoilValue(reactionsState);
+  const handleSendReaction = useRecoilValue(handleSendReactionFn);
+  const lobbyData = useRecoilValue(lobbyState);
 
   return (
-    <div className="reaction-picker">
-      <button onClick={handleSetModal}>Reaction Picker</button>
-      {modalOn && (
-        <div className="reaction-modal">
-          {reactions.map((reaction) => (
-            <Reaction
-              key={reaction.id}
-              reaction={reaction}
-              pickReaction={pickReaction}
-            />
-          ))}
-        </div>
-      )}
+    <div className="reaction-picker-container">
+      <div className="reaction-picker">
+        {reactions.map((reaction, key) => (
+          <div className="reaction" key={key}>
+            <button
+              className="reaction-btn"
+              onClick={() =>
+                handleSendReaction(props.definitionId, reaction.id)
+              }
+              disabled={props.playerId === myId}
+            >
+              <span className="content">{reaction.content}</span>
+            </button>
+            <p className="count">
+              {getReactionCount(
+                lobbyData.reactions,
+                props.definitionId,
+                reaction.id,
+              )}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
-  );
-};
-
-const Reaction = (props: ReactionProps): React.ReactElement => {
-  const { reaction, pickReaction } = props;
-  return (
-    <button className="reaction" onClick={() => pickReaction(reaction.id)}>
-      {reaction.content}
-    </button>
   );
 };
 
 export default ReactionPicker;
 
 interface ReactionPickerProps {
-  reactions: ReactionItem[];
-  cb: (arg0: ReactionDefinitionIdStrings) => void;
-  id: number;
-}
-
-interface ReactionProps {
-  reaction: ReactionItem;
-  pickReaction: (id: number) => void;
-}
-
-export interface ReactionItem {
-  id: number;
-  content: string;
-}
-
-export interface ReactionDefinitionIdStrings {
-  reaction: string;
-  id: string;
+  definitionId: number;
+  playerId: string;
 }

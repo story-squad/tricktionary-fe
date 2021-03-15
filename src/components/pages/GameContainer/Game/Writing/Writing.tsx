@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
-import { lobbyState, playerIdState } from '../../../../state';
+import {
+  isLoadingState,
+  lobbyState,
+  playerIdState,
+} from '../../../../../state';
 import {
   MAX_DEFINITION_LENGTH,
   MAX_SECONDS,
-} from '../../../../utils/constants';
-import { definitionIsValid } from '../../../../utils/validation';
-import { CharCounter } from '../../../common/CharCounter';
-import { Host } from '../../../common/Host';
-import { Input } from '../../../common/Input';
-import { Modal } from '../../../common/Modal';
-import { Player } from '../../../common/Player';
-import Timer from '../../../common/Timer/Timer';
-import { PlayerList } from '../Game';
+} from '../../../../../utils/constants';
+import { definitionIsValid } from '../../../../../utils/validation';
+import { CharCounter } from '../../../../common/CharCounter';
+import { Host } from '../../../../common/Host';
+import { Input } from '../../../../common/Input';
+import { Modal } from '../../../../common/Modal';
+import { Player } from '../../../../common/Player';
+import { PlayerList } from '../../../../common/PlayerList';
+import { ProTip } from '../../../../common/ProTip';
+import Timer from '../../../../common/Timer/Timer';
+import { TwitterButton } from '../../../../common/TwitterButton';
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const { handleSyncTimer, time, setTime } = props;
   const lobbyData = useRecoilValue(lobbyState);
+  const isLoading = useRecoilValue(isLoadingState);
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -26,15 +33,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const playerId = useRecoilValue(playerIdState);
 
   //set up the form details
-  const {
-    register,
-    // handleSubmit,
-    errors,
-    setError,
-    clearErrors,
-    getValues,
-    watch,
-  } = useForm({
+  const { register, errors, setError, clearErrors } = useForm({
     mode: 'onSubmit',
   });
 
@@ -121,8 +120,17 @@ const Writing = (props: WritingProps): React.ReactElement => {
 
   return (
     <div className="writing game-page">
+      <ProTip />
       <Host>
         <h2>Players are writing their definitions...</h2>
+        <p className="instructions">
+          If you’re playing with a timer, warn your players when they have 30,
+          15, 10, and 5 seconds left
+        </p>
+        <div className="guess-word">
+          <h2 className="word-label">The word is:</h2>
+          <p className="word">{lobbyData.word}</p>
+        </div>
         {useTimer && (
           <Timer
             time={time}
@@ -132,18 +140,19 @@ const Writing = (props: WritingProps): React.ReactElement => {
             addTime={handleAddTime}
           />
         )}
-        <div className="guess-word">
-          <p className="word-label">Your Word:</p>
-          <p className="word">{lobbyData.word}</p>
-        </div>
         <div className="times-up-container">
           {timerDone && (
             <p className="times-up">
               Time&apos;s up for players to submit! Start the next phase.
             </p>
           )}
-          <button className="times-up-button" onClick={handleGoToNextPhase}>
-            Start Guessing Phase
+          <PlayerList />
+          <button
+            className="times-up-button"
+            onClick={handleGoToNextPhase}
+            disabled={isLoading}
+          >
+            Read the Definitions!
           </button>
         </div>
         <Modal
@@ -213,10 +222,13 @@ const Writing = (props: WritingProps): React.ReactElement => {
           <div className="player-submitted">
             <h3>You submitted:</h3>
             <p>{definition}</p>
+            <TwitterButton
+              message={`${lobbyData.word} means ${definition} ... or does it?`}
+            />
           </div>
         )}
+        <PlayerList />
       </Player>
-      <PlayerList />
     </div>
   );
 };

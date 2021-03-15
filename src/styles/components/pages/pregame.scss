@@ -1,6 +1,3 @@
-@import "../../mixins.scss";
-@import "../../globals.scss";
-
 .selected {
 	background-color: $neon-green;
 	color: $dark-cerulean;
@@ -12,9 +9,8 @@
 	flex-wrap: wrap;
 	align-items: baseline;
 	justify-content: space-between;
-	.pick-instructions {
-		width: 85%;
-		font-size: 1.4rem;
+	margin: 0 2.4rem;
+	p.instructions {
 		margin-bottom: 1.6rem;
 		@include mid-below {
 			width: 100%;
@@ -22,7 +18,8 @@
 	}
 	@include mid-below {
 		justify-content: center;
-		margin-bottom: 1.6rem;
+		margin: 0 0 1.6rem 0;
+    	width: 100%;
 	}
 }
 
@@ -32,29 +29,25 @@
 	justify-content: space-between;
 	border-radius: 16px;
 	padding: 24px;
-	border: 2px dashed $sky-blue;
+	border: 1px solid $sky-blue;
 	margin-top: 3.2rem;
 	@include mid-below {
 		flex-direction: column;
 	}
 
 	.word-column {
+		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-evenly;
 	}
 
 	#word {
-		@include mid-below {
-			width: 100%;
-		}
+		width: 100%;
 	}
 
 	.word-definition {
-		width: 75%;
-		@include mid-below {
-			width: 100%;
-		}
+		width: 100%;
 	}
 
 	.sm-word {
@@ -66,7 +59,19 @@
 	.word {
 		font-family: $display-font;
 		font-size: 2.4rem;
-		margin: 1.6rem 0;
+		margin: .8rem 0 1.6rem 0;
+	}
+}
+
+.use-own-words {
+	margin-top: 1.6rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: baseline;
+	@include mid-below {
+		flex-direction: column;
+		align-items: center;;
 	}
 }
 
@@ -81,31 +86,40 @@
 		text-align: center;
 	}
 	.timer-itself {
-		border: none;
-		height: 80px;
-		text-align: center;
 		align-items: center;
 		margin: 0 auto;
-		padding-right: 8px;
-		background: $burnt-orange;
-		color: $white;
-		font-family: $display-font;
+		width: 8rem;
 		font-size: 3.2rem;
 	}
 }
 
 input[type="number"]::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	background: #eee url("../../../assets/arrows.png") no-repeat 50% 50%;
 	opacity: 1;
-	width: 14px;
-	height: 20px;
 	padding: 0;
-	position: relative;
-	right: 16px;
-	top: 8px;
+	right: 8px;
+	height: 4rem;
 	cursor: pointer;
-	display: block;
-	color: $white;
-	text-align: center;
 }
+
+.edit-name-block {
+	display: flex;
+	justify-content: flex-end;
+	.edit-name {
+	  width: 150px;
+	  height: 50px;
+	  background-color: $sky-blue;
+	}
+  }
+  
+  .edit-name-form {
+	display: flex;
+	flex-direction: column;
+	margin: 1.6rem auto 1.6rem auto;
+	padding: 1.6rem;
+	border-radius: 8px;
+	border: 2px solid $dark-blue;
+	.button {
+	  float: right;
+	  color: $sky-blue;
+	}
+  }

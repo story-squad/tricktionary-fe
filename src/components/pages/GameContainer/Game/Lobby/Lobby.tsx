@@ -2,15 +2,19 @@ import jwt from 'jsonwebtoken';
 import React, { SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
-import { useLocalStorage } from '../../../../hooks';
-import { DecodedToken } from '../../../../types/commonTypes';
-import { MAX_USERNAME_LENGTH } from '../../../../utils/constants';
+import { useRecoilState } from 'recoil';
+import { useLocalStorage } from '../../../../../hooks';
+import { isLoadingState } from '../../../../../state';
+import { DecodedToken } from '../../../../../types/commonTypes';
+import { MAX_USERNAME_LENGTH } from '../../../../../utils/constants';
+import { initialToken } from '../../../../../utils/localStorageInitialValues';
 import {
   lobbyCodeIsValid,
   usernameIsValid,
-} from '../../../../utils/validation';
-import { CharCounter } from '../../../common/CharCounter';
-import { Input } from '../../../common/Input';
+} from '../../../../../utils/validation';
+import { CharCounter } from '../../../../common/CharCounter';
+import { Expander } from '../../../../common/Expander';
+import { Input } from '../../../../common/Input';
 import {
   HostStepOne,
   HostStepThree,
@@ -18,23 +22,16 @@ import {
   PlayerStepOne,
   PlayerStepThree,
   PlayerStepTwo,
-} from '../../../common/Instructions';
-import { PublicGames } from '../../../common/PublicGames';
+} from '../../../../common/Instructions';
+import { PublicGames } from '../../../../common/PublicGames';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
-  const [token] = useLocalStorage<string>('token', '');
+  const [token] = useLocalStorage<string>('token', initialToken);
+  const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
 
   //set up the form details
-  const {
-    register,
-    handleSubmit,
-    errors,
-    setError,
-    clearErrors,
-    getValues,
-    watch,
-  } = useForm({
+  const { register, errors, setError, clearErrors } = useForm({
     mode: 'onSubmit',
   });
 
@@ -89,12 +86,33 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
     }
   };
 
+  const handleJoinByClick = (e: React.MouseEvent) => {
+    setIsLoading(true);
+    props.handleJoinLobby(e, '');
+  };
+
   return (
     <>
       <PublicGames />
       <div className="lobby game-page">
-        <h2>Welcome!</h2>
-        <p>
+        <Expander headerText={'Learn How to Play'} closeText={'Close'}>
+          <h2>How to Host a Game</h2>
+          <h3>Step 1: Setup</h3>
+          <HostStepOne />
+          <h3>Step 2: Voting</h3>
+          <HostStepTwo />
+          <h3>Step 3: Results</h3>
+          <HostStepThree />
+          <h2>How to Play</h2>
+          <h3>Step 1: Setup</h3>
+          <PlayerStepOne />
+          <h3>Step 2: Voting</h3>
+          <PlayerStepTwo />
+          <h3>Step 3: Results</h3>
+          <PlayerStepThree />
+        </Expander>
+        <h2>Welcome to Tricktionary!</h2>
+        <p className="instructions">
           Please enter your name and lobby code to join a game or you can host a
           new game.
         </p>
@@ -122,43 +140,28 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
             placeholder="Enter lobby code to join a game!"
           />
           {errors.form && <p className="error">*{errors.form.message}</p>}
-          <button
-            className="join lobby-button"
-            onClick={(e) => props.handleJoinLobby(e, '')}
-            disabled={
-              !usernameIsValid(props.username).valid ||
-              props.lobbyCode.length !== 4
-            }
-          >
-            Join Lobby
-          </button>
-          <p className="or">- OR -</p>
-          <button
-            className="host lobby-button"
-            onClick={props.handleCreateLobby}
-            disabled={!usernameIsValid(props.username).valid}
-          >
-            Host New Game
-          </button>
+          <div className="start-buttons">
+            <button
+              className="join lobby-button"
+              onClick={handleJoinByClick}
+              disabled={
+                !usernameIsValid(props.username).valid ||
+                props.lobbyCode.length !== 4 ||
+                isLoading
+              }
+            >
+              Join Lobby
+            </button>
+            <p className="or">- OR -</p>
+            <button
+              className="host lobby-button"
+              onClick={props.handleCreateLobby}
+              disabled={!usernameIsValid(props.username).valid || isLoading}
+            >
+              Host New Game
+            </button>
+          </div>
         </form>
-      </div>
-      <div className="game-page margin-top">
-        <h2>How to Play</h2>
-        <h3>Step 1: Setup</h3>
-        <PlayerStepOne />
-        <h3>Step 2: Voting</h3>
-        <PlayerStepTwo />
-        <h3>Step 3: Results</h3>
-        <PlayerStepThree />
-      </div>
-      <div className="game-page margin-top">
-        <h2>How to Host a Game</h2>
-        <h3>Step 1: Setup</h3>
-        <HostStepOne />
-        <h3>Step 2: Voting</h3>
-        <HostStepTwo />
-        <h3>Step 3: Results</h3>
-        <HostStepThree />
       </div>
     </>
   );

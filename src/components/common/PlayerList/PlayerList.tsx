@@ -54,7 +54,7 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
 
   return (
     <div className="player-display">
-      <h2 className="player-h2">Players</h2>
+      <h2 className="player-h2">Player Lobby</h2>
       <div className="player-lobby">
         {lobbyData.players
           .filter((player: PlayerItem) => player.connected)

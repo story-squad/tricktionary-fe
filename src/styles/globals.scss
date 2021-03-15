@@ -34,9 +34,14 @@ $display-font: "Luckiest Guy", sans-serif;
 $mid: 500px;
 $tablet: 650px;
 $large: 800px;
+$x-large: 1290px;
+$x2-large: 1600px;
 
 //box-shadow
 $boxshadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+
+//box-sizing
+$box-sizing: border-box;
 
 // NEW COLORS
 $blue: #3884ff;
@@ -59,14 +64,14 @@ $lime: #bfd349;
 $royal-blue: #162ca7;
 $purpleblue: #40537f;
 $lt-grey: #c4c4c4;
-$black: #000000de;
+$black: #000000;
 
 //new colors
 $neon-green: #d5ff2e;
 $sky-blue: #1da1f2;
 $dark-cerulean: #064165;
 $burnt-orange: #ff7f35;
-$nero: #141414;
+$nero: #000000de;
 
 //finale colors
 $gold: #ffd645;
