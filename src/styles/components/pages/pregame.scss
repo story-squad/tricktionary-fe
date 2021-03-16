@@ -60,6 +60,7 @@
 		font-family: $display-font;
 		font-size: 2.4rem;
 		margin: .8rem 0 1.6rem 0;
+		word-break: break-word;
 	}
 }
 
@@ -122,4 +123,8 @@ input[type="number"]::-webkit-inner-spin-button {
 	  float: right;
 	  color: $sky-blue;
 	}
-  }
+}
+
+.short.error {
+position: relative;
+}
