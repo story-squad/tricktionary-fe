@@ -229,9 +229,9 @@ const GameContainer = (): React.ReactElement => {
     // Update reactions when other Player clicks a reaction on Postgame
     socket.on(
       'get reaction',
-      (definitionId: number, reactionId: number, value: number) => {
+      (definitionId: number, reactionId: number, value: number[]) => {
         setDefinitionReactions((prevReactions) =>
-          addReaction(prevReactions, definitionId, reactionId),
+          addReaction(prevReactions, definitionId, reactionId, value[0]),
         );
       },
     );
