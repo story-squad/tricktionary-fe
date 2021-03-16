@@ -35,15 +35,16 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     handleSetHost,
     handleRevealResults,
     handleSetFinale,
+    handleGetReactions,
   } = props;
   const resetGuess = useResetRecoilState(playerGuessState);
   const [showNewHostModal, setShowNewHostModal] = useRecoilState(
     showNewHostModalState,
   );
-  const [availableReactions, setAvailableReactions] = useRecoilState(
-    availableReactionsState,
+  const [, setAvailableReactions] = useRecoilState(availableReactionsState);
+  const [definitionReactions, setDefinitionReactions] = useRecoilState(
+    definitionReactionsState,
   );
-  const [, setDefinitionReactions] = useRecoilState(definitionReactionsState);
   const lobbyData = useRecoilValue(lobbyState);
   const loading = useRecoilValue(loadingState);
   const [playerDict] = useState<PlayerDictionary>(
@@ -58,18 +59,26 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     // Reset player's guess for next round
     resetGuess();
     getSelectedReactions()
-      .then((res) => {
-        setAvailableReactions(res);
+      .then((resReactions) => {
+        // Store reactions that can be used
+        setAvailableReactions(resReactions);
+        return resReactions;
+      })
+      .then((resReactions) => {
+        // Create empty reactions dictionary to count reactions for each definition
+        setDefinitionReactions(
+          createReactionsDictionary(lobbyData.players, resReactions),
+        );
       })
       .catch((err) => console.log(err));
   }, []);
 
-  // Create empty reactions dictionary to count reactions for each definition
+  // After reactionsDictionary initialized, attempt to update definitionReactions if needed
   useEffect(() => {
-    setDefinitionReactions(
-      createReactionsDictionary(lobbyData.players, availableReactions),
-    );
-  }, [availableReactions]);
+    if (Object.keys(definitionReactions).length > 0) {
+      handleGetReactions();
+    }
+  }, [definitionReactions]);
 
   // Create new sorted definitions array when player recieves guesses from host
   useEffect(() => {
@@ -184,4 +193,5 @@ interface PostgameProps {
   handleSetHost: (hostId: string, guesses: GuessItem[]) => void;
   handleSetFinale: () => void;
   handleRevealResults: (guesses: GuessItem[]) => void;
+  handleGetReactions: () => void;
 }

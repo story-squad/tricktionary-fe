@@ -226,7 +226,7 @@ const GameContainer = (): React.ReactElement => {
       handleLogin();
     });
 
-    // Update reactions when other Player clicks a reaction on Postgame
+    // Update reactions when other Player clicks a reaction on RESULTS phase
     socket.on(
       'get reaction',
       (definitionId: number, reactionId: number, value: number[]) => {
@@ -235,6 +235,11 @@ const GameContainer = (): React.ReactElement => {
         );
       },
     );
+
+    // Get all cumulative reactions if player refreshes during RESULTS phase
+    socket.on('get reactions', (...args: any) => {
+      console.log(args);
+    });
   }, []);
 
   /* Socket event emitters */
@@ -313,6 +318,11 @@ const GameContainer = (): React.ReactElement => {
     if (lobbyData.host === playerId) {
       socket.emit('synchronize', seconds);
     }
+  };
+
+  // Get cumulative definitionReactions (emoji count) on reentering the game
+  const handleGetReactions = () => {
+    socket.emit('get reactions');
   };
 
   /* 
@@ -401,6 +411,7 @@ const GameContainer = (): React.ReactElement => {
             handleSetHost={handleSetHost}
             handleRevealResults={handleRevealResults}
             handleSetFinale={handleSetFinale}
+            handleGetReactions={handleGetReactions}
           />
         );
       case 'FINALE':
