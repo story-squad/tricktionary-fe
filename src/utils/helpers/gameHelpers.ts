@@ -234,6 +234,7 @@ export const addReaction = (
   reactions: ReactionsDictionary,
   definitionId: number,
   reactionId: number,
+  value: number,
 ): ReactionsDictionary => {
   if (
     reactions.hasOwnProperty(definitionId) &&
@@ -243,7 +244,7 @@ export const addReaction = (
       ...reactions,
       [definitionId]: {
         ...reactions[definitionId],
-        [reactionId]: reactions[definitionId][reactionId] + 1,
+        [reactionId]: value,
       },
     };
   }
