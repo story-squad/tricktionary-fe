@@ -13,6 +13,7 @@ import {
   LobbyData,
   PlayerDictionary,
   PlayerItem,
+  ReactionsDictionary,
   TopPlayers,
 } from '../../types/gameTypes';
 import finaleText from '../../utils/text/finaleText.json';
@@ -230,26 +231,23 @@ export const createReactionsDictionary = (
 
 // Increment reaction and return new lobbyData object
 export const addReaction = (
-  lobbyData: LobbyData,
+  reactions: ReactionsDictionary,
   definitionId: number,
   reactionId: number,
-): LobbyData => {
+): ReactionsDictionary => {
   if (
-    lobbyData?.reactions?.hasOwnProperty(definitionId) &&
-    lobbyData.reactions[definitionId].hasOwnProperty(reactionId)
+    reactions.hasOwnProperty(definitionId) &&
+    reactions[definitionId].hasOwnProperty(reactionId)
   ) {
     return {
-      ...lobbyData,
-      reactions: {
-        ...lobbyData.reactions,
-        [definitionId]: {
-          ...lobbyData.reactions[definitionId],
-          [reactionId]: lobbyData.reactions[definitionId][reactionId] + 1,
-        },
+      ...reactions,
+      [definitionId]: {
+        ...reactions[definitionId],
+        [reactionId]: reactions[definitionId][reactionId] + 1,
       },
     };
   }
-  return lobbyData;
+  return reactions;
 };
 
 // Get reaction count with definitionId and reactionId
