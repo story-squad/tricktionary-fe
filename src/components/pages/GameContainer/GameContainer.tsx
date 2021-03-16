@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 import { useLocalStorage } from '../../../hooks';
 import {
+  definitionReactionsState,
   handleSendReactionFn,
   hostChoiceState,
   loadingState,
@@ -52,6 +53,7 @@ const GameContainer = (): React.ReactElement => {
   const [, setShowNewHostModal] = useRecoilState(showNewHostModalState);
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
   const [, setHandleSendReactionFn] = useRecoilState(handleSendReactionFn);
+  const [, setDefinitionReactions] = useRecoilState(definitionReactionsState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetPlayerGuess = useResetRecoilState(playerGuessState);
@@ -225,11 +227,15 @@ const GameContainer = (): React.ReactElement => {
     });
 
     // Increment reaction when other Player clicks a reaction on Postgame
-    socket.on('get reaction', (definitionId: number, reactionId: number) => {
-      setLobbyData((prevLobbyData) =>
-        addReaction(prevLobbyData, definitionId, reactionId),
-      );
-    });
+    socket.on(
+      'get reaction',
+      (definitionId: number, reactionId: number, value: number) => {
+        console.log(definitionId, reactionId, value);
+        setDefinitionReactions((prevReactions) =>
+          addReaction(prevReactions, definitionId, reactionId),
+        );
+      },
+    );
   }, []);
 
   /* Socket event emitters */
@@ -388,7 +394,8 @@ const GameContainer = (): React.ReactElement => {
             handleSendGuess={handleSendGuess}
           />
         );
-      case 'POSTGAME' || 'RESULTS':
+      case 'POSTGAME':
+      case 'RESULTS':
         return (
           <Postgame
             handlePlayAgain={handlePlayAgain}
@@ -418,7 +425,7 @@ const GameContainer = (): React.ReactElement => {
       <Loader />
       <Modal
         header={'Sorry'}
-        message={'There was a problem loading. Please try again'}
+        message={'There was a problem loading. Please try again.'}
         handleConfirm={() => setLoading('ok')}
         visible={loading === 'failed'}
         zIndex={100}

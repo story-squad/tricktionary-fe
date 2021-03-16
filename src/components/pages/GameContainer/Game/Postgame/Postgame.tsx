@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useLocalStorage } from '../../../../../hooks';
 import {
+  availableReactionsState,
+  definitionReactionsState,
   loadingState,
   lobbyState,
   playerGuessState,
-  reactionsState,
   showNewHostModalState,
 } from '../../../../../state';
 import {
@@ -39,8 +40,11 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   const [showNewHostModal, setShowNewHostModal] = useRecoilState(
     showNewHostModalState,
   );
-  const [reactions, setReactions] = useRecoilState(reactionsState);
-  const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
+  const [availableReactions, setAvailableReactions] = useRecoilState(
+    availableReactionsState,
+  );
+  const [, setDefinitionReactions] = useRecoilState(definitionReactionsState);
+  const lobbyData = useRecoilValue(lobbyState);
   const loading = useRecoilValue(loadingState);
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
@@ -50,23 +54,22 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     DefinitionResultItem[]
   >(getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict));
 
-  // Reset player's guess for next round
   useEffect(() => {
+    // Reset player's guess for next round
     resetGuess();
     getSelectedReactions()
       .then((res) => {
-        setReactions(res);
+        setAvailableReactions(res);
       })
       .catch((err) => console.log(err));
   }, []);
 
   // Create empty reactions dictionary to count reactions for each definition
   useEffect(() => {
-    setLobbyData({
-      ...lobbyData,
-      reactions: createReactionsDictionary(lobbyData.players, reactions),
-    });
-  }, [reactions]);
+    setDefinitionReactions(
+      createReactionsDictionary(lobbyData.players, availableReactions),
+    );
+  }, [availableReactions]);
 
   // Create new sorted definitions array when player recieves guesses from host
   useEffect(() => {
