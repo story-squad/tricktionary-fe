@@ -425,6 +425,7 @@ const GameContainer = (): React.ReactElement => {
         message={'There was a problem loading. Please try again'}
         handleConfirm={() => setLoading('ok')}
         visible={loading === 'failed'}
+        zIndex={100}
       />
       <Modal
         header={'HEY!'}
