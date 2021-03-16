@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useLocalStorage } from '../../../../../hooks';
 import {
-  isLoadingState,
+  loadingState,
   lobbyState,
   playerGuessState,
 } from '../../../../../state';
@@ -31,7 +31,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   const { playerId, handleSubmitGuesses, handleSendGuess } = props;
   const lobbyData = useRecoilValue(lobbyState);
   const playerGuess = useRecoilValue(playerGuessState);
-  const isLoading = useRecoilValue(isLoadingState);
+  const loading = useRecoilValue(loadingState);
   // Call getDefinitions to set state. Invoking getDefinitions outside of state causes re-shuffling of the list on selection
   const [definitions] = useState(
     getDefinitions(lobbyData.players, playerId, lobbyData.definition),
@@ -142,7 +142,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
               <button
                 className="submit-guesses"
                 onClick={handleSubmit}
-                disabled={isLoading}
+                disabled={loading === 'loading'}
               >
                 Submit Guesses
               </button>

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useLocalStorage } from '../../../hooks';
-import { isLoadingState, playerIdState } from '../../../state';
+import { loadingState, playerIdState } from '../../../state';
 import { GuessItem, PlayerItem } from '../../../types/gameTypes';
 import { initialGuesses } from '../../../utils/localStorageInitialValues';
 
 const SetHost = (props: SetHostProps): React.ReactElement => {
   const playerId = useRecoilValue(playerIdState);
-  const isLoading = useRecoilValue(isLoadingState);
+  const loading = useRecoilValue(loadingState);
   const [guesses] = useLocalStorage('guesses', initialGuesses);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [chosenPlayer, setChosenPlayer] = useState<string>('');
@@ -41,7 +41,7 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
       <button
         className={showModal ? 'selected' : ''}
         onClick={() => setShowModal(true)}
-        disabled={isLoading}
+        disabled={loading === 'loading'}
       >
         New Host
       </button>

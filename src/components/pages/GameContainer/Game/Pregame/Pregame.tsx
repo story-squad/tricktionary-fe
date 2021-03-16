@@ -5,7 +5,6 @@ import { getWords } from '../../../../../api/apiRequests';
 import { useLocalStorage } from '../../../../../hooks';
 import {
   hostChoiceState,
-  isLoadingState,
   lobbySettingsState,
   lobbyState,
   revealResultsState,
@@ -27,12 +26,13 @@ import {
   HostStepOneA,
   PlayerStepOne,
 } from '../../../../common/Instructions';
+import { Modal } from '../../../../common/Modal';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
 import { ProTip } from '../../../../common/ProTip';
 import { WordChoice } from './WordChoice';
 
-const initialChoiceValue = -1;
+const initialChoiceValue = 0;
 const initialCustomInputValue = { word: '', definition: '' };
 
 const Pregame = (props: PregameProps): React.ReactElement => {
@@ -40,11 +40,11 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [choice, setChoice] = useState(initialChoiceValue);
   const [customInput, setCustomInput] = useState(initialCustomInputValue);
   const [showEditName, setShowEditName] = useState(false);
+  const [showStartGameModal, setShowStartGameModal] = useState(false);
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
   const lobbySettings = useRecoilValue(lobbySettingsState);
   const [hostChoice, setHostChoice] = useRecoilState(hostChoiceState);
   const lobbyData = useRecoilValue(lobbyState);
-  const isLoading = useRecoilValue(isLoadingState);
   const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
@@ -70,7 +70,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   // Clear choice/input when switching between word selection type
   useEffect(() => {
     if (isCustom) {
-      setChoice(-1);
+      setChoice(0);
     } else {
       setCustomInput({ word: '', definition: '' });
     }
@@ -153,12 +153,37 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     props.handleUpdateUsername(props.username);
   };
 
+  const allowedToStart = (): boolean => {
+    if (!hasMinimumPlayers(lobbyData.players)) {
+      return false;
+    } else if (
+      isCustom &&
+      customInput.word.trim() !== '' &&
+      customInput.definition.trim() !== ''
+    ) {
+      return true;
+    } else if (!isCustom && choice !== 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <div className="pregame game-page">
       <ProTip
         message={
           'This is a really really really really really really really long message'
         }
+      />
+      <Modal
+        visible={showStartGameModal}
+        message={
+          'New players will not be able to join once the game has been started. Are you sure you want to start the game?'
+        }
+        header={'Wait!'}
+        handleConfirm={props.handleStartGame}
+        handleCancel={() => setShowStartGameModal(false)}
       />
       <Host>
         {/* Suggested words selection */}
@@ -285,8 +310,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         <PlayerList />
         <button
           className="start-btn center"
-          onClick={props.handleStartGame}
-          disabled={!hasMinimumPlayers(lobbyData.players)}
+          disabled={!allowedToStart()}
+          onClick={() => setShowStartGameModal(true)}
         >
           Start Game
         </button>
@@ -333,7 +358,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 export default Pregame;
 
 interface PregameProps {
-  handleStartGame: (e: React.MouseEvent) => void;
+  handleStartGame: () => void;
   handleSetWord: (
     id: number,
     word: string | undefined,

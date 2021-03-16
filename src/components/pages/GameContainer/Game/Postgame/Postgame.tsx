@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useLocalStorage } from '../../../../../hooks';
 import {
-  isLoadingState,
+  loadingState,
   lobbyState,
   playerGuessState,
   reactionsState,
@@ -41,7 +41,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   );
   const [reactions, setReactions] = useRecoilState(reactionsState);
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
-  const isLoading = useRecoilValue(isLoadingState);
+  const loading = useRecoilValue(loadingState);
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
   );
@@ -115,7 +115,10 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
             // After reveal
             <div className="after-reveal">
               <div className="after-container">
-                <button onClick={handleSetFinale} disabled={isLoading}>
+                <button
+                  onClick={handleSetFinale}
+                  disabled={loading === 'loading'}
+                >
                   Go to Finale
                 </button>
                 <SetHost
@@ -132,7 +135,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
               <button
                 className="play-again"
                 onClick={handlePlayAgain}
-                disabled={isLoading}
+                disabled={loading === 'loading'}
               >
                 Play Again
               </button>

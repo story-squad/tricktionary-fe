@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { useLocalStorage } from '../../../../../hooks';
-import { isLoadingState } from '../../../../../state';
+import { loadingState } from '../../../../../state';
 import { DecodedToken } from '../../../../../types/commonTypes';
 import { MAX_USERNAME_LENGTH } from '../../../../../utils/constants';
 import { initialToken } from '../../../../../utils/localStorageInitialValues';
@@ -28,7 +28,7 @@ import { PublicGames } from '../../../../common/PublicGames';
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
   const [token] = useLocalStorage<string>('token', initialToken);
-  const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
+  const [loading, setLoading] = useRecoilState(loadingState);
 
   //set up the form details
   const { register, errors, setError, clearErrors } = useForm({
@@ -87,7 +87,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   };
 
   const handleJoinByClick = (e: React.MouseEvent) => {
-    setIsLoading(true);
+    setLoading('loading');
     props.handleJoinLobby(e, '');
   };
 
@@ -147,7 +147,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
               disabled={
                 !usernameIsValid(props.username).valid ||
                 props.lobbyCode.length !== 4 ||
-                isLoading
+                loading === 'loading'
               }
             >
               Join Lobby
@@ -156,7 +156,9 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
             <button
               className="host lobby-button"
               onClick={props.handleCreateLobby}
-              disabled={!usernameIsValid(props.username).valid || isLoading}
+              disabled={
+                !usernameIsValid(props.username).valid || loading === 'loading'
+              }
             >
               Host New Game
             </button>
