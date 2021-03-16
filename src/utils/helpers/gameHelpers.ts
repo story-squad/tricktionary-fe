@@ -8,6 +8,7 @@ import {
   DefinitionDictionary,
   DefinitionItem,
   DefinitionResultItem,
+  GetReactionsItem,
   GuessItem,
   GuessItemWithConnected,
   LobbyData,
@@ -264,6 +265,42 @@ export const getReactionCount = (
     return reactions[definitionId][reactionId];
   } else {
     return 0;
+  }
+};
+
+// Update reactions (emoji smash) on refreshing the page with current totals from API
+export const updateReactionCounts = (
+  reactions: ReactionsDictionary,
+  reactionsList: GetReactionsItem[],
+): ReactionsDictionary => {
+  try {
+    const newReactions: ReactionsDictionary = {};
+    // Create mutable ReactionsDictionary from reactions
+    for (const definition in reactions) {
+      if (!newReactions.hasOwnProperty(definition)) {
+        newReactions[definition] = {};
+      }
+      for (const reaction in reactions[definition]) {
+        newReactions[definition][reaction] = reactions[definition][reaction];
+      }
+    }
+    // Add reaction counts from API request
+    reactionsList.forEach((reaction) => {
+      if (
+        reactions.hasOwnProperty(reaction.definition_id) &&
+        reactions[reaction.definition_id].hasOwnProperty(
+          reaction.reaction_id,
+        ) &&
+        reactions[reaction.definition_id][reaction.reaction_id] < reaction.count
+      ) {
+        newReactions[reaction.definition_id][reaction.reaction_id] =
+          reaction.count;
+      }
+    });
+    return newReactions;
+  } catch (err) {
+    console.log(err);
+    return reactions;
   }
 };
 
