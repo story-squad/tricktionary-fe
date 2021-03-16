@@ -1,13 +1,29 @@
-import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { isLoadingState } from '../../../state';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { loadingState } from '../../../state';
+import { MAX_LOADING_TIME } from '../../../utils/constants';
 
 const Loader = (): React.ReactElement => {
-  const isLoading = useRecoilValue(isLoadingState);
+  const [loading, setLoading] = useRecoilState(loadingState);
+  const [timeoutId, setTimeoutId] = useState<number>(0);
+
+  // Set loading to 'failed' if it takes too long
+  useEffect(() => {
+    if (loading === 'loading') {
+      clearTimeout(timeoutId);
+      setTimeoutId(
+        window.setTimeout(() => {
+          setLoading('failed');
+        }, MAX_LOADING_TIME),
+      );
+    } else if (loading === 'ok') {
+      clearTimeout(timeoutId);
+    }
+  }, [loading]);
 
   return (
     <>
-      {isLoading && (
+      {loading === 'loading' && (
         <div className="loader-container">
           <div className="loader">
             <h2>Loading</h2>

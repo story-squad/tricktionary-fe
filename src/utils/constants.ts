@@ -39,3 +39,7 @@ export const PUBLIC_STREAM_URL = process.env.REACT_APP_PUBLIC_STREAM_URL || '';
 
 // Reaction IDs to be used in the emoji-smash feature, JSON-formatted list
 export const REACTION_IDS = process.env.REACT_APP_REACTION_IDS || '[8, 13, 42]';
+
+// Time until Loader closes in milliseconds
+export const MAX_LOADING_TIME =
+  Number(process.env.REACT_APP_MAX_LOADING_TIME) || 8000;

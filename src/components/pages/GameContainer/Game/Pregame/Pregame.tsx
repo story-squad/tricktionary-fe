@@ -5,7 +5,6 @@ import { getWords } from '../../../../../api/apiRequests';
 import { useLocalStorage } from '../../../../../hooks';
 import {
   hostChoiceState,
-  isLoadingState,
   lobbySettingsState,
   lobbyState,
   revealResultsState,
@@ -46,7 +45,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const lobbySettings = useRecoilValue(lobbySettingsState);
   const [hostChoice, setHostChoice] = useRecoilState(hostChoiceState);
   const lobbyData = useRecoilValue(lobbyState);
-  const isLoading = useRecoilValue(isLoadingState);
   const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
