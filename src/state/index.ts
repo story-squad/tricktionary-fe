@@ -1,3 +1,5 @@
+import { availableReactionsState } from './availableReactionsState';
+import { definitionReactionsState } from './definitionReactionsState';
 import { guessesState } from './guessesState';
 import { handleSendReactionFn } from './handleSendReactionFn';
 import { hostChoiceState } from './hostChoiceState';
@@ -7,7 +9,6 @@ import { lobbySettingsState } from './lobbySettingsState';
 import { lobbyState } from './lobbyState';
 import { playerGuessState } from './playerGuessState';
 import { playerIdState } from './playerIdState';
-import { reactionsState } from './reactionsState';
 import { revealResultsState } from './revealResultsState';
 import { showNewHostModalState } from './showNewHostModalState';
 import { timerState } from './timerState';
@@ -25,7 +26,8 @@ export {
   playerGuessState,
   revealResultsState,
   showNewHostModalState,
-  reactionsState,
+  availableReactionsState,
   loadingState,
   handleSendReactionFn,
+  definitionReactionsState,
 };
