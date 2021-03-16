@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { loadingState } from '../../../state';
-
-// time until Loader closes in milliseconds
-const maxLoadingTime = 8000;
+import { MAX_LOADING_TIME } from '../../../utils/constants';
 
 const Loader = (): React.ReactElement => {
   const [loading, setLoading] = useRecoilState(loadingState);
@@ -16,7 +14,7 @@ const Loader = (): React.ReactElement => {
       setTimeoutId(
         window.setTimeout(() => {
           setLoading('failed');
-        }, maxLoadingTime),
+        }, MAX_LOADING_TIME),
       );
     } else if (loading === 'ok') {
       clearTimeout(timeoutId);
