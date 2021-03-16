@@ -37,6 +37,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     handleSetFinale,
     handleGetReactions,
   } = props;
+  const [shouldGetReactions, setShouldGetReactions] = useState(true);
   const resetGuess = useResetRecoilState(playerGuessState);
   const [showNewHostModal, setShowNewHostModal] = useRecoilState(
     showNewHostModalState,
@@ -75,8 +76,9 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
 
   // After reactionsDictionary initialized, attempt to update definitionReactions if needed
   useEffect(() => {
-    if (Object.keys(definitionReactions).length > 0) {
+    if (Object.keys(definitionReactions).length > 0 && shouldGetReactions) {
       handleGetReactions();
+      setShouldGetReactions(false);
     }
   }, [definitionReactions]);
 
