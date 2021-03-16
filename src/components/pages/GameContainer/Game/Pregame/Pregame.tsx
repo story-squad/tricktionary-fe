@@ -1,4 +1,7 @@
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { getWords } from '../../../../../api/apiRequests';
@@ -14,6 +17,7 @@ import {
   MAX_CUSTOM_WORD_LENGTH,
   MAX_DEFINITION_LENGTH,
   MAX_USERNAME_LENGTH,
+  REACT_APP_URL,
 } from '../../../../../utils/constants';
 import { hasMinimumPlayers } from '../../../../../utils/helpers';
 import { initialGuesses } from '../../../../../utils/localStorageInitialValues';
@@ -194,6 +198,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <div className="invite-code">
               <h3>Invite Code:</h3>
               <p className="room-code">{lobbyData.lobbyCode}</p>
+              <div className="copy-to-clipboard">
+                <CopyToClipboard
+                  text={`${REACT_APP_URL}/${lobbyData.lobbyCode}`}
+                >
+                  <FontAwesomeIcon icon={faCopy} />
+                </CopyToClipboard>
+              </div>
             </div>
             <div className="pick-word-instructions">
               <p className="instructions">
