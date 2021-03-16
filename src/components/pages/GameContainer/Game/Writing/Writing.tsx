@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
-import {
-  isLoadingState,
-  lobbyState,
-  playerIdState,
-} from '../../../../../state';
+import { loadingState, lobbyState, playerIdState } from '../../../../../state';
 import {
   MAX_DEFINITION_LENGTH,
   MAX_SECONDS,
@@ -24,7 +20,7 @@ import { TwitterButton } from '../../../../common/TwitterButton';
 const Writing = (props: WritingProps): React.ReactElement => {
   const { handleSyncTimer, time, setTime } = props;
   const lobbyData = useRecoilValue(lobbyState);
-  const isLoading = useRecoilValue(isLoadingState);
+  const loading = useRecoilValue(loadingState);
   const [definition, setDefinition] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -150,7 +146,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
           <button
             className="times-up-button"
             onClick={handleGoToNextPhase}
-            disabled={isLoading}
+            disabled={loading === 'loading'}
           >
             Read the Definitions!
           </button>
