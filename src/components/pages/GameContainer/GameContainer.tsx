@@ -17,12 +17,17 @@ import {
 } from '../../../state';
 import {
   DefinitionSelection,
+  GetReactionsItem,
   GuessItem,
   LobbyData,
   PlayerItem,
 } from '../../../types/gameTypes';
 import { MAX_SECONDS, REACT_APP_API_URL } from '../../../utils/constants';
-import { addReaction, errorCodeChecker } from '../../../utils/helpers';
+import {
+  addReaction,
+  errorCodeChecker,
+  updateReactionCounts,
+} from '../../../utils/helpers';
 import {
   initialGuesses,
   initialToken,
@@ -237,8 +242,10 @@ const GameContainer = (): React.ReactElement => {
     );
 
     // Get all cumulative reactions if player refreshes during RESULTS phase
-    socket.on('get reactions', (...args: any) => {
-      console.log(args);
+    socket.on('get reactions', (responseReactions: GetReactionsItem[]) => {
+      setDefinitionReactions((reactions) =>
+        updateReactionCounts(reactions, responseReactions),
+      );
     });
   }, []);
 
