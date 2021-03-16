@@ -226,11 +226,10 @@ const GameContainer = (): React.ReactElement => {
       handleLogin();
     });
 
-    // Increment reaction when other Player clicks a reaction on Postgame
+    // Update reactions when other Player clicks a reaction on Postgame
     socket.on(
       'get reaction',
       (definitionId: number, reactionId: number, value: number) => {
-        console.log(definitionId, reactionId, value);
         setDefinitionReactions((prevReactions) =>
           addReaction(prevReactions, definitionId, reactionId),
         );
