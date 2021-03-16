@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useLocalStorage } from '../../../../../hooks';
 import {
+  availableReactionsState,
+  definitionReactionsState,
   loadingState,
   lobbyState,
   playerGuessState,
-  reactionsState,
-  revealResultsState,
   showNewHostModalState,
 } from '../../../../../state';
 import {
@@ -35,14 +35,18 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     handleSetHost,
     handleRevealResults,
     handleSetFinale,
+    handleGetReactions,
   } = props;
+  const [shouldGetReactions, setShouldGetReactions] = useState(true);
   const resetGuess = useResetRecoilState(playerGuessState);
   const [showNewHostModal, setShowNewHostModal] = useRecoilState(
     showNewHostModalState,
   );
-  const [reactions, setReactions] = useRecoilState(reactionsState);
-  const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
-  const revealResults = useRecoilValue(revealResultsState);
+  const [, setAvailableReactions] = useRecoilState(availableReactionsState);
+  const [definitionReactions, setDefinitionReactions] = useRecoilState(
+    definitionReactionsState,
+  );
+  const lobbyData = useRecoilValue(lobbyState);
   const loading = useRecoilValue(loadingState);
   const [playerDict] = useState<PlayerDictionary>(
     getPlayerDictionary(lobbyData.players),
@@ -52,23 +56,31 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     DefinitionResultItem[]
   >(getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict));
 
-  // Reset player's guess for next round
   useEffect(() => {
+    // Reset player's guess for next round
     resetGuess();
     getSelectedReactions()
-      .then((res) => {
-        setReactions(res);
+      .then((resReactions) => {
+        // Store reactions that can be used
+        setAvailableReactions(resReactions);
+        return resReactions;
+      })
+      .then((resReactions) => {
+        // Create empty reactions dictionary to count reactions for each definition
+        setDefinitionReactions(
+          createReactionsDictionary(lobbyData.players, resReactions),
+        );
       })
       .catch((err) => console.log(err));
   }, []);
 
-  // Create empty reactions dictionary to count reactions for each definition
+  // After reactionsDictionary initialized, attempt to update definitionReactions if needed
   useEffect(() => {
-    setLobbyData({
-      ...lobbyData,
-      reactions: createReactionsDictionary(lobbyData.players, reactions),
-    });
-  }, [reactions]);
+    if (Object.keys(definitionReactions).length > 0 && shouldGetReactions) {
+      handleGetReactions();
+      setShouldGetReactions(false);
+    }
+  }, [definitionReactions]);
 
   // Create new sorted definitions array when player recieves guesses from host
   useEffect(() => {
@@ -79,14 +91,14 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         playerDict,
       ),
     );
-  }, [lobbyData, revealResults]);
+  }, [lobbyData]);
 
   return (
     <div className="postgame game-page">
       <ProTip />
       <h2>It’s Time for the Results!</h2>
       <Host>
-        {!revealResults && (
+        {lobbyData.phase === 'POSTGAME' && (
           // Show before reveal
           <p className="instructions">
             Players can’t see the results yet, so it’s up to you to read them
@@ -101,12 +113,12 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
             <DefinitionResult
               key={key}
               definitionResult={definitionResult}
-              showReactions={revealResults}
+              showReactions={lobbyData.phase === 'RESULTS'}
             />
           ))}
         </div>
         <div className="endgame-container">
-          {!revealResults ? (
+          {lobbyData.phase === 'POSTGAME' ? (
             // Before reveal
             <>
               <button onClick={() => handleRevealResults(guesses)}>
@@ -146,7 +158,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         </div>
       </Host>
       <Player>
-        {!revealResults ? (
+        {lobbyData.phase === 'POSTGAME' ? (
           // Before reveal
           <>
             <p className="instructions">
@@ -171,7 +183,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
           </>
         )}
       </Player>
-      <PlayerList hidePoints={!revealResults} />
+      <PlayerList hidePoints={lobbyData.phase === 'POSTGAME'} />
     </div>
   );
 };
@@ -183,4 +195,5 @@ interface PostgameProps {
   handleSetHost: (hostId: string, guesses: GuessItem[]) => void;
   handleSetFinale: () => void;
   handleRevealResults: (guesses: GuessItem[]) => void;
+  handleGetReactions: () => void;
 }

@@ -1,23 +1,23 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import {
+  availableReactionsState,
+  definitionReactionsState,
   handleSendReactionFn,
-  lobbyState,
   playerIdState,
-  reactionsState,
 } from '../../../state';
 import { getReactionCount } from '../../../utils/helpers';
 
 const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
   const myId = useRecoilValue(playerIdState);
-  const reactions = useRecoilValue(reactionsState);
+  const availableReactions = useRecoilValue(availableReactionsState);
   const handleSendReaction = useRecoilValue(handleSendReactionFn);
-  const lobbyData = useRecoilValue(lobbyState);
+  const definitionReactions = useRecoilValue(definitionReactionsState);
 
   return (
     <div className="reaction-picker-container">
       <div className="reaction-picker">
-        {reactions.map((reaction, key) => (
+        {availableReactions.map((reaction, key) => (
           <div className="reaction" key={key}>
             <button
               className="reaction-btn"
@@ -30,7 +30,7 @@ const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
             </button>
             <p className="count">
               {getReactionCount(
-                lobbyData.reactions,
+                definitionReactions,
                 props.definitionId,
                 reaction.id,
               )}
