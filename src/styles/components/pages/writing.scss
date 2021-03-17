@@ -14,6 +14,7 @@
 .guess-word {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: baseline;
     word-break: break-word;
     max-width: 100%;
@@ -40,7 +41,8 @@
       }
     }
     p {
-      color: $dark-cerulean;
+      color: $sky-blue;
+      font-family: $display-font;
     }
   }
   .times-up-container {
