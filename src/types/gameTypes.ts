@@ -122,3 +122,9 @@ export interface PlayerDictionary {
 export interface DefinitionDictionary {
   [Key: number]: DefinitionResultItem;
 }
+
+export interface GetReactionsItem {
+  count: number;
+  definition_id: number;
+  reaction_id: number;
+}

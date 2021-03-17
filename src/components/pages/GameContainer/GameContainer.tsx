@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 import { useLocalStorage } from '../../../hooks';
 import {
+  definitionReactionsState,
   handleSendReactionFn,
   hostChoiceState,
   loadingState,
@@ -12,17 +13,21 @@ import {
   lobbyState,
   playerGuessState,
   playerIdState,
-  revealResultsState,
   showNewHostModalState,
 } from '../../../state';
 import {
   DefinitionSelection,
+  GetReactionsItem,
   GuessItem,
   LobbyData,
   PlayerItem,
 } from '../../../types/gameTypes';
 import { MAX_SECONDS, REACT_APP_API_URL } from '../../../utils/constants';
-import { addReaction, errorCodeChecker } from '../../../utils/helpers';
+import {
+  addReaction,
+  errorCodeChecker,
+  updateReactionCounts,
+} from '../../../utils/helpers';
 import {
   initialGuesses,
   initialToken,
@@ -44,7 +49,6 @@ const GameContainer = (): React.ReactElement => {
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
   const [loading, setLoading] = useRecoilState(loadingState);
   const [playerId, setPlayerId] = useRecoilState(playerIdState);
-  const [, setRevealResults] = useRecoilState(revealResultsState);
   const hostChoice = useRecoilValue(hostChoiceState);
   const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
   const [token, setToken] = useLocalStorage('token', initialToken);
@@ -54,6 +58,7 @@ const GameContainer = (): React.ReactElement => {
   const [, setShowNewHostModal] = useRecoilState(showNewHostModalState);
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
   const [, setHandleSendReactionFn] = useRecoilState(handleSendReactionFn);
+  const [, setDefinitionReactions] = useRecoilState(definitionReactionsState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetPlayerGuess = useResetRecoilState(playerGuessState);
@@ -64,7 +69,6 @@ const GameContainer = (): React.ReactElement => {
     resetLobbyCode();
     resetPlayerGuess();
     setGuesses([]);
-    setRevealResults(false);
     socket.disconnect();
     setToken('');
     handleLogin(true);
@@ -220,7 +224,6 @@ const GameContainer = (): React.ReactElement => {
     // Get the round results from Host when they click 'reveal'
     socket.on('reveal results', (guesses: GuessItem[]) => {
       setGuesses(guesses);
-      setRevealResults(true);
     });
 
     // After a disconnection occurs, refresh the game on reconnection
@@ -228,10 +231,20 @@ const GameContainer = (): React.ReactElement => {
       handleLogin();
     });
 
-    // Increment reaction when other Player clicks a reaction on Postgame
-    socket.on('get reaction', (definitionId: number, reactionId: number) => {
-      setLobbyData((prevLobbyData) =>
-        addReaction(prevLobbyData, definitionId, reactionId),
+    // Update reactions when other Player clicks a reaction on RESULTS phase
+    socket.on(
+      'get reaction',
+      (definitionId: number, reactionId: number, value: number[]) => {
+        setDefinitionReactions((prevReactions) =>
+          addReaction(prevReactions, definitionId, reactionId, value[0]),
+        );
+      },
+    );
+
+    // Get all cumulative reactions if player refreshes during RESULTS phase
+    socket.on('get reactions', (responseReactions: GetReactionsItem[]) => {
+      setDefinitionReactions((reactions) =>
+        updateReactionCounts(reactions, responseReactions),
       );
     });
   }, []);
@@ -314,6 +327,11 @@ const GameContainer = (): React.ReactElement => {
     }
   };
 
+  // Get cumulative definitionReactions (emoji count) on reentering the game
+  const handleGetReactions = () => {
+    socket.emit('get reactions');
+  };
+
   /* 
   Recoil-stored handlers 
   Use regular function syntax to hoist 
@@ -392,6 +410,7 @@ const GameContainer = (): React.ReactElement => {
             handleSendGuess={handleSendGuess}
           />
         );
+      case 'POSTGAME':
       case 'RESULTS':
         return (
           <Postgame
@@ -399,6 +418,7 @@ const GameContainer = (): React.ReactElement => {
             handleSetHost={handleSetHost}
             handleRevealResults={handleRevealResults}
             handleSetFinale={handleSetFinale}
+            handleGetReactions={handleGetReactions}
           />
         );
       case 'FINALE':
@@ -422,7 +442,7 @@ const GameContainer = (): React.ReactElement => {
       <Loader />
       <Modal
         header={'Sorry'}
-        message={'There was a problem loading. Please try again'}
+        message={'There was a problem loading. Please try again.'}
         handleConfirm={() => setLoading('ok')}
         visible={loading === 'failed'}
         zIndex={100}

@@ -8,11 +8,13 @@ import {
   DefinitionDictionary,
   DefinitionItem,
   DefinitionResultItem,
+  GetReactionsItem,
   GuessItem,
   GuessItemWithConnected,
   LobbyData,
   PlayerDictionary,
   PlayerItem,
+  ReactionsDictionary,
   TopPlayers,
 } from '../../types/gameTypes';
 import finaleText from '../../utils/text/finaleText.json';
@@ -230,26 +232,24 @@ export const createReactionsDictionary = (
 
 // Increment reaction and return new lobbyData object
 export const addReaction = (
-  lobbyData: LobbyData,
+  reactions: ReactionsDictionary,
   definitionId: number,
   reactionId: number,
-): LobbyData => {
+  value: number,
+): ReactionsDictionary => {
   if (
-    lobbyData?.reactions?.hasOwnProperty(definitionId) &&
-    lobbyData.reactions[definitionId].hasOwnProperty(reactionId)
+    reactions.hasOwnProperty(definitionId) &&
+    reactions[definitionId].hasOwnProperty(reactionId)
   ) {
     return {
-      ...lobbyData,
-      reactions: {
-        ...lobbyData.reactions,
-        [definitionId]: {
-          ...lobbyData.reactions[definitionId],
-          [reactionId]: lobbyData.reactions[definitionId][reactionId] + 1,
-        },
+      ...reactions,
+      [definitionId]: {
+        ...reactions[definitionId],
+        [reactionId]: value,
       },
     };
   }
-  return lobbyData;
+  return reactions;
 };
 
 // Get reaction count with definitionId and reactionId
@@ -265,6 +265,42 @@ export const getReactionCount = (
     return reactions[definitionId][reactionId];
   } else {
     return 0;
+  }
+};
+
+// Update reactions (emoji smash) on refreshing the page with current totals from API
+export const updateReactionCounts = (
+  reactions: ReactionsDictionary,
+  reactionsList: GetReactionsItem[],
+): ReactionsDictionary => {
+  try {
+    const newReactions: ReactionsDictionary = {};
+    // Create mutable ReactionsDictionary from reactions
+    for (const definition in reactions) {
+      if (!newReactions.hasOwnProperty(definition)) {
+        newReactions[definition] = {};
+      }
+      for (const reaction in reactions[definition]) {
+        newReactions[definition][reaction] = reactions[definition][reaction];
+      }
+    }
+    // Add reaction counts from API request
+    reactionsList.forEach((reaction) => {
+      if (
+        reactions.hasOwnProperty(reaction.definition_id) &&
+        reactions[reaction.definition_id].hasOwnProperty(
+          reaction.reaction_id,
+        ) &&
+        reactions[reaction.definition_id][reaction.reaction_id] < reaction.count
+      ) {
+        newReactions[reaction.definition_id][reaction.reaction_id] =
+          reaction.count;
+      }
+    });
+    return newReactions;
+  } catch (err) {
+    console.log(err);
+    return reactions;
   }
 };
 
