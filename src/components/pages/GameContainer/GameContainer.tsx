@@ -183,7 +183,9 @@ const GameContainer = (): React.ReactElement => {
       const devMessage = errorCodeChecker(code);
       setLoading('ok');
       console.log(
-        `You have received development error code ${code} ${devMessage}`,
+        `You have received development error code ${code}:
+        ${errorData}
+        ${devMessage}`,
       );
       setError(errorData);
       if (code === 2000) {
