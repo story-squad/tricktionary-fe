@@ -183,7 +183,9 @@ const GameContainer = (): React.ReactElement => {
       const devMessage = errorCodeChecker(code);
       setLoading('ok');
       console.log(
-        `You have received development error code ${code} ${devMessage}`,
+        `You have received development error code ${code}:
+        ${errorData}
+        ${devMessage}`,
       );
       setError(errorData);
       if (code === 2000) {
@@ -254,8 +256,8 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('login', newToken ? '' : token);
   };
 
-  const handleCreateLobby = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleCreateLobby = (e?: React.MouseEvent) => {
+    e?.preventDefault();
     setLoading('loading');
     socket.emit('create lobby', username.trim());
   };
@@ -343,7 +345,7 @@ const GameContainer = (): React.ReactElement => {
     };
   }
 
-  /* Lobby Settings handlers / State handlers */
+  /* Other handlers */
   const handleSetWord = (
     id: number,
     word: string | undefined = undefined,
@@ -375,6 +377,11 @@ const GameContainer = (): React.ReactElement => {
 
   const handleSetUsername = (newUsername: string) => {
     setUsername(newUsername.trim());
+  };
+
+  const handleReload = () => {
+    setLoading('ok');
+    location.reload();
   };
 
   // Determine Game component to render based on the current game phase
@@ -443,7 +450,7 @@ const GameContainer = (): React.ReactElement => {
       <Modal
         header={'Sorry'}
         message={'There was a problem loading. Please try again.'}
-        handleConfirm={() => setLoading('ok')}
+        handleConfirm={handleReload}
         visible={loading === 'failed'}
         zIndex={100}
       />
