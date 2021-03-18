@@ -197,11 +197,8 @@ const GameContainer = (): React.ReactElement => {
     });
 
     // Get API token
-    socket.on('token update', (newToken: string, info?: string) => {
+    socket.on('token update', (newToken: string) => {
       setToken(newToken);
-      if (info === 'retry create lobby') {
-        handleCreateLobby();
-      }
     });
 
     // Receive your guess from the Host
@@ -348,7 +345,7 @@ const GameContainer = (): React.ReactElement => {
     };
   }
 
-  /* Lobby Settings handlers / State handlers */
+  /* Other handlers */
   const handleSetWord = (
     id: number,
     word: string | undefined = undefined,
@@ -380,6 +377,11 @@ const GameContainer = (): React.ReactElement => {
 
   const handleSetUsername = (newUsername: string) => {
     setUsername(newUsername.trim());
+  };
+
+  const handleReload = () => {
+    setLoading('ok');
+    location.reload();
   };
 
   // Determine Game component to render based on the current game phase
@@ -448,7 +450,7 @@ const GameContainer = (): React.ReactElement => {
       <Modal
         header={'Sorry'}
         message={'There was a problem loading. Please try again.'}
-        handleConfirm={() => setLoading('ok')}
+        handleConfirm={handleReload}
         visible={loading === 'failed'}
         zIndex={100}
       />
