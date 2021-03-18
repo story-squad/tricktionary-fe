@@ -197,8 +197,11 @@ const GameContainer = (): React.ReactElement => {
     });
 
     // Get API token
-    socket.on('token update', (newToken: string) => {
+    socket.on('token update', (newToken: string, info?: string) => {
       setToken(newToken);
+      if (info === 'retry create lobby') {
+        handleCreateLobby();
+      }
     });
 
     // Receive your guess from the Host
@@ -256,8 +259,8 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('login', newToken ? '' : token);
   };
 
-  const handleCreateLobby = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleCreateLobby = (e?: React.MouseEvent) => {
+    e?.preventDefault();
     setLoading('loading');
     socket.emit('create lobby', username.trim());
   };
