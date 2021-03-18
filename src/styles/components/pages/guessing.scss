@@ -1,0 +1,48 @@
+.guessing {
+    .definition {
+      width: 100%;
+      text-align: center;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      border: 1px solid $lt-grey;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      padding: 16px 8px 16px 8px;
+      box-shadow: $boxshadow;
+  
+      p {
+        margin-bottom: 0;
+        @include mid-below {
+          text-align: left;
+        }
+        &:last-of-type {
+          word-break: break-word;
+        }
+      }
+      .definition-content {
+        align-self: center;
+        text-align: left;
+        margin: 0;
+      }
+      .definition-key {
+        display: flex;
+        justify-content: center;
+        margin: 0 2rem 0 0;
+        color: $nero;
+        background: $white;
+        border-radius: 8px;
+        height: 4rem;
+        p {
+          width: 6.5rem;
+          font-size: 4rem;
+          font-family: $display-font;
+          color: $sky-blue;
+        }
+      }
+  
+      .definition-guess {
+        text-align: left;
+      }
+    }
+}

@@ -199,6 +199,7 @@ a {
 .word-list {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-evenly;
 }
 
@@ -206,11 +207,13 @@ a {
   background: $white;
   border: 1px solid $dark-blue;
   display: block;
+  margin-bottom: .8rem;
 
   @include mid-below {
     width: auto;
     padding: 4px 8px;
-    margin: 0 4px;
+    margin: 0 .04rem .8rem 0;
+    word-break: break-word;
   }
 
   &.writing {
@@ -278,55 +281,6 @@ a {
   color: $dark-cerulean;
 }
 
-.guessing {
-  .definition {
-    width: 100%;
-    text-align: center;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    border: 1px solid $lt-grey;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    padding: 16px 8px 16px 8px;
-    box-shadow: $boxshadow;
-
-    p {
-      margin-bottom: 0;
-      @include mid-below {
-        text-align: left;
-      }
-      &:last-of-type {
-        word-break: break-word;
-      }
-    }
-    .definition-content {
-      align-self: center;
-      text-align: left;
-      margin: 0;
-    }
-    .definition-key {
-      display: flex;
-      justify-content: center;
-      margin: 0 2rem 0 0;
-      color: $nero;
-      background: $white;
-      border-radius: 8px;
-      height: 4rem;
-      p {
-        width: 6.5rem;
-        font-size: 4rem;
-        font-family: $display-font;
-        color: $sky-blue;
-      }
-    }
-
-    .definition-guess {
-      text-align: left;
-    }
-  }
-}
-
 .submit-definition {
   display: flex;
   flex-direction: column;
@@ -368,114 +322,9 @@ a {
   }
 }
 
-.timer-container {
-  .timer-wrap {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin: 1.6rem 0 1.6rem 0;
-    #use-timer {
-      width: 2.4rem;
-      height: 2.4rem;
-      margin-right: 8px;
-    }
-    p {
-      font-size: 1.8rem;
-      color: $medium-grey;
-    }
-  }
-}
 
-.definition-result {
-  margin: 4rem 0;
-  border: 2px solid $dark-cerulean;
-  box-shadow: $boxshadow;
-  border-radius: 8px;
-  padding-bottom: 0.8rem;
-  .who-voted-p {
-    padding: 0 1.6rem 0.8rem 1.6rem;
-    margin-bottom: 0;
-  }
 
-  .who-voted-box {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 0 1.6rem 0 1.6rem;
-  }
-  .vote-align {
-    background-color: #f7fbff;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    padding: 1.6rem 1.6rem 1.6rem 1.6rem;
-    @include mid-below {
-      flex-direction: column-reverse;
-      padding-bottom: 0;
-    }
-    .author-box {
-      @include mid-below {
-        margin-top: 8px;
-        text-align: center;
-      }
-    }
-  }
-  .result-definition {
-    background-color: #f7fbff;
-    padding: 1.6rem 1.6rem 1.6rem 1.6rem;
-    word-wrap: break-word;
-  }
-  .result-username {
-    color: $charcoal;
-    font-family: $display-font;
-    font-size: 3.2rem;
-    margin-bottom: 8px;
-    @include mid-below {
-      font-size: 1.8rem;
-    }
-    &:last-child {
-      color: $sky-blue;
-    }
-  }
-  .result-votes {
-    padding: 1.6rem;
-    box-shadow: $boxshadow;
-    background-color: $white;
-    margin-bottom: 0;
-    border-radius: 8px;
-    font-family: $display-font;
-  }
-  .guess-names {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 0 0 0;
-    padding: 8px;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    p:first-child {
-      margin-bottom: 0;
-    }
-    p.who-voted {
-      font-family: $display-font;
-      color: $burnt-orange;
-      margin-bottom: 0;
-      width: auto;
-    }
-  }
-  &:last-child {
-    .result-username {
-      color: $dark-cerulean;
-    }
-    span:last-child {
-      display: none;
-    }
-  }
-}
+
 
 //error
 .error {
@@ -497,29 +346,7 @@ a {
   font-family: $display-font;
 }
 
-//play/new host button
-.endgame-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  .after-reveal {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    .after-container {
-      display: flex;
-      justify-content: space-evenly;
-    }
-  }
-  .play-again {
-    background: $burnt-orange;
-    margin: 1.6rem 0 0 0;
-  }
-  .selected {
-    background: $neon-green;
-    box-shadow: $boxshadow;
-  }
-}
+
 
 .host-dropdown {
   width: 16rem;

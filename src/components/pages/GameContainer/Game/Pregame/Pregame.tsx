@@ -318,7 +318,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <p>Play with timer</p>
           </div>
         </div>
-        <PlayerList />
+        <div className="start-instructions">
+          <h2>Important!</h2>
+          <p className="instructions">
+            Wait for all players to enter the Lobby before starting.
+          </p>
+          <PlayerList />
+        </div>
         <button
           className="start-btn center"
           disabled={!allowedToStart()}
@@ -339,7 +345,9 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           </div>
         ) : (
           <form className="edit-name-form">
-            {errors.form && <p className="error">{errors.form.message}</p>}
+            {errors.form && (
+              <p className="short error">{errors.form.message}</p>
+            )}
             <div className="char-counter-wrapper higher">
               <Input
                 id="username"
