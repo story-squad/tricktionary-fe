@@ -237,6 +237,7 @@ const GameContainer = (): React.ReactElement => {
     socket.on(
       'get reaction',
       (definitionId: number, reactionId: number, value: number) => {
+        console.log(definitionId, reactionId, value);
         setDefinitionReactions((prevReactions) =>
           addReaction(prevReactions, definitionId, reactionId, value),
         );
@@ -245,6 +246,7 @@ const GameContainer = (): React.ReactElement => {
 
     // Get all cumulative reactions if player refreshes during RESULTS phase
     socket.on('get reactions', (responseReactions: GetReactionsItem[]) => {
+      console.log(responseReactions);
       setDefinitionReactions((reactions) =>
         updateReactionCounts(reactions, responseReactions),
       );
