@@ -124,7 +124,7 @@ export interface DefinitionDictionary {
 }
 
 export interface GetReactionsItem {
-  count: number;
+  value: number;
   definition_id: number;
   reaction_id: number;
 }
