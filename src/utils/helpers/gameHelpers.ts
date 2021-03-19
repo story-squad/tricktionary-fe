@@ -285,6 +285,7 @@ export const updateReactionCounts = (
         newReactions[definition][reaction] = reactions[definition][reaction];
       }
     }
+    console.log(newReactions);
     // Add reaction counts from API request
     reactionsList.forEach((reaction) => {
       if (
@@ -292,10 +293,10 @@ export const updateReactionCounts = (
         reactions[reaction.definition_id].hasOwnProperty(
           reaction.reaction_id,
         ) &&
-        reactions[reaction.definition_id][reaction.reaction_id] < reaction.count
+        reactions[reaction.definition_id][reaction.reaction_id] < reaction.value
       ) {
         newReactions[reaction.definition_id][reaction.reaction_id] =
-          reaction.count;
+          reaction.value;
       }
     });
     return newReactions;
