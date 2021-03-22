@@ -23,6 +23,7 @@ import {
   PlayerStepThree,
   PlayerStepTwo,
 } from '../../../../common/Instructions';
+import { ProTip } from '../../../../common/ProTip';
 import { PublicGames } from '../../../../common/PublicGames';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
@@ -95,6 +96,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
     <>
       <PublicGames />
       <div className="lobby game-page">
+        <ProTip />
         <Expander headerText={'Learn How to Play'} closeText={'Close'}>
           <h2>How to Host a Game</h2>
           <h3>Step 1: Setup</h3>

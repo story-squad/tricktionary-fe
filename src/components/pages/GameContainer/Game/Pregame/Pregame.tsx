@@ -175,11 +175,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
   return (
     <div className="pregame game-page">
-      <ProTip
-        message={
-          'This is a really really really really really really really long message'
-        }
-      />
       <Modal
         visible={showStartGameModal}
         message={
@@ -193,6 +188,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         {/* Suggested words selection */}
         {!isCustom && (
           <>
+            <ProTip message={'Read the word before starting the game!'} />
             <h2>Step 1: Choose a Word</h2>
             <HostStepOne />
             <div className="invite-code">
@@ -334,6 +330,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         </button>
       </Host>
       <Player>
+        <ProTip message={'This is your chance to let your creativity shine!'} />
         <h2>The Lobby is filling up...</h2>
         <PlayerStepOne />
         <PlayerList />
