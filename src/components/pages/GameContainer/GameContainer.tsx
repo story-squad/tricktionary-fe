@@ -27,6 +27,7 @@ import { MAX_SECONDS, REACT_APP_API_URL } from '../../../utils/constants';
 import {
   addReaction,
   errorCodeChecker,
+  isGhostPlayer,
   updateReactionCounts,
 } from '../../../utils/helpers';
 import {
@@ -58,6 +59,8 @@ const GameContainer = (): React.ReactElement => {
     initialToken,
   );
   const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [showKickedModal, setShowKickedModal] = useState(false);
+  const [isKicking, setIsKicking] = useState(false);
   const [time, setTime] = useState(-1);
   const [error, setError] = useState('');
   const [, setShowNewHostModal] = useRecoilState(showNewHostModalState);
@@ -70,6 +73,7 @@ const GameContainer = (): React.ReactElement => {
 
   // Combine reset functions
   const resetGame = () => {
+    history.push('/');
     resetLobbyData();
     resetLobbyCode();
     resetPlayerGuess();
@@ -78,7 +82,6 @@ const GameContainer = (): React.ReactElement => {
     setToken('');
     handleLogin(true);
     setShowLeaveModal(false);
-    history.push('/');
   };
 
   // For testing, DELETE later
@@ -88,19 +91,20 @@ const GameContainer = (): React.ReactElement => {
     console.log('playerId', playerId);
   }, [lobbyData]);
 
-  // Reset timer
   useEffect(() => {
+    // Reset timer
     if (lobbyData.phase !== 'WRITING') {
       setTime(-1);
     }
-  }, [lobbyData]);
-
-  // Make a new socket connection after disconnecting
-  useEffect(() => {
-    if (socket.disconnected) {
-      socket.connect();
+    // Remove self from game if no matching playerId
+    if (isGhostPlayer(lobbyData.players, playerId)) {
+      handleKickPlayer();
     }
-  }, [socket.disconnected]);
+    // Run when lobbyData is cleared after player got kicked
+    if (isKicking && lobbyData.phase === 'LOBBY') {
+      history.push('/');
+    }
+  }, [lobbyData]);
 
   useBeforeunload(() => {
     setOpenTabs(Number(openTabs) - 1);
@@ -280,7 +284,12 @@ const GameContainer = (): React.ReactElement => {
 
   // Create game as Host
   const handleCreateLobby = (e?: React.MouseEvent) => {
-    e?.preventDefault();
+    if (e) {
+      e.preventDefault();
+      if (socket.disconnected) {
+        socket.connect();
+      }
+    }
     setLoading('loading');
     socket.emit('create lobby', username.trim());
   };
@@ -289,6 +298,9 @@ const GameContainer = (): React.ReactElement => {
   const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
     if (e) {
       e.preventDefault();
+      if (socket.disconnected) {
+        socket.connect();
+      }
     }
     socket.emit(
       'join lobby',
@@ -409,6 +421,12 @@ const GameContainer = (): React.ReactElement => {
     location.reload();
   };
 
+  const handleKickPlayer = () => {
+    setIsKicking(true);
+    resetGame();
+    setShowKickedModal(true);
+  };
+
   // Determine Game component to render based on the current game phase
   const currentPhase = () => {
     switch (lobbyData.phase) {
@@ -495,6 +513,12 @@ const GameContainer = (): React.ReactElement => {
         handleConfirm={() => setOpenTabs(1)}
         customConfirmText={'Yes'}
         visible={Number(openTabs) > 1}
+      />
+      <Modal
+        header={'Connection Lost'}
+        message={'You lost connection to the game.'}
+        handleConfirm={() => setShowKickedModal(false)}
+        visible={showKickedModal}
       />
       {lobbyData.phase === 'LOBBY' ? (
         <Header />
