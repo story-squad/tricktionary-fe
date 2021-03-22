@@ -17,7 +17,7 @@ export const DefinitionResult = (
 
   return (
     <>
-      {definition !== '' ? (
+      {definition !== '' && (
         // Player submitted a definition
         <div className="definition-result">
           <div className="vote-align">
@@ -43,16 +43,6 @@ export const DefinitionResult = (
           {showReactions && definitionId !== 0 && (
             <ReactionPicker definitionId={definitionId} playerId={playerId} />
           )}
-        </div>
-      ) : (
-        // Player didn't submit a definition
-        <div className="definition-result">
-          <div className="vote-align">
-            <div className="author-box">
-              <span className="result-username">{username} </span>
-            </div>
-          </div>
-          <p className="result-definition">No submission!</p>
         </div>
       )}
     </>
