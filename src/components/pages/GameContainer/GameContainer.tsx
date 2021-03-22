@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useBeforeunload } from 'react-beforeunload';
 import { useHistory } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
@@ -52,6 +53,10 @@ const GameContainer = (): React.ReactElement => {
   const hostChoice = useRecoilValue(hostChoiceState);
   const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
   const [token, setToken] = useLocalStorage('token', initialToken);
+  const [openTabs, setOpenTabs, refreshOpenTabs] = useLocalStorage(
+    'openTabs',
+    initialToken,
+  );
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [time, setTime] = useState(-1);
   const [error, setError] = useState('');
@@ -78,7 +83,9 @@ const GameContainer = (): React.ReactElement => {
 
   // For testing, DELETE later
   useEffect(() => {
+    console.log('--------------');
     console.log('lobbydata', lobbyData);
+    console.log('playerId', playerId);
   }, [lobbyData]);
 
   // Reset timer
@@ -95,9 +102,22 @@ const GameContainer = (): React.ReactElement => {
     }
   }, [socket.disconnected]);
 
+  useBeforeunload(() => {
+    setOpenTabs(Number(openTabs) - 1);
+  });
+
   useEffect(() => {
+    /* onMount */
     // Get token from localStorage if it exists, log in
     handleLogin();
+    refreshOpenTabs();
+
+    // Keep track of the number of tabs players are using
+    if (Number(openTabs) >= 0) {
+      setOpenTabs(Number(openTabs) + 1);
+    } else {
+      setOpenTabs(1);
+    }
 
     /* Set up Recoil-stored handler functions */
     setHandleSendReactionFn(handleSendReaction);
@@ -251,19 +271,21 @@ const GameContainer = (): React.ReactElement => {
         updateReactionCounts(reactions, responseReactions),
       );
     });
-  }, []);
+  }, []); /* onMount */
 
   /* Socket event emitters */
   const handleLogin = (newToken = false) => {
     socket.emit('login', newToken ? '' : token);
   };
 
+  // Create game as Host
   const handleCreateLobby = (e?: React.MouseEvent) => {
     e?.preventDefault();
     setLoading('loading');
     socket.emit('create lobby', username.trim());
   };
 
+  // Join game as Player
   const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
     if (e) {
       e.preventDefault();
@@ -276,6 +298,7 @@ const GameContainer = (): React.ReactElement => {
     localStorage.setItem('username', username.trim());
   };
 
+  // Begin game as Host with a word chosen
   const handleStartGame = () => {
     setLoading('loading');
     socket.emit('start game', lobbySettings, lobbyCode, hostChoice);
@@ -462,6 +485,16 @@ const GameContainer = (): React.ReactElement => {
         handleConfirm={resetGame}
         handleCancel={() => setShowLeaveModal(false)}
         visible={showLeaveModal}
+      />
+      {/* Warn player of multiple tabs, allow to reset value and play anyway */}
+      <Modal
+        header={'Already Playing'}
+        message={
+          'You appear to be already playing the game in another tab. Would you like to play anyway?'
+        }
+        handleConfirm={() => setOpenTabs(1)}
+        customConfirmText={'Yes'}
+        visible={Number(openTabs) > 1}
       />
       {lobbyData.phase === 'LOBBY' ? (
         <Header />
