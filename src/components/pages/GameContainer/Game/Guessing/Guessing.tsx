@@ -77,8 +77,12 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
   return (
     <div className="guessing game-page">
-      <ProTip />
       <Host>
+        <ProTip
+          message={
+            'Read through the definitions twice. Give each one life by reading it like a story!'
+          }
+        />
         {!showGuesses ? (
           // Showing definitions
           <>
@@ -158,6 +162,9 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         />
       </Host>
       <Player>
+        <ProTip
+          message={'Listen for the definition that strikes your fancy!'}
+        />
         <h2>It’s Time to Vote</h2>
         <PlayerStepTwo />
         <p className="word-display">{lobbyData.word}</p>

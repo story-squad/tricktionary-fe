@@ -116,8 +116,12 @@ const Writing = (props: WritingProps): React.ReactElement => {
 
   return (
     <div className="writing game-page">
-      <ProTip />
       <Host>
+        <ProTip
+          message={
+            'Encourage players by saying “First Thought = Best Thought!”'
+          }
+        />
         <h2>Players are writing their definitions...</h2>
         <p className="instructions">
           If you’re playing with a timer, warn your players when they have 30,
@@ -160,6 +164,11 @@ const Writing = (props: WritingProps): React.ReactElement => {
         />
       </Host>
       <Player>
+        <ProTip
+          message={
+            'Struggling to come up with a definition? Remember, when all else fails: First Thought = Best Thought'
+          }
+        />
         <h2>It&apos;s Time to Get Creative!</h2>
         <p>
           When the game starts,{' '}
