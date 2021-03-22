@@ -44,7 +44,7 @@ export const getDefinitions = (
     .filter(
       (player: PlayerItem) =>
         player.id !== playerId &&
-        player.hasOwnProperty('definition') &&
+        isValidPlayer(player) &&
         player.definition.trim() !== '',
     )
     .map((player: PlayerItem) => {
@@ -159,7 +159,7 @@ export const getSortedDefinitions = (
   // Create a definition dictionary to easily map all player guesses to each definition
   const definitions: DefinitionDictionary = {};
   lobbyData.players.forEach((player) => {
-    if (player.id !== lobbyData.host) {
+    if (player.id !== lobbyData.host && isValidPlayer(player)) {
       definitions[player.definitionId as number] = {
         username: player.username,
         playerId: player.id,
@@ -314,4 +314,15 @@ export const getFinaleNoDefinitionText = (): string => {
   text += ' ' + finaleText.noDefinition;
   text += ' ' + getRandomFromArray(finaleText.funWords) + '!';
   return text;
+};
+
+// Check if player object has required properties
+export const isValidPlayer = (player: PlayerItem): boolean => {
+  return (
+    player.hasOwnProperty('id') &&
+    player.hasOwnProperty('username') &&
+    player.hasOwnProperty('definition') &&
+    player.hasOwnProperty('points') &&
+    player.hasOwnProperty('connected')
+  );
 };
