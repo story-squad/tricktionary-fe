@@ -26,13 +26,11 @@ import { Modal } from '../../../../common/Modal';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
 import { ProTip } from '../../../../common/ProTip';
-import { SetHost } from '../../../../common/SetHost';
 import { DefinitionResult } from './DefinitionResult';
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
   const {
     handlePlayAgain,
-    handleSetHost,
     handleRevealResults,
     handleSetFinale,
     handleGetReactions,
@@ -139,10 +137,6 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
                 >
                   Go to Finale
                 </button>
-                <SetHost
-                  players={lobbyData.players}
-                  handleSetHost={handleSetHost}
-                />
                 <Modal
                   header={'Host Changed'}
                   message={'You are now the Host.'}
@@ -197,7 +191,6 @@ export default Postgame;
 
 interface PostgameProps {
   handlePlayAgain: () => void;
-  handleSetHost: (hostId: string, guesses: GuessItem[]) => void;
   handleSetFinale: () => void;
   handleRevealResults: (guesses: GuessItem[]) => void;
   handleGetReactions: () => void;

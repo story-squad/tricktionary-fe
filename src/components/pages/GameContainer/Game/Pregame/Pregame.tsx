@@ -34,6 +34,7 @@ import { Modal } from '../../../../common/Modal';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
 import { ProTip } from '../../../../common/ProTip';
+import { SetHost } from '../../../../common/SetHost';
 import { WordChoice } from './WordChoice';
 
 const initialChoiceValue = 0;
@@ -328,6 +329,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         >
           Start Game
         </button>
+        <SetHost />
       </Host>
       <Player>
         <ProTip message={'This is your chance to let your creativity shine!'} />
