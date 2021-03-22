@@ -34,7 +34,7 @@ export const hasMinimumPlayers = (players: PlayerItem[]): boolean => {
   return players.filter((player) => player.connected).length >= MINIMUM_PLAYERS;
 };
 
-// Get a shuffled list of definitions + the correct one for the Host to read off
+// Get a shuffled list of definitions + the correct one for the Host to read
 export const getDefinitions = (
   players: PlayerItem[],
   playerId: string,
@@ -43,7 +43,9 @@ export const getDefinitions = (
   let definitions = players
     .filter(
       (player: PlayerItem) =>
-        player.id !== playerId && player.definition !== '',
+        player.id !== playerId &&
+        player.hasOwnProperty('definition') &&
+        player.definition.trim() !== '',
     )
     .map((player: PlayerItem) => {
       return {
