@@ -34,7 +34,7 @@ export const hasMinimumPlayers = (players: PlayerItem[]): boolean => {
   return players.filter((player) => player.connected).length >= MINIMUM_PLAYERS;
 };
 
-// Get a shuffled list of definitions + the correct one for the Host to read off
+// Get a shuffled list of definitions + the correct one for the Host to read
 export const getDefinitions = (
   players: PlayerItem[],
   playerId: string,
@@ -43,7 +43,9 @@ export const getDefinitions = (
   let definitions = players
     .filter(
       (player: PlayerItem) =>
-        player.id !== playerId && player.definition !== '',
+        player.id !== playerId &&
+        isValidPlayer(player) &&
+        player.definition.trim() !== '',
     )
     .map((player: PlayerItem) => {
       return {
@@ -157,7 +159,7 @@ export const getSortedDefinitions = (
   // Create a definition dictionary to easily map all player guesses to each definition
   const definitions: DefinitionDictionary = {};
   lobbyData.players.forEach((player) => {
-    if (player.id !== lobbyData.host) {
+    if (player.id !== lobbyData.host && isValidPlayer(player)) {
       definitions[player.definitionId as number] = {
         username: player.username,
         playerId: player.id,
@@ -312,4 +314,32 @@ export const getFinaleNoDefinitionText = (): string => {
   text += ' ' + finaleText.noDefinition;
   text += ' ' + getRandomFromArray(finaleText.funWords) + '!';
   return text;
+};
+
+// Check if player object has required properties
+export const isValidPlayer = (player: PlayerItem): boolean => {
+  return (
+    player.hasOwnProperty('id') &&
+    player.hasOwnProperty('username') &&
+    player.hasOwnProperty('definition') &&
+    player.hasOwnProperty('points') &&
+    player.hasOwnProperty('connected')
+  );
+};
+
+export const isGhostPlayer = (
+  players: PlayerItem[],
+  playerId: string,
+): boolean => {
+  let isGhost = true;
+  if (players.length === 0) {
+    isGhost = false;
+  } else {
+    players.forEach((player) => {
+      if (player.id === playerId) {
+        isGhost = false;
+      }
+    });
+  }
+  return isGhost;
 };
