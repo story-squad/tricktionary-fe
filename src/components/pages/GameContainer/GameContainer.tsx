@@ -16,6 +16,7 @@ import {
   playerIdState,
   showNewHostModalState,
 } from '../../../state';
+import { handleSetHostFn } from '../../../state/handleSetHostFn';
 import {
   DefinitionSelection,
   GetReactionsItem,
@@ -66,6 +67,7 @@ const GameContainer = (): React.ReactElement => {
   const [, setShowNewHostModal] = useRecoilState(showNewHostModalState);
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
   const [, setHandleSendReactionFn] = useRecoilState(handleSendReactionFn);
+  const [, setHandleSetHostFn] = useRecoilState(handleSetHostFn);
   const [, setDefinitionReactions] = useRecoilState(definitionReactionsState);
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
@@ -125,6 +127,7 @@ const GameContainer = (): React.ReactElement => {
 
     /* Set up Recoil-stored handler functions */
     setHandleSendReactionFn(handleSendReaction);
+    setHandleSetHostFn(handleSetHost);
 
     /* Socket event listeners */
     // Update game each phase, push socket data to state, push lobbyCode to URL
@@ -340,10 +343,6 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('set finale', lobbyCode);
   };
 
-  const handleSetHost = (hostId: string, guesses: GuessItem[]) => {
-    socket.emit('set host', hostId, lobbyCode, guesses);
-  };
-
   const handleRevealResults = (guesses: GuessItem[]) => {
     socket.emit('reveal results', lobbyCode, guesses);
   };
@@ -379,6 +378,12 @@ const GameContainer = (): React.ReactElement => {
   function handleSendReaction() {
     return (definitionId: number, reactionId: number) => {
       socket.emit('send reaction', definitionId, reactionId);
+    };
+  }
+
+  function handleSetHost() {
+    return (hostId: string, lobbyCode: string, guesses: GuessItem[]) => {
+      socket.emit('set host', hostId, lobbyCode, guesses);
     };
   }
 
@@ -465,7 +470,6 @@ const GameContainer = (): React.ReactElement => {
         return (
           <Postgame
             handlePlayAgain={handlePlayAgain}
-            handleSetHost={handleSetHost}
             handleRevealResults={handleRevealResults}
             handleSetFinale={handleSetFinale}
             handleGetReactions={handleGetReactions}
