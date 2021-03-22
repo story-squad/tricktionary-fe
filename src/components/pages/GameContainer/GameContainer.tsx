@@ -36,8 +36,17 @@ import {
 import { Header } from '../../common/Header';
 import { Loader } from '../../common/Loader';
 import { Modal } from '../../common/Modal';
-import { Finale, Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
-
+import {
+  Finale,
+  Guessing,
+  Lobby,
+  Painter,
+  Postgame,
+  Pregame,
+  Writing,
+} from './Game';
+import { Coordinate } from './Game/Painter';
+type canvasCoordList = number[][];
 // Create a socket connection to API
 const socket = io.connect(REACT_APP_API_URL as string);
 
@@ -62,7 +71,7 @@ const GameContainer = (): React.ReactElement => {
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetPlayerGuess = useResetRecoilState(playerGuessState);
-
+  const [canvasCoords, setCanvasCoords] = useState<canvasCoordList>([]);
   // Combine reset functions
   const resetGame = () => {
     resetLobbyData();
@@ -251,6 +260,13 @@ const GameContainer = (): React.ReactElement => {
         updateReactionCounts(reactions, responseReactions),
       );
     });
+
+    // Remote Painter
+    socket.on('update canvas', (incomingCoords: number[]) => {
+      const newCoords = canvasCoords || [];
+      newCoords?.push(incomingCoords);
+      setCanvasCoords(newCoords);
+    });
   }, []);
 
   /* Socket event emitters */
@@ -386,9 +402,28 @@ const GameContainer = (): React.ReactElement => {
     location.reload();
   };
 
+  const handleUpdateCanvas = (oldVector: Coordinate, newVector: Coordinate) => {
+    socket.emit('remote paint', [
+      oldVector.x,
+      oldVector.y,
+      newVector.x,
+      newVector.y,
+    ]);
+  };
+
   // Determine Game component to render based on the current game phase
   const currentPhase = () => {
     switch (lobbyData.phase) {
+      case 'PAINT':
+        return (
+          <Painter
+            width={640}
+            height={480}
+            remotePaint={handleUpdateCanvas}
+            canvasHistory={canvasCoords}
+            refreshEvery={1000}
+          />
+        );
       case 'PREGAME':
         return (
           <Pregame
