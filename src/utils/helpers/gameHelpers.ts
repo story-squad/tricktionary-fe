@@ -326,3 +326,20 @@ export const isValidPlayer = (player: PlayerItem): boolean => {
     player.hasOwnProperty('connected')
   );
 };
+
+export const isGhostPlayer = (
+  players: PlayerItem[],
+  playerId: string,
+): boolean => {
+  let isGhost = true;
+  if (players.length === 0) {
+    isGhost = false;
+  } else {
+    players.forEach((player) => {
+      if (player.id === playerId) {
+        isGhost = false;
+      }
+    });
+  }
+  return isGhost;
+};
