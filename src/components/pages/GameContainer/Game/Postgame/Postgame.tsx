@@ -95,9 +95,9 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
 
   return (
     <div className="postgame game-page">
-      <ProTip />
       <h2>It’s Time for the Results!</h2>
       <Host>
+        <ProTip message="Reading the definition each player votes for makes the game more fun! Example: Darwin voted for number 6: “silly or high-spirited behavior; mischief.”" />
         {lobbyData.phase === 'POSTGAME' && (
           // Show before reveal
           <p className="instructions">
@@ -158,6 +158,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         </div>
       </Host>
       <Player>
+        <ProTip />
         {lobbyData.phase === 'POSTGAME' ? (
           // Before reveal
           <>

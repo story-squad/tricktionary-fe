@@ -6,6 +6,7 @@ import {
   getFinaleNoDefinitionText,
   getTopPlayers,
 } from '../../../../../utils/helpers';
+import { ProTip } from '../../../../common/ProTip';
 
 const Finale = (): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
@@ -13,6 +14,9 @@ const Finale = (): React.ReactElement => {
 
   return (
     <div className="finale game-page">
+      <ProTip
+        message={'Much like statistics, 99% of these definitions are made up'}
+      />
       {console.log(topPlayers)}
       <img className="finale-banner" src={finaleBanner} />
       <div className="place-bars">
