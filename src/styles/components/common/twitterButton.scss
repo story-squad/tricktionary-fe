@@ -1,4 +1,7 @@
 .twitter-share-button {
+  display: flex;
+  align-items: center;
+  align-self: flex-end;
   line-height: 4rem;
   font-size: 3rem;
   font-family: $text-font;

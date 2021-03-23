@@ -79,6 +79,12 @@ p {
   @include tablet-below {
     font-size: 1.6rem;
   }
+  &.word {
+    color: $dark-cerulean;
+    @include tablet-below {
+      font-size: 1.8rem;
+    }
+  }
 }
 
 strong {
@@ -90,6 +96,29 @@ textarea {
   margin-left: auto;
   margin-right: auto;
   resize: none;
+}
+
+//adds more 4rem to margin-bottom
+.auto-width {
+  width: auto;
+}
+.bot-margin {
+  margin-bottom: 4rem;
+}
+.align-self {
+  align-self: center;
+}
+.center-text {
+  text-align: center;
+}
+.align-right {
+  margin-right: 0;
+}
+.orange {
+  background: $burnt-orange;
+}
+.word-label {
+  font-size: 2.8rem;
 }
 
 button {
@@ -115,20 +144,9 @@ button {
   }
   &.choose-word.sm-btn {
     display: block;
-    margin: 0 0 0 8px;
+    margin: 0 0 1.6rem .8rem;
     height: auto;
     padding: 8px 16px;
-  }
-  &.start-btn {
-    width: 40rem;
-    max-width: 100%;
-    box-sizing: border-box;
-    background: $burnt-orange;
-    font-size: 1.8rem;
-    height: 5rem;
-  }
-  &.start-btn.center {
-    align-self: center;
   }
 }
 
@@ -195,51 +213,6 @@ a {
   }
 }
 
-.word-list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-}
-
-.word-choice {
-  background: $white;
-  border: 1px solid $dark-blue;
-  display: block;
-  margin-bottom: .8rem;
-
-  @include tablet-below {
-    width: auto;
-    padding: 4px 8px;
-    margin: 0 .04rem .8rem 0;
-    word-break: break-word;
-  }
-
-  &.writing {
-    border-style: dashed;
-    border-radius: 8px;
-  }
-
-  .word {
-    color: $charcoal;
-    margin-bottom: 0;
-    font-size: 2.4rem;
-    font-family: $display-font;
-    @include tablet-below {
-      font-size: 1.6rem;
-    }
-    &.single-word {
-      text-align: center;
-      font-size: 4.8rem;
-      color: $sky-blue;
-    }
-  }
-  .definition {
-    font-weight: 300;
-    border: 1px dashed $dark-blue;
-  }
-}
-
 .notes {
   text-align: center;
   textarea {
@@ -284,9 +257,6 @@ a {
   display: flex;
   flex-direction: column;
   margin-bottom: 1.6rem;
-  button {
-    align-self: flex-end;
-  }
 }
 
 .pregame {
@@ -385,8 +355,11 @@ a {
       font-size: 2.4rem;
       align-self: start;
     }
-    button:first-child {
-      margin-right: 1.6rem;
+    button {
+      width: auto;
+      &:first-child {
+        margin-right: 1.6rem;
+      }
     }
     p {
       align-self: start;
@@ -398,6 +371,8 @@ a {
 }
 
 .player-submitted {
+  display: flex;
+  flex-direction: column;
   padding: 20px;
   border: 1px solid black;
   border-radius: 8px;
@@ -406,10 +381,6 @@ a {
 
   h3 {
     margin-top: 0;
-  }
-  p {
-    text-align: center;
-    margin-bottom: 0;
   }
 }
 
@@ -546,7 +517,7 @@ a {
 
 .submit-guesses {
   display: flex;
-  margin: 0 auto;
+  justify-content: center;
   background-color: $burnt-orange;
   margin-top: 4.8rem;
 }

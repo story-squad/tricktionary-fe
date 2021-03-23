@@ -114,7 +114,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
           <PlayerStepThree />
         </Expander>
         <h1>Welcome to Tricktionary!</h1>
-        <p className="instructions">
+        <p className="instructions bot-margin">
           Please enter your name and lobby code to join a game or you can host a
           new game.
         </p>
