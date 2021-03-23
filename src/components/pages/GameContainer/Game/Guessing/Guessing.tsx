@@ -94,7 +94,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
               the same numbered list AGAIN.
             </p>
             <div className="guess-word">
-              <h2 className="">The word is:</h2>
+              <h3 className="">The word is:</h3>
               <p className="word">{lobbyData.word}</p>
             </div>
             <div className="definitions">

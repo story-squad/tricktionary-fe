@@ -192,7 +192,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
           )}
         </div>
         <div className="guess-word">
-          <h3 className="word-label">Your Word:</h3>
+          <h3 className="word-label">The Word:</h3>
           <p className="word">{lobbyData.word}</p>
         </div>
         {!isSubmitted && !timerDone && (
