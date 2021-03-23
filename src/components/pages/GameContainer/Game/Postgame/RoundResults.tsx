@@ -4,47 +4,53 @@ import { DefinitionResult } from './DefinitionResult';
 
 export const RoundResults = (props: RoundResultsProps): React.ReactElement => {
   const { sortedDefinitions, showReactions } = props;
+  const noVotes = sortedDefinitions.filter(
+    (definition) => definition.points === 0 && definition.definitionId !== 0,
+  );
+  const gotVotes = sortedDefinitions.filter(
+    (definition) => definition.points > 0 && definition.definitionId !== 0,
+  );
+  const realDefinition = sortedDefinitions.filter(
+    (definition) => definition.definitionId === 0,
+  )[0];
 
   return (
     <div className="round-results">
-      <section>
-        <h3>Honorable Mentions</h3>
-        {sortedDefinitions
-          .filter((definition) => definition.points === 0)
-          .map((definitionResult, key) => (
+      {noVotes.length > 0 && (
+        <section>
+          <h3>Honorable Mentions</h3>
+          {noVotes.map((definitionResult, key) => (
             <DefinitionResult
               key={key}
               definitionResult={definitionResult}
               showReactions={showReactions}
             />
           ))}
-      </section>
-      <section>
-        <h3>The Ones Who Did a Bit Better</h3>
-        {sortedDefinitions
-          .filter(
-            (definition) =>
-              definition.points > 0 && definition.definitionId !== 0,
-          )
-          .map((definitionResult, key) => (
-            <DefinitionResult
-              key={key}
-              definitionResult={definitionResult}
-              showReactions={showReactions}
-            />
-          ))}
-      </section>
+        </section>
+      )}
+      {gotVotes.length > 0 && (
+        <section>
+          <h3>The Ones Who Earned Some Votes</h3>
+          {sortedDefinitions
+            .filter(
+              (definition) =>
+                definition.points > 0 && definition.definitionId !== 0,
+            )
+            .map((definitionResult, key) => (
+              <DefinitionResult
+                key={key}
+                definitionResult={definitionResult}
+                showReactions={showReactions}
+              />
+            ))}
+        </section>
+      )}
       <section>
         <h3>The Real Definition</h3>
-        {sortedDefinitions
-          .filter((definition) => definition.definitionId === 0)
-          .map((definitionResult, key) => (
-            <DefinitionResult
-              key={key}
-              definitionResult={definitionResult}
-              showReactions={showReactions}
-            />
-          ))}
+        <DefinitionResult
+          definitionResult={realDefinition}
+          showReactions={showReactions}
+        />
       </section>
     </div>
   );
