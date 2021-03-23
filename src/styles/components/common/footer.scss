@@ -46,7 +46,7 @@ footer {
       justify-content: space-evenly;
       text-align: center;
 
-      @include mid-below {
+      @include tablet-below {
         flex-direction: column;
       }
       input#ck-email {
@@ -58,7 +58,7 @@ footer {
         height: 3.2rem;
         padding: 0 16px 0 16px;
         margin: 0 0 0 8px;
-      @include mid-below {
+      @include tablet-below {
         margin-top: 8px;
       }
       }

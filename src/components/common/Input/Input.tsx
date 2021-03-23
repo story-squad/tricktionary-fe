@@ -26,7 +26,7 @@ const Input = ({
   };
   return (
     <div className={`form-input${errors[name] ? ' error' : ''}`}>
-      <label htmlFor={id}>{label} :</label>
+      <label htmlFor={id}>{label}</label>
       <div className="input-field">
         <input
           id={id}

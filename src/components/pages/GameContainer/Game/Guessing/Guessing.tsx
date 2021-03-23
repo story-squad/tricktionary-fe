@@ -93,7 +93,10 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
               and definition from the list below. Once you finish, read through
               the same numbered list AGAIN.
             </p>
-            <p className="word-display">{lobbyData.word}</p>
+            <div className="guess-word">
+              <h3 className="">The word is:</h3>
+              <p className="word">{lobbyData.word}</p>
+            </div>
             <div className="definitions">
               <h3>Definitions</h3>
               {definitions.map((definition: DefinitionItem, key: number) => (
@@ -122,7 +125,10 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
               Example: &quot;Number 3, the squishy remains of rotten
               fruit.&quot;
             </p>
-            <p className="word-display">{lobbyData.word}</p>
+            <div className="guess-word">
+              <h3 className="word-label">The word is:</h3>
+              <p className="word">{lobbyData.word}</p>
+            </div>
             <div className="guesses">
               <h3>Player Guesses</h3>
               <div className="voting-label">
@@ -167,7 +173,10 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         />
         <h2>It’s Time to Vote</h2>
         <PlayerStepTwo />
-        <p className="word-display">{lobbyData.word}</p>
+        <div className="guess-word">
+          <h3 className="word-label">The word is:</h3>
+          <p className="word">{lobbyData.word}</p>
+        </div>
         <div className="player-guess">
           <h3>Your guess:</h3>
           {playerGuess.key > 0 ? (
