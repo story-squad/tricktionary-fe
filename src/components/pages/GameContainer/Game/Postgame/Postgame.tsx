@@ -26,7 +26,7 @@ import { Modal } from '../../../../common/Modal';
 import { Player } from '../../../../common/Player';
 import { PlayerList } from '../../../../common/PlayerList';
 import { ProTip } from '../../../../common/ProTip';
-import { DefinitionResult } from './DefinitionResult';
+import { RoundResults } from './RoundResults';
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
   const {
@@ -113,15 +113,10 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
           <h3 className="word-label">The word is:</h3>
           <p className="word">{lobbyData.word}</p>
         </div>
-        <div className="round-results">
-          {sortedDefinitions.map((definitionResult, key) => (
-            <DefinitionResult
-              key={key}
-              definitionResult={definitionResult}
-              showReactions={lobbyData.phase === 'RESULTS'}
-            />
-          ))}
-        </div>
+        <RoundResults
+          sortedDefinitions={sortedDefinitions}
+          showReactions={lobbyData.phase === 'RESULTS'}
+        />
         <div className="endgame-container">
           {lobbyData.phase === 'POSTGAME' ? (
             // Before reveal
@@ -179,15 +174,10 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
               <h3 className="word-label">The word is:</h3>
               <p className="word">{lobbyData.word}</p>
             </div>
-            <div className="round-results">
-              {sortedDefinitions.map((definitionResult, key) => (
-                <DefinitionResult
-                  key={key}
-                  definitionResult={definitionResult}
-                  showReactions={true}
-                />
-              ))}
-            </div>
+            <RoundResults
+              sortedDefinitions={sortedDefinitions}
+              showReactions={true}
+            />
           </>
         )}
       </Player>
