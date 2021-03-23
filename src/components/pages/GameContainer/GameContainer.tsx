@@ -64,7 +64,9 @@ const GameContainer = (): React.ReactElement => {
   const [isKicking, setIsKicking] = useState(false);
   const [time, setTime] = useState(-1);
   const [error, setError] = useState('');
-  const [, setShowNewHostModal] = useRecoilState(showNewHostModalState);
+  const [showNewHostModal, setShowNewHostModal] = useRecoilState(
+    showNewHostModalState,
+  );
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
   const [, setHandleSendReactionFn] = useRecoilState(handleSendReactionFn);
   const [, setHandleSetHostFn] = useRecoilState(handleSetHostFn);
@@ -494,6 +496,7 @@ const GameContainer = (): React.ReactElement => {
   return (
     <div className="game-container">
       <Loader />
+      {/* Loader time-out */}
       <Modal
         header={'Sorry'}
         message={'There was a problem loading. Please try again.'}
@@ -501,6 +504,7 @@ const GameContainer = (): React.ReactElement => {
         visible={loading === 'failed'}
         zIndex={100}
       />
+      {/* Leaving the game via clicking the Header/logo */}
       <Modal
         header={'HEY!'}
         message={'Would you like to leave the current game?'}
@@ -518,12 +522,21 @@ const GameContainer = (): React.ReactElement => {
         customConfirmText={'Yes'}
         visible={Number(openTabs) > 1}
       />
+      {/* Lost connection or got kicked */}
       <Modal
         header={'Connection Lost'}
         message={'You lost connection to the game.'}
         handleConfirm={() => setShowKickedModal(false)}
         visible={showKickedModal}
       />
+      {/* You became the host */}
+      <Modal
+        header={'Host Changed'}
+        message={'You are now the Host.'}
+        visible={showNewHostModal}
+        handleConfirm={() => setShowNewHostModal(false)}
+      />
+      {/* Make the header clickable if not in the Lobby */}
       {lobbyData.phase === 'LOBBY' ? (
         <Header />
       ) : (
@@ -532,7 +545,9 @@ const GameContainer = (): React.ReactElement => {
           to={`/${lobbyData.lobbyCode}`}
         />
       )}
+      {/* Error display */}
       {error && <p className="outside-error">{error}</p>}
+      {/* Game component */}
       <div className="game-styles">{currentPhase()}</div>
     </div>
   );
