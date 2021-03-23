@@ -190,7 +190,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         {!isCustom && (
           <>
             <ProTip message={'Read the word before starting the game!'} />
-            <h2>Step 1: Choose a Word</h2>
+            <h1>Step 1: Choose a Word</h1>
             <HostStepOne />
             <div className="invite-code">
               <h3>Invite Code:</h3>
@@ -204,10 +204,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
               </div>
             </div>
             <div className="pick-word-instructions">
-              <p className="instructions">
+              <p className="instructions bot-margin">
                 Click on a word to see its definition.
               </p>
-              <button className="shuffle-btn sm-btn" onClick={handleGetWords}>
+              <button
+                className="shuffle-btn sm-btn auto-width"
+                onClick={handleGetWords}
+              >
                 Shuffle Words
               </button>
             </div>
@@ -280,7 +283,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         <div className="use-own-words">
           <p>Don&apos;t like our words?</p>
           <button
-            className="choose-word sm-btn"
+            className="choose-word sm-btn auto-width"
             onClick={() => setIsCustom(!isCustom)}
           >
             {isCustom ? 'Pick One of Our Words' : 'Bring Your Own Word'}
@@ -323,7 +326,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           <PlayerList />
         </div>
         <button
-          className="start-btn center"
+          className="center align-self orange"
           disabled={!allowedToStart()}
           onClick={() => setShowStartGameModal(true)}
         >
@@ -338,7 +341,10 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         <PlayerList />
         {!showEditName ? (
           <div className="edit-name-block">
-            <button className="sm-btn" onClick={() => setShowEditName(true)}>
+            <button
+              className="sm-btn auto-width"
+              onClick={() => setShowEditName(true)}
+            >
               Edit Name
             </button>
           </div>

@@ -47,7 +47,10 @@ const Timer = (props: TimerProps): React.ReactElement => {
         <p>Timer</p>
         <span className="time">{time}</span>{' '}
         {addTime && (
-          <button className="add-time center" onClick={() => addTime(time, 20)}>
+          <button
+            className="add-time center auto-width"
+            onClick={() => addTime(time, 20)}
+          >
             Add 20 seconds
           </button>
         )}

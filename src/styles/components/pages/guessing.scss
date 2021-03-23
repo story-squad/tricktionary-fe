@@ -13,7 +13,7 @@
   
       p {
         margin-bottom: 0;
-        @include mid-below {
+        @include tablet-below {
           text-align: left;
         }
         &:last-of-type {

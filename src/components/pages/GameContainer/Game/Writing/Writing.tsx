@@ -128,7 +128,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
           15, 10, and 5 seconds left
         </p>
         <div className="guess-word">
-          <h2 className="word-label">The word is:</h2>
+          <h3 className="word-label">The word is:</h3>
           <p className="word">{lobbyData.word}</p>
         </div>
         {useTimer && (
@@ -192,7 +192,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
           )}
         </div>
         <div className="guess-word">
-          <p className="word-label">Your Word:</p>
+          <h3 className="word-label">The Word:</h3>
           <p className="word">{lobbyData.word}</p>
         </div>
         {!isSubmitted && !timerDone && (
@@ -217,8 +217,10 @@ const Writing = (props: WritingProps): React.ReactElement => {
               />
               <CharCounter string={definition} max={MAX_DEFINITION_LENGTH} />
             </div>
-            <br />
-            <button disabled={!definitionIsValid(definition).valid}>
+            <button
+              className="align-right auto-width"
+              disabled={!definitionIsValid(definition).valid}
+            >
               Submit
             </button>
           </form>
@@ -226,7 +228,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
         {isSubmitted && (
           <div className="player-submitted">
             <h3>You submitted:</h3>
-            <p>{definition}</p>
+            <p className="center-text">{definition}</p>
             <TwitterButton
               message={`${lobbyData.word} means ${definition} ... or does it?`}
             />

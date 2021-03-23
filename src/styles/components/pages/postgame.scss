@@ -48,12 +48,12 @@
       border-top-left-radius: 8px;
       border-top-right-radius: 8px;
       padding: 1.6rem 1.6rem 1.6rem 1.6rem;
-      @include mid-below {
+      @include tablet-below {
         flex-direction: column-reverse;
         padding-bottom: 0;
       }
       .author-box {
-        @include mid-below {
+        @include tablet-below {
           margin-top: 8px;
           text-align: center;
         }
@@ -69,7 +69,7 @@
       font-family: $display-font;
       font-size: 3.2rem;
       margin-bottom: 8px;
-      @include mid-below {
+      @include tablet-below {
         font-size: 1.8rem;
       }
       &:last-child {
