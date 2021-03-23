@@ -217,7 +217,6 @@ const Writing = (props: WritingProps): React.ReactElement => {
               />
               <CharCounter string={definition} max={MAX_DEFINITION_LENGTH} />
             </div>
-            <br />
             <button disabled={!definitionIsValid(definition).valid}>
               Submit
             </button>

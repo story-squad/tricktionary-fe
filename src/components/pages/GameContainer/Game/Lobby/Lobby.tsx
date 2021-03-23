@@ -113,12 +113,11 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
           <h3>Step 3: Results</h3>
           <PlayerStepThree />
         </Expander>
-        <h2>Welcome to Tricktionary!</h2>
+        <h1>Welcome to Tricktionary!</h1>
         <p className="instructions">
           Please enter your name and lobby code to join a game or you can host a
           new game.
         </p>
-        <br />
         <form className="start-game">
           <div className="char-counter-wrapper">
             <Input

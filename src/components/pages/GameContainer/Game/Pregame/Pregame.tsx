@@ -190,7 +190,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         {!isCustom && (
           <>
             <ProTip message={'Read the word before starting the game!'} />
-            <h2>Step 1: Choose a Word</h2>
+            <h1>Step 1: Choose a Word</h1>
             <HostStepOne />
             <div className="invite-code">
               <h3>Invite Code:</h3>

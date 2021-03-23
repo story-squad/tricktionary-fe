@@ -1,7 +1,7 @@
 .lobby.game-page {
   padding-left: 12.5rem;
   padding-right: 12.5rem;
-  @include mid-below {
+  @include tablet-below {
     padding: 1.6rem 2.4rem;
   }
 }
@@ -19,6 +19,8 @@
   box-sizing: border-box;
   &:disabled {
     background-color: $lt-grey;
+    color: $white;
+    border: none;
   }
 }
 

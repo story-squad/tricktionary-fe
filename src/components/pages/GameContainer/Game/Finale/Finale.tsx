@@ -79,7 +79,6 @@ const Finale = (): React.ReactElement => {
         )}
       </div>
       <div className="podium">&nbsp;</div>
-      <br />
       <p className="feedback">
         {`We're still in beta-testing and we'd love to hear any ideas you have!`}{' '}
         <a

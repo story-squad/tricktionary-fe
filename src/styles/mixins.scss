@@ -31,8 +31,14 @@
   &:disabled,
   &.disabled {
     background-color: $lt-grey;
+    color: $font-color;
+    border: none;
     cursor: not-allowed;
   }
+}
+
+@mixin margin-bottom ($margin-bottom: 1.6rem) {
+  margin-bottom: $margin-bottom
 }
 
 @mixin mid-below {
