@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import React, { useEffect, useState } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
 import { useHistory } from 'react-router-dom';
@@ -24,7 +25,11 @@ import {
   LobbyData,
   PlayerItem,
 } from '../../../types/gameTypes';
-import { MAX_SECONDS, REACT_APP_API_URL } from '../../../utils/constants';
+import {
+  JWT_SECRET,
+  MAX_SECONDS,
+  REACT_APP_API_URL,
+} from '../../../utils/constants';
 import {
   addReaction,
   errorCodeChecker,
@@ -110,14 +115,21 @@ const GameContainer = (): React.ReactElement => {
     }
   }, [lobbyData]);
 
+  // When app unloads, decrement tab count
   useBeforeunload(() => {
     setOpenTabs(Number(openTabs) - 1);
   });
 
   useEffect(() => {
     /* onMount */
-    // Get token from localStorage if it exists, log in
-    handleLogin();
+    // Log in with a valid token, or get a new token if needed
+    try {
+      jwt.verify(token, JWT_SECRET);
+      handleLogin();
+    } catch (err) {
+      console.log(err, 'getting new token');
+      handleLogin(true);
+    }
     refreshOpenTabs();
 
     // Keep track of the number of tabs players are using
