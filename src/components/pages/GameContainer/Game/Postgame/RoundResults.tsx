@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
 import { DefinitionResultItem } from '../../../../../types/gameTypes';
+import { splitSortedDefinitions } from '../../../../../utils/helpers';
 import { DefinitionResult } from './DefinitionResult';
 
 export const RoundResults = (props: RoundResultsProps): React.ReactElement => {
   const { sortedDefinitions, showReactions } = props;
   const [showNoVotes, setShowNoVotes] = useState(false);
-  const noVotes = sortedDefinitions.filter(
-    (definition) => definition.points === 0 && definition.definitionId !== 0,
+  const [noVotes, gotVotes, realDefinition] = splitSortedDefinitions(
+    sortedDefinitions,
   );
-  const gotVotes = sortedDefinitions.filter(
-    (definition) => definition.points > 0 && definition.definitionId !== 0,
-  );
-  const realDefinition = sortedDefinitions.filter(
-    (definition) => definition.definitionId === 0,
-  )[0];
 
   return (
     <div className="round-results">

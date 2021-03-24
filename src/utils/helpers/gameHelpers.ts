@@ -343,3 +343,21 @@ export const isGhostPlayer = (
   }
   return isGhost;
 };
+
+export const splitSortedDefinitions = (
+  sortedDefinitions: DefinitionResultItem[],
+): [DefinitionResultItem[], DefinitionResultItem[], DefinitionResultItem] => {
+  const filteredDefinitions = sortedDefinitions.filter(
+    (definition) => definition.definition.trim() !== '',
+  );
+  const noVotes = filteredDefinitions.filter(
+    (definition) => definition.points === 0 && definition.definitionId !== 0,
+  );
+  const gotVotes = filteredDefinitions.filter(
+    (definition) => definition.points > 0 && definition.definitionId !== 0,
+  );
+  const realDefinition = filteredDefinitions.filter(
+    (definition) => definition.definitionId === 0,
+  )[0];
+  return [noVotes, gotVotes, realDefinition];
+};
