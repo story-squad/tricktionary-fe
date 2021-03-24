@@ -88,7 +88,7 @@ const GameContainer = (): React.ReactElement => {
     resetPlayerGuess();
     setGuesses([]);
     socket.disconnect();
-    setToken('');
+    setToken(undefined);
     handleLogin(true);
     setShowLeaveModal(false);
   };
@@ -296,7 +296,7 @@ const GameContainer = (): React.ReactElement => {
 
   /* Socket event emitters */
   const handleLogin = (newToken = false) => {
-    socket.emit('login', newToken ? '' : token);
+    socket.emit('login', newToken ? undefined : token);
   };
 
   // Create game as Host
