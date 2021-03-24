@@ -23,7 +23,7 @@ const Finale = (): React.ReactElement => {
         {topPlayers.second.username !== undefined && (
           <div className="stack second-place-stack">
             <div className="def-card second-def-card">
-              {topPlayers.second.definition !== undefined ? (
+              {topPlayers.second.definition !== '' ? (
                 <p>
                   {topPlayers.second.word} does not mean:{' '}
                   {topPlayers.second.definition}
@@ -42,7 +42,7 @@ const Finale = (): React.ReactElement => {
         {topPlayers.first.username !== undefined && (
           <div className="stack first-place-stack">
             <div className="def-card first-def-card">
-              {topPlayers.first.definition !== undefined ? (
+              {topPlayers.first.definition !== '' ? (
                 <p>
                   {topPlayers.first.word} does not mean:{' '}
                   {topPlayers.first.definition}
@@ -61,7 +61,7 @@ const Finale = (): React.ReactElement => {
         {topPlayers.third.username !== undefined && (
           <div className="stack third-place-stack">
             <div className="def-card third-def-card">
-              {topPlayers.third.definition !== undefined ? (
+              {topPlayers.third.definition !== '' ? (
                 <p>
                   {topPlayers.third.word} does not mean:{' '}
                   {topPlayers.third.definition}
