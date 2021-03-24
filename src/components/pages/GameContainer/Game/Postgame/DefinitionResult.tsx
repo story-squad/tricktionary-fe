@@ -18,7 +18,7 @@ export const DefinitionResult = (
   return (
     <>
       {definition !== '' && (
-        // Player submitted a definition
+        // show if Player submitted a definition
         <div className="definition-result">
           <div className="vote-align">
             <div className="author-box">
