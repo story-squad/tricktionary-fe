@@ -46,3 +46,6 @@ export const REACTION_IDS = process.env.REACT_APP_REACTION_IDS || '[8, 13, 42]';
 // Time until Loader closes in milliseconds
 export const MAX_LOADING_TIME =
   Number(process.env.REACT_APP_MAX_LOADING_TIME) || 8000;
+
+/* SECRETS, don't add default value */
+export const JWT_SECRET = process.env.REACT_APP_JWT_SECRET || '';
