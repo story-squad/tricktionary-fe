@@ -30,16 +30,18 @@ export const DefinitionResult = (
             </p>
           </div>
           <p className="result-definition">{definition}</p>
-          <p className="who-voted-p">
-            {guesses.length > 0 ? 'Who voted:' : 'No votes'}
-          </p>
-          <div className="who-voted-box">
-            {guesses.map((guess, key) => (
-              <div key={key} className="guess-names">
-                <p className="who-voted">{guess}</p>
+          {guesses.length > 0 && (
+            <>
+              <p className="who-voted-p">Who voted:</p>
+              <div className="who-voted-box">
+                {guesses.map((guess, key) => (
+                  <div key={key} className="guess-names">
+                    <p className="who-voted">{guess}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
           {showReactions && definitionId !== 0 && (
             <ReactionPicker definitionId={definitionId} playerId={playerId} />
           )}
