@@ -1,11 +1,11 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import { handleSendReactionFn } from '../../../state/functionState';
 import {
   availableReactionsState,
   definitionReactionsState,
-  handleSendReactionFn,
   playerIdState,
-} from '../../../state';
+} from '../../../state/gameState';
 import { getReactionCount } from '../../../utils/helpers';
 
 const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {

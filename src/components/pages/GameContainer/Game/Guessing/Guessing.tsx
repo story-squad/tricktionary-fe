@@ -5,7 +5,7 @@ import {
   loadingState,
   lobbyState,
   playerGuessState,
-} from '../../../../../state';
+} from '../../../../../state/gameState';
 import {
   DefinitionItem,
   DefinitionSelection,

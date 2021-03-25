@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useLocalStorage } from '../../../hooks';
-import { loadingState, lobbyState, playerIdState } from '../../../state';
-import { handleSetHostFn } from '../../../state/handleSetHostFn';
+import { handleSetHostFn } from '../../../state/functionState';
+import {
+  loadingState,
+  lobbyState,
+  playerIdState,
+} from '../../../state/gameState';
 import { GuessItem } from '../../../types/gameTypes';
 import { initialGuesses } from '../../../utils/localStorageInitialValues';
 

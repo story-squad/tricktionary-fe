@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { loadingState } from '../../../state';
+import { loadingState } from '../../../state/gameState';
 import { MAX_LOADING_TIME } from '../../../utils/constants';
 
 const Loader = (): React.ReactElement => {

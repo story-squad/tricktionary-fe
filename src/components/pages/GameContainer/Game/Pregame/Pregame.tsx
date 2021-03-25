@@ -11,7 +11,7 @@ import {
   lobbySettingsState,
   lobbyState,
   revealResultsState,
-} from '../../../../../state';
+} from '../../../../../state/gameState';
 import { WordItem } from '../../../../../types/gameTypes';
 import {
   MAX_CUSTOM_WORD_LENGTH,

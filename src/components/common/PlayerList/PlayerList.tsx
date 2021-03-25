@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { lobbyState, playerIdState } from '../../../state';
+import { lobbyState, playerIdState } from '../../../state/gameState';
 import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
 import { isValidPlayer } from '../../../utils/helpers';
 

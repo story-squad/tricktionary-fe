@@ -6,8 +6,11 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
 import { useLocalStorage } from '../../../hooks';
 import {
-  definitionReactionsState,
   handleSendReactionFn,
+  handleSetHostFn,
+} from '../../../state/functionState';
+import {
+  definitionReactionsState,
   hostChoiceState,
   loadingState,
   lobbyCodeState,
@@ -15,9 +18,7 @@ import {
   lobbyState,
   playerGuessState,
   playerIdState,
-  showNewHostModalState,
-} from '../../../state';
-import { handleSetHostFn } from '../../../state/handleSetHostFn';
+} from '../../../state/gameState';
 import {
   DefinitionSelection,
   GetReactionsItem,
@@ -65,11 +66,9 @@ const GameContainer = (): React.ReactElement => {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showKickedModal, setShowKickedModal] = useState(false);
   const [isKicking, setIsKicking] = useState(false);
+  const [showNewHostModal, setShowNewHostModal] = useState(false);
   const [time, setTime] = useState(-1);
   const [error, setError] = useState('');
-  const [showNewHostModal, setShowNewHostModal] = useRecoilState(
-    showNewHostModalState,
-  );
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
   const [, setHandleSendReactionFn] = useRecoilState(handleSendReactionFn);
   const [, setHandleSetHostFn] = useRecoilState(handleSetHostFn);

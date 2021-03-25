@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import finaleBanner from '../../../../../assets/finaleBanner.png';
-import { lobbyState } from '../../../../../state';
+import { lobbyState } from '../../../../../state/gameState';
 import {
   getFinaleNoDefinitionText,
   getTopPlayers,

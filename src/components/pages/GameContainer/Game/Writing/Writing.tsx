@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
-import { loadingState, lobbyState, playerIdState } from '../../../../../state';
+import {
+  loadingState,
+  lobbyState,
+  playerIdState,
+} from '../../../../../state/gameState';
 import {
   MAX_DEFINITION_LENGTH,
   MAX_SECONDS,

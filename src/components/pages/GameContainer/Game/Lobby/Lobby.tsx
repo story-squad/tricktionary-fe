@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { useLocalStorage } from '../../../../../hooks';
-import { loadingState } from '../../../../../state';
+import { loadingState } from '../../../../../state/gameState';
 import { DecodedToken } from '../../../../../types/commonTypes';
 import { MAX_USERNAME_LENGTH } from '../../../../../utils/constants';
 import { initialToken } from '../../../../../utils/localStorageInitialValues';
