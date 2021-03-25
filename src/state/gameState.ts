@@ -111,3 +111,8 @@ export const timerState = atom<Timer>({
     currentTime: -1,
   },
 });
+
+export const canSendReactionState = atom<boolean>({
+  key: 'canSendReactionState',
+  default: true,
+});
