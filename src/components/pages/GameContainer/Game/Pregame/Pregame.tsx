@@ -190,12 +190,12 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       <Host>
         {/* Suggested words selection */}
         {!isCustom && (
-          <>
+          <section>
             <ProTip message={'Read the word before starting the game!'} />
             <h1>Step 1: Choose a Word</h1>
             <HostStepOne />
             <div className="invite-code">
-              <h3>Invite Code:</h3>
+              <p>Invite Code:</p>
               <p className="room-code">{lobbyData.lobbyCode}</p>
               <div className="copy-to-clipboard">
                 <CopyToClipboard
@@ -226,23 +226,23 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 />
               ))}
             </div>
-          </>
-        )}
-        {/* Selected word information */}
-        {!isCustom && getCurrentWord() && (
-          <div className="word-block">
-            <div className="word-definition">
-              <p className="sm-word">Word:</p>
-              <p className="word">{getCurrentWord()?.word}</p>
-              <p className="sm-word">Definition:</p>
-              <p className="definition">{getCurrentWord()?.definition}</p>
-            </div>
-          </div>
+            {/* Selected word information */}
+            {getCurrentWord() && (
+              <div className="word-block">
+                <div className="word-definition">
+                  <p className="sm-word">Word:</p>
+                  <p className="word">{getCurrentWord()?.word}</p>
+                  <p className="sm-word">Definition:</p>
+                  <p className="definition">{getCurrentWord()?.definition}</p>
+                </div>
+              </div>
+            )}
+          </section>
         )}
         {/* Custom word form */}
         {isCustom && (
-          <>
-            <h2>Step 1: Bring Your Own Word</h2>
+          <section>
+            <h1>Step 1: Bring Your Own Word</h1>
             <HostStepOneA />
             <div className="invite-code">
               <h3>Invite Code:</h3>
@@ -280,7 +280,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 </div>
               </div>
             </div>
-          </>
+          </section>
         )}
         <div className="use-own-words">
           <p>Don&apos;t like our words?</p>
@@ -291,7 +291,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             {isCustom ? 'Pick One of Our Words' : 'Bring Your Own Word'}
           </button>
         </div>
-        <div className="timer-container">
+        <section className="timer-container">
           <h3 className="timer-title">Step 2: Set A Timer</h3>
           <p className="timer-directions">
             This timer is to deterimine how long players have to type.
@@ -319,14 +319,14 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             />
             <p>Play with timer</p>
           </div>
-        </div>
-        <div className="start-instructions">
+        </section>
+        <section className="start-instructions">
           <h2>Important!</h2>
           <p className="instructions">
             Wait for all players to enter the Lobby before starting.
           </p>
           <PlayerList />
-        </div>
+        </section>
         <button
           className="center align-self orange"
           disabled={!allowedToStart()}

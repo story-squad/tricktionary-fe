@@ -7,7 +7,7 @@ const Expander = (props: ExpanderProps): React.ReactElement => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="expander">
+    <section className="expander">
       <button
         className="expander-header"
         onClick={() => setIsExpanded(!isExpanded)}
@@ -25,7 +25,7 @@ const Expander = (props: ExpanderProps): React.ReactElement => {
           </button>
         </section>
       )}
-    </div>
+    </section>
   );
 };
 
