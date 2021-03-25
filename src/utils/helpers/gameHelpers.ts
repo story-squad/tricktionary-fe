@@ -273,38 +273,29 @@ export const getReactionCount = (
 
 // Update reactions (emoji smash) on refreshing the page with current totals from API
 export const updateReactionCounts = (
-  reactions: ReactionsDictionary,
+  prevReactions: ReactionsDictionary,
   reactionsList: GetReactionsItem[],
 ): ReactionsDictionary => {
   try {
-    const newReactions: ReactionsDictionary = {};
-    // Create mutable ReactionsDictionary from reactions
-    for (const definition in reactions) {
+    const newReactions: any = {};
+    for (const definition in prevReactions) {
       if (!newReactions.hasOwnProperty(definition)) {
         newReactions[definition] = {};
       }
-      for (const reaction in reactions[definition]) {
-        newReactions[definition][reaction] = reactions[definition][reaction];
+      for (const reaction in definition as any) {
+        if (!newReactions[definition].hasOwnProperty(reaction)) {
+          newReactions[definition][reaction] = 0;
+        }
       }
     }
-    console.log(newReactions);
-    // Add reaction counts from API request
     reactionsList.forEach((reaction) => {
-      if (
-        reactions.hasOwnProperty(reaction.definition_id) &&
-        reactions[reaction.definition_id].hasOwnProperty(
-          reaction.reaction_id,
-        ) &&
-        reactions[reaction.definition_id][reaction.reaction_id] < reaction.value
-      ) {
-        newReactions[reaction.definition_id][reaction.reaction_id] =
-          reaction.value;
-      }
+      newReactions[reaction.definition_id][reaction.reaction_id] =
+        reaction.count;
     });
     return newReactions;
   } catch (err) {
     console.log(err);
-    return reactions;
+    return prevReactions;
   }
 };
 
