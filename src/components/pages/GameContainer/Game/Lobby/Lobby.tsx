@@ -12,9 +12,13 @@ import {
   lobbyCodeIsValid,
   usernameIsValid,
 } from '../../../../../utils/validation';
-import { CharCounter } from '../../../../common/CharCounter';
-import { Expander } from '../../../../common/Expander';
-import { Input } from '../../../../common/Input';
+import {
+  CharCounter,
+  Expander,
+  Input,
+  ProTip,
+  PublicGames,
+} from '../../../../common';
 import {
   HostStepOne,
   HostStepThree,
@@ -23,8 +27,6 @@ import {
   PlayerStepThree,
   PlayerStepTwo,
 } from '../../../../common/Instructions';
-import { ProTip } from '../../../../common/ProTip';
-import { PublicGames } from '../../../../common/PublicGames';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();

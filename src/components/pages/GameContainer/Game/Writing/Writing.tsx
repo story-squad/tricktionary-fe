@@ -7,15 +7,17 @@ import {
   MAX_SECONDS,
 } from '../../../../../utils/constants';
 import { definitionIsValid } from '../../../../../utils/validation';
-import { CharCounter } from '../../../../common/CharCounter';
-import { Host } from '../../../../common/Host';
-import { Input } from '../../../../common/Input';
-import { Modal } from '../../../../common/Modal';
-import { Player } from '../../../../common/Player';
-import { PlayerList } from '../../../../common/PlayerList';
-import { ProTip } from '../../../../common/ProTip';
-import Timer from '../../../../common/Timer/Timer';
-import { TwitterButton } from '../../../../common/TwitterButton';
+import {
+  CharCounter,
+  Host,
+  Input,
+  Modal,
+  Player,
+  PlayerList,
+  ProTip,
+  Timer,
+  TwitterButton,
+} from '../../../../common';
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const { handleSyncTimer, time, setTime } = props;

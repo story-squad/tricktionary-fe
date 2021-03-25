@@ -6,7 +6,7 @@ import {
   getFinaleNoDefinitionText,
   getTopPlayers,
 } from '../../../../../utils/helpers';
-import { ProTip } from '../../../../common/ProTip';
+import { ProTip } from '../../../../common';
 
 const Finale = (): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);

@@ -20,10 +20,7 @@ import {
 } from '../../../../../utils/helpers';
 import { getSelectedReactions } from '../../../../../utils/helpers/apiHelpers';
 import { initialToken } from '../../../../../utils/localStorageInitialValues';
-import { Host } from '../../../../common/Host';
-import { Player } from '../../../../common/Player';
-import { PlayerList } from '../../../../common/PlayerList';
-import { ProTip } from '../../../../common/ProTip';
+import { Host, Player, PlayerList, ProTip } from '../../../../common';
 import { RoundResults } from './RoundResults';
 
 const Postgame = (props: PostgameProps): React.ReactElement => {

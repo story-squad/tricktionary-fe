@@ -41,9 +41,7 @@ import {
   initialToken,
   randomUsername,
 } from '../../../utils/localStorageInitialValues';
-import { Header } from '../../common/Header';
-import { Loader } from '../../common/Loader';
-import { Modal } from '../../common/Modal';
+import { Header, Loader, Modal } from '../../common';
 import { Finale, Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
 // Create a socket connection to API

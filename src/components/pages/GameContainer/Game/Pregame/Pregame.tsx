@@ -22,19 +22,21 @@ import {
 import { hasMinimumPlayers } from '../../../../../utils/helpers';
 import { initialGuesses } from '../../../../../utils/localStorageInitialValues';
 import { usernameIsValid } from '../../../../../utils/validation';
-import { CharCounter } from '../../../../common/CharCounter';
-import { Host } from '../../../../common/Host';
-import { Input } from '../../../../common/Input';
+import {
+  CharCounter,
+  Host,
+  Input,
+  Modal,
+  Player,
+  PlayerList,
+  ProTip,
+  SetHost,
+} from '../../../../common';
 import {
   HostStepOne,
   HostStepOneA,
   PlayerStepOne,
 } from '../../../../common/Instructions';
-import { Modal } from '../../../../common/Modal';
-import { Player } from '../../../../common/Player';
-import { PlayerList } from '../../../../common/PlayerList';
-import { ProTip } from '../../../../common/ProTip';
-import { SetHost } from '../../../../common/SetHost';
 import { WordChoice } from './WordChoice';
 
 const initialChoiceValue = 0;

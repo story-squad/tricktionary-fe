@@ -18,13 +18,15 @@ import {
   recalculateGuessesWithConnected,
 } from '../../../../../utils/helpers';
 import { getGuessesWithConnected } from '../../../../../utils/localStorageInitialValues';
-import { CharCounter } from '../../../../common/CharCounter';
-import { Host } from '../../../../common/Host';
+import {
+  CharCounter,
+  Host,
+  Modal,
+  Player,
+  PlayerList,
+  ProTip,
+} from '../../../../common';
 import { PlayerStepTwo } from '../../../../common/Instructions';
-import { Modal } from '../../../../common/Modal';
-import { Player } from '../../../../common/Player';
-import { PlayerList } from '../../../../common/PlayerList';
-import { ProTip } from '../../../../common/ProTip';
 import { Guess } from './Guess';
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
