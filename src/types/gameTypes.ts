@@ -130,7 +130,7 @@ export interface DefinitionDictionary {
 }
 
 export interface GetReactionsItem {
-  value: number;
+  count: number;
   definition_id: number;
   reaction_id: number;
 }
