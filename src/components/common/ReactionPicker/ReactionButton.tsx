@@ -1,18 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { handleSendReactionFn } from '../../../state/functionState';
+import { canSendReactionState } from '../../../state/gameState';
 
 export const ReactionButton = (
   props: ReactionButtonProps,
 ): React.ReactElement => {
   const handleSendReaction = useRecoilValue(handleSendReactionFn);
-  const thisButton = useRef<HTMLButtonElement>(null);
-  const [canClick, setCanClick] = useState(true);
+  const [canClick, setCanClick] = useRecoilState(canSendReactionState);
 
   const handleClick = () => {
     if (canClick) {
       handleSendReaction(props.definitionId, props.reactionId);
-      thisButton?.current?.blur();
       setCanClick(false);
     }
   };
@@ -29,7 +28,6 @@ export const ReactionButton = (
   return (
     <button
       className="reaction-btn"
-      ref={thisButton}
       onClick={handleClick}
       disabled={props.disabled}
     >
