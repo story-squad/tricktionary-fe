@@ -337,45 +337,52 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         <SetHost />
       </Host>
       <Player>
-        <ProTip message={'This is your chance to let your creativity shine!'} />
-        <h2>The Lobby is filling up...</h2>
-        <PlayerStepOne />
-        <PlayerList />
-        {!showEditName ? (
-          <div className="edit-name-block">
-            <button
-              className="sm-btn auto-width"
-              onClick={() => setShowEditName(true)}
-            >
-              Edit Name
-            </button>
-          </div>
-        ) : (
-          <form className="edit-name-form">
-            {errors.form && (
-              <p className="short error">{errors.form.message}</p>
-            )}
-            <div className="char-counter-wrapper higher">
-              <Input
-                id="username"
-                name="username"
-                value={props.username}
-                label="Edit Name"
-                register={register}
-                onChange={handleChangeUsername}
-                autoFocus={true}
-                maxLength={MAX_USERNAME_LENGTH}
-              />
-              <CharCounter string={props.username} max={MAX_USERNAME_LENGTH} />
+        <section>
+          <ProTip
+            message={'This is your chance to let your creativity shine!'}
+          />
+          <h1>The Lobby is filling up...</h1>
+          <PlayerStepOne />
+          <PlayerList />
+          {!showEditName ? (
+            <div className="edit-name-block">
+              <button
+                className="sm-btn auto-width"
+                onClick={() => setShowEditName(true)}
+              >
+                Edit Name
+              </button>
             </div>
-            <button
-              disabled={!usernameIsValid(props.username).valid}
-              onClick={handleSubmitUsername}
-            >
-              Confirm
-            </button>
-          </form>
-        )}
+          ) : (
+            <form className="edit-name-form">
+              {errors.form && (
+                <p className="short error">{errors.form.message}</p>
+              )}
+              <div className="char-counter-wrapper higher">
+                <Input
+                  id="username"
+                  name="username"
+                  value={props.username}
+                  label="Edit Name"
+                  register={register}
+                  onChange={handleChangeUsername}
+                  autoFocus={true}
+                  maxLength={MAX_USERNAME_LENGTH}
+                />
+                <CharCounter
+                  string={props.username}
+                  max={MAX_USERNAME_LENGTH}
+                />
+              </div>
+              <button
+                disabled={!usernameIsValid(props.username).valid}
+                onClick={handleSubmitUsername}
+              >
+                Confirm
+              </button>
+            </form>
+          )}
+        </section>
       </Player>
     </div>
   );
