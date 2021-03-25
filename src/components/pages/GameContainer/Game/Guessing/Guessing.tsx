@@ -79,7 +79,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   };
 
   return (
-    <div className="guessing game-page">
+    <section className="guessing game-page">
       <Host>
         <ProTip
           message={
@@ -89,7 +89,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         {!showGuesses ? (
           // Showing definitions
           <>
-            <h2>Read Each Number and Its Definition</h2>
+            <h1>Read Each Number and Its Definition</h1>
             <p className="instructions">
               The contestants have submitted their trick definitions. Now you
               need to summon your best gameshow host voice and read the number
@@ -118,7 +118,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         ) : (
           // Showing votes
           <>
-            <h2>It’s Time to Vote!</h2>
+            <h1>It’s Time to Vote!</h1>
             <p className="instructions">
               Call on each contestant and ask for the number of their vote.
               Input their selection and confirm by reading the definition aloud.
@@ -168,7 +168,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         <ProTip
           message={'Listen for the definition that strikes your fancy!'}
         />
-        <h2>It’s Time to Vote</h2>
+        <h1>It’s Time to Vote</h1>
         <PlayerStepTwo />
         <Word word={lobbyData.word} />
         <div className="player-guess">
@@ -198,7 +198,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         </div>
       </Player>
       <PlayerList />
-    </div>
+    </section>
   );
 };
 

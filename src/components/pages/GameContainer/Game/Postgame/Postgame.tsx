@@ -84,8 +84,8 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   }, [lobbyData]);
 
   return (
-    <div className="postgame game-page">
-      <h2>It’s Time for the Results!</h2>
+    <section className="postgame game-page">
+      <h1>It’s Time for the Results!</h1>
       <Host>
         <ProTip
           message={`Reading the definition each player votes for makes the 
@@ -159,7 +159,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         )}
       </Player>
       <PlayerList hidePoints={lobbyData.phase === 'POSTGAME'} />
-    </div>
+    </section>
   );
 };
 
