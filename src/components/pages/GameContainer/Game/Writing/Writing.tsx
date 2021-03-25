@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
-import { loadingState, lobbyState, playerIdState } from '../../../../../state';
+import {
+  loadingState,
+  lobbyState,
+  playerIdState,
+} from '../../../../../state/gameState';
 import {
   MAX_DEFINITION_LENGTH,
   MAX_SECONDS,
 } from '../../../../../utils/constants';
 import { definitionIsValid } from '../../../../../utils/validation';
-import { CharCounter } from '../../../../common/CharCounter';
-import { Host } from '../../../../common/Host';
-import { Input } from '../../../../common/Input';
-import { Modal } from '../../../../common/Modal';
-import { Player } from '../../../../common/Player';
-import { PlayerList } from '../../../../common/PlayerList';
-import { ProTip } from '../../../../common/ProTip';
-import Timer from '../../../../common/Timer/Timer';
-import { TwitterButton } from '../../../../common/TwitterButton';
+import {
+  CharCounter,
+  Host,
+  Input,
+  Modal,
+  Player,
+  PlayerList,
+  ProTip,
+  Timer,
+  TwitterButton,
+  Word,
+} from '../../../../common';
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const { handleSyncTimer, time, setTime } = props;
@@ -115,22 +122,19 @@ const Writing = (props: WritingProps): React.ReactElement => {
   };
 
   return (
-    <div className="writing game-page">
+    <section className="writing game-page">
       <Host>
         <ProTip
           message={
             'Encourage players by saying “First Thought = Best Thought!”'
           }
         />
-        <h2>Players are writing their definitions...</h2>
+        <h1>Players are writing their definitions...</h1>
         <p className="instructions">
           If you’re playing with a timer, warn your players when they have 30,
           15, 10, and 5 seconds left
         </p>
-        <div className="guess-word">
-          <h3 className="word-label">The word is:</h3>
-          <p className="word">{lobbyData.word}</p>
-        </div>
+        <Word word={lobbyData.word} />
         {useTimer && (
           <Timer
             time={time}
@@ -169,7 +173,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
             'Struggling to come up with a definition? Remember, when all else fails: First Thought = Best Thought'
           }
         />
-        <h2>It&apos;s Time to Get Creative!</h2>
+        <h1>It&apos;s Time to Get Creative!</h1>
         <p>
           When the game starts,{' '}
           <strong>
@@ -191,10 +195,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
             <p className="times-up">Time&apos;s up!</p>
           )}
         </div>
-        <div className="guess-word">
-          <h3 className="word-label">The Word:</h3>
-          <p className="word">{lobbyData.word}</p>
-        </div>
+        <Word word={lobbyData.word} />
         {!isSubmitted && !timerDone && (
           <form
             className="submit-definition"
@@ -236,7 +237,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
         )}
         <PlayerList />
       </Player>
-    </div>
+    </section>
   );
 };
 

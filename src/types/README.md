@@ -2,7 +2,7 @@
 
 ## Common and state types/interfaces
 
-Any types/interfaces that will be required throughout the app should be placed in the types folder in their respective xyzTypes.ts file and exported/imported.
+Any types/interfaces that will be required throughout the app should be placed in the types folder in their respective xyzTypes.ts file and exported individually.
 
 ## Component props
 

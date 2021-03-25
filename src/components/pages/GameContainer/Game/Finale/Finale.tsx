@@ -1,24 +1,30 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import finaleBanner from '../../../../../assets/finaleBanner.png';
-import { lobbyState } from '../../../../../state';
+import { lobbyState } from '../../../../../state/gameState';
 import {
   getFinaleNoDefinitionText,
   getTopPlayers,
 } from '../../../../../utils/helpers';
-import { ProTip } from '../../../../common/ProTip';
+import { ProTip } from '../../../../common';
 
 const Finale = (): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
   const [topPlayers] = useState(getTopPlayers(lobbyData));
 
   return (
-    <div className="finale game-page">
+    <section className="finale game-page">
       <ProTip
         message={'Much like statistics, 99% of these definitions are made up'}
       />
       {console.log(topPlayers)}
-      <img className="finale-banner" src={finaleBanner} />
+      <img
+        className="finale-banner"
+        src={finaleBanner}
+        alt="It's Time to Crown a Champion!"
+        role="heading"
+        aria-level={1}
+      />
       <div className="place-bars">
         {topPlayers.second.username !== undefined && (
           <div className="stack second-place-stack">
@@ -80,17 +86,17 @@ const Finale = (): React.ReactElement => {
       </div>
       <div className="podium">&nbsp;</div>
       <p className="feedback">
-        {`We're still in beta-testing and we'd love to hear any ideas you have!`}{' '}
-        <a
-          target="_blank"
-          href="https://forms.gle/Nj3kMpKQpWZU9gxq7"
-          rel="noreferrer"
-        >
-          {' '}
-          <h3>Feedback Form</h3>
-        </a>
+        We&apos;re still in beta-testing and we&apos;d love to hear any ideas
+        you have!
       </p>
-    </div>
+      <a
+        target="_blank"
+        href="https://forms.gle/Nj3kMpKQpWZU9gxq7"
+        rel="noreferrer"
+      >
+        Feedback Form
+      </a>
+    </section>
   );
 };
 

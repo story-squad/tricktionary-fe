@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { lobbyState } from '../../../../../state';
+import { lobbyState } from '../../../../../state/gameState';
 import {
   DefinitionItem,
   DefinitionSelection,
