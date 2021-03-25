@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { handleSendReactionFn } from '../../../state/functionState';
 
@@ -7,12 +7,24 @@ export const ReactionButton = (
 ): React.ReactElement => {
   const handleSendReaction = useRecoilValue(handleSendReactionFn);
   const thisButton = useRef<HTMLButtonElement>(null);
+  const [canClick, setCanClick] = useState(true);
 
   const handleClick = () => {
-    handleSendReaction(props.definitionId, props.reactionId);
-    console.log(thisButton?.current);
-    thisButton?.current?.blur();
+    if (canClick) {
+      handleSendReaction(props.definitionId, props.reactionId);
+      thisButton?.current?.blur();
+      setCanClick(false);
+    }
   };
+
+  // Time-out button clicks to prevent clicking macros from running wild
+  useEffect(() => {
+    if (!canClick) {
+      setTimeout(() => {
+        setCanClick(true);
+      }, 100);
+    }
+  }, [canClick]);
 
   return (
     <button
