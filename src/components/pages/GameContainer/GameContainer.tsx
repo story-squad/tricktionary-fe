@@ -10,6 +10,7 @@ import {
   handleSetHostFn,
 } from '../../../state/functionState';
 import {
+  allowUrlJoinState,
   definitionReactionsState,
   hostChoiceState,
   loadingState,
@@ -67,6 +68,7 @@ const GameContainer = (): React.ReactElement => {
   const [showKickedModal, setShowKickedModal] = useState(false);
   const [isKicking, setIsKicking] = useState(false);
   const [showNewHostModal, setShowNewHostModal] = useState(false);
+  const [, setAllowUrlJoin] = useRecoilState(allowUrlJoinState);
   const [time, setTime] = useState(-1);
   const [error, setError] = useState('');
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
@@ -237,6 +239,7 @@ const GameContainer = (): React.ReactElement => {
     // Get API token
     socket.on('token update', (newToken: string) => {
       setToken(newToken);
+      setAllowUrlJoin(true);
     });
 
     // Receive your guess from the Host
@@ -268,7 +271,8 @@ const GameContainer = (): React.ReactElement => {
 
     // After a disconnection occurs, refresh the game on reconnection
     socket.on('pulse check', () => {
-      handleLogin();
+      // further testing to see if needed (DELETE?)
+      // handleLogin();
     });
 
     // Update reactions when other Player clicks a reaction on RESULTS phase
@@ -292,6 +296,11 @@ const GameContainer = (): React.ReactElement => {
 
   /* Socket event emitters */
   const handleLogin = (newToken = false) => {
+    if (newToken) {
+      console.log('attempting request new token');
+    } else {
+      console.log('attempting login');
+    }
     socket.emit('login', newToken ? undefined : token);
   };
 
