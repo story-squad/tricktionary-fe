@@ -213,14 +213,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 <CopyToClipboard
                   text={`${REACT_APP_URL}/${lobbyData.lobbyCode}`}
                 >
-                  <div
+                  <button
                     className={copiedUrl ? 'copied' : ''}
-                    role="button"
                     onClick={handleClickCopy}
                   >
                     <FontAwesomeIcon icon={faCopy} />
                     {copiedUrl && <p>Link copied!</p>}
-                  </div>
+                  </button>
                 </CopyToClipboard>
               </div>
             </div>
