@@ -5,4 +5,9 @@
     font-size: 4rem;
     color: $sky-blue;
     cursor: pointer;
+
+    @include large-below {
+        font-size: 3rem;
+        right: -4rem;
+    }
 }
