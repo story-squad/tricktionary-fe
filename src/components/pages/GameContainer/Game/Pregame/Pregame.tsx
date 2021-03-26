@@ -355,9 +355,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             </div>
           ) : (
             <form className="edit-name-form">
-              {errors.form && (
-                <p className="short error">{errors.form.message}</p>
-              )}
               <div className="char-counter-wrapper higher">
                 <Input
                   id="username"
@@ -374,7 +371,11 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                   max={MAX_USERNAME_LENGTH}
                 />
               </div>
+              {errors.form && (
+                <p className="short error">{errors.form.message}</p>
+              )}
               <button
+                className="add-top-margin"
                 disabled={!usernameIsValid(props.username).valid}
                 onClick={handleSubmitUsername}
               >
