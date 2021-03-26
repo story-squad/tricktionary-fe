@@ -20,7 +20,10 @@ const Expander = (props: ExpanderProps): React.ReactElement => {
       {isExpanded && (
         <section className="expander-content">
           {children}
-          <button onClick={() => setIsExpanded(false)}>
+          <button
+            className="display-block"
+            onClick={() => setIsExpanded(false)}
+          >
             {closeText ? closeText : 'Close'}
           </button>
         </section>
