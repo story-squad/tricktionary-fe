@@ -341,7 +341,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           <ProTip
             message={'This is your chance to let your creativity shine!'}
           />
-          <h2>The Lobby is filling up...</h2>
+          <h1>The Lobby is filling up...</h1>
           <PlayerStepOne />
           <PlayerList />
           {!showEditName ? (
