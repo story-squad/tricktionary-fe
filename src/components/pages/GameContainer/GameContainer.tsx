@@ -271,7 +271,8 @@ const GameContainer = (): React.ReactElement => {
 
     // After a disconnection occurs, refresh the game on reconnection
     socket.on('pulse check', () => {
-      handleLogin();
+      // further testing to see if needed (DELETE?)
+      // handleLogin();
     });
 
     // Update reactions when other Player clicks a reaction on RESULTS phase
@@ -295,6 +296,11 @@ const GameContainer = (): React.ReactElement => {
 
   /* Socket event emitters */
   const handleLogin = (newToken = false) => {
+    if (newToken) {
+      console.log('attempting request new token');
+    } else {
+      console.log('attempting login');
+    }
     socket.emit('login', newToken ? undefined : token);
   };
 
