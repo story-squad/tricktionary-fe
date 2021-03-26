@@ -172,7 +172,7 @@ export const getSortedDefinitions = (
   });
   // Add real definition
   definitions[0] = {
-    username: `Real Definition for ${lobbyData.word}`,
+    username: lobbyData.word,
     playerId: '0',
     definition: lobbyData.definition,
     definitionId: 0,

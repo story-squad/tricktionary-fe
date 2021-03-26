@@ -15,7 +15,10 @@ export const RoundResults = (props: RoundResultsProps): React.ReactElement => {
       {noVotes.length > 0 && (
         <section>
           <h3>Honorable Mentions</h3>
-          <button onClick={() => setShowNoVotes(!showNoVotes)}>
+          <button
+            className="display-block"
+            onClick={() => setShowNoVotes(!showNoVotes)}
+          >
             {showNoVotes ? 'Hide Definitions' : 'Show Definitions'}
           </button>
           {showNoVotes ? (
@@ -54,7 +57,7 @@ export const RoundResults = (props: RoundResultsProps): React.ReactElement => {
             ))}
         </section>
       )}
-      <section>
+      <section className="reveal-definition">
         <h3>The Real Definition</h3>
         <DefinitionResult
           definitionResult={realDefinition}

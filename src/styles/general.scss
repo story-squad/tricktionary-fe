@@ -34,7 +34,7 @@ h2 {
 
 h3 {
   font-size: 3.2rem;
-  margin: 4rem 0 0.8rem;
+  margin: 0 0 0.8rem;
   @include tablet-below {
     font-size: 1.8rem;
   }
@@ -98,7 +98,7 @@ textarea {
   resize: none;
 }
 
-//adds more 4rem to margin-bottom
+//these classes are to be added at the end off className
 .auto-width {
   width: auto;
 }
@@ -114,11 +114,21 @@ textarea {
 .align-right {
   margin-right: 0;
 }
+.display-block {
+  display: block;
+}
+.LR-automargin {
+  margin-left: auto;
+  margin-right: auto;
+}
 .orange {
   background: $burnt-orange;
 }
 .word-label {
   font-size: 2.8rem;
+}
+.add-top-margin {
+  margin-top: 24px;
 }
 
 button {
@@ -405,6 +415,10 @@ a {
   }
 }
 
+.error-div {
+  margin: 8px auto;
+}
+
 .player-lobby {
   display: flex;
   flex-direction: row;
@@ -420,7 +434,8 @@ a {
     border: 1px solid $lt-grey;
     border-radius: 8px;
     padding: 8px 16px;
-    margin: 0 8px 8px 0;
+    margin: 0 8px 16px 0;
+
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
     @include tablet-below {
       flex-direction: row;
@@ -439,11 +454,11 @@ a {
     }
     .player {
       font-family: $display-font;
-      margin-bottom: 8px;
       font-size: 1.6rem;
+      margin-bottom: 0;
+      padding: .8rem;
       @include tablet-below {
         font-size: 1.4rem;
-        margin-bottom: 0;
       }
     }
     p.player-score {

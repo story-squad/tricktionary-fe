@@ -20,7 +20,7 @@ const ReactionPicker = (props: ReactionPickerProps): React.ReactElement => {
         {availableReactions.map((reaction, key) => (
           <div className="reaction" key={key}>
             <button
-              className="reaction-btn"
+              className="reaction-btn auto-width"
               onClick={() =>
                 handleSendReaction(props.definitionId, reaction.id)
               }
