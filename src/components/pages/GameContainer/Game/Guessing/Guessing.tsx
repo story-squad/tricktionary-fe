@@ -5,7 +5,7 @@ import {
   loadingState,
   lobbyState,
   playerGuessState,
-} from '../../../../../state';
+} from '../../../../../state/gameState';
 import {
   DefinitionItem,
   DefinitionSelection,
@@ -18,13 +18,16 @@ import {
   recalculateGuessesWithConnected,
 } from '../../../../../utils/helpers';
 import { getGuessesWithConnected } from '../../../../../utils/localStorageInitialValues';
-import { CharCounter } from '../../../../common/CharCounter';
-import { Host } from '../../../../common/Host';
+import {
+  CharCounter,
+  Host,
+  Modal,
+  Player,
+  PlayerList,
+  ProTip,
+  Word,
+} from '../../../../common';
 import { PlayerStepTwo } from '../../../../common/Instructions';
-import { Modal } from '../../../../common/Modal';
-import { Player } from '../../../../common/Player';
-import { PlayerList } from '../../../../common/PlayerList';
-import { ProTip } from '../../../../common/ProTip';
 import { Guess } from './Guess';
 
 const Guessing = (props: GuessingProps): React.ReactElement => {
@@ -76,7 +79,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   };
 
   return (
-    <div className="guessing game-page">
+    <section className="guessing game-page">
       <Host>
         <ProTip
           message={
@@ -86,17 +89,14 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         {!showGuesses ? (
           // Showing definitions
           <>
-            <h2>Read Each Number and Its Definition</h2>
+            <h1>Read Each Number and Its Definition</h1>
             <p className="instructions">
               The contestants have submitted their trick definitions. Now you
               need to summon your best gameshow host voice and read the number
               and definition from the list below. Once you finish, read through
               the same numbered list AGAIN.
             </p>
-            <div className="guess-word">
-              <h3 className="">The word is:</h3>
-              <p className="word">{lobbyData.word}</p>
-            </div>
+            <Word word={lobbyData.word} />
             <div className="definitions">
               <h3>Definitions</h3>
               {definitions.map((definition: DefinitionItem, key: number) => (
@@ -118,17 +118,14 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         ) : (
           // Showing votes
           <>
-            <h2>It’s Time to Vote!</h2>
+            <h1>It’s Time to Vote!</h1>
             <p className="instructions">
               Call on each contestant and ask for the number of their vote.
               Input their selection and confirm by reading the definition aloud.
               Example: &quot;Number 3, the squishy remains of rotten
               fruit.&quot;
             </p>
-            <div className="guess-word">
-              <h3 className="word-label">The word is:</h3>
-              <p className="word">{lobbyData.word}</p>
-            </div>
+            <Word word={lobbyData.word} />
             <div className="guesses">
               <h3>Player Guesses</h3>
               <div className="voting-label">
@@ -171,12 +168,9 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         <ProTip
           message={'Listen for the definition that strikes your fancy!'}
         />
-        <h2>It’s Time to Vote</h2>
+        <h1>It’s Time to Vote</h1>
         <PlayerStepTwo />
-        <div className="guess-word">
-          <h3 className="word-label">The word is:</h3>
-          <p className="word">{lobbyData.word}</p>
-        </div>
+        <Word word={lobbyData.word} />
         <div className="player-guess">
           <h3>Your guess:</h3>
           {playerGuess.key > 0 ? (
@@ -204,7 +198,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
         </div>
       </Player>
       <PlayerList />
-    </div>
+    </section>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { lobbyState, playerIdState } from '../../../state';
+import { lobbyState, playerIdState } from '../../../state/gameState';
 import { HOCProps } from '../../../types/commonTypes';
 
 const Host = (props: HOCProps): React.ReactElement => {

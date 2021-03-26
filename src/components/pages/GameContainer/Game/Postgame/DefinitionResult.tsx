@@ -1,6 +1,6 @@
 import React from 'react';
 import { DefinitionResultItem } from '../../../../../types/gameTypes';
-import { ReactionPicker } from '../../../../common/ReactionPicker';
+import { ReactionPicker } from '../../../../common';
 
 export const DefinitionResult = (
   props: DefinitionResultProps,

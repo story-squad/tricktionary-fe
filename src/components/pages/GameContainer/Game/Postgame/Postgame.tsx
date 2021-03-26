@@ -7,7 +7,7 @@ import {
   loadingState,
   lobbyState,
   playerGuessState,
-} from '../../../../../state';
+} from '../../../../../state/gameState';
 import {
   DefinitionResultItem,
   GuessItem,
@@ -20,10 +20,7 @@ import {
 } from '../../../../../utils/helpers';
 import { getSelectedReactions } from '../../../../../utils/helpers/apiHelpers';
 import { initialToken } from '../../../../../utils/localStorageInitialValues';
-import { Host } from '../../../../common/Host';
-import { Player } from '../../../../common/Player';
-import { PlayerList } from '../../../../common/PlayerList';
-import { ProTip } from '../../../../common/ProTip';
+import { Host, Player, PlayerList, ProTip, Word } from '../../../../common';
 import { RoundResults } from './RoundResults';
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
@@ -87,8 +84,8 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
   }, [lobbyData]);
 
   return (
-    <div className="postgame game-page">
-      <h2>It’s Time for the Results!</h2>
+    <section className="postgame game-page">
+      <h1>It’s Time for the Results!</h1>
       <Host>
         <ProTip
           message={`Reading the definition each player votes for makes the 
@@ -104,10 +101,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
             vote. Let&apos;s reveal the results.
           </p>
         )}
-        <div className="guess-word">
-          <h3 className="word-label">The word is:</h3>
-          <p className="word">{lobbyData.word}</p>
-        </div>
+        <Word word={lobbyData.word} />
         <RoundResults
           sortedDefinitions={sortedDefinitions}
           showReactions={lobbyData.phase === 'RESULTS'}
@@ -151,18 +145,12 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
               Your host is now going to read the results! Did you guess the
               right one? How did your definition do? Did it reign supreme?
             </p>
-            <div className="guess-word">
-              <h3 className="word-label">The word is:</h3>
-              <p className="word">{lobbyData.word}</p>
-            </div>
+            <Word word={lobbyData.word} />
           </>
         ) : (
           // After reveal
           <>
-            <div className="guess-word">
-              <h3 className="word-label">The word is:</h3>
-              <p className="word">{lobbyData.word}</p>
-            </div>
+            <Word word={lobbyData.word} />
             <RoundResults
               sortedDefinitions={sortedDefinitions}
               showReactions={true}
@@ -171,7 +159,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         )}
       </Player>
       <PlayerList hidePoints={lobbyData.phase === 'POSTGAME'} />
-    </div>
+    </section>
   );
 };
 
