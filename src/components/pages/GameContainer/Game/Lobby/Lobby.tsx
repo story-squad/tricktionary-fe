@@ -2,9 +2,12 @@ import jwt from 'jsonwebtoken';
 import React, { SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useLocalStorage } from '../../../../../hooks';
-import { loadingState } from '../../../../../state/gameState';
+import {
+  allowUrlJoinState,
+  loadingState,
+} from '../../../../../state/gameState';
 import { DecodedToken } from '../../../../../types/commonTypes';
 import { MAX_USERNAME_LENGTH } from '../../../../../utils/constants';
 import { initialToken } from '../../../../../utils/localStorageInitialValues';
@@ -32,6 +35,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
   const [token] = useLocalStorage<string>('token', initialToken);
   const [loading, setLoading] = useRecoilState(loadingState);
+  const allowUrlJoin = useRecoilValue(allowUrlJoinState);
 
   //set up the form details
   const { register, errors, setError, clearErrors } = useForm({
@@ -40,16 +44,18 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
 
   // Join a game if the lobbyCode is provided in the URL
   useEffect(() => {
-    const decodedToken: DecodedToken = jwt.decode(token) as DecodedToken;
-    let lobbyUrl = location.pathname;
-    if (lobbyUrl !== '/') {
-      lobbyUrl = lobbyUrl.substring(1, 5);
+    if (allowUrlJoin) {
+      const decodedToken: DecodedToken = jwt.decode(token) as DecodedToken;
+      let lobbyUrl = location.pathname;
+      if (lobbyUrl !== '/') {
+        lobbyUrl = lobbyUrl.substring(1, 5);
+      }
+      // If the user is entering a new game, join. Else, let the login event handle joining
+      if (lobbyUrl !== decodedToken?.lob) {
+        props.handleJoinLobby(null, lobbyUrl);
+      }
     }
-    // If the user is entering a new game, join. Else, let the login event handle joining
-    if (lobbyUrl !== decodedToken?.lob) {
-      props.handleJoinLobby(null, lobbyUrl);
-    }
-  }, []);
+  }, [allowUrlJoin]);
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.handleSetUsername(e.target.value);

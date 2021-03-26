@@ -10,6 +10,7 @@ import {
   handleSetHostFn,
 } from '../../../state/functionState';
 import {
+  allowUrlJoinState,
   definitionReactionsState,
   hostChoiceState,
   loadingState,
@@ -67,6 +68,7 @@ const GameContainer = (): React.ReactElement => {
   const [showKickedModal, setShowKickedModal] = useState(false);
   const [isKicking, setIsKicking] = useState(false);
   const [showNewHostModal, setShowNewHostModal] = useState(false);
+  const [, setAllowUrlJoin] = useRecoilState(allowUrlJoinState);
   const [time, setTime] = useState(-1);
   const [error, setError] = useState('');
   const [, setPlayerGuess] = useRecoilState(playerGuessState);
@@ -237,6 +239,7 @@ const GameContainer = (): React.ReactElement => {
     // Get API token
     socket.on('token update', (newToken: string) => {
       setToken(newToken);
+      setAllowUrlJoin(true);
     });
 
     // Receive your guess from the Host
