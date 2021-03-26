@@ -47,6 +47,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [choice, setChoice] = useState(initialChoiceValue);
   const [customInput, setCustomInput] = useState(initialCustomInputValue);
   const [showEditName, setShowEditName] = useState(false);
+  const [copiedUrl, setCopiedUrl] = useState(false);
+  const [copiedTimeout, setCopiedTimeout] = useState(0);
   const [showStartGameModal, setShowStartGameModal] = useState(false);
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
   const lobbySettings = useRecoilValue(lobbySettingsState);
@@ -160,6 +162,16 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     props.handleUpdateUsername(props.username);
   };
 
+  const handleClickCopy = () => {
+    setCopiedUrl(true);
+    clearTimeout(copiedTimeout);
+    setCopiedTimeout(
+      window.setTimeout(() => {
+        setCopiedUrl(false);
+      }, 2000),
+    );
+  };
+
   const allowedToStart = (): boolean => {
     if (!hasMinimumPlayers(lobbyData.players)) {
       return false;
@@ -201,7 +213,14 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 <CopyToClipboard
                   text={`${REACT_APP_URL}/${lobbyData.lobbyCode}`}
                 >
-                  <FontAwesomeIcon icon={faCopy} />
+                  <div
+                    className={copiedUrl ? 'copied' : ''}
+                    role="button"
+                    onClick={handleClickCopy}
+                  >
+                    <FontAwesomeIcon icon={faCopy} />
+                    {copiedUrl && <p>Link copied!</p>}
+                  </div>
                 </CopyToClipboard>
               </div>
             </div>

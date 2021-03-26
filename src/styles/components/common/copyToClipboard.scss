@@ -1,8 +1,42 @@
 .copy-to-clipboard {
-    position: absolute;
-    bottom: 2.7rem;
-    right: -5rem;
-    font-size: 4rem;
-    color: $sky-blue;
-    cursor: pointer;
+	position: absolute;
+	bottom: 2.7rem;
+	right: -5rem;
+	font-size: 4rem;
+	color: $sky-blue;
+	cursor: pointer;
+
+	p {
+		position: absolute;
+		width: 9rem;
+		font-size: 1.2rem;
+		bottom: -3rem;
+		margin: 0;
+		background: $sky-blue;
+		color: $white;
+		padding: 0.5rem 1rem;
+		border-radius: 1rem;
+	}
+	div {
+		animation-duration: 1s;
+		&.copied {
+			animation-name: copy-to-clipboard;
+		}
+	}
+	@include large-below {
+		font-size: 3rem;
+		right: -4rem;
+	}
+}
+
+@keyframes copy-to-clipboard {
+	0% {
+		color: $burnt-orange;
+	}
+	50% {
+		color: $burnt-orange;
+	}
+	100% {
+		color: unset;
+	}
 }

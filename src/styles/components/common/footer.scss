@@ -68,9 +68,9 @@ footer {
         padding: 0 16px 0 16px;
         margin: 0 0 0 8px;
         font-size: 1.2rem;
-      @include tablet-below {
-        margin-top: 8px;
-      }
+        @include tablet-below {
+          margin-top: 8px;
+        }
       }
     }
   }
