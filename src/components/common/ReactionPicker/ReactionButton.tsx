@@ -27,7 +27,7 @@ export const ReactionButton = (
 
   return (
     <button
-      className="reaction-btn"
+      className="reaction-btn auto-width"
       onClick={handleClick}
       disabled={props.disabled}
     >
