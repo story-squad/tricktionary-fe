@@ -3,6 +3,11 @@
   outline: none;
 }
 
+*:focus-visible {
+  outline: 4px solid $dark-cerulean;
+  outline-offset: 2px;
+}
+
 //hide labels, from Manuel Matuzović:
 .visually-hidden {
   border: 0;
