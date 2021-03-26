@@ -11,6 +11,11 @@ import {
   TricktionarySettings,
 } from '../types/gameTypes';
 
+export const allowUrlJoinState = atom<boolean>({
+  key: 'allowUrlJoinState',
+  default: false,
+});
+
 export const availableReactionsState = atom<ReactionItem[]>({
   key: 'availableReactionsState',
   default: [],
