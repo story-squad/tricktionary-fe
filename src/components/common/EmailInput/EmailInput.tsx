@@ -7,7 +7,7 @@ const convertKitConfig = {
   emailPlaceholder: 'ilovestorysquad@gmail.com',
   hideName: true,
   newTab: true,
-  submitText: 'Stay in touch',
+  submitText: 'Subscribe',
 };
 
 const EmailCollectionForm = (): React.ReactElement => {
