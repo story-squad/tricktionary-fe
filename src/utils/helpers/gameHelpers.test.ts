@@ -33,6 +33,7 @@ describe('addReaction', () => {
         102: 16,
       },
     };
+
     const output = addReaction(inputReactions, definitionId, reactionId, value);
 
     expect(output).toEqual(outputReactions);
