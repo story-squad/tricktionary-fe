@@ -8,7 +8,7 @@ describe('addReaction', () => {
       1000: {
         100: 5,
         101: 10,
-        102: 15,
+        102: 15, // this value should change
       },
       1001: {
         100: 6,
@@ -18,14 +18,14 @@ describe('addReaction', () => {
     };
     const definitionId = 1000;
     const reactionId = 102;
-    const value = 16;
+    const value = 22;
 
     // Function output
     const outputReactions: ReactionsDictionary = {
       1000: {
         100: 5,
         101: 10,
-        102: 16,
+        102: 22, // the updated value
       },
       1001: {
         100: 6,
