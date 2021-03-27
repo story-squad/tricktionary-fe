@@ -25,4 +25,14 @@ describe('Lobby', () => {
     expect(nameInput).toHaveDisplayValue(/player.*/gi);
     expect(codeInput).toHaveDisplayValue('');
   });
+  it('has buttons with default disabled status', () => {
+    const joinButton = screen.getByText(/join lobby/i);
+    const hostButton = screen.getByText(/host new game/i);
+
+    expect(joinButton).toBeInTheDocument;
+    expect(hostButton).toBeInTheDocument;
+
+    expect(joinButton.disabled).toEqual(true);
+    expect(hostButton.disabled).toEqual(false);
+  });
 });
