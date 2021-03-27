@@ -1,9 +1,7 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 import TestWrapper from '../../testing/TestWrapper';
 import GameContainer from './GameContainer';
-
-afterEach(cleanup);
 
 describe('GameContainer', () => {
   it('renders the GameContainer component', () => {
