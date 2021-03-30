@@ -1,7 +1,4 @@
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { getWords } from '../../../../../api/apiRequests';
@@ -17,7 +14,6 @@ import {
   MAX_CUSTOM_WORD_LENGTH,
   MAX_DEFINITION_LENGTH,
   MAX_USERNAME_LENGTH,
-  REACT_APP_URL,
 } from '../../../../../utils/constants';
 import { hasMinimumPlayers } from '../../../../../utils/helpers';
 import { initialGuesses } from '../../../../../utils/localStorageInitialValues';
@@ -37,6 +33,7 @@ import {
   HostStepOneA,
   PlayerStepOne,
 } from '../../../../common/Instructions';
+import { RoomCode } from '../../../../common/RoomCode';
 import { WordChoice } from './WordChoice';
 
 const initialChoiceValue = 0;
@@ -47,8 +44,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [choice, setChoice] = useState(initialChoiceValue);
   const [customInput, setCustomInput] = useState(initialCustomInputValue);
   const [showEditName, setShowEditName] = useState(false);
-  const [copiedUrl, setCopiedUrl] = useState(false);
-  const [copiedTimeout, setCopiedTimeout] = useState(0);
   const [showStartGameModal, setShowStartGameModal] = useState(false);
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
   const lobbySettings = useRecoilValue(lobbySettingsState);
@@ -162,16 +157,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     props.handleUpdateUsername(props.username);
   };
 
-  const handleClickCopy = () => {
-    setCopiedUrl(true);
-    clearTimeout(copiedTimeout);
-    setCopiedTimeout(
-      window.setTimeout(() => {
-        setCopiedUrl(false);
-      }, 2000),
-    );
-  };
-
   const allowedToStart = (): boolean => {
     if (!hasMinimumPlayers(lobbyData.players)) {
       return false;
@@ -206,23 +191,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <ProTip message={'Read the word before starting the game!'} />
             <h1>Step 1: Choose a Word</h1>
             <HostStepOne />
-            <div className="invite-code">
-              <p>Invite Code:</p>
-              <p className="room-code">{lobbyData.lobbyCode}</p>
-              <div className="copy-to-clipboard">
-                <CopyToClipboard
-                  text={`${REACT_APP_URL}/${lobbyData.lobbyCode}`}
-                >
-                  <button
-                    className={copiedUrl ? 'copied' : ''}
-                    onClick={handleClickCopy}
-                  >
-                    <FontAwesomeIcon icon={faCopy} />
-                    {copiedUrl && <p>Link copied!</p>}
-                  </button>
-                </CopyToClipboard>
-              </div>
-            </div>
+            <RoomCode />
             <div className="pick-word-instructions">
               <p className="instructions bot-margin">
                 Click on a word to see its definition.
@@ -262,10 +231,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           <section>
             <h1>Step 1: Bring Your Own Word</h1>
             <HostStepOneA />
-            <div className="invite-code">
-              <h3>Invite Code:</h3>
-              <p className="room-code">{lobbyData.lobbyCode}</p>
-            </div>
+            <RoomCode />
             <div className="word-block">
               <div className="word-column">
                 <label htmlFor="word">Word:</label>
