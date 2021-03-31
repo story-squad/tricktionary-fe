@@ -229,6 +229,8 @@ export const createReactionsDictionary = (
       dict[player.definitionId] = reactionDict;
     }
   });
+  //DELETE
+  console.log('The d:', dict);
   return dict;
 };
 
@@ -244,6 +246,14 @@ export const addReaction = (
     reactions.hasOwnProperty(definitionId) &&
     reactions[definitionId].hasOwnProperty(reactionId)
   ) {
+    //DELETE
+    console.log('addReaction success:', {
+      ...reactions,
+      [definitionId]: {
+        ...reactions[definitionId],
+        [reactionId]: value,
+      },
+    });
     return {
       ...reactions,
       [definitionId]: {
@@ -252,6 +262,8 @@ export const addReaction = (
       },
     };
   }
+  //DELETE
+  console.log('addReaction catch:', reactions);
   return reactions;
 };
 
@@ -282,9 +294,10 @@ export const updateReactionCounts = (
       if (!newReactions.hasOwnProperty(definition)) {
         newReactions[definition] = {};
       }
-      for (const reaction in definition as any) {
+      for (const reaction in prevReactions[definition] as any) {
         if (!newReactions[definition].hasOwnProperty(reaction)) {
-          newReactions[definition][reaction] = 0;
+          newReactions[definition][reaction] =
+            prevReactions[definition][reaction as any];
         }
       }
     }
