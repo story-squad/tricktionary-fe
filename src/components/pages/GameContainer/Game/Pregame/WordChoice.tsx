@@ -2,11 +2,13 @@ import React from 'react';
 
 export const WordChoice = (props: WordChoiceProps): React.ReactElement => {
   const { word, handleChoose, choice } = props;
-  const className = `word-choice${word.id === choice ? ' selected' : ''}`;
+  const className = `word-choice selectable${
+    word.id === choice ? ' selected' : ''
+  }`;
 
   return (
     <button onClick={() => handleChoose(word.id)} className={className}>
-      <p className="word">{word.word}</p>
+      {word.word}
     </button>
   );
 };

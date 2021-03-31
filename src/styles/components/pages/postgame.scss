@@ -1,111 +1,107 @@
 //play/new host button
 .endgame-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  .after-reveal {
+    width: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    .after-reveal {
-      width: 100%;
+    flex-direction: column;
+    .after-container {
       display: flex;
-      flex-direction: column;
-      .after-container {
-        display: flex;
-        justify-content: space-evenly;
-      }
+      justify-content: space-evenly;
     }
-    .selected {
-      background: $neon-green;
-      box-shadow: $boxshadow;
-    }
+  }
 }
 
 .definition-result {
-    margin: 4rem 0;
-    border: 2px solid $dark-cerulean;
-    box-shadow: $boxshadow;
-    border-radius: 8px;
-    padding-bottom: 0.8rem;
-    .who-voted-p {
-      padding: 0 1.6rem 0.8rem 1.6rem;
-      margin-bottom: 0;
+  margin: 4rem 0;
+  border: 2px solid $dark-cerulean;
+  box-shadow: $boxshadow;
+  border-radius: 8px;
+  padding-bottom: 0.8rem;
+  .who-voted-p {
+    padding: 0 1.6rem 0.8rem 1.6rem;
+    margin-bottom: 0;
+  }
+
+  .who-voted-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 1.6rem 0 1.6rem;
+  }
+  .vote-align {
+    background-color: #f7fbff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 1.6rem 1.6rem 1.6rem 1.6rem;
+    @include tablet-below {
+      justify-content: center;
+      padding-bottom: 0;
     }
-  
-    .who-voted-box {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      padding: 0 1.6rem 0 1.6rem;
-    }
-    .vote-align {
-      background-color: #f7fbff;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      align-items: center;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-      padding: 1.6rem 1.6rem 1.6rem 1.6rem;
+    .author-box {
       @include tablet-below {
-        justify-content: center;
-        padding-bottom: 0;
-      }
-      .author-box {
-        @include tablet-below {
-          margin-top: 8px;
-          text-align: center;
-        }
+        margin-top: 8px;
+        text-align: center;
       }
     }
-    .result-definition {
-      background-color: #f7fbff;
-      padding: 1.6rem 1.6rem 1.6rem 1.6rem;
-      word-wrap: break-word;
-    }
-    .result-username {
-      word-break: break-word;
-      color: $charcoal;
-      font-family: $display-font;
-      font-size: 3.2rem;
-      margin-bottom: 8px;
-      @include tablet-below {
-        font-size: 1.8rem;
-      }
-      &:last-child {
-        color: $sky-blue;
-      }
-    }
-    .result-votes {
-      padding: 1.6rem;
-      font-size: 1.6rem;
-      box-shadow: $boxshadow;
-      background-color: $white;
-      margin-bottom: 0;
-      border-radius: 8px;
-      font-family: $display-font;
-    }
-    .guess-names {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0 0 0 0;
-      padding: 8px;
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
-      p:first-child {
-        margin-bottom: 0;
-      }
-      p.who-voted {
-        font-family: $display-font;
-        color: $burnt-orange;
-        margin-bottom: 0;
-        width: auto;
-      }
+  }
+  .result-definition {
+    background-color: #f7fbff;
+    padding: 1.6rem 1.6rem 1.6rem 1.6rem;
+    word-wrap: break-word;
+  }
+  .result-username {
+    word-break: break-word;
+    color: $charcoal;
+    font-family: $display-font;
+    font-size: 3.2rem;
+    margin-bottom: 8px;
+    @include tablet-below {
+      font-size: 1.8rem;
     }
     &:last-child {
-      .result-username {
-        color: $dark-cerulean;
-      }
+      color: $sky-blue;
     }
+  }
+  .result-votes {
+    padding: 1.6rem;
+    font-size: 1.6rem;
+    box-shadow: $boxshadow;
+    background-color: $white;
+    margin-bottom: 0;
+    border-radius: 8px;
+    font-family: $display-font;
+  }
+  .guess-names {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0 0 0;
+    padding: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    p:first-child {
+      margin-bottom: 0;
+    }
+    p.who-voted {
+      font-family: $display-font;
+      color: $burnt-orange;
+      margin-bottom: 0;
+      width: auto;
+    }
+  }
+  &:last-child {
+    .result-username {
+      color: $dark-cerulean;
+    }
+  }
 }
 
 .reveal-definition {

@@ -10,6 +10,8 @@ html,
 body,
 #root {
   min-height: 100vh;
+  padding: 0;
+  margin: 0;
 }
 
 // Set the font-size so 1rem = 10px for easier styling
@@ -26,9 +28,16 @@ strong {
   font-weight: 600;
 }
 
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
 // Font Variables
-$text-font: "Roboto", sans-serif;
-$display-font: "Luckiest Guy", sans-serif;
+$text-font: 'Roboto', sans-serif;
+$display-font: 'Luckiest Guy', sans-serif;
 
 // Media Query Sizes
 $mid: 500px;
@@ -44,34 +53,18 @@ $boxshadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
 $box-sizing: border-box;
 
 // NEW COLORS
-$blue: #3884ff;
-$hover-blue: #5872ff;
-$lt-orange: #f7bc50;
-$orange: #f66700;
-$jade: #00b67d;
 $medium-grey: #5a5b5b;
-$seafoam: #34c9ad;
 $dark-blue: #40537f;
 $white: #ffffff;
 $charcoal: #343434;
-$red: #f64141;
-$ltblue: #85c7f2;
-$bright-blue: #2462d9;
-$otherblue: #4558c1;
-$rose: #d97f9f;
-$green: #297c12;
 $lime: #bfd349;
-$royal-blue: #162ca7;
-$purpleblue: #40537f;
 $lt-grey: #c4c4c4;
 $black: #000000;
-
-//new colors
+$nero: #131313f1;
 $neon-green: #d5ff2e;
 $sky-blue: #1da1f2;
 $dark-cerulean: #064165;
 $burnt-orange: #ff7f35;
-$nero: #000000de;
 
 //finale colors
 $gold: #ffd645;
@@ -97,8 +90,4 @@ $bronze-outline: #9f4c00;
 .App > div:not(.modal-wrapper):not(.cookie-popup) {
   display: flex;
   flex-flow: column nowrap;
-}
-
-textarea {
-  font-family: $text-font;
 }

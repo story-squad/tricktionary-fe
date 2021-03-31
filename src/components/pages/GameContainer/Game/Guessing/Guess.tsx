@@ -37,7 +37,7 @@ export const Guess = (props: GuessProps): React.ReactElement => {
           // Use button display for small games
           definitions.map((definition, key) => (
             <button
-              className={`${
+              className={`selectable ${
                 getPlayerGuess(guesses, player) === definition.id
                   ? 'selected'
                   : ''

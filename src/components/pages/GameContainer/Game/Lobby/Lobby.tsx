@@ -106,20 +106,25 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
       <div className="lobby game-page">
         <ProTip />
         <Expander headerText={'Learn How to Play'} closeText={'Close'}>
-          <h2>How to Host a Game</h2>
-          <h3>Step 1: Setup</h3>
-          <HostStepOne />
-          <h3>Step 2: Voting</h3>
-          <HostStepTwo />
-          <h3>Step 3: Results</h3>
-          <HostStepThree />
-          <h2>How to Play</h2>
-          <h3>Step 1: Setup</h3>
-          <PlayerStepOne />
-          <h3>Step 2: Voting</h3>
-          <PlayerStepTwo />
-          <h3>Step 3: Results</h3>
-          <PlayerStepThree />
+          <section className="text-content">
+            <h2>How to Host a Game</h2>
+            <h3>Step 1: Setup</h3>
+            <HostStepOne />
+            <h3>Step 2: Voting</h3>
+            <HostStepTwo />
+            <h3>Step 3: Results</h3>
+            <HostStepThree />
+            <div className="visual-line-break" />
+          </section>
+          <section className="text-content">
+            <h2>How to Play</h2>
+            <h3>Step 1: Setup</h3>
+            <PlayerStepOne />
+            <h3>Step 2: Voting</h3>
+            <PlayerStepTwo />
+            <h3>Step 3: Results</h3>
+            <PlayerStepThree />
+          </section>
         </Expander>
         <section>
           <h1>Welcome to Tricktionary!</h1>
