@@ -282,9 +282,10 @@ export const updateReactionCounts = (
       if (!newReactions.hasOwnProperty(definition)) {
         newReactions[definition] = {};
       }
-      for (const reaction in definition as any) {
+      for (const reaction in prevReactions[definition] as any) {
         if (!newReactions[definition].hasOwnProperty(reaction)) {
-          newReactions[definition][reaction] = 0;
+          newReactions[definition][reaction] =
+            prevReactions[definition][reaction as any];
         }
       }
     }
