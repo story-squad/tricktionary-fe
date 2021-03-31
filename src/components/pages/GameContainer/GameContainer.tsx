@@ -81,12 +81,12 @@ const GameContainer = (): React.ReactElement => {
 
   // Combine reset functions
   const resetGame = () => {
+    handleLeaveGame();
     history.push('/');
     resetLobbyData();
     resetLobbyCode();
     resetPlayerGuess();
     setGuesses([]);
-    socket.disconnect();
     setToken(undefined);
     handleLogin(true);
     setShowLeaveModal(false);
@@ -113,6 +113,14 @@ const GameContainer = (): React.ReactElement => {
       history.push('/');
     }
   }, [lobbyData]);
+
+  useEffect(() => {
+    if (socket.disconnected) {
+      console.log('reconnecting...');
+      socket.connect();
+    }
+    console.log('I am connected:', socket.connected);
+  }, [socket.disconnected, socket.connected]);
 
   // When app unloads, decrement tab count
   useBeforeunload(() => {
@@ -292,16 +300,21 @@ const GameContainer = (): React.ReactElement => {
         updateReactionCounts(prevReactions, responseReactions),
       );
     });
+
+    socket.on('disconnect me', () => {
+      console.log('you were disconnected from the game.');
+    });
   }, []); /* onMount */
 
   /* Socket event emitters */
   const handleLogin = (newToken = false) => {
     if (newToken) {
       console.log('attempting request new token');
+      socket.emit('login');
     } else {
       console.log('attempting login');
+      socket.emit('login', newToken);
     }
-    socket.emit('login', newToken ? undefined : token);
   };
 
   // Create game as Host
@@ -336,6 +349,11 @@ const GameContainer = (): React.ReactElement => {
   const handleStartGame = () => {
     setLoading('loading');
     socket.emit('start game', lobbySettings, lobbyCode, hostChoice);
+  };
+
+  const handleLeaveGame = () => {
+    console.log('requesting disconnection');
+    socket.emit('disconnect me');
   };
 
   const handleSubmitDefinition = (definition: string) => {
