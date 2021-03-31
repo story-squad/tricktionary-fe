@@ -1,5 +1,35 @@
-
 .game-container {
-  max-width: 100%;
-  padding: 2.4rem 2.4rem 2.4rem 2.4rem;
+  max-width: 100vw;
+  padding: 2.4rem;
+}
+
+.game-page {
+  margin: 0 auto;
+  max-width: 82rem;
+  width: 100%;
+  background-color: $white;
+  border-radius: 24px;
+  padding: 4.8rem 8.5rem;
+
+  @include tablet-below {
+    padding: 2.4rem 2.4rem;
+  }
+  #username,
+  #lobby-code {
+    width: 57rem;
+    max-width: 100%;
+    height: 40px;
+  }
+  &p.welcome-word {
+    font-size: 1.4rem;
+  }
+  &.margin-top {
+    margin-top: 4rem;
+    h2 {
+      font-size: 6.4rem;
+    }
+  }
+  &.margin-bottom {
+    margin-bottom: 4rem;
+  }
 }

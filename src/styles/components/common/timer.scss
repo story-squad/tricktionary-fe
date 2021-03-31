@@ -1,23 +1,23 @@
 .countdown-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    .time {
-      font-family: $display-font;
-      font-size: 4.8rem;
-      width: 8rem;
-      color: $medium-grey;
-      text-align: center;
-      margin-bottom: .8rem;
-    }
-    .add-time.center {
-      background-color: $white;
-      color: $nero;
-      height: auto;
-      font-family: $display-font;
-      padding: .4rem .8rem;
-      color: $burnt-orange;
-      border: 1px solid $burnt-orange;
-    }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .time {
+    font-family: $display-font;
+    font-size: 4.8rem;
+    width: 8rem;
+    color: $medium-grey;
+    text-align: center;
+    margin-bottom: 0.8rem;
   }
+  .add-time.center {
+    background-color: $white;
+    height: auto;
+    font-family: $display-font;
+    padding: 0.4rem 0.8rem;
+    color: $burnt-orange;
+    border: 1px solid $burnt-orange;
+  }
+}
