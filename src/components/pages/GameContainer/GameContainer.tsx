@@ -120,7 +120,7 @@ const GameContainer = (): React.ReactElement => {
       socket.connect();
     }
     console.log('I am connected:', socket.connected);
-  }, [socket.disconnected, socket.connected]);
+  }, [socket.connected]);
 
   // When app unloads, decrement tab count
   useBeforeunload(() => {
@@ -321,9 +321,6 @@ const GameContainer = (): React.ReactElement => {
   const handleCreateLobby = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
-      if (socket.disconnected) {
-        socket.connect();
-      }
     }
     setLoading('loading');
     socket.emit('create lobby', username.trim());
@@ -333,9 +330,6 @@ const GameContainer = (): React.ReactElement => {
   const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
     if (e) {
       e.preventDefault();
-      if (socket.disconnected) {
-        socket.connect();
-      }
     }
     socket.emit(
       'join lobby',
