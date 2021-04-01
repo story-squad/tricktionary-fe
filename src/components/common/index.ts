@@ -16,4 +16,5 @@ export { ReactionPicker } from './ReactionPicker';
 export { SetHost } from './SetHost';
 export { Timer } from './Timer';
 export { TwitterButton } from './TwitterButton';
+export { View } from './View';
 export { Word } from './Word';
