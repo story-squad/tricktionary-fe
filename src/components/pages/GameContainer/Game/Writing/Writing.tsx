@@ -21,6 +21,7 @@ import {
   ProTip,
   Timer,
   TwitterButton,
+  View,
   Word,
 } from '../../../../common';
 
@@ -135,7 +136,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
           15, 10, and 5 seconds left
         </p>
         <Word word={lobbyData.word} />
-        {useTimer && (
+        <View show={useTimer}>
           <Timer
             time={time}
             setTime={setTime}
@@ -143,13 +144,13 @@ const Writing = (props: WritingProps): React.ReactElement => {
             syncTime={handleSyncTimer}
             addTime={handleAddTime}
           />
-        )}
+        </View>
         <div className="times-up-container">
-          {timerDone && (
+          <View show={timerDone}>
             <p className="times-up">
               Time&apos;s up for players to submit! Start the next phase.
             </p>
-          )}
+          </View>
           <PlayerList />
           <button
             className="times-up-button"
@@ -182,21 +183,21 @@ const Writing = (props: WritingProps): React.ReactElement => {
           </strong>{' '}
           Click “submit” before the time runs out!
         </p>
-        {useTimer && (
+        <View show={useTimer}>
           <Timer
             time={time}
             setTime={setTime}
             timeUp={setTimerDone}
             syncTime={() => 0}
           />
-        )}
+        </View>
         <div className="times-up-container">
-          {!isSubmitted && timerDone && (
+          <View show={!isSubmitted && timerDone}>
             <p className="times-up">Time&apos;s up!</p>
-          )}
+          </View>
         </div>
         <Word word={lobbyData.word} />
-        {!isSubmitted && !timerDone && (
+        <View show={!isSubmitted && !timerDone}>
           <form
             className="submit-definition"
             onSubmit={(e) => {
@@ -225,16 +226,16 @@ const Writing = (props: WritingProps): React.ReactElement => {
               Submit
             </button>
           </form>
-        )}
-        {isSubmitted && (
+        </View>
+        <View show={isSubmitted}>
           <div className="player-submitted">
             <h3>You submitted:</h3>
             <p className="center-text">{definition}</p>
             <TwitterButton
-              message={`${lobbyData.word} means ${definition} ... or does it?`}
+              message={`${lobbyData.word} means  ... or does it?`}
             />
           </div>
-        )}
+        </View>
         <PlayerList />
       </Player>
     </section>
