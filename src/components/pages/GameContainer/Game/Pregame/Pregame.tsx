@@ -357,7 +357,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                   max={MAX_USERNAME_LENGTH}
                 />
               </div>
-              <View show={errors.form}>
+              <View show={errors.form != undefined}>
                 <p className="short error">{errors.form.message}</p>
               </View>
               <button
