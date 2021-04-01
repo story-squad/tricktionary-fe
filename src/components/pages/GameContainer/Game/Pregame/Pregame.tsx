@@ -358,7 +358,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 />
               </div>
               <View show={errors.form != undefined}>
-                <p className="short error">{errors.form.message}</p>
+                <p className="short error">{errors?.form?.message}</p>
               </View>
               <button
                 className="add-top-margin"
