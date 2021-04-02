@@ -20,7 +20,14 @@ import {
 } from '../../../../../utils/helpers';
 import { getSelectedReactions } from '../../../../../utils/helpers/apiHelpers';
 import { initialToken } from '../../../../../utils/localStorageInitialValues';
-import { Host, Player, PlayerList, ProTip, Word } from '../../../../common';
+import {
+  Host,
+  Player,
+  PlayerList,
+  ProTip,
+  View,
+  Word,
+} from '../../../../common';
 import { RoundResults } from './RoundResults';
 
 const Postgame = (props: PostgameProps): React.ReactElement => {
@@ -92,30 +99,29 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
           game more fun! Example: Darwin voted for number 6: “silly or 
           high-spirited behavior; mischief.”`}
         />
-        {lobbyData.phase === 'POSTGAME' && (
-          // Show before reveal
+        <View show={lobbyData.phase === 'POSTGAME'}>
+          {/* Before reveal */}
           <p className="instructions">
             Players can’t see the results yet, so it’s up to you to read them
             with pizzaz! Say, “Remember, you get one point if you vote for the
             right definition and 1 point if yours ensnares someone else&apos;s
             vote. Let&apos;s reveal the results.
           </p>
-        )}
+        </View>
         <Word word={lobbyData.word} />
         <RoundResults
           sortedDefinitions={sortedDefinitions}
           showReactions={lobbyData.phase === 'RESULTS'}
         />
         <div className="endgame-container">
-          {lobbyData.phase === 'POSTGAME' ? (
-            // Before reveal
-            <>
-              <button onClick={() => handleRevealResults(guesses)}>
-                Reveal Results
-              </button>
-            </>
-          ) : (
-            // After reveal
+          <View show={lobbyData.phase === 'POSTGAME'}>
+            {/* Before reveal */}
+            <button onClick={() => handleRevealResults(guesses)}>
+              Reveal Results
+            </button>
+          </View>
+          <View show={lobbyData.phase === 'RESULTS'}>
+            {/* After reveal */}
             <div className="after-reveal">
               <div className="after-container">
                 <button
@@ -133,30 +139,27 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
                 Play Again
               </button>
             </div>
-          )}
+          </View>
         </div>
       </Host>
       <Player>
         <ProTip />
-        {lobbyData.phase === 'POSTGAME' ? (
-          // Before reveal
-          <>
-            <p className="instructions">
-              Your host is now going to read the results! Did you guess the
-              right one? How did your definition do? Did it reign supreme?
-            </p>
-            <Word word={lobbyData.word} />
-          </>
-        ) : (
-          // After reveal
-          <>
-            <Word word={lobbyData.word} />
-            <RoundResults
-              sortedDefinitions={sortedDefinitions}
-              showReactions={true}
-            />
-          </>
-        )}
+        <View show={lobbyData.phase === 'POSTGAME'}>
+          {/* // Before reveal */}
+          <p className="instructions">
+            Your host is now going to read the results! Did you guess the right
+            one? How did your definition do? Did it reign supreme?
+          </p>
+          <Word word={lobbyData.word} />
+        </View>
+        <View show={lobbyData.phase === 'RESULTS'}>
+          {/* // After reveal */}
+          <Word word={lobbyData.word} />
+          <RoundResults
+            sortedDefinitions={sortedDefinitions}
+            showReactions={true}
+          />
+        </View>
       </Player>
       <PlayerList hidePoints={lobbyData.phase === 'POSTGAME'} />
     </section>
