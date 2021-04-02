@@ -20,10 +20,13 @@
     width: 5rem;
     height: 5rem;
     margin: 0;
-    color: $sky-blue;
+    color: $burnt-orange;
     font-size: 4rem;
     animation-duration: 1s;
 
+    &:hover {
+      box-shadow: none;
+    }
     &.copied {
       animation-name: copy-to-clipboard;
     }
@@ -33,17 +36,5 @@
   }
   @include large-below {
     right: -5rem;
-  }
-}
-
-@keyframes copy-to-clipboard {
-  0% {
-    color: $neon-green;
-  }
-  50% {
-    color: $neon-green;
-  }
-  100% {
-    color: $sky-blue;
   }
 }

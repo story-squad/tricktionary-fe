@@ -39,12 +39,15 @@
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  margin: 0 2.4rem;
+  // margin: 0 2.4rem;
   p.instructions {
     margin-bottom: 1.6rem;
     @include tablet-below {
       width: 100%;
     }
+  }
+  button {
+    margin: 0;
   }
   @include tablet-below {
     justify-content: center;

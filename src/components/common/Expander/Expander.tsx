@@ -21,7 +21,7 @@ const Expander = (props: ExpanderProps): React.ReactElement => {
         <section className="expander-content">
           {children}
           <button
-            className="display-block"
+            className="secondary display-block"
             onClick={() => setIsExpanded(false)}
           >
             {closeText ? closeText : 'Close'}

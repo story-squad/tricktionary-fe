@@ -133,12 +133,12 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   };
 
   const handleSetUseTimer = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
+    if (!e.target.checked) {
       props.handleSetSeconds(60);
     } else {
       props.handleSetSeconds(0);
     }
-    setUseTimer(e.target.checked);
+    setUseTimer(!e.target.checked);
   };
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,17 +190,15 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         <View show={!isCustom}>
           <section>
             <ProTip message={'Read the word before starting the game!'} />
-            <h1>Step 1: Choose a Word</h1>
+            <h1>Game Setup</h1>
+            <h2>Step 1: Choose a Word</h2>
             <HostStepOne />
             <RoomCode />
             <div className="pick-word-instructions">
               <p className="instructions bot-margin">
                 Click on a word to see its definition.
               </p>
-              <button
-                className="shuffle-btn sm-btn auto-width"
-                onClick={handleGetWords}
-              >
+              <button className="sm-btn auto-width" onClick={handleGetWords}>
                 Shuffle Words
               </button>
             </div>
@@ -230,7 +228,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         {/* Custom word form */}
         <View show={isCustom}>
           <section>
-            <h1>Step 1: Bring Your Own Word</h1>
+            <h1>Game Setup</h1>
+            <h2>Step 1: Bring Your Own Word</h2>
             <HostStepOneA />
             <RoomCode />
             <div className="word-block">
@@ -268,7 +267,9 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           </section>
         </View>
         <div className="use-own-words">
-          <p>Don&apos;t like our words?</p>
+          <p>
+            {!isCustom ? `Don't like our words?` : `Need a creative boost?`}
+          </p>
           <button
             className="choose-word sm-btn auto-width"
             onClick={() => setIsCustom(!isCustom)}
@@ -277,9 +278,9 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           </button>
         </div>
         <section className="timer-container">
-          <h3 className="timer-title">Step 2: Set A Timer</h3>
+          <h3>Step 2: Set A Timer</h3>
           <p className="timer-directions">
-            This timer is to deterimine how long players have to type.
+            Choose how many seconds players have to write their definitions.
           </p>
           <View show={useTimer}>
             <div className="quantity-wrapper">
@@ -299,10 +300,10 @@ const Pregame = (props: PregameProps): React.ReactElement => {
             <input
               type="checkbox"
               id="use-timer"
-              checked={useTimer}
+              checked={!useTimer}
               onChange={handleSetUseTimer}
             />
-            <p>Play with timer</p>
+            <p>Play without timer</p>
           </div>
         </section>
         <section className="start-instructions">
