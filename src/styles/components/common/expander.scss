@@ -7,6 +7,10 @@
     padding: 0;
     color: $burnt-orange;
     background: none;
+
+    &:hover {
+      box-shadow: none;
+    }
   }
   .expander-content {
     margin: 2rem 0 6rem;

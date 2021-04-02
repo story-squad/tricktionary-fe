@@ -153,11 +153,11 @@ const Writing = (props: WritingProps): React.ReactElement => {
           </View>
           <PlayerList />
           <button
-            className="times-up-button"
+            className="no-bottom-margin"
             onClick={handleGoToNextPhase}
             disabled={loading === 'loading'}
           >
-            Read the Definitions!
+            Read the Definitions
           </button>
         </div>
         <Modal

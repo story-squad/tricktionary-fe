@@ -53,13 +53,11 @@
 .submit-guesses {
   display: flex;
   justify-content: center;
-  background-color: $burnt-orange;
-  margin-top: 4.8rem;
+  margin-top: 1.6rem;
 }
 
 .show-guess {
   p.guess-choice {
-    text-align: center;
     word-wrap: break-word;
   }
 }
@@ -84,7 +82,7 @@
     margin-top: 4.8rem;
   }
   hr {
-    border-top: 2px dashed $dark-blue;
+    border-top: 1px solid $lt-grey;
     hr:first-child {
       margin-top: 0;
     }
@@ -92,11 +90,12 @@
   .guess {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: baseline;
 
     .guess-name {
       font-weight: bold;
-      margin-right: 7.2rem;
+      width: 17rem;
     }
     button {
       min-height: unset;

@@ -13,13 +13,15 @@ export const RoundResults = (props: RoundResultsProps): React.ReactElement => {
   return (
     <div className="round-results">
       {noVotes.length > 0 && (
-        <section>
+        <section className="definition-section">
           <h3>Honorable Mentions</h3>
           <button
-            className="display-block"
+            className="secondary display-block"
             onClick={() => setShowNoVotes(!showNoVotes)}
           >
-            {showNoVotes ? 'Hide Definitions' : 'Show Definitions'}
+            {showNoVotes
+              ? 'Hide Honorable Mentions'
+              : 'Show Honorable Mentions'}
           </button>
           {showNoVotes ? (
             noVotes.map((definitionResult, key) => (
@@ -30,7 +32,7 @@ export const RoundResults = (props: RoundResultsProps): React.ReactElement => {
               />
             ))
           ) : (
-            <div className="player-lobby">
+            <div className="player-lobby add-bottom-margin">
               {noVotes.map((definitionResult, key) => (
                 <div className="players" key={key}>
                   <p className="player">{definitionResult.username}</p>
@@ -41,7 +43,7 @@ export const RoundResults = (props: RoundResultsProps): React.ReactElement => {
         </section>
       )}
       {gotVotes.length > 0 && (
-        <section>
+        <section className="definition-section">
           <h3>The Ones Who Earned Some Votes</h3>
           {sortedDefinitions
             .filter(
@@ -57,7 +59,7 @@ export const RoundResults = (props: RoundResultsProps): React.ReactElement => {
             ))}
         </section>
       )}
-      <section className="reveal-definition">
+      <section className="definition-section reveal-definition">
         <h3>The Real Definition</h3>
         <DefinitionResult
           definitionResult={realDefinition}

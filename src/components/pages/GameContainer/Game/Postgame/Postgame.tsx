@@ -132,7 +132,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
                 </button>
               </div>
               <button
-                className="orange display-block"
+                className="secondary display-block"
                 onClick={handlePlayAgain}
                 disabled={loading === 'loading'}
               >

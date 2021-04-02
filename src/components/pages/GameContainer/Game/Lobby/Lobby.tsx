@@ -157,7 +157,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
             {errors.form && <p className="error">*{errors.form.message}</p>}
             <div className="start-buttons">
               <button
-                className="join lobby-button"
+                className="no-bottom-margin"
                 onClick={handleJoinByClick}
                 disabled={
                   !usernameIsValid(props.username).valid ||
@@ -169,7 +169,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
               </button>
               <p className="or">- OR -</p>
               <button
-                className="host lobby-button"
+                className="secondary no-bottom-margin"
                 onClick={props.handleCreateLobby}
                 disabled={
                   !usernameIsValid(props.username).valid ||
