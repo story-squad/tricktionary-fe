@@ -84,17 +84,19 @@ const Finale = (): React.ReactElement => {
         </View>
       </div>
       <div className="podium">&nbsp;</div>
-      <p className="feedback">
-        We&apos;re still in beta-testing and we&apos;d love to hear any ideas
-        you have!
-      </p>
-      <a
-        target="_blank"
-        href="https://forms.gle/Nj3kMpKQpWZU9gxq7"
-        rel="noreferrer"
-      >
-        Feedback Form
-      </a>
+      <div className="feedback-container">
+        <p className="feedback">
+          We&apos;re still in beta-testing and we&apos;d love to hear any ideas
+          you have!
+        </p>
+        <a
+          target="_blank"
+          href="https://forms.gle/Nj3kMpKQpWZU9gxq7"
+          rel="noreferrer"
+        >
+          Feedback Form
+        </a>
+      </div>
     </section>
   );
 };

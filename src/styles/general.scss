@@ -81,6 +81,11 @@ p {
   }
 }
 
+a {
+  font-family: $text-font;
+  font-size: 1.8rem;
+}
+
 strong {
   color: $nero;
 }
@@ -362,6 +367,9 @@ div.visual-line-break {
   align-items: flex-start;
   margin-top: 16px;
 
+  &.add-bottom-margin {
+    margin-bottom: 32px;
+  }
   .players {
     display: flex;
     flex-direction: column;

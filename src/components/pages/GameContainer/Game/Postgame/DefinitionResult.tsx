@@ -29,7 +29,7 @@ export const DefinitionResult = (
               {points} vote{points === 1 ? '' : 's'}
             </p>
           </div>
-          <p className="result-definition">{definition}</p>
+          <p className="result-definition no-bottom-margin">{definition}</p>
           {guesses.length > 0 && (
             <>
               <p className="who-voted-p">Who voted:</p>
