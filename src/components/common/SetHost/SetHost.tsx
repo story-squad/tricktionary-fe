@@ -46,7 +46,7 @@ const SetHost = (): React.ReactElement => {
   return (
     <>
       <button
-        className={showModal ? 'selected' : ''}
+        className="no-bottom-margin secondary"
         onClick={() => setShowModal(true)}
         disabled={loading === 'loading'}
       >

@@ -278,8 +278,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           </button>
         </div>
         <section className="timer-container">
-          <h3>Step 2: Set A Timer</h3>
-          <p className="timer-directions">
+          <h2>Step 2: Set A Timer</h2>
+          <p>
             Choose how many seconds players have to write their definitions.
           </p>
           <View show={useTimer}>
@@ -314,7 +314,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           <PlayerList />
         </section>
         <button
-          className="center align-self orange"
           disabled={!allowedToStart()}
           onClick={() => setShowStartGameModal(true)}
         >

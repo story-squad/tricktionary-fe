@@ -13,7 +13,6 @@
     align-self: center;
     border-radius: 16px;
     padding: 24px;
-    border: 2px dashed $dark-blue;
     margin: 2.4rem auto;
     position: relative;
 
@@ -39,7 +38,6 @@
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  // margin: 0 2.4rem;
   p.instructions {
     margin-bottom: 1.6rem;
     @include tablet-below {
@@ -61,8 +59,7 @@
   flex-direction: row;
   justify-content: space-between;
   border-radius: 16px;
-  padding: 24px;
-  border: 1px solid $sky-blue;
+  // padding: 24px;
   margin-top: 3.2rem;
 
   @include tablet-below {
@@ -74,15 +71,12 @@
     flex-direction: column;
     justify-content: space-evenly;
   }
-
   #word {
     width: 100%;
   }
-
   .word-definition {
     width: 100%;
   }
-
   .sm-word {
     color: $dark-cerulean;
     font-size: 1.4rem;
@@ -159,9 +153,6 @@
     font-family: $display-font;
     text-align: center;
     margin-top: 24px;
-  }
-  .timer-directions {
-    text-align: center;
   }
   .timer-itself {
     align-items: center;
