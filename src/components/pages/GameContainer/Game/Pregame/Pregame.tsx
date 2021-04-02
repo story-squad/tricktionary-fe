@@ -34,6 +34,7 @@ import {
   PlayerStepOne,
 } from '../../../../common/Instructions';
 import { RoomCode } from '../../../../common/RoomCode';
+import { View } from '../../../../common/View';
 import { WordChoice } from './WordChoice';
 
 const initialChoiceValue = 0;
@@ -186,7 +187,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       />
       <Host>
         {/* Suggested words selection */}
-        {!isCustom && (
+        <View show={!isCustom}>
           <section>
             <ProTip message={'Read the word before starting the game!'} />
             <h1>Step 1: Choose a Word</h1>
@@ -214,7 +215,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
               ))}
             </div>
             {/* Selected word information */}
-            {getCurrentWord() && (
+            <View show={getCurrentWord() != undefined}>
               <div className="word-block">
                 <div className="word-definition">
                   <p className="sm-word">Word:</p>
@@ -223,11 +224,11 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                   <p className="definition">{getCurrentWord()?.definition}</p>
                 </div>
               </div>
-            )}
+            </View>
           </section>
-        )}
+        </View>
         {/* Custom word form */}
-        {isCustom && (
+        <View show={isCustom}>
           <section>
             <h1>Step 1: Bring Your Own Word</h1>
             <HostStepOneA />
@@ -265,7 +266,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
               </div>
             </div>
           </section>
-        )}
+        </View>
         <div className="use-own-words">
           <p>Don&apos;t like our words?</p>
           <button
@@ -280,7 +281,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           <p className="timer-directions">
             This timer is to deterimine how long players have to type.
           </p>
-          {useTimer && (
+          <View show={useTimer}>
             <div className="quantity-wrapper">
               <input
                 className="timer-itself"
@@ -293,7 +294,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 name="seconds"
               />
             </div>
-          )}
+          </View>
           <div className="timer-wrap">
             <input
               type="checkbox"
@@ -328,7 +329,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           <h1>The Lobby is filling up...</h1>
           <PlayerStepOne />
           <PlayerList />
-          {!showEditName ? (
+          <View show={!showEditName}>
             <div className="edit-name-block">
               <button
                 className="sm-btn auto-width"
@@ -337,7 +338,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 Edit Name
               </button>
             </div>
-          ) : (
+          </View>
+          <View show={showEditName}>
             <form className="edit-name-form">
               <div className="char-counter-wrapper higher">
                 <Input
@@ -355,9 +357,9 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                   max={MAX_USERNAME_LENGTH}
                 />
               </div>
-              {errors.form && (
-                <p className="short error">{errors.form.message}</p>
-              )}
+              <View show={errors.form != undefined}>
+                <p className="short error">{errors?.form?.message}</p>
+              </View>
               <button
                 className="add-top-margin"
                 disabled={!usernameIsValid(props.username).valid}
@@ -366,7 +368,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 Confirm
               </button>
             </form>
-          )}
+          </View>
         </section>
       </Player>
     </div>
