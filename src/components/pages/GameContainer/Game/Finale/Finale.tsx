@@ -6,7 +6,7 @@ import {
   getFinaleNoDefinitionText,
   getTopPlayers,
 } from '../../../../../utils/helpers';
-import { ProTip } from '../../../../common';
+import { ProTip, View } from '../../../../common';
 
 const Finale = (): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
@@ -17,7 +17,6 @@ const Finale = (): React.ReactElement => {
       <ProTip
         message={'Much like statistics, 99% of these definitions are made up'}
       />
-      {console.log(topPlayers)}
       <img
         className="finale-banner"
         src={finaleBanner}
@@ -26,7 +25,7 @@ const Finale = (): React.ReactElement => {
         aria-level={1}
       />
       <div className="place-bars">
-        {topPlayers.second.username !== undefined && (
+        <View show={topPlayers?.second?.username !== undefined}>
           <div className="stack second-place-stack">
             <div className="def-card second-def-card">
               {topPlayers.second.definition !== '' ? (
@@ -44,8 +43,8 @@ const Finale = (): React.ReactElement => {
               </div>
             </div>
           </div>
-        )}
-        {topPlayers.first.username !== undefined && (
+        </View>
+        <View show={topPlayers?.first?.username !== undefined}>
           <div className="stack first-place-stack">
             <div className="def-card first-def-card">
               {topPlayers.first.definition !== '' ? (
@@ -63,8 +62,8 @@ const Finale = (): React.ReactElement => {
               </div>
             </div>
           </div>
-        )}
-        {topPlayers.third.username !== undefined && (
+        </View>
+        <View show={topPlayers?.third?.username !== undefined}>
           <div className="stack third-place-stack">
             <div className="def-card third-def-card">
               {topPlayers.third.definition !== '' ? (
@@ -82,7 +81,7 @@ const Finale = (): React.ReactElement => {
               </div>
             </div>
           </div>
-        )}
+        </View>
       </div>
       <div className="podium">&nbsp;</div>
       <p className="feedback">
