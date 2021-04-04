@@ -93,11 +93,11 @@ const GameContainer = (): React.ReactElement => {
   };
 
   // For testing, DELETE later
-  useEffect(() => {
-    console.log('--------------');
-    console.log('lobbydata', lobbyData);
-    console.log('playerId', playerId);
-  }, [lobbyData]);
+  // useEffect(() => {
+  //   console.log('--------------');
+  //   console.log('lobbydata', lobbyData);
+  //   console.log('playerId', playerId);
+  // }, [lobbyData]);
 
   useEffect(() => {
     // Reset timer
@@ -119,7 +119,6 @@ const GameContainer = (): React.ReactElement => {
       console.log('reconnecting...');
       socket.connect();
     }
-    console.log('I am connected:', socket.connected);
   }, [socket.connected]);
 
   // When app unloads, decrement tab count
@@ -295,7 +294,6 @@ const GameContainer = (): React.ReactElement => {
 
     // Get all cumulative reactions if player refreshes during RESULTS phase
     socket.on('get reactions', (responseReactions: GetReactionsItem[]) => {
-      console.log(responseReactions);
       setDefinitionReactions((prevReactions) =>
         updateReactionCounts(prevReactions, responseReactions),
       );
@@ -309,10 +307,8 @@ const GameContainer = (): React.ReactElement => {
   /* Socket event emitters */
   const handleLogin = (newToken = false) => {
     if (newToken) {
-      console.log('attempting request new token');
       socket.emit('login');
     } else {
-      console.log('attempting login');
       socket.emit('login', newToken);
     }
   };
