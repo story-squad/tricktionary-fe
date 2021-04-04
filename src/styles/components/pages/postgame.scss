@@ -1,0 +1,112 @@
+//play/new host button
+.endgame-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  .after-reveal {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    .after-container {
+      display: flex;
+      justify-content: space-evenly;
+    }
+  }
+}
+
+.definition-result {
+  margin-bottom: 2.4rem;
+  border: 2px solid $dark-cerulean;
+  box-shadow: $boxshadow;
+  border-radius: 8px;
+
+  .who-voted-p {
+    padding: 0.8rem 1.6rem 0.8rem 1.6rem;
+    margin-bottom: 0;
+  }
+  .who-voted-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 1.6rem 0 1.6rem;
+  }
+  .vote-align {
+    background-color: $sky-blue-light;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 1.6rem 1.6rem 0 1.6rem;
+    @include tablet-below {
+      justify-content: center;
+      padding-bottom: 0;
+    }
+    .author-box {
+      @include tablet-below {
+        margin-top: 8px;
+        text-align: center;
+      }
+    }
+  }
+  .result-definition {
+    background-color: $sky-blue-light;
+    border-bottom-right-radius: 0.8rem;
+    border-bottom-left-radius: 0.8rem;
+    padding: 1.6rem 1.6rem 1.6rem 1.6rem;
+    word-wrap: break-word;
+  }
+  .result-username {
+    word-break: break-word;
+    color: $charcoal;
+    font-family: $display-font;
+    font-size: 2.4rem;
+    margin-bottom: 8px;
+    @include tablet-below {
+      font-size: 1.8rem;
+    }
+    &:last-child {
+      color: $sky-blue;
+    }
+  }
+  .result-votes {
+    margin-bottom: 0;
+    border-radius: 8px;
+    font-family: $display-font;
+  }
+  .guess-names {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0 0 0;
+    padding: 8px 8px 8px 0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    p:first-child {
+      margin-bottom: 0;
+    }
+    p.who-voted {
+      font-family: $display-font;
+      color: $burnt-orange;
+      margin-bottom: 0;
+      width: auto;
+    }
+  }
+  &:last-child {
+    .result-username {
+      color: $dark-cerulean;
+    }
+  }
+}
+
+.definition-section {
+  margin-bottom: 4.8rem;
+}
+
+.reveal-definition {
+  span:last-child {
+    display: none;
+  }
+}

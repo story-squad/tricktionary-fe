@@ -1,111 +1,213 @@
-@import "../../mixins.scss";
-@import "../../globals.scss";
+.pregame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  h3 {
+    margin-top: 0;
+  }
+  .invite-code {
+    max-width: 20rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    border-radius: 16px;
+    padding: 24px;
+    margin: 2.4rem auto;
+    position: relative;
 
-.selected {
-	background-color: $neon-green;
-	color: $dark-cerulean;
+    @include large-below {
+      max-width: 16rem;
+    }
+    p.room-code {
+      font-family: $display-font;
+      font-size: 3.6rem;
+      margin: 0;
+      color: $sky-blue;
+
+      @include large-below {
+        font-size: 3.8rem;
+      }
+    }
+  }
 }
 
 .pick-word-instructions {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	align-items: baseline;
-	justify-content: space-between;
-	.pick-instructions {
-		width: 85%;
-		font-size: 1.4rem;
-		margin-bottom: 1.6rem;
-		@include mid-below {
-			width: 100%;
-		}
-	}
-	@include mid-below {
-		justify-content: center;
-		margin-bottom: 1.6rem;
-	}
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  p.instructions {
+    margin-bottom: 1.6rem;
+    @include tablet-below {
+      width: 100%;
+    }
+  }
+  button {
+    margin: 0;
+  }
+  @include tablet-below {
+    justify-content: center;
+    margin: 0 0 1.6rem 0;
+    width: 100%;
+  }
 }
 
 .word-block {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	border-radius: 16px;
-	padding: 24px;
-	border: 2px dashed $sky-blue;
-	margin-top: 3.2rem;
-	@include mid-below {
-		flex-direction: column;
-	}
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 16px;
+  // padding: 24px;
+  margin-top: 3.2rem;
 
-	.word-column {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-evenly;
-	}
+  @include tablet-below {
+    flex-direction: column;
+  }
+  .word-column {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+  #word {
+    width: 100%;
+  }
+  .word-definition {
+    width: 100%;
+  }
+  .sm-word {
+    color: $dark-cerulean;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+  .word {
+    font-family: $display-font;
+    font-size: 2.4rem;
+    margin: 0.8rem 0 1.6rem 0;
+    word-break: break-word;
+  }
+}
 
-	#word {
-		@include mid-below {
-			width: 100%;
-		}
-	}
+.use-own-words {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  @include tablet-below {
+    flex-direction: column;
+  }
+}
 
-	.word-definition {
-		width: 75%;
-		@include mid-below {
-			width: 100%;
-		}
-	}
+.word-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
 
-	.sm-word {
-		color: $dark-cerulean;
-		font-size: 1.4rem;
-		font-weight: 700;
-		margin-bottom: 0.8rem;
-	}
-	.word {
-		font-family: $display-font;
-		font-size: 2.4rem;
-		margin: 1.6rem 0;
-	}
+.word-choice {
+  display: block;
+  min-width: 20rem;
+  width: auto;
+  word-break: break-word;
+  margin-bottom: 0.8rem;
+  padding-bottom: 1rem;
+  color: $charcoal;
+  font-size: 2.4rem;
+  font-family: $display-font;
+
+  @include tablet-below {
+    width: auto;
+    padding: 4px 8px;
+    margin: 0 0.04rem 0.8rem 0;
+    word-break: break-word;
+  }
+
+  &.writing {
+    border-style: dashed;
+    border-radius: 8px;
+  }
+
+  @include tablet-below {
+    font-size: 1.6rem;
+
+    &.single-word {
+      text-align: center;
+      font-size: 4.8rem;
+      color: $sky-blue;
+    }
+  }
+  .definition {
+    font-weight: 300;
+    border: 1px dashed $dark-blue;
+  }
 }
 
 .timer-container {
-	margin-top: 4.8rem;
-	.timer-title {
-		font-family: $display-font;
-		text-align: center;
-		margin-top: 24px;
-	}
-	.timer-directions {
-		text-align: center;
-	}
-	.timer-itself {
-		border: none;
-		height: 80px;
-		text-align: center;
-		align-items: center;
-		margin: 0 auto;
-		padding-right: 8px;
-		background: $burnt-orange;
-		color: $white;
-		font-family: $display-font;
-		font-size: 3.2rem;
-	}
+  margin-top: 4.8rem;
+  .timer-title {
+    font-family: $display-font;
+    text-align: center;
+    margin-top: 24px;
+  }
+  .timer-itself {
+    align-items: center;
+    margin: 0 auto;
+    width: 8rem;
+    font-size: 3.2rem;
+  }
 }
 
-input[type="number"]::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	background: #eee url("../../../assets/arrows.png") no-repeat 50% 50%;
-	opacity: 1;
-	width: 14px;
-	height: 20px;
-	padding: 0;
-	position: relative;
-	right: 16px;
-	top: 8px;
-	cursor: pointer;
-	display: block;
-	color: $white;
-	text-align: center;
+input[type='number']::-webkit-inner-spin-button {
+  opacity: 1;
+  padding: 0;
+  right: 8px;
+  height: 4rem;
+  cursor: pointer;
+}
+
+.edit-name-block {
+  display: flex;
+  justify-content: flex-end;
+  .edit-name {
+    width: 150px;
+    height: 50px;
+    background-color: $sky-blue;
+  }
+}
+
+.edit-name-form {
+  display: flex;
+  flex-direction: column;
+  margin: 1.6rem auto 1.6rem auto;
+  padding: 1.6rem;
+  border-radius: 8px;
+  max-width: 100%;
+  border: 2px solid $dark-blue;
+  .button {
+    float: right;
+    color: $sky-blue;
+  }
+}
+
+.timer-container {
+  .timer-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 1.6rem 0 1.6rem 0;
+
+    p {
+      font-size: 1.8rem;
+      color: $medium-grey;
+    }
+  }
+}
+.short.error {
+  position: relative;
 }

@@ -1,3 +1,5 @@
+<a href="https://www.producthunt.com/posts/tricktionary?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-tricktionary" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=286868&theme=light" alt="Tricktionary - Creative icebreaker game for Zoom meetings | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
 # Tricktionary
 
 Tricktionary is a game developed for StorySquad.

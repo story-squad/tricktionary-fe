@@ -1,11 +1,14 @@
 footer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-evenly;
   padding: 16px 0 16px 0;
   background: $white;
   margin: 2.4rem 0 0 0;
-
+  @include tablet-below {
+    flex-direction: column;
+  }
   .flex-container {
     display: flex;
     height: 4rem;
@@ -14,12 +17,13 @@ footer {
     font-family: $display-font;
     text-decoration: none;
   }
-
   .bottom {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 1.6rem;
+    @include tablet-below {
+      margin-top: 1.6rem;
+    }
 
     p {
       font-weight: 700;
@@ -32,42 +36,42 @@ footer {
       margin: 0 0 4px 0;
     }
   }
-
   .top {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    width: 100%;
-
     p.email-disclaimer {
       margin-bottom: 8px;
+      font-size: 1.6rem;
     }
-
     .ck-fm {
       display: flex;
       flex-direction: row;
-      justify-content: space-evenly;
+      justify-content: space-between;
       text-align: center;
-
-      @include mid-below {
+      @include tablet-below {
         flex-direction: column;
       }
-
       input#ck-email {
         height: 3.2rem;
-        margin: 0 0 0 1.6rem;
+        margin: 0;
+        width: 65%;
         padding: 8px;
+        font-size: 1.2rem;
+        @include tablet-below {
+          width: 100%;
+        }
       }
-
       button {
+        min-height: unset;
         height: 3.2rem;
+        width: auto;
         padding: 0 16px 0 16px;
         margin: 0 0 0 8px;
-
-      @include mid-below {
-        margin-top: 8px;
-      }
+        font-size: 1.2rem;
+        @include tablet-below {
+          margin-top: 8px;
+        }
       }
     }
   }

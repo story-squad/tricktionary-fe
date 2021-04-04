@@ -1,48 +1,36 @@
-import React from 'react';
-// import { Link } from 'react-router-dom';
-// import { ClimbingBoxLoader } from 'react-spinners';
-// import { useRecoilState } from 'recoil';
-// import { apiError } from '../../../state';
-// import { Header } from '../Header';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { loadingState } from '../../../state/gameState';
+import { MAX_LOADING_TIME } from '../../../utils/constants';
 
 const Loader = (): React.ReactElement => {
-  //   const [dots, setDots] = useState('');
-  //   const [loadingError, setLoadingError] = useRecoilState(apiError.global);
+  const [loading, setLoading] = useRecoilState(loadingState);
+  const [timeoutId, setTimeoutId] = useState<number>(0);
 
-  //   useEffect(() => {
-  //     const dotTimer = setInterval(() => {
-  //       setDots((cur) => {
-  //         if (cur.length >= 3) return '';
-  //         else return cur + '.';
-  //       });
-  //     }, 500);
-  //     return () => {
-  //       clearInterval(dotTimer);
-  //       setLoadingError(null);
-  //     };
-  //   }, []);
+  // Set loading to 'failed' if it takes too long
+  useEffect(() => {
+    if (loading === 'loading') {
+      clearTimeout(timeoutId);
+      setTimeoutId(
+        window.setTimeout(() => {
+          setLoading('failed');
+        }, MAX_LOADING_TIME),
+      );
+    } else if (loading === 'ok') {
+      clearTimeout(timeoutId);
+    }
+  }, [loading]);
 
   return (
-    <div className="loader">
-      <h2>Loader Temp</h2>
-      {/* <Header />
-      <div className="loader-body">
-        {loadingError ? (
-          <>
-            <div className="message error">{loadingError}</div>
-            <Link to="/">Back to Home</Link>
-          </>
-        ) : (
-          <>
-            <ClimbingBoxLoader loading={true} />
-            <div className="message">
-              {message}
-              {dots}
-            </div>
-          </>
-        )}
-      </div> */}
-    </div>
+    <>
+      {loading === 'loading' && (
+        <div className="loader-container">
+          <div className="loader">
+            <h2>Loading</h2>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

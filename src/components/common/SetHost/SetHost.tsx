@@ -1,26 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useLocalStorage } from '../../../hooks';
-import { playerIdState } from '../../../state';
-import { GuessItem, PlayerItem } from '../../../types/gameTypes';
+import { handleSetHostFn } from '../../../state/functionState';
+import {
+  loadingState,
+  lobbyState,
+  playerIdState,
+} from '../../../state/gameState';
+import { GuessItem } from '../../../types/gameTypes';
+import { initialGuesses } from '../../../utils/localStorageInitialValues';
 
-const SetHost = (props: SetHostProps): React.ReactElement => {
+const SetHost = (): React.ReactElement => {
   const playerId = useRecoilValue(playerIdState);
-  const [guesses] = useLocalStorage('guesses', []);
+  const loading = useRecoilValue(loadingState);
+  const lobbyData = useRecoilValue(lobbyState);
+  const handleSetHost = useRecoilValue(handleSetHostFn);
+  const [guesses] = useLocalStorage('guesses', initialGuesses);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [chosenPlayer, setChosenPlayer] = useState<string>('');
 
   const connectedOtherPlayers = () =>
-    props.players.filter(
+    lobbyData.players.filter(
       (player) => player.id !== playerId && player.connected,
     );
 
-  // Update players list on props.players update
+  // Update players list on lobbyData.players update
   useEffect(() => {
-    if (props.players.length >= 1) {
+    if (lobbyData.players.length >= 1) {
       setChosenPlayer(connectedOtherPlayers()[0]?.id);
     }
-  }, [props.players]);
+  }, [lobbyData.players]);
 
   const handleSetChosenPlayer = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setChosenPlayer(e.target.value);
@@ -28,7 +37,7 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
 
   const handleOnClick = () => {
     if (connectedOtherPlayers().length >= 1) {
-      props.handleSetHost(chosenPlayer, guesses as GuessItem[]);
+      handleSetHost(chosenPlayer, lobbyData.lobbyCode, guesses as GuessItem[]);
     } else {
       setShowModal(false);
     }
@@ -37,8 +46,9 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
   return (
     <>
       <button
-        className={showModal ? 'selected' : ''}
+        className="no-bottom-margin secondary"
         onClick={() => setShowModal(true)}
+        disabled={loading === 'loading'}
       >
         New Host
       </button>
@@ -79,8 +89,3 @@ const SetHost = (props: SetHostProps): React.ReactElement => {
 };
 
 export default SetHost;
-
-interface SetHostProps {
-  players: PlayerItem[];
-  handleSetHost: (hostId: string, guesses: GuessItem[]) => void;
-}

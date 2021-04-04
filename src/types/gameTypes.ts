@@ -1,3 +1,11 @@
+import { DoubleNumberDict } from './commonTypes';
+
+/* Types */
+
+export type LoadingState = 'ok' | 'loading' | 'failed';
+
+/* Interfaces */
+
 export interface PlayerItem {
   id: string;
   username: string;
@@ -10,6 +18,7 @@ export interface PlayerItem {
 export interface FinalePlayer {
   username: string;
   definition: string;
+  word: string;
 }
 
 export interface LobbyData {
@@ -30,11 +39,22 @@ export interface LobbyData {
     };
   };
   topThree: FinaleDefinition[];
+  reactions: DoubleNumberDict;
+}
+
+export interface ReactionsDictionary {
+  [key: number]: { [key: number]: number };
 }
 
 export interface GuessItem {
   guess: number;
   player: string;
+}
+
+export interface GuessItemWithConnected {
+  guess: number;
+  player: string;
+  connected: boolean;
 }
 
 export interface DefinitionItem {
@@ -77,6 +97,7 @@ export interface HostChoice {
 export interface FinaleDefinition {
   user_id: string;
   definition: string;
+  word: string;
 }
 
 export interface TopPlayers {
@@ -89,4 +110,32 @@ export interface HandleSelectGuessParams {
   playerId: string;
   guessId: number;
   definitionSelection: DefinitionSelection;
+}
+
+export interface DefinitionResultItem {
+  username: string;
+  playerId: string;
+  definition: string;
+  definitionId: number;
+  guesses: string[];
+  points: number;
+}
+
+export interface PlayerDictionary {
+  [Key: string]: string;
+}
+
+export interface DefinitionDictionary {
+  [Key: number]: DefinitionResultItem;
+}
+
+export interface GetReactionsItem {
+  count: number;
+  definition_id: number;
+  reaction_id: number;
+}
+
+export interface Timer {
+  startTime: number;
+  currentTime: number;
 }

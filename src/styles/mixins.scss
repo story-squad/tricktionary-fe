@@ -4,38 +4,6 @@
   -moz-box-shadow: 0 4px 4px $color;
 }
 
-// The power of mixins! All your buttons should be consistent with this.
-@mixin button(
-  $bgcolor: $sky-blue,
-  $font-color: $white,
-  $font-size: 1.6rem,
-  $padding: 1.6rem 1.6rem,
-  $border-width: 0,
-  $border-color: #000000
-) {
-  padding: $padding;
-  text-decoration: none;
-  text-align: center;
-  border: $border-width solid $border-color;
-  border-radius: 4px;
-  color: $font-color;
-  background-color: $bgcolor;
-  font-family: $text-font;
-  font-size: $font-size;
-
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  &:hover {
-    background-color: darken($bgcolor, 5%);
-    transition: all 0.2s ease-in-out;
-  }
-  &:disabled,
-  &.disabled {
-    background-color: $lt-grey;
-    cursor: not-allowed;
-  }
-}
-
 @mixin mid-below {
   @media (max-width: #{$mid}) {
     @content;
@@ -48,6 +16,16 @@
 }
 @mixin large-below {
   @media (max-width: #{$large}) {
+    @content;
+  }
+}
+@mixin x-large-below {
+  @media (max-width: #{$x-large}) {
+    @content;
+  }
+}
+@mixin x2-large-below {
+  @media (max-width: #{$x2-large}) {
     @content;
   }
 }

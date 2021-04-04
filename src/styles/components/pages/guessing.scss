@@ -1,0 +1,119 @@
+.guessing {
+  .definition {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border: 1px solid $lt-grey;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    padding: 16px 8px 16px 8px;
+    box-shadow: $boxshadow;
+
+    &:last-of-type {
+      margin-bottom: 2.4rem;
+    }
+    p {
+      margin-bottom: 0;
+      @include tablet-below {
+        text-align: left;
+      }
+      &:last-of-type {
+        word-break: break-word;
+      }
+    }
+    .definition-content {
+      align-self: center;
+      text-align: left;
+      margin: 0;
+    }
+    .definition-key {
+      display: flex;
+      justify-content: center;
+      margin: 0 2rem 0 0;
+      color: $nero;
+      background: $white;
+      border-radius: 8px;
+      height: 4rem;
+      p {
+        width: 6.5rem;
+        font-size: 4rem;
+        font-family: $display-font;
+        color: $sky-blue;
+      }
+    }
+  }
+}
+
+.definition-guess {
+  text-align: left;
+}
+
+.submit-guesses {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.6rem;
+}
+
+.show-guess {
+  p.guess-choice {
+    word-wrap: break-word;
+  }
+}
+
+.voting-label {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0;
+    margin-top: 1.6rem;
+  }
+  h3:first-child {
+    margin-right: 12.08rem;
+  }
+}
+
+.guesses {
+  h2 {
+    margin-top: 4.8rem;
+  }
+  hr {
+    border-top: 1px solid $lt-grey;
+    hr:first-child {
+      margin-top: 0;
+    }
+  }
+  .guess {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+
+    .guess-name {
+      font-weight: bold;
+      width: 17rem;
+    }
+    button {
+      min-height: unset;
+      height: 3.2rem;
+      width: 3.2rem;
+      padding: 0;
+      margin: 4px;
+    }
+  }
+}
+
+.notes {
+  text-align: center;
+  textarea {
+    width: 35rem;
+    height: 10rem;
+    max-width: 100%;
+    border-radius: 8px;
+    border: 2px solid $nero;
+  }
+}

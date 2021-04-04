@@ -1,7 +1,8 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { lobbyState, playerIdState } from '../../../state';
+import { lobbyState, playerIdState } from '../../../state/gameState';
 import { GuessItem, LobbyData, PlayerItem } from '../../../types/gameTypes';
+import { isValidPlayer } from '../../../utils/helpers';
 
 // Functions to determine if the player has submitted, based on the current phase/lobbyData
 const guessArrayContainsPlayer = (guesses: GuessItem[], playerId: string) => {
@@ -54,10 +55,12 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
 
   return (
     <div className="player-display">
-      <h2 className="player-h2">Players</h2>
+      <h2 className="player-h2">Player Lobby</h2>
       <div className="player-lobby">
         {lobbyData.players
-          .filter((player: PlayerItem) => player.connected)
+          .filter(
+            (player: PlayerItem) => player.connected && isValidPlayer(player),
+          )
           .map((player: PlayerItem) => {
             return (
               <div

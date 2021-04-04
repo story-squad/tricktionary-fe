@@ -1,9 +1,10 @@
 {
-    "2000": "Bad Lobby Code",
-    "2001": "Max players in lobby",
-    "2002": "Game already started",
-    "2003": "Internal server error",
-    "2004": "Permission error: client not in requested game",
-    "2005": "Permission error: client not host of current game",
-    "2006": "Interface error"
+  "2000": "Bad Lobby Code",
+  "2001": "Max players in lobby",
+  "2002": "Game already started",
+  "2003": "Internal server error",
+  "2004": "Permission error: client not in requested game",
+  "2005": "Permission error: client not host of current game",
+  "2006": "Interface error",
+  "2007": "There was an issue starting the game. Please refresh and try again."
 }

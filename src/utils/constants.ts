@@ -1,3 +1,6 @@
+export const REACT_APP_URL =
+  process.env.REACT_APP_URL || 'http://localhost:3000';
+
 export const REACT_APP_API_URL =
   process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
@@ -36,3 +39,13 @@ export const PUBLIC_MEETING_URL =
 
 // For Tricktionary team to host public livestream
 export const PUBLIC_STREAM_URL = process.env.REACT_APP_PUBLIC_STREAM_URL || '';
+
+// Reaction IDs to be used in the emoji-smash feature, JSON-formatted list
+export const REACTION_IDS = process.env.REACT_APP_REACTION_IDS || '[8, 13, 42]';
+
+// Time until Loader closes in milliseconds
+export const MAX_LOADING_TIME =
+  Number(process.env.REACT_APP_MAX_LOADING_TIME) || 8000;
+
+/* SECRETS, don't add default value */
+export const JWT_SECRET = process.env.REACT_APP_JWT_SECRET || '';

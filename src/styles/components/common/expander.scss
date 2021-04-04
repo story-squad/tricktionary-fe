@@ -1,0 +1,31 @@
+.expander {
+  .expander-header {
+    width: 100%;
+    margin: 0 auto 4rem;
+    font-family: $display-font;
+    font-size: 2rem;
+    padding: 0;
+    color: $burnt-orange;
+    background: none;
+
+    &:hover {
+      box-shadow: none;
+    }
+  }
+  .expander-content {
+    margin: 2rem 0 6rem;
+    width: 100%;
+  }
+  .expander-icon {
+    margin-left: 0.5rem;
+    color: inherit;
+    transition-duration: 0.5s;
+
+    svg {
+      transition-duration: 0.2s;
+    }
+    &.expanded svg {
+      transform: scaleY(-1);
+    }
+  }
+}
