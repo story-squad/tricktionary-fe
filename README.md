@@ -2,7 +2,7 @@
 
 # Tricktionary
 
-Tricktionary is a game developed for StorySquad.
+Tricktionary is a game developed by StorySquad.
 
 This frontend application is a React/TypeScript project that relies heavily on the use of WebSockets.
 We use socket.io to handle player connections and game events.
