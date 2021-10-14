@@ -127,7 +127,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
           </section>
         </Expander>
         <section>
-          <h1>Welcome to Tricktionary!</h1>
+          <h1>Welcome to Word Hoax!</h1>
           <p className="instructions bot-margin">
             Please enter your name and lobby code to join a game or you can host
             a new game.
