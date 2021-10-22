@@ -9,7 +9,7 @@ const PublicGames = (): React.ReactElement => {
     <>
       {(PUBLIC_MEETING_URL !== '' || PUBLIC_STREAM_URL !== '') && (
         <div className="game-page public-games margin-bottom">
-          <h2>Play a Game With the Tricktionary Team</h2>
+          <h2>Play a Game With the Word Hoax Team</h2>
           {PUBLIC_MEETING_URL !== '' && (
             <>
               <a href={PUBLIC_MEETING_URL} target="_blank" rel="noreferrer">

@@ -18,6 +18,6 @@ describe('GameContainer', () => {
       </TestWrapper>,
     );
 
-    expect(screen.getByText(/welcome to tricktionary/i)).toBeInTheDocument;
+    expect(screen.getByText(/welcome to Word Hoax/i)).toBeInTheDocument;
   });
 });
