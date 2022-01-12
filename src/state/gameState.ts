@@ -72,6 +72,7 @@ export const lobbyState = atom<LobbyData>({
   default: {
     phase: 'LOBBY',
     players: [],
+    rounds: [],
     definition: '',
     host: '',
     guesses: [],

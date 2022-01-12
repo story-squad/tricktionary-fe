@@ -1,7 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-//logo
-import logo from '../../../assets/WordHoaxLogo.png';
 
 const Header = (props: HeaderProps): React.ReactElement => {
   const { onClick, to } = props;
@@ -10,10 +8,16 @@ const Header = (props: HeaderProps): React.ReactElement => {
     <header>
       {onClick !== undefined && to !== undefined ? (
         <Link className="home-link" onClick={onClick} to={to}>
-          <img className="trick-logo" src={logo} alt="Word Hoax logo" />
+          {/* <img className="trick-logo" src={logo} alt="Word Hoax logo" /> */}
+          <h2>WORD HOAX</h2>
+          <p>A game of verbal cloaks, jokes & masterstrokes</p>
         </Link>
       ) : (
-        <img className="trick-logo" src={logo} alt="Word Hoax logo" />
+        // <img className="trick-logo" src={logo} alt="Word Hoax logo" />
+        <>
+          <h2>WORD HOAX</h2>
+          <p>A game of verbal cloaks, jokes & masterstrokes</p>
+        </>
       )}
     </header>
   );

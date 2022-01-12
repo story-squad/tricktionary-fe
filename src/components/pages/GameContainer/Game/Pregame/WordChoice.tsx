@@ -7,7 +7,11 @@ export const WordChoice = (props: WordChoiceProps): React.ReactElement => {
   }`;
 
   return (
-    <button onClick={() => handleChoose(word.id)} className={className}>
+    <button
+      onClick={() => handleChoose(word.id)}
+      className={className}
+      title={word.word}
+    >
       {word.word}
     </button>
   );

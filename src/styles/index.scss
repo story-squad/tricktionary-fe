@@ -5,6 +5,7 @@
 // Google Font Imports
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Oswald:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@700&display=swap');
 
 // Page Component Stylesheets
 @import './components/pages/landingPage.scss';
@@ -32,3 +33,4 @@
 @import './components/common/copyToClipboard.scss';
 @import './components/common/modal.scss';
 @import './components/common/guessWord.scss';
+@import './components/common/scoreboard.scss';

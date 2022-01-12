@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import proTipImg from '../../../assets/proTip.svg';
 import { getRandomFromArray } from '../../../utils/helpers/commonHelpers';
 import proTips from '../../../utils/text/proTips.json';
 
@@ -11,7 +10,8 @@ const ProTip = (props: ProTipProps): React.ReactElement => {
 
   return (
     <div className="pro-tip">
-      <img src={proTipImg} alt="Pro Tip:" role="heading" aria-level={3} />
+      {/* <img src={proTipImg} alt="Pro Tip:" role="heading" aria-level={3} /> */}
+      <h4>Pro Tip</h4>
       <p>{tipMessage}</p>
     </div>
   );

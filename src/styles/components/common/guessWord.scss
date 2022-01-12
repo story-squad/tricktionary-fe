@@ -3,13 +3,12 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: baseline;
-  justify-content: center;
+  justify-content: flex-start;
   word-break: break-word;
   max-width: 100%;
-  width: fit-content;
   text-align: center;
-  margin: 0 auto 4rem auto;
-  padding: 24px;
+  margin: 0 auto 2rem;
+  padding: 0;
 
   @include tablet-below {
     align-items: center;
@@ -18,13 +17,14 @@
   }
   .word {
     font-size: 3.2rem;
-    font-family: $display-font;
+    font-family: $text-font;
     margin: 0 0 0 1.6rem;
     background: $neon-green;
     color: $dark-cerulean;
     padding: 1.4rem 4rem 0.8rem;
     border-radius: 8px;
     border: 2px solid $dark-cerulean;
+    font-weight: 700;
     @include tablet-below {
       font-size: 2.4rem;
       margin-left: 0;

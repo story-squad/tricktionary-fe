@@ -21,6 +21,16 @@ export interface FinalePlayer {
   word: string;
 }
 
+export interface RoundItem {
+  roundNum: string;
+  scores: RoundScoreItem[];
+}
+
+export interface RoundScoreItem {
+  playerId: string;
+  score: string;
+}
+
 export interface LobbyData {
   definition: string;
   guesses: GuessItem[];
@@ -28,6 +38,7 @@ export interface LobbyData {
   lobbyCode: string;
   phase: string;
   players: PlayerItem[];
+  rounds: RoundItem[];
   roundId: number;
   word: string;
   roundSettings: {

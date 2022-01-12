@@ -1,4 +1,62 @@
 .guessing {
+  .page-title {
+    padding: 3rem 8.5rem 2rem;
+  }
+
+  section {
+    padding: 3rem 8.5rem;
+
+    &.white-bg {
+      background: $white;
+    }
+  }
+
+  p.instructions {
+    margin: 0 auto;
+    text-align: center;
+    width: 65rem;
+    max-width: 100%;
+    font-weight: 700;
+    line-height: 1.5em;
+    font-size: 2rem;
+  }
+
+  .word-label,
+  .guess-label {
+    width: 18rem;
+    text-align: left;
+  }
+
+  .guess-word {
+    .word {
+      margin-left: 0;
+      max-width: 70%;
+    }
+  }
+
+  .player-guess {
+    display: flex;
+    margin-bottom: 3rem;
+
+    .guess-label {
+      font-size: 2.8rem;
+    }
+
+    .guess {
+      border: 2px solid $dark-cerulean;
+      border-radius: 8px;
+      padding: 1.5rem 4rem 0;
+      max-width: 70%;
+
+      p {
+        font-size: 2.5rem;
+        color: $black;
+        text-align: left;
+        font-weight: 700;
+      }
+    }
+  }
+
   .definition {
     width: 100%;
     text-align: center;
@@ -7,9 +65,8 @@
     align-items: center;
     border: 1px solid $lt-grey;
     border-radius: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 15px;
     padding: 16px 8px 16px 8px;
-    box-shadow: $boxshadow;
 
     &:last-of-type {
       margin-bottom: 2.4rem;
@@ -97,6 +154,7 @@
       font-weight: bold;
       width: 17rem;
     }
+
     button {
       min-height: unset;
       height: 3.2rem;
@@ -108,9 +166,9 @@
 }
 
 .notes {
-  text-align: center;
+  text-align: left;
   textarea {
-    width: 35rem;
+    width: 100%;
     height: 10rem;
     max-width: 100%;
     border-radius: 8px;

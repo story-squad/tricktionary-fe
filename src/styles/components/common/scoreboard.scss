@@ -1,0 +1,142 @@
+.player-scoreboard {
+  color: $white;
+  background-color: #0053a1;
+  border-radius: 8px;
+  position: fixed;
+  right: -400px;
+  top: 40px;
+  z-index: 200;
+
+  .scoreboard-table {
+    overflow-x: scroll;
+    max-width: 300px;
+    box-sizing: border-box;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $burnt-orange;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $brand-blue;
+      opacity: 0.7;
+    }
+  }
+
+  .scoreboard-heading {
+    position: relative;
+
+    h2 {
+      color: $white;
+      font-size: 3rem;
+      padding: 2rem;
+      margin-bottom: 0;
+    }
+
+    button {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      border-radius: 8px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      min-height: 0 !important;
+    }
+  }
+
+  .row {
+    display: flex;
+    background-color: #002654;
+    align-items: center;
+
+    td {
+      padding: 1rem;
+    }
+
+    &.no-players {
+      font-family: $text-font;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    &.heading {
+      background-color: #003b7a;
+
+      .round {
+        text-align: center;
+      }
+
+      td {
+        color: $white;
+        font-family: $display-font;
+      }
+    }
+
+    .username {
+      width: 11rem;
+      text-align: center;
+    }
+
+    .round {
+      width: 5rem;
+      text-align: center;
+    }
+
+    .total {
+      width: 7rem;
+      text-align: center;
+    }
+
+    .placing {
+      width: 5rem;
+      text-align: center;
+    }
+
+    &.player {
+      border-bottom: 1px solid #b7b7b8;
+
+      td {
+        color: $white;
+        font-weight: 300;
+        font-size: 1.4rem;
+        font-family: $text-font;
+      }
+
+      &:last-child {
+        border-bottom: none !important;
+      }
+    }
+
+    &.current {
+      background-color: #28a9fa;
+
+      td {
+        font-weight: 800;
+      }
+    }
+  }
+}
+
+.show-scoreboard {
+  position: fixed;
+  top: 100px;
+  right: -35px;
+  z-index: 100;
+  width: 120px;
+  border-radius: 8px 8px 0 0;
+  transform: rotate(-90deg);
+  margin: 0 !important;
+}

@@ -7,9 +7,22 @@
   margin: 0 auto;
   max-width: 82rem;
   width: 100%;
-  background-color: $white;
+  background-color: $lighter-grey;
   border-radius: 24px;
-  padding: 4.8rem 8.5rem;
+
+  .bottom-radius {
+    border-radius: 0 0 24px 24px;
+    overflow: hidden;
+  }
+
+  h1,
+  p.instructions {
+    text-align: center;
+  }
+
+  h1 {
+    margin-bottom: 1rem;
+  }
 
   @include tablet-below {
     padding: 2.4rem 2.4rem;

@@ -7,6 +7,7 @@ import {
   hostChoiceState,
   lobbySettingsState,
   lobbyState,
+  playerIdState,
   revealResultsState,
 } from '../../../../../state/gameState';
 import { WordItem } from '../../../../../types/gameTypes';
@@ -28,11 +29,7 @@ import {
   ProTip,
   SetHost,
 } from '../../../../common';
-import {
-  HostStepOne,
-  HostStepOneA,
-  PlayerStepOne,
-} from '../../../../common/Instructions';
+import { HowToPlay } from '../../../../common/HowTo';
 import { RoomCode } from '../../../../common/RoomCode';
 import { View } from '../../../../common/View';
 import { WordChoice } from './WordChoice';
@@ -44,12 +41,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const [isCustom, setIsCustom] = useState(false);
   const [choice, setChoice] = useState(initialChoiceValue);
   const [customInput, setCustomInput] = useState(initialCustomInputValue);
-  const [showEditName, setShowEditName] = useState(false);
   const [showStartGameModal, setShowStartGameModal] = useState(false);
+  const [showChangeNameModal, setShowChangeNameModal] = useState(false);
   const [wordSelection, setWordSelection] = useState<WordItem[]>([]);
   const lobbySettings = useRecoilValue(lobbySettingsState);
   const [hostChoice, setHostChoice] = useRecoilState(hostChoiceState);
   const lobbyData = useRecoilValue(lobbyState);
+  const playerId = useRecoilValue(playerIdState);
   const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
@@ -71,6 +69,15 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     setGuesses([]);
     resetRevealResults();
   }, []);
+
+  //* Check if the user has a default name. If so, open change name modal
+  useEffect(() => {
+    const isHost = lobbyData.host === playerId;
+
+    if (props.username.includes('Player') && isHost === false) {
+      setShowChangeNameModal(true);
+    }
+  }, [props.username]);
 
   // Clear choice/input when switching between word selection type
   useEffect(() => {
@@ -128,6 +135,13 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     });
   };
 
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCustomInput({
+      ...customInput,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const handleSecondsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.handleSetSeconds(Number(e.target.value));
   };
@@ -144,6 +158,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.handleSetUsername(e.target.value);
     const message = usernameIsValid(e.target.value).message;
+
     if (usernameIsValid(e.target.value).valid) {
       clearErrors();
     }
@@ -154,7 +169,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
   const handleSubmitUsername = (e: React.MouseEvent) => {
     e.preventDefault();
-    setShowEditName(false);
+    // setShowEditName(false);
+    setShowChangeNameModal(false);
     props.handleUpdateUsername(props.username);
   };
 
@@ -174,8 +190,44 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     }
   };
 
+  //* Component for the change name modal
+  const changePlayerName = (
+    <form className="edit-name-form">
+      <div className="char-counter-wrapper higher">
+        <Input
+          id="username"
+          name="username"
+          value={props.username}
+          label="Codename"
+          register={register}
+          onChange={handleChangeUsername}
+          autoFocus={true}
+          maxLength={MAX_USERNAME_LENGTH}
+        />
+        <CharCounter string={props.username} max={MAX_USERNAME_LENGTH} />
+      </div>
+      <View show={errors.form != undefined}>
+        <p className="short error">{errors?.form?.message}</p>
+      </View>
+      <button
+        className="add-top-margin"
+        disabled={!usernameIsValid(props.username).valid}
+        onClick={handleSubmitUsername}
+      >
+        Save
+      </button>
+    </form>
+  );
+
   return (
     <div className="pregame game-page">
+      <Modal
+        visible={showChangeNameModal}
+        message={''}
+        customJSXCode={changePlayerName}
+        header={'Change your codename'}
+      />
+
       <Modal
         visible={showStartGameModal}
         message={
@@ -186,22 +238,38 @@ const Pregame = (props: PregameProps): React.ReactElement => {
         handleCancel={() => setShowStartGameModal(false)}
       />
       <Host>
-        {/* Suggested words selection */}
-        <View show={!isCustom}>
-          <section>
-            <ProTip message={'Read the word before starting the game!'} />
-            <h1>Game Setup</h1>
-            <h2>Step 1: Choose a Word</h2>
-            <HostStepOne />
-            <RoomCode />
+        <ProTip message={'Read the word before starting the game!'} />
+
+        <h1 className="page-title">Game Setup</h1>
+
+        <section>
+          <h3>Step 1: Invite Players</h3>
+
+          <p className="description">
+            Send lobby code or copy link to invite players
+          </p>
+
+          <RoomCode />
+        </section>
+
+        <section className="white-bg">
+          <h3>Step 2: Choose a word</h3>
+
+          {/* Suggested words selection */}
+          <View show={!isCustom}>
             <div className="pick-word-instructions">
               <p className="instructions bot-margin">
-                Click on a word to see its definition.
+                Choose a word while your friends are joining the lobby. Click on
+                a word to see it’s definition.
               </p>
-              <button className="sm-btn auto-width" onClick={handleGetWords}>
-                Shuffle Words
+              <button
+                className="sm-btn auto-width secondary"
+                onClick={handleGetWords}
+              >
+                give me new words
               </button>
             </div>
+
             <div className="word-list">
               {wordSelection.map((word) => (
                 <WordChoice
@@ -212,29 +280,26 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 />
               ))}
             </div>
+
             {/* Selected word information */}
             <View show={getCurrentWord() != undefined}>
               <div className="word-block">
                 <div className="word-definition">
-                  <p className="sm-word">Word:</p>
                   <p className="word">{getCurrentWord()?.word}</p>
-                  <p className="sm-word">Definition:</p>
+                  <p className="sm-word">Definition</p>
                   <p className="definition">{getCurrentWord()?.definition}</p>
                 </div>
               </div>
             </View>
-          </section>
-        </View>
-        {/* Custom word form */}
-        <View show={isCustom}>
-          <section>
-            <h1>Game Setup</h1>
-            <h2>Step 1: Bring Your Own Word</h2>
-            <HostStepOneA />
-            <RoomCode />
+          </View>
+
+          {/* Custom word form */}
+          <View show={isCustom}>
+            <p>Enter your own word and definition.</p>
+
             <div className="word-block">
               <div className="word-column">
-                <label htmlFor="word">Word:</label>
+                <label htmlFor="word">Word</label>
                 <div className="char-counter-wrapper higher">
                   <input
                     id="word"
@@ -242,21 +307,27 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                     value={customInput.word}
                     onChange={handleInputChange}
                     maxLength={MAX_CUSTOM_WORD_LENGTH}
+                    placeholder="Type your word"
                   />
                   <CharCounter
                     string={customInput.word}
                     max={MAX_CUSTOM_WORD_LENGTH}
                   />
                 </div>
-                <label htmlFor="definition">Definition:</label>
                 <div className="char-counter-wrapper higher">
-                  <input
-                    id="definition"
-                    name="definition"
-                    value={customInput.definition}
-                    onChange={handleInputChange}
-                    maxLength={MAX_DEFINITION_LENGTH}
-                  />
+                  <div className="form-input">
+                    <label htmlFor="definition">Definition</label>
+                    <textarea
+                      id="definition"
+                      name="definition"
+                      value={customInput.definition}
+                      onChange={(e) => handleTextareaChange(e)}
+                      maxLength={MAX_DEFINITION_LENGTH}
+                      placeholder="Type your definition"
+                      rows={5}
+                    ></textarea>
+                  </div>
+
                   <CharCounter
                     string={customInput.definition}
                     max={MAX_DEFINITION_LENGTH}
@@ -264,38 +335,61 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                 </div>
               </div>
             </div>
-          </section>
-        </View>
-        <div className="use-own-words">
-          <p>
-            {!isCustom ? `Don't like our words?` : `Need a creative boost?`}
-          </p>
-          <button
-            className="choose-word sm-btn auto-width"
-            onClick={() => setIsCustom(!isCustom)}
-          >
-            {isCustom ? 'Pick One of Our Words' : 'Bring Your Own Word'}
-          </button>
-        </div>
+          </View>
+
+          <div className="use-own-words">
+            <p>
+              {!isCustom ? `Don't like our words?` : `Need a creative boost?`}
+            </p>
+            <button
+              className="choose-word sm-btn auto-width secondary"
+              onClick={() => setIsCustom(!isCustom)}
+            >
+              {isCustom ? 'Pick One of Our Words' : 'Bring Your Own Word'}
+            </button>
+          </div>
+        </section>
+
         <section className="timer-container">
-          <h2>Step 2: Set A Timer</h2>
-          <p>
+          <h3>Step 3: Set A Timer</h3>
+          <p className="description">
             Choose how many seconds players have to write their definitions.
           </p>
-          <View show={useTimer}>
-            <div className="quantity-wrapper">
-              <input
-                className="timer-itself"
-                type="number"
-                min={0}
-                max={120}
-                value={lobbySettings.seconds}
-                onChange={handleSecondsChange}
-                id="seconds"
-                name="seconds"
-              />
-            </div>
-          </View>
+
+          <div className="quantity-wrapper">
+            <button
+              onClick={() => {
+                if (lobbySettings.seconds !== undefined) {
+                  props.handleSetSeconds(Number(lobbySettings.seconds - 1));
+                }
+              }}
+              disabled={!useTimer}
+            >
+              -
+            </button>
+            <input
+              className="timer-itself"
+              type="number"
+              min={0}
+              max={120}
+              value={lobbySettings.seconds}
+              onChange={handleSecondsChange}
+              id="seconds"
+              name="seconds"
+              disabled={!useTimer}
+            />
+            <button
+              onClick={() => {
+                if (lobbySettings.seconds !== undefined) {
+                  props.handleSetSeconds(Number(lobbySettings.seconds + 1));
+                }
+              }}
+              disabled={!useTimer}
+            >
+              +
+            </button>
+          </div>
+
           <div className="timer-wrap">
             <input
               type="checkbox"
@@ -303,72 +397,49 @@ const Pregame = (props: PregameProps): React.ReactElement => {
               checked={!useTimer}
               onChange={handleSetUseTimer}
             />
-            <p>Play without timer</p>
+            <label htmlFor="use-timer">Play without timer</label>
           </div>
         </section>
-        <section className="start-instructions">
-          <h2>Important!</h2>
-          <p className="instructions">
+
+        <section className="start-instructions white-bg">
+          <h3>Important!</h3>
+          <p className="description">
             Wait for all players to enter the Lobby before starting.
           </p>
           <PlayerList />
         </section>
-        <button
-          disabled={!allowedToStart()}
-          onClick={() => setShowStartGameModal(true)}
-        >
-          Start Game
-        </button>
-        <SetHost />
-      </Host>
-      <Player>
+
         <section>
-          <ProTip
-            message={'This is your chance to let your creativity shine!'}
-          />
-          <h1>The Lobby is filling up...</h1>
-          <PlayerStepOne />
+          <button
+            disabled={!allowedToStart()}
+            onClick={() => setShowStartGameModal(true)}
+          >
+            Start Game
+          </button>
+          <SetHost />
+        </section>
+      </Host>
+
+      <Player>
+        <ProTip message={'Definitions, like life, don’t always make sense!'} />
+
+        <h1 className="page-title">The Lobby is filling up...</h1>
+
+        <section className="white-bg">
+          <div className="edit-name-block">
+            <button
+              className="sm-btn auto-width secondary"
+              onClick={() => setShowChangeNameModal(true)}
+            >
+              Edit Name
+            </button>
+          </div>
+
           <PlayerList />
-          <View show={!showEditName}>
-            <div className="edit-name-block">
-              <button
-                className="sm-btn auto-width"
-                onClick={() => setShowEditName(true)}
-              >
-                Edit Name
-              </button>
-            </div>
-          </View>
-          <View show={showEditName}>
-            <form className="edit-name-form">
-              <div className="char-counter-wrapper higher">
-                <Input
-                  id="username"
-                  name="username"
-                  value={props.username}
-                  label="Edit Name"
-                  register={register}
-                  onChange={handleChangeUsername}
-                  autoFocus={true}
-                  maxLength={MAX_USERNAME_LENGTH}
-                />
-                <CharCounter
-                  string={props.username}
-                  max={MAX_USERNAME_LENGTH}
-                />
-              </div>
-              <View show={errors.form != undefined}>
-                <p className="short error">{errors?.form?.message}</p>
-              </View>
-              <button
-                className="add-top-margin"
-                disabled={!usernameIsValid(props.username).valid}
-                onClick={handleSubmitUsername}
-              >
-                Confirm
-              </button>
-            </form>
-          </View>
+        </section>
+
+        <section>
+          <HowToPlay isExpanded={true} />
         </section>
       </Player>
     </div>

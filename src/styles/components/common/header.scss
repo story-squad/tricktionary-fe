@@ -5,6 +5,29 @@ header {
   max-width: 100%;
   padding: 0.8rem 0;
   color: $white;
+  text-align: center;
+
+  h2,
+  p {
+    transition: 0.3s all;
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      h2,
+      p {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  h2 {
+    color: $neon-green;
+    margin-bottom: 5px;
+    font-size: 4.8rem;
+  }
 
   .trick-logo {
     display: block;
@@ -13,11 +36,10 @@ header {
 
   p {
     color: $white;
-    margin-top: 8px;
-    margin-left: 1.6rem;
     margin-bottom: 0;
     font-family: $text-font;
     font-size: 1.8rem;
+    font-weight: 400;
   }
   .welcome-word {
     margin-left: 3.2rem;

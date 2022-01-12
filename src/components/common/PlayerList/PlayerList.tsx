@@ -29,19 +29,21 @@ const playerHasSubmitted = (lobbyData: LobbyData, player: PlayerItem) => {
   }
 };
 
-const playerClassName = (lobbyData: LobbyData, player: PlayerItem) => {
-  return `players${playerHasSubmitted(lobbyData, player) ? ' submitted' : ''}`;
-};
-
-const playerUserName = (
+const playerClassName = (
   lobbyData: LobbyData,
   player: PlayerItem,
   playerId: string,
 ) => {
+  const currentPlayer = player.id === playerId ? ' current' : '';
+  const hasSubmitted = playerHasSubmitted(lobbyData, player)
+    ? ' submitted'
+    : '';
+
+  return `players${currentPlayer}${hasSubmitted}`;
+};
+
+const playerUserName = (lobbyData: LobbyData, player: PlayerItem) => {
   let username = '';
-  if (player.id === playerId) {
-    username += '(You) ';
-  }
   if (lobbyData.host === player.id) {
     username += '(Host) ';
   }
@@ -64,12 +66,10 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
           .map((player: PlayerItem) => {
             return (
               <div
-                className={playerClassName(lobbyData, player)}
+                className={playerClassName(lobbyData, player, playerId)}
                 key={player.id}
               >
-                <p className="player">
-                  {playerUserName(lobbyData, player, playerId)}
-                </p>
+                <p className="player">{playerUserName(lobbyData, player)}</p>
                 <p className="player-score">
                   Score: {props.hidePoints ? '?' : `${player.points}`}
                 </p>

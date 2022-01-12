@@ -15,21 +15,8 @@ import {
   lobbyCodeIsValid,
   usernameIsValid,
 } from '../../../../../utils/validation';
-import {
-  CharCounter,
-  Expander,
-  Input,
-  ProTip,
-  PublicGames,
-} from '../../../../common';
-import {
-  HostStepOne,
-  HostStepThree,
-  HostStepTwo,
-  PlayerStepOne,
-  PlayerStepThree,
-  PlayerStepTwo,
-} from '../../../../common/Instructions';
+import { CharCounter, Input, ProTip, PublicGames } from '../../../../common';
+import { HowToPlay } from '../../../../common/HowTo';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
   const location = useLocation();
@@ -105,27 +92,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
       <PublicGames />
       <div className="lobby game-page">
         <ProTip />
-        <Expander headerText={'Learn How to Play'} closeText={'Close'}>
-          <section className="text-content">
-            <h2>How to Host a Game</h2>
-            <h3>Step 1: Setup</h3>
-            <HostStepOne />
-            <h3>Step 2: Voting</h3>
-            <HostStepTwo />
-            <h3>Step 3: Results</h3>
-            <HostStepThree />
-            <div className="visual-line-break" />
-          </section>
-          <section className="text-content">
-            <h2>How to Play</h2>
-            <h3>Step 1: Setup</h3>
-            <PlayerStepOne />
-            <h3>Step 2: Voting</h3>
-            <PlayerStepTwo />
-            <h3>Step 3: Results</h3>
-            <PlayerStepThree />
-          </section>
-        </Expander>
+        <HowToPlay />
         <section>
           <h1>Welcome to Word Hoax!</h1>
           <p className="instructions bot-margin">
@@ -167,7 +134,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
               >
                 Join Lobby
               </button>
-              <p className="or">- OR -</p>
+              <p className="or">Or</p>
               <button
                 className="secondary no-bottom-margin"
                 onClick={props.handleCreateLobby}

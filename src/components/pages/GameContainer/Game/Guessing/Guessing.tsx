@@ -87,72 +87,85 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
             'Read through the definitions twice. Give each one life by reading it like a story!'
           }
         />
+
         <View show={!showGuesses}>
           {/* Showing definitions */}
-          <h1>Read Each Number and Its Definition</h1>
+          <h1 className="page-title">Read Each Number and Its Definition</h1>
+
           <p className="instructions">
             The contestants have submitted their trick definitions. Now you need
             to summon your best gameshow host voice and read the number and
             definition from the list below. Once you finish, read through the
             same numbered list AGAIN.
           </p>
-          <Word word={lobbyData.word} />
-          <div className="definitions">
-            <h3>Definitions</h3>
-            {definitions.map((definition: DefinitionItem, key: number) => (
-              <div key={key} className="definition">
-                <div className="definition-key">
-                  <p>#{definition.definitionKey}</p>
+
+          <section>
+            <Word word={lobbyData.word} />
+
+            <div className="definitions">
+              <h3>Definitions</h3>
+              {definitions.map((definition: DefinitionItem, key: number) => (
+                <div key={key} className="definition">
+                  <div className="definition-key">
+                    <p>#{definition.definitionKey}</p>
+                  </div>
+                  <p className="definition-guess">{definition.content}</p>
                 </div>
-                <p className="definition-guess">{definition.content}</p>
-              </div>
-            ))}
-            <button
-              className="submit-guesses"
-              onClick={() => setShowGuesses(true)}
-            >
-              Start Voting
-            </button>
-          </div>
+              ))}
+              <button
+                className="submit-guesses"
+                onClick={() => setShowGuesses(true)}
+              >
+                Start Voting
+              </button>
+            </div>
+          </section>
         </View>
+
         <View show={showGuesses}>
           {/* Showing votes */}
-          <h1>It’s Time to Vote!</h1>
+          <h1 className="page-title">It’s Time to Vote!</h1>
+
           <p className="instructions">
             Call on each contestant and ask for the number of their vote. Input
             their selection and confirm by reading the definition aloud.
             Example: &quot;Number 3, the squishy remains of rotten fruit.&quot;
           </p>
-          <Word word={lobbyData.word} />
-          <div className="guesses">
-            <h3>Player Guesses</h3>
-            <div className="voting-label">
-              <h3>Name:</h3>
-              <h3>Vote:</h3>
+
+          <section>
+            <Word word={lobbyData.word} />
+
+            <div className="guesses">
+              <h3>Player Guesses</h3>
+              <div className="voting-label">
+                <h3>Name:</h3>
+                <h3>Vote:</h3>
+              </div>
+              <hr />
+              {lobbyData.players
+                .filter(
+                  (player) => player.id !== lobbyData.host && player.connected,
+                )
+                .map((player, key) => (
+                  <Guess
+                    key={key}
+                    definitions={definitions as DefinitionItem[]}
+                    player={player}
+                    handleSelectGuess={handleSelectGuess}
+                    guesses={guesses}
+                  />
+                ))}
+              <button
+                className="submit-guesses"
+                onClick={handleSubmit}
+                disabled={loading === 'loading'}
+              >
+                Submit Guesses
+              </button>
             </div>
-            <hr />
-            {lobbyData.players
-              .filter(
-                (player) => player.id !== lobbyData.host && player.connected,
-              )
-              .map((player, key) => (
-                <Guess
-                  key={key}
-                  definitions={definitions as DefinitionItem[]}
-                  player={player}
-                  handleSelectGuess={handleSelectGuess}
-                  guesses={guesses}
-                />
-              ))}
-            <button
-              className="submit-guesses"
-              onClick={handleSubmit}
-              disabled={loading === 'loading'}
-            >
-              Submit Guesses
-            </button>
-          </div>
+          </section>
         </View>
+
         <Modal
           header={'Continue?'}
           message={`You haven't selected a guess for every player. Continue anyway?`}
@@ -161,40 +174,62 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
           visible={showModal}
         />
       </Host>
+
       <Player>
         <ProTip
-          message={'Listen for the definition that strikes your fancy!'}
+          message={
+            'Compose your best trick defintion to get other players to vote for it. Click “submit” before the time runs out!'
+          }
         />
-        <h1>It’s Time to Vote</h1>
-        <PlayerStepTwo />
-        <Word word={lobbyData.word} />
-        <div className="player-guess">
-          <h3>Your guess:</h3>
-          {playerGuess.key > 0 ? (
-            <div className="definition">
-              <div className="definition-key">
-                <p>#{playerGuess.key}</p>
-              </div>
-              <p className="definition-guess">{playerGuess.definition}</p>
+
+        <h1 className="page-title">It’s Time to Vote</h1>
+
+        <p className="instructions">
+          <PlayerStepTwo />
+        </p>
+
+        <section>
+          <Word word={lobbyData.word} />
+
+          <div className="player-guess">
+            <h3 className="guess-label">Your guess:</h3>
+
+            <div className="guess">
+              {playerGuess.key > 0 ? (
+                <p>
+                  #{playerGuess.key} - {playerGuess.definition}
+                </p>
+              ) : (
+                <p>No Guess yet</p>
+              )}
             </div>
-          ) : (
-            <p>No Guess yet</p>
-          )}
-        </div>
-        <div className="notes">
-          <h3>Listen to the definitions.</h3>
-          <p>Take some notes!</p>
-          <div className="char-counter-wrapper max-width-35-center">
-            <textarea
-              maxLength={MAX_NOTES_LENGTH}
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-            <CharCounter string={notes} max={MAX_NOTES_LENGTH} />
           </div>
-        </div>
+
+          {playerGuess.key === 0 && (
+            <div className="notes">
+              <div className="char-counter-wrapper">
+                <div className="form-input">
+                  <label htmlFor="notes">
+                    Take some notes or write your choice so you don’t forget.
+                  </label>
+                  <textarea
+                    maxLength={MAX_NOTES_LENGTH}
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    id="notes"
+                  />
+                </div>
+
+                <CharCounter string={notes} max={MAX_NOTES_LENGTH} />
+              </div>
+            </div>
+          )}
+        </section>
       </Player>
-      <PlayerList />
+
+      <section className="white-bg bottom-radius">
+        <PlayerList />
+      </section>
     </section>
   );
 };
