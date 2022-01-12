@@ -3,8 +3,8 @@
 }
 
 *:focus-visible {
-  outline: 4px solid $dark-cerulean;
-  outline-offset: 2px;
+  outline: 2px solid $brand-blue;
+  outline-offset: -1px;
 }
 
 /* Elements */
@@ -34,10 +34,11 @@ h3 {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   text-align: center;
   font-family: $display-font;
-  color: $sky-blue;
+  color: $brand-blue;
   font-weight: 100;
 }
 
@@ -64,6 +65,19 @@ span {
   font-size: 1.6rem;
 }
 
+label {
+  font-weight: 700;
+}
+
+input {
+  font-weight: 400;
+  transition: 0.1s all;
+}
+
+input::placeholder {
+  color: $lt-grey;
+}
+
 p {
   color: $medium-grey;
   font-family: $text-font;
@@ -84,6 +98,7 @@ p {
 a {
   font-family: $text-font;
   font-size: 1.8rem;
+  transition: 0.3s all;
 }
 
 strong {
@@ -96,6 +111,17 @@ textarea {
   margin-left: auto;
   margin-right: auto;
   resize: none;
+  color: $black;
+  font-size: 1.6rem;
+  border: 1px solid $silver;
+  padding: 15px;
+  border-radius: 8px;
+  transition: 0.1s all;
+  margin-bottom: 2rem;
+
+  &::placeholder {
+    color: $lt-grey;
+  }
 }
 
 button {
@@ -104,40 +130,55 @@ button {
   text-align: center;
   outline: none;
   border: none;
-  border-radius: 0.8rem;
+  border-radius: 50px;
   color: $white;
-  background-color: $sky-blue;
-  font-family: $text-font;
+  background-color: $burnt-orange;
+  border: $burnt-orange 1px solid;
+  font-family: $button-font;
   font-size: 1.6rem;
-  width: 40rem;
+  width: 100%;
   min-height: 5rem;
   margin: 0 auto 1.6rem;
   max-width: 100%;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  text-transform: uppercase;
+
+  &.expander-header {
+    border: none !important;
+  }
 
   &.secondary {
     color: $burnt-orange;
     background-color: $white;
     font-weight: 700;
-    border: 1px solid $burnt-orange;
     box-sizing: border-box;
     &:disabled {
       background-color: $lt-grey;
       color: $white;
       border: none;
     }
+
+    &:hover {
+      background: $brand-blue;
+      color: $white;
+      border-color: $brand-blue;
+    }
   }
   &:hover {
-    transition: all 0.2s ease-in-out;
-    transform: translateY(-0.2rem);
-    box-shadow: $boxshadow;
+    background: $brand-blue;
+    color: $white;
+    border-color: $brand-blue;
   }
   &:disabled,
   &.disabled {
     background-color: $lt-grey;
-    border: none;
+    border-color: $lt-grey !important;
     cursor: not-allowed;
+
+    &:hover {
+      color: $white !important;
+    }
   }
   &.selectable {
     color: $medium-grey;
@@ -145,7 +186,7 @@ button {
     border: 2px solid $lt-grey;
   }
   &.selected {
-    box-shadow: $boxshadow;
+    //box-shadow: $boxshadow;
     background-color: $neon-green;
     color: $dark-cerulean;
   }
@@ -195,8 +236,8 @@ input[type='checkbox']:checked:after {
   color: $dark-cerulean;
   font-size: 4rem;
   content: '✓';
-  margin-bottom: -0.4rem;
-  margin-left: -0.7rem;
+  margin-bottom: 2rem;
+  margin-left: 1rem;
 }
 
 /* Modifiers */
@@ -281,20 +322,24 @@ div.visual-line-break {
 }
 
 .or {
-  font-family: $display-font;
-  color: $sky-blue;
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 2rem;
   vertical-align: middle;
-  margin: 20px auto 20px auto;
+  margin: 10px auto;
+  text-transform: lowercase;
+  font-weight: 400;
 }
 
 //error
 .error {
-  position: absolute;
   text-align: center;
-  color: $burnt-orange;
-  font-family: $display-font;
+  color: $black;
+  background: $neon-green;
+  font-family: $text-font;
+  padding: 15px;
+  margin-bottom: 3rem;
+  border-radius: 8px;
+  font-weight: 700;
 }
 
 .outside-error {
@@ -340,13 +385,13 @@ div.visual-line-break {
 }
 
 .player-display {
-  margin: 4rem auto 4rem auto;
-  width: 61rem;
-  max-width: 100%;
+  margin: 2.5rem auto;
   .player-h2 {
-    color: $burnt-orange;
+    color: $brand-blue;
     text-align: left;
-    font-size: 2.4rem;
+    font-size: 3.2rem;
+    margin-bottom: 0.8rem;
+
     @include tablet-below {
       text-align: center;
     }
@@ -379,7 +424,12 @@ div.visual-line-break {
     border-radius: 8px;
     padding: 8px 16px;
     margin: 0 8px 16px 0;
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+
+    &.current {
+      .player {
+        color: $burnt-orange;
+      }
+    }
 
     @include tablet-below {
       flex-direction: row;
@@ -397,15 +447,17 @@ div.visual-line-break {
       }
     }
     .player {
-      font-family: $display-font;
+      font-family: $text-font;
       font-size: 1.6rem;
       margin-bottom: 0;
       padding: 0.8rem;
+      font-weight: 700;
       @include tablet-below {
         font-size: 1.4rem;
       }
     }
     p.player-score {
+      display: none;
       margin: 0 auto;
       font-size: 1.4rem;
       @include tablet-below {

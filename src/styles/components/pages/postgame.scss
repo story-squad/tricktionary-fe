@@ -14,10 +14,45 @@
   }
 }
 
+.postgame {
+  .page-title {
+    padding: 3rem 8.5rem 2rem;
+  }
+
+  section {
+    padding: 3rem 8.5rem;
+
+    &.white-bg {
+      background: $white;
+    }
+  }
+
+  p.instructions {
+    margin: 0 auto;
+    text-align: center;
+    width: 65rem;
+    max-width: 100%;
+    font-weight: 700;
+    line-height: 1.5em;
+    font-size: 2rem;
+  }
+
+  .round-results {
+    section {
+      padding: 0 !important;
+    }
+  }
+
+  .reaction {
+    button {
+      border: none !important;
+    }
+  }
+}
+
 .definition-result {
   margin-bottom: 2.4rem;
-  border: 2px solid $dark-cerulean;
-  box-shadow: $boxshadow;
+  border: 1px solid $lt-grey;
   border-radius: 8px;
 
   .who-voted-p {

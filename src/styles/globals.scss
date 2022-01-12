@@ -38,6 +38,7 @@ p {
 // Font Variables
 $text-font: 'Roboto', sans-serif;
 $display-font: 'Luckiest Guy', sans-serif;
+$button-font: 'Mulish', sans-serif;
 
 // Media Query Sizes
 $mid: 500px;
@@ -56,16 +57,19 @@ $box-sizing: border-box;
 $medium-grey: #5a5b5b;
 $dark-blue: #40537f;
 $white: #ffffff;
+$lighter-grey: #f9f9f9;
 $charcoal: #343434;
 $lime: #bfd349;
 $lt-grey: #c4c4c4;
 $black: #000000;
 $nero: #131313f1;
+$black-2: #121212;
 $neon-green: #d5ff2e;
+$brand-blue: #0089ed;
 $sky-blue: #1da1f2;
 $sky-blue-light: #e8f6fe;
 $dark-cerulean: #064165;
-$burnt-orange: #ff7f35;
+$burnt-orange: #ff7f34;
 
 //finale colors
 $gold: #ffd645;
@@ -77,7 +81,7 @@ $bronze-outline: #9f4c00;
 
 #root {
   font-size: 16px;
-  background-color: $dark-cerulean;
+  background-color: $black-2;
 }
 
 // Put footer at the bottom

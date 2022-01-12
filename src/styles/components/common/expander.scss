@@ -1,20 +1,32 @@
 .expander {
   .expander-header {
     width: 100%;
-    margin: 0 auto 4rem;
+    margin: 0 auto 1rem;
     font-family: $display-font;
-    font-size: 2rem;
+    font-size: 3rem;
     padding: 0;
     color: $burnt-orange;
     background: none;
 
     &:hover {
       box-shadow: none;
+      transform: translateY(-2px);
     }
   }
   .expander-content {
-    margin: 2rem 0 6rem;
+    margin: 0 0 2rem;
     width: 100%;
+    overflow: hidden;
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 2rem;
+    }
+
+    button,
+    .visual-line-break {
+      display: none;
+    }
   }
   .expander-icon {
     margin-left: 0.5rem;
@@ -26,6 +38,17 @@
     }
     &.expanded svg {
       transform: scaleY(-1);
+    }
+  }
+
+  section {
+    p.instructions {
+      font-weight: 400;
+      color: $medium-grey;
+    }
+
+    h3 {
+      margin-bottom: 5px !important;
     }
   }
 }

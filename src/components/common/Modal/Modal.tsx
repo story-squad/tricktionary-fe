@@ -10,6 +10,7 @@ const Modal = (props: ModalProps): React.ReactElement => {
     customConfirmText,
     customCancelText,
     zIndex,
+    customJSXCode,
   } = props;
   // If zIndex is defined, update inline style
   const inlineZIndex = zIndex !== undefined ? { zIndex } : {};
@@ -22,10 +23,13 @@ const Modal = (props: ModalProps): React.ReactElement => {
             <div className="modal-content">
               <h2>{header}</h2>
               <p>{message}</p>
+              {customJSXCode !== undefined && customJSXCode}
               <div className="modal-buttons">
-                <button onClick={handleConfirm} autoFocus={true}>
-                  {customConfirmText ? customConfirmText : 'Okay'}
-                </button>
+                {handleConfirm && (
+                  <button onClick={handleConfirm} autoFocus={true}>
+                    {customConfirmText ? customConfirmText : 'Okay'}
+                  </button>
+                )}
                 {handleCancel && (
                   <button onClick={handleCancel}>
                     {customCancelText ? customCancelText : 'Cancel'}
@@ -48,8 +52,9 @@ interface ModalProps {
   message: string;
   header: string;
   zIndex?: number;
-  handleConfirm: () => void | (() => (args: unknown) => void);
+  handleConfirm?: () => void | (() => (args: unknown) => void);
   handleCancel?: () => void | (() => (args: unknown) => void);
   customConfirmText?: string;
   customCancelText?: string;
+  customJSXCode?: any;
 }

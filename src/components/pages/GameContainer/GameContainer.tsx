@@ -1,3 +1,4 @@
+import gsap from 'gsap';
 import jwt from 'jsonwebtoken';
 import React, { useEffect, useState } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
@@ -44,6 +45,7 @@ import {
   randomUsername,
 } from '../../../utils/localStorageInitialValues';
 import { Header, Loader, Modal } from '../../common';
+import { Scoreboard } from '../../common/Scoreboard';
 import { Finale, Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
 // Create a socket connection to API
@@ -78,6 +80,17 @@ const GameContainer = (): React.ReactElement => {
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetPlayerGuess = useResetRecoilState(playerGuessState);
+
+  //* Add transitions in between screens
+  useEffect(() => {
+    gsap.from('.game-page', {
+      opacity: 0,
+      marginTop: -100,
+      duration: 1,
+    });
+
+    window.scrollTo(0, 0);
+  }, [lobbyData.phase]);
 
   // Combine reset functions
   const resetGame = () => {
@@ -574,6 +587,8 @@ const GameContainer = (): React.ReactElement => {
       {error && <p className="outside-error">{error}</p>}
       {/* Game component */}
       <div className="game-styles">{currentPhase()}</div>
+
+      <Scoreboard hidePoints={lobbyData.phase === 'POSTGAME'} />
     </div>
   );
 };

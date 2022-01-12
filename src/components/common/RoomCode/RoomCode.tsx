@@ -23,14 +23,22 @@ const RoomCode = (): React.ReactElement => {
 
   return (
     <div className="invite-code">
-      <p>Invite Code:</p>
-      <p className="room-code">{lobbyData.lobbyCode}</p>
+      <div className="lobby-code">
+        <span>Lobby Code</span>
+        {lobbyData.lobbyCode}
+      </div>
+
+      <div className="separator">
+        <p>or</p>
+      </div>
+
       <div className="copy-to-clipboard">
         <CopyToClipboard text={`${REACT_APP_URL}/${lobbyData.lobbyCode}`}>
           <button
             className={copiedUrl ? 'copied' : ''}
             onClick={handleClickCopy}
           >
+            <span>Click to copy link</span>
             <FontAwesomeIcon icon={faCopy} />
             {copiedUrl && <p>Link copied!</p>}
           </button>

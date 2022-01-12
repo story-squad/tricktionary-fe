@@ -15,3 +15,4 @@ The `Expander` component has the following properties:
 
 - `headerText` - The header text for the Expander
 - `closeText` - The text on the button that closes the Expander
+- `expandedDefault` - Declare whether the expander will be open or closed onload

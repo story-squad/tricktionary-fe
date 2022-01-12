@@ -92,13 +92,15 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
 
   return (
     <section className="postgame game-page">
-      <h1>It’s Time for the Results!</h1>
+      <h1 className="page-title">It’s Time for the Results!</h1>
+
       <Host>
         <ProTip
           message={`Reading the definition each player votes for makes the 
           game more fun! Example: Darwin voted for number 6: “silly or 
           high-spirited behavior; mischief.”`}
         />
+
         <View show={lobbyData.phase === 'POSTGAME'}>
           {/* Before reveal */}
           <p className="instructions">
@@ -108,60 +110,78 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
             vote. Let&apos;s reveal the results.
           </p>
         </View>
-        <Word word={lobbyData.word} />
-        <RoundResults
-          sortedDefinitions={sortedDefinitions}
-          showReactions={lobbyData.phase === 'RESULTS'}
-        />
-        <div className="endgame-container">
-          <View show={lobbyData.phase === 'POSTGAME'}>
-            {/* Before reveal */}
-            <button onClick={() => handleRevealResults(guesses)}>
-              Reveal Results
-            </button>
-          </View>
-          <View show={lobbyData.phase === 'RESULTS'}>
-            {/* After reveal */}
-            <div className="after-reveal">
-              <div className="after-container">
+
+        <section>
+          <Word word={lobbyData.word} />
+
+          <RoundResults
+            sortedDefinitions={sortedDefinitions}
+            showReactions={lobbyData.phase === 'RESULTS'}
+          />
+
+          <div className="endgame-container">
+            <View show={lobbyData.phase === 'POSTGAME'}>
+              {/* Before reveal */}
+              <button onClick={() => handleRevealResults(guesses)}>
+                Reveal Results
+              </button>
+            </View>
+            <View show={lobbyData.phase === 'RESULTS'}>
+              {/* After reveal */}
+              <div className="after-reveal">
+                <div className="after-container">
+                  <button
+                    onClick={handleSetFinale}
+                    disabled={loading === 'loading'}
+                  >
+                    Go to Finale
+                  </button>
+                </div>
                 <button
-                  onClick={handleSetFinale}
+                  className="secondary display-block"
+                  onClick={handlePlayAgain}
                   disabled={loading === 'loading'}
                 >
-                  Go to Finale
+                  Play Another Round
                 </button>
               </div>
-              <button
-                className="secondary display-block"
-                onClick={handlePlayAgain}
-                disabled={loading === 'loading'}
-              >
-                Play Again
-              </button>
-            </div>
-          </View>
-        </div>
+            </View>
+          </div>
+        </section>
       </Host>
+
       <Player>
         <ProTip />
+
         <View show={lobbyData.phase === 'POSTGAME'}>
           {/* // Before reveal */}
           <p className="instructions">
             Your host is now going to read the results! Did you guess the right
             one? How did your definition do? Did it reign supreme?
           </p>
-          <Word word={lobbyData.word} />
+
+          <section>
+            <Word word={lobbyData.word} />
+          </section>
         </View>
+
         <View show={lobbyData.phase === 'RESULTS'}>
           {/* // After reveal */}
-          <Word word={lobbyData.word} />
-          <RoundResults
-            sortedDefinitions={sortedDefinitions}
-            showReactions={true}
-          />
+
+          <section>
+            <Word word={lobbyData.word} />
+
+            <RoundResults
+              sortedDefinitions={sortedDefinitions}
+              showReactions={true}
+            />
+          </section>
         </View>
       </Player>
-      <PlayerList hidePoints={lobbyData.phase === 'POSTGAME'} />
+
+      <section className="white-bg bottom-radius">
+        <PlayerList hidePoints={lobbyData.phase === 'POSTGAME'} />
+      </section>
     </section>
   );
 };

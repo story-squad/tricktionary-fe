@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { gsap } from 'gsap';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import finaleBanner from '../../../../../assets/finaleBanner.png';
 import { lobbyState } from '../../../../../state/gameState';
@@ -12,8 +13,102 @@ const Finale = (): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
   const [topPlayers] = useState(getTopPlayers(lobbyData));
 
+  useEffect(() => {
+    gsap.to('.finale-banner', {
+      duration: 1.5,
+      y: -20,
+      repeat: -1,
+      yoyo: true,
+    });
+
+    let firstPlaceDelay = 0;
+    let secondPlaceDelay = 0;
+
+    if (topPlayers?.third?.username !== undefined) {
+      firstPlaceDelay = 2;
+      secondPlaceDelay = 1;
+
+      gsap.from('.third-place-stack .example-podium', {
+        opacity: 0,
+        height: 0,
+        duration: 1,
+        delay: 1,
+        ease: 'bounce',
+      });
+
+      gsap.from('.third-place-stack .place-img', {
+        opacity: 0,
+        scale: 0,
+        duration: 2,
+        delay: 2,
+        ease: 'elastic(1, 0.5)',
+      });
+
+      gsap.from('.third-place-stack .def-card', {
+        scale: 0,
+        duration: 1,
+        delay: 2,
+        ease: 'elastic(1, 0.5)',
+      });
+    }
+
+    if (topPlayers?.second?.username !== undefined) {
+      if (topPlayers?.third?.username === undefined) {
+        firstPlaceDelay = 1;
+      }
+
+      gsap.from('.second-place-stack .example-podium', {
+        opacity: 0,
+        height: 0,
+        duration: 1,
+        delay: 1,
+        ease: 'bounce',
+      });
+
+      gsap.from('.second-place-stack .place-img', {
+        opacity: 0,
+        scale: 0,
+        duration: 2,
+        delay: secondPlaceDelay + 2,
+        ease: 'elastic(1, 0.5)',
+      });
+
+      gsap.from('.second-place-stack .def-card', {
+        scale: 0,
+        duration: 1,
+        delay: secondPlaceDelay + 2,
+        ease: 'elastic(1, 0.5)',
+      });
+    }
+
+    if (topPlayers?.first?.username !== undefined) {
+      gsap.from('.first-place-stack .example-podium', {
+        opacity: 0,
+        height: 0,
+        duration: 1,
+        delay: 1,
+        ease: 'bounce',
+      });
+
+      gsap.from('.first-place-stack .place-img', {
+        opacity: 0,
+        scale: 0,
+        duration: 2,
+        delay: firstPlaceDelay + 2,
+        ease: 'elastic(1, 0.5)',
+      });
+
+      gsap.from('.first-place-stack .def-card', {
+        scale: 0,
+        duration: 1,
+        delay: firstPlaceDelay + 2,
+        ease: 'elastic(1, 0.5)',
+      });
+    }
+  }, []);
+
   return (
-    <section className="finale game-page">
+    <div className="finale game-page">
       <ProTip
         message={'Much like statistics, 99% of these definitions are made up'}
       />
@@ -97,7 +192,7 @@ const Finale = (): React.ReactElement => {
           Feedback Form
         </a>
       </div>
-    </section>
+    </div>
   );
 };
 

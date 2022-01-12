@@ -1,24 +1,52 @@
 .writing.game-page {
-  padding: 4.8rem 5.6rem;
-
-  @include tablet-below {
-    padding: 2.4rem 2.8rem;
+  .page-title {
+    padding: 3rem 8.5rem 2rem;
   }
+
+  section {
+    padding: 3rem 8.5rem;
+
+    &.white-bg {
+      background: $white;
+    }
+  }
+
   p.instructions {
-    margin: 0.8rem auto 0 auto;
-    text-align: left;
+    margin: 0 auto;
+    text-align: center;
     width: 65rem;
     max-width: 100%;
+    font-weight: 700;
+    line-height: 1.5em;
+    font-size: 2rem;
+  }
+
+  .game-timer {
+    p {
+      margin-bottom: 0;
+      font-weight: 700;
+    }
+  }
+
+  .submit-definition {
+    input[type='text'] {
+      height: 300px;
+      word-break: break-word;
+    }
+
+    .char-counter {
+      bottom: 2rem;
+    }
   }
 }
 
 .times-up-container {
   text-align: center;
-  margin-top: 24px;
+  margin-bottom: 2rem;
 
   .times-up {
     text-align: center;
-    margin: 0 0 2.4rem 0;
+    margin: 0 0 1.5rem 0;
     font-size: 2.4rem;
     font-family: $display-font;
     color: $burnt-orange;
