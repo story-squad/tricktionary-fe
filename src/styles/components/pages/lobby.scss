@@ -16,16 +16,20 @@
 
       img {
         width: 200px;
+
+        @include x-large-below {
+          width: 170px;
+        }
       }
+    }
+
+    @include tablet-below {
+      display: none;
     }
   }
 
   @include tablet-below {
     padding: 1.6rem 2.4rem;
-
-    .bots {
-      display: none;
-    }
   }
 }
 

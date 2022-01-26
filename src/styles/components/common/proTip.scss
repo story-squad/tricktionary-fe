@@ -34,15 +34,6 @@
     }
   }
   @include x-large-below {
-    top: 2.4rem;
-    left: 30rem;
-
-    p {
-      width: unset;
-      max-width: 60rem;
-    }
-  }
-  @include tablet-below {
     display: none;
   }
   // @include mid-below {
