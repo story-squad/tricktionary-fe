@@ -1,3 +1,4 @@
+import axios from 'axios';
 import gsap from 'gsap';
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
@@ -8,19 +9,27 @@ const socket = io.connect(REACT_APP_API_URL as string);
 
 const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
   const [enableBot, setEnableBot] = useState(false);
+  const [botList, setBotList] = useState([]);
+  const [loadingBots, setLoadingBots] = useState(true);
 
   const handleSetAlphaBot = () => {
     setEnableBot(!enableBot);
   };
 
-  const botNameList = [
-    'bubblebot',
-    'bubblebot_v2',
-    'bubblebot_v3',
-    'bubblebot_v4',
-    'buzzkillbot',
-    'originaltestbot',
-  ];
+  // Get botlist from API
+  useEffect(() => {
+    const APIURL = `https://hoaxbot3000.herokuapp.com/zetabot/botlist`;
+
+    axios
+      .get(APIURL)
+      .then((res) => {
+        setBotList(res.data);
+        setLoadingBots(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   return (
     <div className="alphabot-setting">
@@ -35,20 +44,23 @@ const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
         <label htmlFor="enable-bot">Play With AlphaBot?</label>
       </div>
 
-      {enableBot && (
-        <div className="select-bot">
-          {botNameList.map((bot, index) => {
-            return (
-              <AlphaBotList
-                bot={`${bot}`}
-                botID={`${bot}-${index}`}
-                lobbyCode={props.lobbyCode}
-                key={index}
-              />
-            );
-          })}
-        </div>
-      )}
+      {enableBot &&
+        (loadingBots ? (
+          <div className="select-bot">Loading Bots...</div>
+        ) : (
+          <div className="select-bot">
+            {botList.map((bot, index) => {
+              return (
+                <AlphaBotList
+                  bot={`${bot}`}
+                  botID={`${bot}-${index}`}
+                  lobbyCode={props.lobbyCode}
+                  key={index}
+                />
+              );
+            })}
+          </div>
+        ))}
     </div>
   );
 };
