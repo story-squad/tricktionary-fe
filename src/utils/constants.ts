@@ -20,7 +20,7 @@ export const MINIMUM_PLAYERS =
   Number(process.env.REACT_APP_MINIMUM_PLAYERS) || 0;
 
 export const MAX_DEFINITION_LENGTH =
-  Number(process.env.REACT_APP_MAX_DEFINITION_LENGTH) || 250;
+  Number(process.env.REACT_APP_MAX_DEFINITION_LENGTH) || 350;
 
 export const MAX_USERNAME_LENGTH =
   Number(process.env.REACT_APP_MAX_USERNAME_LENGTH) || 12;

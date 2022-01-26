@@ -42,18 +42,21 @@
       max-width: 60rem;
     }
   }
-  @include mid-below {
-    left: 1.4rem;
-    top: 11.5rem;
-    max-width: unset;
-    display: flex;
-    align-items: center;
-
-    img {
-      width: 8rem;
-    }
-    p {
-      margin: 0 1rem;
-    }
+  @include tablet-below {
+    display: none;
   }
+  // @include mid-below {
+  //   left: 1.4rem;
+  //   top: 11.5rem;
+  //   max-width: unset;
+  //   display: flex;
+  //   align-items: center;
+
+  //   img {
+  //     width: 8rem;
+  //   }
+  //   p {
+  //     margin: 0 1rem;
+  //   }
+  // }
 }

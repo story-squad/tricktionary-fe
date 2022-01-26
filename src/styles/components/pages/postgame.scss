@@ -145,3 +145,17 @@
     display: none;
   }
 }
+
+/* Responsive */
+
+@media screen and (max-width: $tablet) {
+  .postgame {
+    .page-title {
+      padding: 0 !important;
+    }
+
+    section {
+      padding: 2rem 0 !important;
+    }
+  }
+}

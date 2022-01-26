@@ -15,6 +15,11 @@ export interface PlayerItem {
   connected: boolean;
 }
 
+export interface BotItem {
+  id: string;
+  botName: string;
+}
+
 export interface FinalePlayer {
   username: string;
   definition: string;
@@ -38,9 +43,11 @@ export interface LobbyData {
   lobbyCode: string;
   phase: string;
   players: PlayerItem[];
+  bots: BotItem[];
   rounds: RoundItem[];
   roundId: number;
   word: string;
+  category: string;
   roundSettings: {
     seconds: number;
     source: string;
@@ -90,6 +97,7 @@ export interface TricktionarySettings {
     id: number;
     word: string | undefined;
     definition: string | undefined;
+    category: string | undefined;
   };
   seconds: number | undefined;
   filter: {

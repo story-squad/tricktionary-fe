@@ -1,8 +1,11 @@
+import gsap from 'gsap';
 import jwt from 'jsonwebtoken';
 import React, { SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import alphabotA from '../../../../../assets/alphabot-a.png';
+import alphabotZ from '../../../../../assets/alphabot-z.png';
 import { useLocalStorage } from '../../../../../hooks';
 import {
   allowUrlJoinState,
@@ -43,6 +46,17 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
       }
     }
   }, [allowUrlJoin]);
+
+  // Adding some effects to bots
+  useEffect(() => {
+    gsap.to('#alphabot-z', {
+      duration: 3,
+      y: -20,
+      repeat: -1,
+      yoyo: true,
+      delay: 0.5,
+    });
+  }, []);
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.handleSetUsername(e.target.value);
@@ -93,6 +107,13 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
       <div className="lobby game-page">
         <ProTip />
         <HowToPlay />
+
+        <div className="bots">
+          <div className="bots-inner">
+            <img src={alphabotA} alt="Alphabot A" id="alphabot-a" />
+            <img src={alphabotZ} alt="Alphabot Z" id="alphabot-z" />
+          </div>
+        </div>
         <section>
           <h1>Welcome to Word Hoax!</h1>
           <p className="instructions bot-margin">

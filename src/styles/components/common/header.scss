@@ -46,4 +46,11 @@ header {
     margin-top: 0;
     margin-bottom: 4rem;
   }
+
+  @include tablet-below {
+    width: 100%;
+    text-align: center;
+    height: auto;
+    margin-bottom: 30px;
+  }
 }

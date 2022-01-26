@@ -15,6 +15,13 @@
     width: 100%;
     flex-direction: column;
   }
+
+  @include mid-below {
+    .word {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
   .word {
     font-size: 3.2rem;
     font-family: $text-font;

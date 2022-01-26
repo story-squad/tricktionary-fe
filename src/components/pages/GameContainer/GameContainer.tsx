@@ -81,6 +81,12 @@ const GameContainer = (): React.ReactElement => {
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetPlayerGuess = useResetRecoilState(playerGuessState);
 
+  console.log('GameContainer.tsx - Line 84 - get lobby data', lobbyData);
+  console.log(
+    'GameContainer.tsx - Line 85 - get lobby settings',
+    lobbySettings,
+  );
+
   //* Add transitions in between screens
   useEffect(() => {
     gsap.from('.game-page', {
@@ -363,6 +369,15 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('definition submitted', definition.trim(), lobbyCode);
   };
 
+  const handleBotSubmitDefinition = (definition: string, botID: string) => {
+    socket.emit(
+      'bot definition submitted',
+      definition.trim(),
+      botID,
+      lobbyCode,
+    );
+  };
+
   const handleSubmitGuesses = (guesses: GuessItem[]) => {
     setLoading('loading');
     socket.emit('guess', lobbyCode, guesses);
@@ -432,6 +447,7 @@ const GameContainer = (): React.ReactElement => {
     id: number,
     word: string | undefined = undefined,
     definition: string | undefined = undefined,
+    category: string | undefined = undefined,
   ) => {
     setLobbySettings({
       ...lobbySettings,
@@ -439,6 +455,7 @@ const GameContainer = (): React.ReactElement => {
         id,
         word,
         definition,
+        category,
       },
     });
   };
@@ -485,12 +502,14 @@ const GameContainer = (): React.ReactElement => {
             handleSetUsername={handleSetUsername}
             handleUpdateUsername={handleUpdateUsername}
             setError={setError}
+            lobbyCode={lobbyCode}
           />
         );
       case 'WRITING':
         return (
           <Writing
             handleSubmitDefinition={handleSubmitDefinition}
+            handleBotSubmitDefinition={handleBotSubmitDefinition}
             handleSetPhase={handleSetPhase}
             handleSyncTimer={handleSyncTimer}
             time={time}

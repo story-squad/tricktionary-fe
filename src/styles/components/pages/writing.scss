@@ -70,3 +70,23 @@
   flex-direction: column;
   margin-bottom: 1.6rem;
 }
+
+/* Responsive */
+
+@media screen and (max-width: $tablet) {
+  .writing {
+    .page-title {
+      padding: 0 !important;
+    }
+
+    .submit-definition {
+      button {
+        width: 100%;
+      }
+    }
+
+    section {
+      padding: 2rem 0 !important;
+    }
+  }
+}
