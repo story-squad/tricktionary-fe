@@ -81,11 +81,11 @@ const GameContainer = (): React.ReactElement => {
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetPlayerGuess = useResetRecoilState(playerGuessState);
 
-  console.log('GameContainer.tsx - Line 84 - get lobby data', lobbyData);
-  console.log(
-    'GameContainer.tsx - Line 85 - get lobby settings',
-    lobbySettings,
-  );
+  // console.log('GameContainer.tsx - Line 84 - get lobby data', lobbyData);
+  // console.log(
+  //   'GameContainer.tsx - Line 85 - get lobby settings',
+  //   lobbySettings,
+  // );
 
   //* Add transitions in between screens
   useEffect(() => {

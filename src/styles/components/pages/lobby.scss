@@ -16,7 +16,15 @@
 
       img {
         width: 200px;
+
+        @include x-large-below {
+          width: 170px;
+        }
       }
+    }
+
+    @include tablet-below {
+      display: none;
     }
   }
 
