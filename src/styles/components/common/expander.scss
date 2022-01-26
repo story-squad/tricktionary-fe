@@ -51,4 +51,11 @@
       margin-bottom: 5px !important;
     }
   }
+
+  @include tablet-below {
+    .expander-content {
+      margin-bottom: 0 !important;
+      margin-top: 0 !important;
+    }
+  }
 }

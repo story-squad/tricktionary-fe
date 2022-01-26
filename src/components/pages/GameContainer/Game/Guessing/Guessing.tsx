@@ -137,11 +137,10 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
 
             <div className="guesses">
               <h3>Player Guesses</h3>
-              <div className="voting-label">
-                <h3>Name:</h3>
-                <h3>Vote:</h3>
+              <div className="voting-heading row">
+                <div className="guess-name">Name:</div>
+                <div className="guess-vote">Vote:</div>
               </div>
-              <hr />
               {lobbyData.players
                 .filter(
                   (player) => player.id !== lobbyData.host && player.connected,
@@ -153,6 +152,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
                     player={player}
                     handleSelectGuess={handleSelectGuess}
                     guesses={guesses}
+                    lobbyData={lobbyData}
                   />
                 ))}
               <button

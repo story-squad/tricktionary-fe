@@ -57,6 +57,7 @@ export const lobbySettingsState = atom<TricktionarySettings>({
       id: 0,
       word: undefined,
       definition: undefined,
+      category: 'thing',
     },
     seconds: 60,
     filter: {
@@ -72,6 +73,7 @@ export const lobbyState = atom<LobbyData>({
   default: {
     phase: 'LOBBY',
     players: [],
+    bots: [],
     rounds: [],
     definition: '',
     host: '',
@@ -79,6 +81,7 @@ export const lobbyState = atom<LobbyData>({
     lobbyCode: '',
     roundId: 0,
     word: '',
+    category: '',
     roundSettings: {
       seconds: 60,
       source: 'User',

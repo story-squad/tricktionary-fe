@@ -31,6 +31,7 @@
     position: relative;
     align-items: center;
     justify-content: flex-start;
+    margin-bottom: 20px;
 
     .lobby-code {
       font-weight: 400;
@@ -57,6 +58,24 @@
 
     @include large-below {
       max-width: 16rem;
+    }
+  }
+
+  .select-bot {
+    padding-left: 15px;
+  }
+
+  .word-category {
+    p {
+      font-weight: 700;
+      color: $medium-grey;
+      font-size: 1.6rem;
+      margin-bottom: 0;
+    }
+
+    .categories {
+      display: flex;
+      justify-content: space-between;
     }
   }
 
@@ -120,9 +139,6 @@
   // padding: 24px;
   margin: 3rem auto;
 
-  @include tablet-below {
-    flex-direction: column;
-  }
   .word-column {
     width: 100%;
     display: flex;
@@ -192,13 +208,6 @@
     color: $dark-cerulean;
   }
 
-  @include tablet-below {
-    width: auto;
-    padding: 4px 8px;
-    margin: 0 0.04rem 0.8rem 0;
-    word-break: break-word;
-  }
-
   &.writing {
     border-style: dashed;
     border-radius: 8px;
@@ -213,6 +222,7 @@
       color: $sky-blue;
     }
   }
+
   .definition {
     font-weight: 300;
     border: 1px dashed $dark-blue;
@@ -337,4 +347,49 @@
 
 .short.error {
   position: relative;
+}
+
+/* Responsive */
+
+@media screen and (max-width: $mid) {
+  .invite-code {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: $tablet) {
+  .pregame {
+    .page-title {
+      padding: 0 !important;
+    }
+
+    section {
+      padding: 2rem 0 !important;
+    }
+
+    .invite-code {
+      max-width: 100% !important;
+    }
+
+    .pick-word-instructions {
+      display: block;
+      text-align: center;
+
+      p {
+        text-align: left;
+        margin-bottom: 15px;
+      }
+    }
+
+    .word-list {
+      display: block;
+
+      button {
+        width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
+  }
 }

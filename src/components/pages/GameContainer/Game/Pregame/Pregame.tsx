@@ -32,10 +32,11 @@ import {
 import { HowToPlay } from '../../../../common/HowTo';
 import { RoomCode } from '../../../../common/RoomCode';
 import { View } from '../../../../common/View';
+import AlphaBotSettings from './AlphaBotSettings';
 import { WordChoice } from './WordChoice';
 
 const initialChoiceValue = 0;
-const initialCustomInputValue = { word: '', definition: '' };
+const initialCustomInputValue = { word: '', definition: '', category: 'thing' };
 
 const Pregame = (props: PregameProps): React.ReactElement => {
   const [isCustom, setIsCustom] = useState(false);
@@ -84,16 +85,21 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     if (isCustom) {
       setChoice(0);
     } else {
-      setCustomInput({ word: '', definition: '' });
+      setCustomInput({ word: '', definition: '', category: 'thing' });
     }
   }, [isCustom]);
 
   // Update word selection in lobbySettings object
   useEffect(() => {
     if (isCustom) {
-      props.handleSetWord(0, customInput.word, customInput.definition);
+      props.handleSetWord(
+        0,
+        customInput.word,
+        customInput.definition,
+        customInput.category,
+      );
     } else {
-      props.handleSetWord(choice, undefined, undefined);
+      props.handleSetWord(choice, undefined, undefined, undefined);
     }
   }, [isCustom, choice, customInput]);
 
@@ -119,6 +125,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const handleChoose = (id: number) => {
     setChoice(id);
     const not_chosen_list = wordSelection.filter((word) => word.id !== id);
+
     if (not_chosen_list.length > 1) {
       setHostChoice({
         ...hostChoice,
@@ -140,6 +147,15 @@ const Pregame = (props: PregameProps): React.ReactElement => {
       ...customInput,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleWordCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomInput({
+      ...customInput,
+      category: e.target.value,
+    });
+
+    console.log(e.target.value);
   };
 
   const handleSecondsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -250,6 +266,8 @@ const Pregame = (props: PregameProps): React.ReactElement => {
           </p>
 
           <RoomCode />
+
+          <AlphaBotSettings lobbyCode={props.lobbyCode} />
         </section>
 
         <section className="white-bg">
@@ -332,6 +350,48 @@ const Pregame = (props: PregameProps): React.ReactElement => {
                     string={customInput.definition}
                     max={MAX_DEFINITION_LENGTH}
                   />
+                </div>
+
+                <div className="word-category">
+                  <p>Select Category</p>
+
+                  <div className="categories">
+                    <div className="radio-input-wrapper">
+                      <input
+                        type="radio"
+                        id="cat-thing"
+                        name="category"
+                        value="thing"
+                        checked={customInput.category === 'thing'}
+                        onChange={(e) => handleWordCategory(e)}
+                      />
+                      <label htmlFor="cat-thing">Thing</label>
+                    </div>
+
+                    <div className="radio-input-wrapper">
+                      <input
+                        type="radio"
+                        id="cat-person"
+                        name="category"
+                        value="person"
+                        checked={customInput.category === 'person'}
+                        onChange={(e) => handleWordCategory(e)}
+                      />
+                      <label htmlFor="cat-person">Person</label>
+                    </div>
+
+                    <div className="radio-input-wrapper">
+                      <input
+                        type="radio"
+                        id="cat-movie"
+                        name="category"
+                        value="movie"
+                        checked={customInput.category === 'movie'}
+                        onChange={(e) => handleWordCategory(e)}
+                      />
+                      <label htmlFor="cat-movie">Movie</label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -454,10 +514,12 @@ interface PregameProps {
     id: number,
     word: string | undefined,
     definition: string | undefined,
+    category: string | undefined,
   ) => void;
   handleSetSeconds: (seconds: number) => void;
   handleSetUsername: (newUsername: string) => void;
   username: string;
   handleUpdateUsername: (newUsername: string) => void;
   setError: any;
+  lobbyCode: string;
 }

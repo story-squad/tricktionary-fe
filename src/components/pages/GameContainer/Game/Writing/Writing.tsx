@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
@@ -57,6 +58,34 @@ const Writing = (props: WritingProps): React.ReactElement => {
         setIsSubmitted(true);
         setDefinition(player.definition);
       }
+    });
+  }, []);
+
+  //* If the timer runs out, auto-submit the definition from users, unless it is empty
+  useEffect(() => {
+    if (timerDone && definition !== '') {
+      console.log('Times up my friend, pencils down! - Writing.tsx - line 66');
+      props.handleSubmitDefinition(definition);
+      setIsSubmitted(true);
+    } else {
+      console.log('You still got time! - Writing.tsx - line 70');
+    }
+  }, [timerDone]);
+
+  //* Automatically submit the bot definitions
+  useEffect(() => {
+    lobbyData.bots.forEach((bot) => {
+      const APIURL = `https://hoaxbot3000.herokuapp.com/zetabot/${lobbyData.category}/${lobbyData.word}/${bot.botName}`;
+
+      axios
+        .get(APIURL)
+        .then((res) => {
+          console.log('bot response', res);
+          props.handleBotSubmitDefinition(res.data, bot.id);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
     });
   }, []);
 
@@ -269,6 +298,7 @@ export default Writing;
 
 interface WritingProps {
   handleSubmitDefinition: (definition: string) => void;
+  handleBotSubmitDefinition: (definition: string, botID: string) => void;
   handleSetPhase: (phase: string) => void;
   handleSyncTimer: (seconds: number) => void;
   time: number;

@@ -1,17 +1,21 @@
 import { gsap } from 'gsap';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import finaleBanner from '../../../../../assets/finaleBanner.png';
+import finaleBanner from '../../../../../assets/wordhoax-finale-banner.png';
 import { lobbyState } from '../../../../../state/gameState';
 import {
   getFinaleNoDefinitionText,
   getTopPlayers,
 } from '../../../../../utils/helpers';
 import { ProTip, View } from '../../../../common';
+import SaveScreenshot from './SaveScreenshot';
 
 const Finale = (): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
   const [topPlayers] = useState(getTopPlayers(lobbyData));
+
+  //* Used for saving a screenshot from a button
+  const podiumRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     gsap.to('.finale-banner', {
@@ -112,6 +116,7 @@ const Finale = (): React.ReactElement => {
       <ProTip
         message={'Much like statistics, 99% of these definitions are made up'}
       />
+
       <img
         className="finale-banner"
         src={finaleBanner}
@@ -119,66 +124,73 @@ const Finale = (): React.ReactElement => {
         role="heading"
         aria-level={1}
       />
-      <div className="place-bars">
-        <View show={topPlayers?.second?.username !== undefined}>
-          <div className="stack second-place-stack">
-            <div className="def-card second-def-card">
-              {topPlayers.second.definition !== '' ? (
-                <p>
-                  {topPlayers.second.word} does not mean:{' '}
-                  {topPlayers.second.definition}
-                </p>
-              ) : (
-                <p>{getFinaleNoDefinitionText()}</p>
-              )}
-            </div>
-            <div className="example-podium second-place">
-              <div className="place-img second-img">
-                <p className="second-name">{topPlayers.second.username}</p>
+
+      <div className="finale-podiums" ref={podiumRef}>
+        <div className="place-bars">
+          <View show={topPlayers?.second?.username !== undefined}>
+            <div className="stack second-place-stack">
+              <div className="def-card second-def-card">
+                {topPlayers.second.definition !== '' ? (
+                  <p>
+                    {topPlayers.second.word} does not mean:{' '}
+                    {topPlayers.second.definition}
+                  </p>
+                ) : (
+                  <p>{getFinaleNoDefinitionText()}</p>
+                )}
+              </div>
+              <div className="example-podium second-place">
+                <div className="place-img second-img">
+                  <p className="second-name">{topPlayers.second.username}</p>
+                </div>
               </div>
             </div>
-          </div>
-        </View>
-        <View show={topPlayers?.first?.username !== undefined}>
-          <div className="stack first-place-stack">
-            <div className="def-card first-def-card">
-              {topPlayers.first.definition !== '' ? (
-                <p>
-                  {topPlayers.first.word} does not mean:{' '}
-                  {topPlayers.first.definition}
-                </p>
-              ) : (
-                <p>{getFinaleNoDefinitionText()}</p>
-              )}
-            </div>
-            <div className="example-podium first-place">
-              <div className="place-img first-img">
-                <p className="first-name">{topPlayers.first.username}</p>
+          </View>
+          <View show={topPlayers?.first?.username !== undefined}>
+            <div className="stack first-place-stack">
+              <div className="def-card first-def-card">
+                {topPlayers.first.definition !== '' ? (
+                  <p>
+                    {topPlayers.first.word} does not mean:{' '}
+                    {topPlayers.first.definition}
+                  </p>
+                ) : (
+                  <p>{getFinaleNoDefinitionText()}</p>
+                )}
+              </div>
+              <div className="example-podium first-place">
+                <div className="place-img first-img">
+                  <p className="first-name">{topPlayers.first.username}</p>
+                </div>
               </div>
             </div>
-          </div>
-        </View>
-        <View show={topPlayers?.third?.username !== undefined}>
-          <div className="stack third-place-stack">
-            <div className="def-card third-def-card">
-              {topPlayers.third.definition !== '' ? (
-                <p>
-                  {topPlayers.third.word} does not mean:{' '}
-                  {topPlayers.third.definition}
-                </p>
-              ) : (
-                <p>{getFinaleNoDefinitionText()}</p>
-              )}
-            </div>
-            <div className="example-podium third-place">
-              <div className="place-img third-img">
-                <p className="third-name">{topPlayers.third.username}</p>
+          </View>
+          <View show={topPlayers?.third?.username !== undefined}>
+            <div className="stack third-place-stack">
+              <div className="def-card third-def-card">
+                {topPlayers.third.definition !== '' ? (
+                  <p>
+                    {topPlayers.third.word} does not mean:{' '}
+                    {topPlayers.third.definition}
+                  </p>
+                ) : (
+                  <p>{getFinaleNoDefinitionText()}</p>
+                )}
+              </div>
+              <div className="example-podium third-place">
+                <div className="place-img third-img">
+                  <p className="third-name">{topPlayers.third.username}</p>
+                </div>
               </div>
             </div>
-          </div>
-        </View>
+          </View>
+        </div>
+
+        <div className="podium">&nbsp;</div>
       </div>
-      <div className="podium">&nbsp;</div>
+
+      <SaveScreenshot podiumRef={podiumRef} />
+
       <div className="feedback-container">
         <p className="feedback">
           We&apos;re still in beta-testing and we&apos;d love to hear any ideas
