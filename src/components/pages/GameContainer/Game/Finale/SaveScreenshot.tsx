@@ -32,11 +32,20 @@ const SaveScreenshot = (props: ScreenshotProps): React.ReactElement => {
   }, [ref]);
 
   return (
-    <div className="save-screenshot">
-      <button onClick={saveScreenshot} disabled={disableBtn}>
-        Save screenshot
-      </button>
-    </div>
+    <>
+      <div className="save-screenshot">
+        <button onClick={saveScreenshot} disabled={disableBtn}>
+          Save screenshot
+        </button>
+      </div>
+
+      <a
+        className="twitter-share-button"
+        href="https://twitter.com/intent/tweet?hashtags=WordHoax&text=What%20a%20fun%20round%20of&via=StorySquadHQ"
+      >
+        Tweet
+      </a>
+    </>
   );
 };
 
