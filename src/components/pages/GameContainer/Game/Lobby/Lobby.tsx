@@ -140,8 +140,9 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
               value={props.lobbyCode}
               onChange={handleChangeCode}
               maxLength={4}
-              placeholder="Enter lobby code to join a game!"
+              placeholder="THIS IS A TEST REPLACE WITH TEXT ON LINE 145 AFTER LOCATING FRONTEND ON AWS!"
             />
+            {/* Enter lobby code to join a game */}
             {errors.form && <p className="error">*{errors.form.message}</p>}
             <div className="start-buttons">
               <button
