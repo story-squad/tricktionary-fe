@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import ScrollToPlugin from 'gsap/ScrollToPlugin';
 import jwt from 'jsonwebtoken';
 import React, { useEffect, useState } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
@@ -89,13 +90,15 @@ const GameContainer = (): React.ReactElement => {
 
   //* Add transitions in between screens
   useEffect(() => {
+    gsap.registerPlugin(ScrollToPlugin);
+
     gsap.from('.game-page', {
       opacity: 0,
-      marginTop: -100,
+      marginTop: -50,
       duration: 1,
     });
 
-    window.scrollTo(0, 0);
+    gsap.to(window, { duration: 1, scrollTo: 0 });
   }, [lobbyData.phase]);
 
   // Combine reset functions
@@ -111,22 +114,17 @@ const GameContainer = (): React.ReactElement => {
     setShowLeaveModal(false);
   };
 
-  // For testing, DELETE later
-  // useEffect(() => {
-  //   console.log('--------------');
-  //   console.log('lobbydata', lobbyData);
-  //   console.log('playerId', playerId);
-  // }, [lobbyData]);
-
   useEffect(() => {
     // Reset timer
     if (lobbyData.phase !== 'WRITING') {
       setTime(-1);
     }
+
     // Remove self from game if no matching playerId
     if (isGhostPlayer(lobbyData.players, playerId)) {
       handleKickPlayer();
     }
+
     // Run when lobbyData is cleared after player got kicked
     if (isKicking && lobbyData.phase === 'LOBBY') {
       history.push('/');
@@ -605,9 +603,15 @@ const GameContainer = (): React.ReactElement => {
       {/* Error display */}
       {error && <p className="outside-error">{error}</p>}
       {/* Game component */}
-      <div className="game-styles">{currentPhase()}</div>
-
-      <Scoreboard hidePoints={lobbyData.phase === 'POSTGAME'} />
+      <div className="game-styles">
+        <div className="game-page-wrapper">
+          {currentPhase()}
+          <Scoreboard
+            hidePoints={lobbyData.phase === 'POSTGAME'}
+            revealBoard={lobbyData.phase === 'RESULTS'}
+          />
+        </div>
+      </div>
     </div>
   );
 };

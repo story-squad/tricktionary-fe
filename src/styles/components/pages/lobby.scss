@@ -3,7 +3,7 @@
 
   .bots {
     position: absolute;
-    top: 10px;
+    top: -150px;
     left: 0;
     width: 100%;
 
@@ -15,11 +15,7 @@
       width: 100%;
 
       img {
-        width: 200px;
-
-        @include x-large-below {
-          width: 170px;
-        }
+        width: 170px;
       }
     }
 
