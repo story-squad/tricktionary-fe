@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
@@ -24,6 +23,7 @@ import {
   View,
   Word,
 } from '../../../../common';
+import BotSubmission from './BotSubmission';
 
 const Writing = (props: WritingProps): React.ReactElement => {
   const { handleSyncTimer, time, setTime } = props;
@@ -71,23 +71,6 @@ const Writing = (props: WritingProps): React.ReactElement => {
       console.log('You still got time! - Writing.tsx - line 70');
     }
   }, [timerDone]);
-
-  //* Automatically submit the bot definitions
-  useEffect(() => {
-    lobbyData.bots.forEach((bot) => {
-      const APIURL = `https://hoaxbot3000.herokuapp.com/zetabot/${lobbyData.category}/${lobbyData.word}/${bot.botName}`;
-
-      axios
-        .get(APIURL)
-        .then((res) => {
-          console.log('bot response', res);
-          props.handleBotSubmitDefinition(res.data, bot.id);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    });
-  }, []);
 
   const allPlayersHaveWritten = () => {
     let all = true;
@@ -155,6 +138,9 @@ const Writing = (props: WritingProps): React.ReactElement => {
   return (
     <section className="writing game-page">
       <Host>
+        <BotSubmission
+          handleBotSubmitDefinition={props.handleBotSubmitDefinition}
+        />
         <ProTip
           message={
             'Encourage players by saying “First Thought = Best Thought!”'
@@ -259,7 +245,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
                     disabled={timerDone}
                     autoFocus={true}
                     maxLength={MAX_DEFINITION_LENGTH}
-                    placeholder="Lamma Greg"
+                    placeholder="First thought = Best thought"
                     rows={5}
                   ></textarea>
                 </div>

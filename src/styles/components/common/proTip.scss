@@ -1,53 +1,12 @@
-.pro-tip {
+.pro-tip-btn {
+  display: none;
   position: absolute;
-  left: 5.5rem;
-  top: 16rem;
-
-  h4 {
-    color: $white;
-    text-align: left;
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-    position: relative;
-
-    &::before {
-      content: '';
-      width: 47px;
-      height: 73px;
-      background: url(../../../assets//HarperPizzaz.png) center no-repeat;
-      background-size: cover;
-      display: block;
-      position: absolute;
-      top: -30px;
-      left: -33px;
-    }
-  }
-
-  p {
-    margin-right: 2.4rem;
-    width: 30rem;
-    color: $white;
-  }
-  @include x2-large-below {
-    p {
-      width: 18rem;
-    }
-  }
-  @include x-large-below {
-    display: none;
-  }
-  // @include mid-below {
-  //   left: 1.4rem;
-  //   top: 11.5rem;
-  //   max-width: unset;
-  //   display: flex;
-  //   align-items: center;
-
-  //   img {
-  //     width: 8rem;
-  //   }
-  //   p {
-  //     margin: 0 1rem;
-  //   }
-  // }
+  top: -50px;
+  left: -50px;
+  z-index: 100;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 !important;
 }

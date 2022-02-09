@@ -1,4 +1,5 @@
-import React from 'react';
+import gsap from 'gsap';
+import React, { useEffect } from 'react';
 
 const Modal = (props: ModalProps): React.ReactElement => {
   const {
@@ -14,6 +15,13 @@ const Modal = (props: ModalProps): React.ReactElement => {
   } = props;
   // If zIndex is defined, update inline style
   const inlineZIndex = zIndex !== undefined ? { zIndex } : {};
+
+  //* Add smoother entrance
+  useEffect(() => {
+    if (visible) {
+      gsap.from('.modal', { opacity: 0, y: 100, duration: 0.3 });
+    }
+  }, [visible]);
 
   return (
     <>

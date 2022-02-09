@@ -27,6 +27,7 @@ export const Guess = (props: GuessProps): React.ReactElement => {
     ) {
       // Set the array for bot guesses
       let filteredBotDefinitions = [...definitions];
+      console.log('definitions', definitions);
 
       // Remove actual word definition from guesses
       filteredBotDefinitions = filteredBotDefinitions.filter(
@@ -44,7 +45,13 @@ export const Guess = (props: GuessProps): React.ReactElement => {
       });
 
       // Format the definitions array to be properly used with the API
-      const formattedList = filteredBotDefinitions.join('*');
+      let formattedList;
+
+      if (filteredBotDefinitions.length > 0) {
+        formattedList = filteredBotDefinitions.join('*');
+      } else {
+        formattedList = '';
+      }
 
       const APIURL = `https://hoaxbot3000.herokuapp.com/zetabot/guess/${lobbyData.word}/${formattedList}/${player.username}`;
 
