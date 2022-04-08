@@ -29,7 +29,7 @@ const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, []);
 
   return (
     <div className="alphabot-setting">
