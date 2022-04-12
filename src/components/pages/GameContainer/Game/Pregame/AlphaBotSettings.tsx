@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 import { REACT_APP_API_URL } from '../../../../../utils/constants';
 
 // Create a socket connection to API
-const socket = io.connect(REACT_APP_API_URL as string);
+const socket = io(REACT_APP_API_URL, { transports: ['websocket'] });
 
 const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
   const [enableBot, setEnableBot] = useState(false);
