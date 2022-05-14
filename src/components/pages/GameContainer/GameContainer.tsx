@@ -101,19 +101,6 @@ const GameContainer = (): React.ReactElement => {
     gsap.to(window, { duration: 1, scrollTo: 0 });
   }, [lobbyData.phase]);
 
-  // Combine reset functions
-  const resetGame = () => {
-    handleLeaveGame();
-    history.push('/');
-    resetLobbyData();
-    resetLobbyCode();
-    resetPlayerGuess();
-    setGuesses([]);
-    setToken(undefined);
-    handleLogin(true);
-    setShowLeaveModal(false);
-  };
-
   useEffect(() => {
     // Reset timer
     if (lobbyData.phase !== 'WRITING') {
@@ -130,19 +117,12 @@ const GameContainer = (): React.ReactElement => {
       history.push('/');
     }
   }, [lobbyData]);
-
   useEffect(() => {
     if (socket.disconnected) {
       console.log('reconnecting...');
       socket.connect();
     }
   }, [socket.connected]);
-
-  // When app unloads, decrement tab count
-  useBeforeunload(() => {
-    setOpenTabs(Number(openTabs) - 1);
-  });
-
   useEffect(() => {
     /* onMount */
     // Log in with a valid token, or get a new token if needed
@@ -320,6 +300,24 @@ const GameContainer = (): React.ReactElement => {
       console.log('you were disconnected from the game.');
     });
   }, []); /* onMount */
+
+  // Combine reset functions
+  const resetGame = () => {
+    handleLeaveGame();
+    history.push('/');
+    resetLobbyData();
+    resetLobbyCode();
+    resetPlayerGuess();
+    setGuesses([]);
+    setToken(undefined);
+    handleLogin(true);
+    setShowLeaveModal(false);
+  };
+
+  // When app unloads, decrement tab count
+  useBeforeunload(() => {
+    setOpenTabs(Number(openTabs) - 1);
+  });
 
   /* Socket event emitters */
   const handleLogin = (newToken = false) => {
