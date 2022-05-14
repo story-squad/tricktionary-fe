@@ -5,14 +5,8 @@ import { ReactionPicker } from '../../../../common';
 export const DefinitionResult = (
   props: DefinitionResultProps,
 ): React.ReactElement => {
-  const {
-    username,
-    playerId,
-    definition,
-    points,
-    guesses,
-    definitionId,
-  } = props.definitionResult;
+  const { username, playerId, definition, points, guesses, definitionId } =
+    props.definitionResult;
   const { showReactions } = props;
 
   return (
