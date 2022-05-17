@@ -50,7 +50,7 @@ import { Scoreboard } from '../../common/Scoreboard';
 import { Finale, Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
 // Create a socket connection to API
-const socket = io(REACT_APP_API_URL, { transports: ['websocket'] });
+const socket = io(REACT_APP_API_URL);
 
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();
