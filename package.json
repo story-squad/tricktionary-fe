@@ -20,7 +20,6 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-helmet": "^6.1.5",
     "@types/react-router-dom": "^5.1.6",
-    "@types/recoil": "^0.0.9",
     "@types/shuffle-array": "^1.0.0",
     "@types/socket.io-client": "^1.4.35",
     "axios": "^0.21.0",
