@@ -6,8 +6,9 @@ import { DefinitionResult } from './DefinitionResult';
 export const RoundResults = (props: RoundResultsProps): React.ReactElement => {
   const { sortedDefinitions, showReactions } = props;
   const [showNoVotes, setShowNoVotes] = useState(false);
-  const [noVotes, gotVotes, realDefinition] =
-    splitSortedDefinitions(sortedDefinitions);
+  const [noVotes, gotVotes, realDefinition] = splitSortedDefinitions(
+    sortedDefinitions,
+  );
 
   return (
     <div className="round-results">
