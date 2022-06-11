@@ -71,15 +71,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     resetRevealResults();
   }, []);
 
-  //* Check if the user has a default name. If so, open change name modal
-  useEffect(() => {
-    const isHost = lobbyData.host === playerId;
-
-    if (props.username.includes('Player') && isHost === false) {
-      setShowChangeNameModal(true);
-    }
-  }, [props.username]);
-
   // Clear choice/input when switching between word selection type
   useEffect(() => {
     if (isCustom) {
@@ -267,7 +258,11 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
           <RoomCode />
 
-          <AlphaBotSettings lobbyCode={props.lobbyCode} />
+          <AlphaBotSettings
+            socket={props.socket}
+            lobbyCode={props.lobbyCode}
+            lobbyData={lobbyData}
+          />
         </section>
 
         <section className="white-bg">
@@ -522,4 +517,5 @@ interface PregameProps {
   handleUpdateUsername: (newUsername: string) => void;
   setError: any;
   lobbyCode: string;
+  socket: any;
 }

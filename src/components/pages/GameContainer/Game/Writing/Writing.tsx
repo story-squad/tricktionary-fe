@@ -64,11 +64,8 @@ const Writing = (props: WritingProps): React.ReactElement => {
   //* If the timer runs out, auto-submit the definition from users, unless it is empty
   useEffect(() => {
     if (timerDone && definition !== '') {
-      console.log('Times up my friend, pencils down! - Writing.tsx - line 66');
       props.handleSubmitDefinition(definition);
       setIsSubmitted(true);
-    } else {
-      console.log('You still got time! - Writing.tsx - line 70');
     }
   }, [timerDone]);
 

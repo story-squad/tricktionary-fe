@@ -1,15 +1,15 @@
-@import "./globals.scss";
-@import "./mixins.scss";
+@import '../../globals.scss';
+@import '../../mixins.scss';
 
 .landing-page {
-    .landing-content {
-      display: flex;
-      flex-flow: column nowrap;
-      align-items: center;
-  
-      & > div {
-        width: 800px;
-        max-width: 100%;
-      }
+  .landing-content {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+
+    & > div {
+      width: 800px;
+      max-width: 100%;
     }
   }
+}

@@ -35,11 +35,12 @@ const playerClassName = (
   playerId: string,
 ) => {
   const currentPlayer = player.id === playerId ? ' current' : '';
+  const disconnectedPlayer = !player.connected ? ' disconnected' : '';
   const hasSubmitted = playerHasSubmitted(lobbyData, player)
     ? ' submitted'
     : '';
 
-  return `players${currentPlayer}${hasSubmitted}`;
+  return `players${currentPlayer}${hasSubmitted}${disconnectedPlayer}`;
 };
 
 const playerUserName = (lobbyData: LobbyData, player: PlayerItem) => {
@@ -60,9 +61,7 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
       <h2 className="player-h2">Player Lobby</h2>
       <div className="player-lobby">
         {lobbyData.players
-          .filter(
-            (player: PlayerItem) => player.connected && isValidPlayer(player),
-          )
+          .filter((player: PlayerItem) => isValidPlayer(player))
           .map((player: PlayerItem) => {
             return (
               <div
@@ -70,9 +69,6 @@ const PlayerList = (props: PlayerListProps): React.ReactElement => {
                 key={player.id}
               >
                 <p className="player">{playerUserName(lobbyData, player)}</p>
-                <p className="player-score">
-                  Score: {props.hidePoints ? '?' : `${player.points}`}
-                </p>
               </div>
             );
           })}

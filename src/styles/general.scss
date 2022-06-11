@@ -469,6 +469,10 @@ div.visual-line-break {
       }
     }
 
+    &.disconnected {
+      background: $lt-grey;
+    }
+
     @include tablet-below {
       flex-direction: row;
       justify-content: space-between;

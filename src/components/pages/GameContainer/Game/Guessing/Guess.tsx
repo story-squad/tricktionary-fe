@@ -27,7 +27,6 @@ export const Guess = (props: GuessProps): React.ReactElement => {
     ) {
       // Set the array for bot guesses
       let filteredBotDefinitions = [...definitions];
-      console.log('definitions', definitions);
 
       // Remove actual word definition from guesses
       filteredBotDefinitions = filteredBotDefinitions.filter(
@@ -58,7 +57,7 @@ export const Guess = (props: GuessProps): React.ReactElement => {
       axios
         .get(APIURL)
         .then((res) => {
-          console.log('bot response', res);
+          console.log('Guess.tsx - line 61 - bot response', res);
           setBotGuess(`${res.data}`);
         })
         .catch((err) => {

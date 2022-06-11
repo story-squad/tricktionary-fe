@@ -18,6 +18,7 @@
 @import './components/pages/postgame.scss';
 
 // Common Component Stylesheets
+@import '~antd/dist/antd.css';
 @import './general.scss';
 @import './components/common/header.scss';
 @import './components/common/footer.scss';
@@ -34,3 +35,4 @@
 @import './components/common/modal.scss';
 @import './components/common/guessWord.scss';
 @import './components/common/scoreboard.scss';
+@import './components/common/notification.scss';

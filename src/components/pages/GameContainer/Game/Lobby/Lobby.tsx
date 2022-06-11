@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import jwt from 'jsonwebtoken';
-import React, { SetStateAction, useEffect } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -18,7 +18,13 @@ import {
   lobbyCodeIsValid,
   usernameIsValid,
 } from '../../../../../utils/validation';
-import { CharCounter, Input, ProTip, PublicGames } from '../../../../common';
+import {
+  CharCounter,
+  Input,
+  Modal,
+  ProTip,
+  PublicGames,
+} from '../../../../common';
 import { HowToPlay } from '../../../../common/HowTo';
 
 const Lobby = (props: LobbyProps): React.ReactElement => {
@@ -26,20 +32,45 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   const [token] = useLocalStorage<string>('token', initialToken);
   const [loading, setLoading] = useRecoilState(loadingState);
   const allowUrlJoin = useRecoilValue(allowUrlJoinState);
+  const [joinModal, setJoinModal] = useState(false);
+  const [reJoinModal, setReJoinModal] = useState(false);
 
   //set up the form details
   const { register, errors, setError, clearErrors } = useForm({
     mode: 'onSubmit',
   });
 
+  // Either "login" player if we have a code, or just reset game data
+  useEffect(() => {
+    const lobbyUrl = location.pathname;
+
+    if (lobbyUrl !== '/') {
+      console.log('Lobby.tsx - Line 49 - Player Entered Game');
+
+      props.setLobbyCode(lobbyUrl.substring(1, 5));
+
+      if (token === undefined || token === '') {
+        setJoinModal(true);
+      } else {
+        setReJoinModal(true);
+      }
+    } else {
+      console.log('Lobby.tsx - Line 44 - Resetting Game');
+
+      props.resetGame();
+    }
+  }, [location.pathname]);
+
   // Join a game if the lobbyCode is provided in the URL
   useEffect(() => {
     if (allowUrlJoin) {
       const decodedToken: DecodedToken = jwt.decode(token) as DecodedToken;
       let lobbyUrl = location.pathname;
+
       if (lobbyUrl !== '/') {
         lobbyUrl = lobbyUrl.substring(1, 5);
       }
+
       // If the user is entering a new game, join. Else, let the login event handle joining
       if (lobbyUrl !== decodedToken?.lob) {
         props.handleJoinLobby(null, lobbyUrl);
@@ -101,8 +132,73 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
     props.handleJoinLobby(e, '');
   };
 
+  const joinGameModal = (
+    <form className="start-game modal-join-form">
+      <div className="char-counter-wrapper">
+        <Input
+          id="username"
+          name="username"
+          value={props.username}
+          label="Codename"
+          register={register}
+          onChange={handleChangeUsername}
+          maxLength={MAX_USERNAME_LENGTH}
+        />
+        <CharCounter string={props.username} max={MAX_USERNAME_LENGTH} />
+      </div>
+      <input
+        id="lobby-code"
+        name="lobby-code"
+        value={props.lobbyCode}
+        type="hidden"
+      />
+      {errors.form && <p className="error">*{errors.form.message}</p>}
+      <div className="start-buttons">
+        <button
+          className="no-bottom-margin"
+          onClick={handleJoinByClick}
+          disabled={
+            !usernameIsValid(props.username).valid ||
+            props.lobbyCode.length !== 4 ||
+            loading === 'loading'
+          }
+        >
+          Join
+        </button>
+
+        <button
+          onClick={() => {
+            setJoinModal(false);
+            props.resetGame();
+          }}
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+
   return (
     <>
+      <Modal
+        header={`Join Lobby ${props.lobbyCode}!`}
+        customJSXCode={joinGameModal}
+        message={''}
+        customConfirmText="Join"
+        visible={joinModal}
+      />
+
+      <Modal
+        header={'HEY!'}
+        message={'Would you like to REjoin the game?'}
+        handleConfirm={() => props.handleLogin()}
+        handleCancel={() => {
+          setReJoinModal(false);
+          props.resetGame();
+        }}
+        visible={reJoinModal}
+      />
+
       <PublicGames />
       <div className="lobby game-page">
         <ProTip />
@@ -183,4 +279,6 @@ interface LobbyProps {
   setLobbyCode: React.Dispatch<SetStateAction<string>>;
   handleCreateLobby: (e: React.MouseEvent) => void;
   handleJoinLobby: (e: null | React.MouseEvent, optionalCode: string) => void;
+  handleLogin: any;
+  resetGame: any;
 }

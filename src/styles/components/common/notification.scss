@@ -1,0 +1,20 @@
+.ant-notification-notice {
+  .ant-notification-notice-icon {
+    .anticon {
+      color: $burnt-orange;
+      font-size: 4rem;
+    }
+  }
+
+  .ant-notification-notice-message {
+    font-family: $display-font;
+    color: $brand-blue;
+    font-size: 2rem;
+  }
+
+  .ant-notification-notice-description {
+    font-family: $text-font;
+    font-size: 1.5rem;
+    color: $medium-grey;
+  }
+}

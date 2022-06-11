@@ -73,6 +73,10 @@
           padding: 2rem;
         }
 
+        &.disconnected {
+          background-color: $medium-grey;
+        }
+
         &.heading {
           background-color: #003b7a;
 

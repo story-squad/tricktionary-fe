@@ -1,6 +1,5 @@
 import gsap from 'gsap';
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
-import jwt from 'jsonwebtoken';
 import React, { useEffect, useState } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
 import { useHistory } from 'react-router-dom';
@@ -29,11 +28,7 @@ import {
   LobbyData,
   PlayerItem,
 } from '../../../types/gameTypes';
-import {
-  JWT_SECRET,
-  MAX_SECONDS,
-  REACT_APP_API_URL,
-} from '../../../utils/constants';
+import { MAX_SECONDS, REACT_APP_API_URL } from '../../../utils/constants';
 import {
   addReaction,
   errorCodeChecker,
@@ -46,11 +41,12 @@ import {
   randomUsername,
 } from '../../../utils/localStorageInitialValues';
 import { Header, Loader, Modal } from '../../common';
+import { Notifications } from '../../common/Notifications';
 import { Scoreboard } from '../../common/Scoreboard';
 import { Finale, Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 
 // Create a socket connection to API
-const socket = io.connect(REACT_APP_API_URL as string);
+const socket = io(REACT_APP_API_URL);
 
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();
@@ -82,11 +78,7 @@ const GameContainer = (): React.ReactElement => {
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetPlayerGuess = useResetRecoilState(playerGuessState);
 
-  // console.log('GameContainer.tsx - Line 84 - get lobby data', lobbyData);
-  // console.log(
-  //   'GameContainer.tsx - Line 85 - get lobby settings',
-  //   lobbySettings,
-  // );
+  console.log('GameContainer.tsx - Line 84 - get lobby data', lobbyData);
 
   //* Add transitions in between screens
   useEffect(() => {
@@ -103,6 +95,8 @@ const GameContainer = (): React.ReactElement => {
 
   // Combine reset functions
   const resetGame = () => {
+    console.log('GameContainer.tsx - Line 99 - Resetting Game');
+
     handleLeaveGame();
     history.push('/');
     resetLobbyData();
@@ -110,7 +104,6 @@ const GameContainer = (): React.ReactElement => {
     resetPlayerGuess();
     setGuesses([]);
     setToken(undefined);
-    handleLogin(true);
     setShowLeaveModal(false);
   };
 
@@ -145,14 +138,6 @@ const GameContainer = (): React.ReactElement => {
 
   useEffect(() => {
     /* onMount */
-    // Log in with a valid token, or get a new token if needed
-    try {
-      jwt.verify(token, JWT_SECRET);
-      handleLogin();
-    } catch (err) {
-      console.log(err, 'getting new token');
-      handleLogin(true);
-    }
     refreshOpenTabs();
 
     // Keep track of the number of tabs players are using
@@ -232,6 +217,10 @@ const GameContainer = (): React.ReactElement => {
     });
 
     // Get your playerId from the API
+    socket.on('welcome', (socketData: string) => {
+      setPlayerId(socketData);
+    });
+
     socket.on('welcome', (socketData: string) => {
       setPlayerId(socketData);
     });
@@ -323,10 +312,12 @@ const GameContainer = (): React.ReactElement => {
 
   /* Socket event emitters */
   const handleLogin = (newToken = false) => {
+    console.log('GameContainer.tsx - Line 316 - Player Logging in');
+
     if (newToken) {
       socket.emit('login');
     } else {
-      socket.emit('login', newToken);
+      socket.emit('login', token, username);
     }
   };
 
@@ -335,6 +326,7 @@ const GameContainer = (): React.ReactElement => {
     if (e) {
       e.preventDefault();
     }
+    handleLogin(true);
     setLoading('loading');
     socket.emit('create lobby', username.trim());
   };
@@ -501,6 +493,7 @@ const GameContainer = (): React.ReactElement => {
             handleUpdateUsername={handleUpdateUsername}
             setError={setError}
             lobbyCode={lobbyCode}
+            socket={socket}
           />
         );
       case 'WRITING':
@@ -543,6 +536,8 @@ const GameContainer = (): React.ReactElement => {
             setLobbyCode={setLobbyCode}
             handleCreateLobby={handleCreateLobby}
             handleJoinLobby={handleJoinLobby}
+            handleLogin={handleLogin}
+            resetGame={resetGame}
           />
         );
     }
@@ -609,9 +604,13 @@ const GameContainer = (): React.ReactElement => {
           <Scoreboard
             hidePoints={lobbyData.phase === 'POSTGAME'}
             revealBoard={lobbyData.phase === 'RESULTS'}
+            lobbyData={lobbyData}
+            playerId={playerId}
           />
         </div>
       </div>
+
+      <Notifications socket={socket} lobbyData={lobbyData} />
     </div>
   );
 };

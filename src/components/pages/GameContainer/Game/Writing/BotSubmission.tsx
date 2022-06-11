@@ -14,7 +14,7 @@ const BotSubmission = (props: BotSubmissionProps): React.ReactElement => {
       axios
         .get(APIURL)
         .then((res) => {
-          console.log('bot response', res);
+          console.log('BotSubmission.tsx - line 17 - bot response', res);
           props.handleBotSubmitDefinition(res.data, bot.id);
         })
         .catch((err) => {
