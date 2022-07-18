@@ -538,6 +538,7 @@ const GameContainer = (): React.ReactElement => {
             handleJoinLobby={handleJoinLobby}
             handleLogin={handleLogin}
             resetGame={resetGame}
+            openTabs={openTabs}
           />
         );
     }
@@ -566,9 +567,12 @@ const GameContainer = (): React.ReactElement => {
       <Modal
         header={'Already Playing'}
         message={
-          'You appear to be already playing the game in another tab. Would you like to play anyway?'
+          'You appear to be already playing the game in another tab. Would you like to quit that game and continue anyway? If not, close this tab and go back to the active game tab.'
         }
-        handleConfirm={() => setOpenTabs(1)}
+        handleConfirm={() => {
+          setOpenTabs(1);
+          resetGame();
+        }}
         customConfirmText={'Yes'}
         visible={Number(openTabs) > 1}
       />

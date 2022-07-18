@@ -43,6 +43,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   // Either "login" player if we have a code, or just reset game data
   useEffect(() => {
     const lobbyUrl = location.pathname;
+    console.log('opened tabs', props.openTabs);
 
     if (lobbyUrl !== '/') {
       console.log('Lobby.tsx - Line 49 - Player Entered Game');
@@ -52,7 +53,9 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
       if (token === undefined || token === '') {
         setJoinModal(true);
       } else {
-        setReJoinModal(true);
+        if (Number(props.openTabs) < 1) {
+          setReJoinModal(true);
+        }
       }
     } else {
       console.log('Lobby.tsx - Line 44 - Resetting Game');
@@ -190,7 +193,9 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
 
       <Modal
         header={'HEY!'}
-        message={'Would you like to REjoin the game?'}
+        message={
+          'Seems like you disconnected from a game. Would you like to re-join the game?'
+        }
         handleConfirm={() => props.handleLogin()}
         handleCancel={() => {
           setReJoinModal(false);
@@ -281,4 +286,5 @@ interface LobbyProps {
   handleJoinLobby: (e: null | React.MouseEvent, optionalCode: string) => void;
   handleLogin: any;
   resetGame: any;
+  openTabs: string;
 }
