@@ -4,6 +4,9 @@ export const REACT_APP_URL =
 export const REACT_APP_API_URL =
   process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
+export const STORYSQUAD_AI_API_URL =
+  process.env.STORYSQUAD_AI_API_URL || `https://hoaxbot3000.herokuapp.com`;
+
 // Max seconds for definition writing timer
 export const MAX_SECONDS = Number(process.env.REACT_APP_MAX_SECONDS) || 120;
 

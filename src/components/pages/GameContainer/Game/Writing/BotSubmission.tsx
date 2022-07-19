@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { lobbyState } from '../../../../../state/gameState';
+import { STORYSQUAD_AI_API_URL } from '../../../../../utils/constants';
 
 const BotSubmission = (props: BotSubmissionProps): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
@@ -9,7 +10,7 @@ const BotSubmission = (props: BotSubmissionProps): React.ReactElement => {
   //* Submit Bot Definition
   useEffect(() => {
     lobbyData.bots.forEach((bot) => {
-      const APIURL = `https://hoaxbot3000.herokuapp.com/zetabot/${lobbyData.category}/${lobbyData.word}/${bot.botName}`;
+      const APIURL = `${STORYSQUAD_AI_API_URL}/zetabot/${lobbyData.category}/${lobbyData.word}/${bot.botName}`;
 
       axios
         .get(APIURL)

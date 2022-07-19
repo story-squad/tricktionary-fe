@@ -2,6 +2,7 @@ import axios from 'axios';
 import gsap from 'gsap';
 import React, { useEffect, useState } from 'react';
 import { BotItem } from '../../../../../types/gameTypes';
+import { STORYSQUAD_AI_API_URL } from '../../../../../utils/constants';
 
 const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
   const [enableBot, setEnableBot] = useState(false);
@@ -14,10 +15,8 @@ const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
 
   // Get botlist from API
   useEffect(() => {
-    const APIURL = `https://hoaxbot3000.herokuapp.com/zetabot/botlist`;
-
     axios
-      .get(APIURL)
+      .get(STORYSQUAD_AI_API_URL + '/zetabot/botlist')
       .then((res) => {
         setBotList(res.data);
         setLoadingBots(false);
