@@ -16,7 +16,7 @@ const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
   // Get botlist from API
   useEffect(() => {
     axios
-      .get(STORYSQUAD_AI_API_URL + '/zetabot/botlist')
+      .get(STORYSQUAD_AI_API_URL + '/zetabot/botlist/')
       .then((res) => {
         setBotList(res.data);
         setLoadingBots(false);
