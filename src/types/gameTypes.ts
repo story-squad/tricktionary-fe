@@ -8,11 +8,13 @@ export type LoadingState = 'ok' | 'loading' | 'failed';
 
 export interface PlayerItem {
   id: string;
+  pid: string;
   username: string;
   definition: string;
   definitionId: number | undefined;
   points: number;
   connected: boolean;
+  playerPlacing: number;
 }
 
 export interface BotItem {
@@ -33,7 +35,14 @@ export interface RoundItem {
 
 export interface RoundScoreItem {
   playerId: string;
+  playerPID: string;
   score: string;
+}
+
+export interface NotificationItem {
+  message: string;
+  description: string;
+  className: string;
 }
 
 export interface LobbyData {

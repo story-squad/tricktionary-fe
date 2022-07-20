@@ -1,11 +1,7 @@
 import axios from 'axios';
 import gsap from 'gsap';
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
-import { REACT_APP_API_URL } from '../../../../../utils/constants';
-
-// Create a socket connection to API
-const socket = io(REACT_APP_API_URL, { transports: ['websocket'] });
+import { BotItem } from '../../../../../types/gameTypes';
 
 const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
   const [enableBot, setEnableBot] = useState(false);
@@ -29,6 +25,13 @@ const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
       .catch((err) => {
         console.log(err);
       });
+  }, []);
+
+  // Check if we have bots selected for future rounds
+  useEffect(() => {
+    if (props.lobbyData.bots.length > 0) {
+      setEnableBot(true);
+    }
   }, []);
 
   return (
@@ -56,6 +59,8 @@ const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
                   botID={`${bot}-${index}`}
                   lobbyCode={props.lobbyCode}
                   key={index}
+                  socket={props.socket}
+                  activeBots={props.lobbyData.bots}
                 />
               );
             })}
@@ -67,7 +72,7 @@ const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
 
 //* Component for the Alphabot list
 const AlphaBotList = (props: AlphaBotListProps): React.ReactElement => {
-  const { bot, botID, lobbyCode } = props;
+  const { bot, botID, lobbyCode, socket, activeBots } = props;
 
   const [enableBot, setEnableBot] = useState(false);
 
@@ -79,6 +84,15 @@ const AlphaBotList = (props: AlphaBotListProps): React.ReactElement => {
   //* Add some smoothing effects
   useEffect(() => {
     gsap.from(`#${botID}-box`, { opacity: 0 });
+  }, []);
+
+  // If a bot is in the game, preselect it
+  useEffect(() => {
+    activeBots.some((element: BotItem) => {
+      if (element.botName === bot) {
+        setEnableBot(true);
+      }
+    });
   }, []);
 
   // Join game as Player
@@ -114,10 +128,14 @@ export default AlphaBotSettings;
 
 interface AlphaBotProps {
   lobbyCode: string;
+  socket: any;
+  lobbyData: any;
 }
 
 interface AlphaBotListProps {
   bot: string;
   botID: string;
   lobbyCode: string;
+  socket: any;
+  activeBots: Array<BotItem>;
 }

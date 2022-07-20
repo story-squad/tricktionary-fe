@@ -1,7 +1,5 @@
 import { gsap } from 'gsap';
 import React, { useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
-import { lobbyState, playerIdState } from '../../../state/gameState';
 import {
   LobbyData,
   PlayerItem,
@@ -11,8 +9,9 @@ import { isValidPlayer } from '../../../utils/helpers';
 
 const playerClassName = (player: PlayerItem, playerId: string) => {
   const currentPlayer = player.id === playerId ? 'current' : '';
+  const disconnected = player.connected === false ? ' disconnected' : '';
 
-  return currentPlayer;
+  return currentPlayer + disconnected;
 };
 
 const isPlayerHost = (lobbyData: LobbyData, player: PlayerItem) => {
@@ -24,13 +23,20 @@ const isPlayerHost = (lobbyData: LobbyData, player: PlayerItem) => {
 };
 
 const Scoreboard = (props: ScoreboardProps): React.ReactElement => {
-  const playerId = useRecoilValue(playerIdState);
-  const lobbyData = useRecoilValue(lobbyState);
+  const { lobbyData, playerId } = props;
 
+  const playerList = [
+    ...lobbyData.players
+      .filter(
+        (player: PlayerItem) =>
+          isValidPlayer(player) && !isPlayerHost(lobbyData, player),
+      )
+      .sort((a, b) => b.points - a.points),
+  ];
   const { hidePoints, revealBoard } = props;
 
   //* Helper for placement ranking
-  let playerPlacing = 0;
+  const listPlayerCount = playerList.length - 1;
 
   //* Hide Scoreboard
   const handleHideScoreboard = () => {
@@ -98,57 +104,57 @@ const Scoreboard = (props: ScoreboardProps): React.ReactElement => {
                     <td colSpan={4}>No Players in yet</td>
                   </tr>
                 ) : (
-                  lobbyData.players
-                    .filter(
-                      (player: PlayerItem) =>
-                        player.connected && isValidPlayer(player),
-                    )
-                    .sort((a, b) => b.points - a.points)
-                    .map((player: PlayerItem) => {
-                      const isHost = isPlayerHost(lobbyData, player);
+                  playerList.map((player: PlayerItem, index) => {
+                    const playerPlace = player.playerPlacing;
+                    let curPlayerPlacing = playerPlace.toString();
 
-                      if (isHost) {
-                        return;
+                    if (playerList.length > 1 && index !== 0) {
+                      if (
+                        playerList[index - 1].playerPlacing ===
+                        player.playerPlacing
+                      ) {
+                        curPlayerPlacing = `T${playerPlace}`;
                       }
+                    }
 
-                      playerPlacing = playerPlacing + 1;
+                    return (
+                      <tr
+                        className={`row player ${playerClassName(
+                          player,
+                          playerId,
+                        )}`}
+                        key={player.id}
+                      >
+                        <td className="placing">
+                          {hidePoints ? '?' : curPlayerPlacing}
+                        </td>
+                        <td className="username">{player.username}</td>
+                        {lobbyData.rounds.length > 0 &&
+                          lobbyData.rounds.map((round) => {
+                            const curRoundScore = round.scores.filter(
+                              (x: RoundScoreItem) => x.playerId === player.id,
+                            )[0];
 
-                      return (
-                        <tr
-                          className={`row player ${playerClassName(
-                            player,
-                            playerId,
-                          )}`}
-                          key={player.id}
-                        >
-                          <td className="placing">{playerPlacing}</td>
-                          <td className="username">{player.username}</td>
-                          {lobbyData.rounds.length > 0 &&
-                            lobbyData.rounds.map((round) => {
-                              const curRoundScore = round.scores.filter(
-                                (x: RoundScoreItem) => x.playerId === player.id,
-                              )[0];
+                            const curRound =
+                              round.roundNum ===
+                              String(lobbyData.rounds.length);
 
-                              const curRound =
-                                round.roundNum ===
-                                String(lobbyData.rounds.length);
-
-                              return (
-                                <td className="round" key={round.roundNum}>
-                                  {curRound
-                                    ? hidePoints
-                                      ? '?'
-                                      : `${curRoundScore.score}`
-                                    : curRoundScore.score}
-                                </td>
-                              );
-                            })}
-                          <td className="total">
-                            {hidePoints ? '?' : `${player.points}`}
-                          </td>
-                        </tr>
-                      );
-                    })
+                            return (
+                              <td className="round" key={round.roundNum}>
+                                {curRound
+                                  ? hidePoints
+                                    ? '?'
+                                    : `${curRoundScore.score}`
+                                  : curRoundScore.score}
+                              </td>
+                            );
+                          })}
+                        <td className="total">
+                          {hidePoints ? '?' : `${player.points}`}
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
@@ -164,4 +170,6 @@ export default Scoreboard;
 interface ScoreboardProps {
   hidePoints?: boolean;
   revealBoard?: boolean;
+  lobbyData: LobbyData;
+  playerId: string;
 }
