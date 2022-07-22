@@ -4,6 +4,8 @@ import { CookiePopup, Footer } from './components/common';
 import { GameContainer } from './components/pages/GameContainer';
 
 const App = (): React.ReactElement => {
+  console.log('Latest Build: 07/22/2022');
+
   return (
     <div className="App">
       <CookiePopup />
