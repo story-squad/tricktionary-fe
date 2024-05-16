@@ -32,7 +32,7 @@ import {
 import { HowToPlay } from '../../../../common/HowTo';
 import { RoomCode } from '../../../../common/RoomCode';
 import { View } from '../../../../common/View';
-import AlphaBotSettings from './AlphaBotSettings';
+// import AlphaBotSettings from './AlphaBotSettings';
 import { WordChoice } from './WordChoice';
 
 const initialChoiceValue = 0;
@@ -258,11 +258,11 @@ const Pregame = (props: PregameProps): React.ReactElement => {
 
           <RoomCode />
 
-          <AlphaBotSettings
+          {/* <AlphaBotSettings
             socket={props.socket}
             lobbyCode={props.lobbyCode}
             lobbyData={lobbyData}
-          />
+          /> */}
         </section>
 
         <section className="white-bg">
