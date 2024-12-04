@@ -27,7 +27,11 @@ Here is a basic layout of the application from a frontend perspective:
 
 For a list of required environment variables, look in [./src/utils/constants.ts](./src/utils/constants.ts)
 
----
+- REACT_APP_API_URL
+- REACT_APP_JWT_SECRET
+- REACT_APP_STORYSQUAD_AI_API_URL
+
+
 
 ---
 

@@ -12,6 +12,7 @@ import {
 } from '../../../../../types/gameTypes';
 import { getPlayerGuess, isLargeGame } from '../../../../../utils/helpers';
 import { Modal } from '../../../../common';
+import { STORYSQUAD_AI_API_URL } from '../../../../../utils/constants';
 
 export const Guess = (props: GuessProps): React.ReactElement => {
   const { player, definitions, handleSelectGuess, guesses, lobbyData } = props;
@@ -51,11 +52,11 @@ export const Guess = (props: GuessProps): React.ReactElement => {
       } else {
         formattedList = '';
       }
-
-      const APIURL = `https://hoaxbot3000.herokuapp.com/zetabot/guess/${lobbyData.word}/${formattedList}/${player.username}`;
-
       axios
-        .get(APIURL)
+        .get(
+          STORYSQUAD_AI_API_URL +
+            `/zetabot/guess/${lobbyData.word}/${formattedList}/${player.username}`,
+        )
         .then((res) => {
           console.log('Guess.tsx - line 61 - bot response', res);
           setBotGuess(`${res.data}`);
