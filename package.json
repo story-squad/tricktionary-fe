@@ -27,7 +27,7 @@
     "dotenv": "^8.2.0",
     "gsap": "^3.8.0",
     "html-to-image": "^1.9.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "react": "^17.0.1",
     "react-beforeunload": "^2.4.0",
     "react-copy-to-clipboard": "^5.0.3",
