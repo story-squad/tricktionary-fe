@@ -22,7 +22,7 @@
     "@types/shuffle-array": "^1.0.0",
     "@types/socket.io-client": "^1.4.35",
     "antd": "^4.20.4",
-    "axios": "^0.21.0",
+    "axios": "^0.21.2",
     "convertkit-react": "^1.5.0",
     "dotenv": "^8.2.0",
     "gsap": "^3.8.0",
