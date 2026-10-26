@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useEffectEvent } from '../../../hooks';
 import { MAX_SECONDS, TIMER_SYNC_INTERVAL } from '../../../utils/constants';
 
 const Timer = (props: TimerProps): React.ReactElement => {
   const { time, setTime, timeUp, syncTime, addTime } = props;
   const [allowTimeUp, setAllowTimeUp] = useState(false);
 
-  // Timer logic. Update Recoil state as the Timer's local state updates
-  useEffect(() => {
+  // Timer logic for one tick. The callbacks come from the parent and are not
+  // memoized, and allowTimeUp changes on the first tick; reading them here keeps
+  // them from re-running the tick.
+  const onTick = useEffectEvent((time: number) => {
     // Sync host's timer with other players
     if (time % TIMER_SYNC_INTERVAL === 0) {
       syncTime(time);
@@ -21,7 +24,11 @@ const Timer = (props: TimerProps): React.ReactElement => {
     if (time === 0 && allowTimeUp) {
       timeUp(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- runs once per tick; the callbacks come from the parent and are not memoized
+  });
+
+  // Run the timer logic once per tick. Update Recoil state as the Timer's local state updates
+  useEffect(() => {
+    onTick(time);
   }, [time]);
 
   // Decrement local timer state
