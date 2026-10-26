@@ -194,11 +194,11 @@ describe('updateReactionCounts', () => {
         42: 6,
       },
     };
-    const inputReactionsList: any = [
+    const inputReactionsList = [
       [42, 'the meaning of life', { foo: 'bar', soap: 'bar', candy: 'bar' }],
-    ];
+    ] as unknown as GetReactionsItem[];
     // Action
-    const output = updateReactionCounts(inputReactionsDict, []);
+    const output = updateReactionCounts(inputReactionsDict, inputReactionsList);
 
     // Assertion
     expect(output).toEqual(inputReactionsDict);
