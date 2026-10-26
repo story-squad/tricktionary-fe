@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import alphabotA from '../../../../../assets/alphabot-a.png';
 import alphabotZ from '../../../../../assets/alphabot-z.png';
-import { useLocalStorage } from '../../../../../hooks';
+import { useEffectEvent, useLocalStorage } from '../../../../../hooks';
 import {
   allowUrlJoinState,
   loadingState,
@@ -40,9 +40,9 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
     mode: 'onSubmit',
   });
 
-  // Either "login" player if we have a code, or just reset game data
-  useEffect(() => {
-    const lobbyUrl = location.pathname;
+  // Either "login" player if we have a code, or just reset game data. Props and
+  // token are read at the moment the path changes.
+  const onPathChange = useEffectEvent((lobbyUrl: string) => {
     console.log('opened tabs', props.openTabs);
 
     if (lobbyUrl !== '/') {
@@ -62,30 +62,40 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
 
       props.resetGame();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run only when the URL path changes; props and token are read at that moment
+  });
+
+  // Run only when the URL path changes
+  useEffect(() => {
+    onPathChange(location.pathname);
   }, [location.pathname]);
 
-  // Join a game if the lobbyCode is provided in the URL
+  // Join a game if the lobbyCode is provided in the URL. Token, path and props
+  // are read at the moment the server allows it.
+  const joinFromUrl = useEffectEvent(() => {
+    let decodedToken: DecodedToken | null = null;
+    try {
+      decodedToken = jwtDecode<DecodedToken>(token);
+    } catch {
+      // jwt-decode throws on an empty or malformed token (jsonwebtoken returned null)
+    }
+    let lobbyUrl = location.pathname;
+
+    if (lobbyUrl !== '/') {
+      lobbyUrl = lobbyUrl.substring(1, 5);
+    }
+
+    // If the user is entering a new game, join. Else, let the login event handle joining
+    if (lobbyUrl !== decodedToken?.lob) {
+      props.handleJoinLobby(null, lobbyUrl);
+    }
+  });
+
+  // Join from the URL only when the server allows it (allowUrlJoin flips), not
+  // on every prop change
   useEffect(() => {
     if (allowUrlJoin) {
-      let decodedToken: DecodedToken | null = null;
-      try {
-        decodedToken = jwtDecode<DecodedToken>(token);
-      } catch {
-        // jwt-decode throws on an empty or malformed token (jsonwebtoken returned null)
-      }
-      let lobbyUrl = location.pathname;
-
-      if (lobbyUrl !== '/') {
-        lobbyUrl = lobbyUrl.substring(1, 5);
-      }
-
-      // If the user is entering a new game, join. Else, let the login event handle joining
-      if (lobbyUrl !== decodedToken?.lob) {
-        props.handleJoinLobby(null, lobbyUrl);
-      }
+      joinFromUrl();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- join from the URL only when the server allows it (allowUrlJoin flips), not on every prop change
   }, [allowUrlJoin]);
 
   // Adding some effects to bots

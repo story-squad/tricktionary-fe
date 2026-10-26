@@ -109,8 +109,9 @@ const Finale = (): React.ReactElement => {
         ease: 'elastic(1, 0.5)',
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- play the podium animation once, on mount
-  }, []);
+    // topPlayers is set once from the first render and never updated, so the
+    // podium animation plays once, on mount
+  }, [topPlayers]);
 
   return (
     <div className="finale game-page">

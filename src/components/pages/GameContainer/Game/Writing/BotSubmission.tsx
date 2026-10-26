@@ -1,13 +1,14 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useEffectEvent } from '../../../../../hooks';
 import { lobbyState } from '../../../../../state/gameState';
 
 const BotSubmission = (props: BotSubmissionProps): React.ReactElement => {
   const lobbyData = useRecoilValue(lobbyState);
 
-  //* Submit Bot Definition
-  useEffect(() => {
+  //* Submit Bot Definition, for the bots and word as they are when writing starts
+  const submitBotDefinitions = useEffectEvent(() => {
     lobbyData.bots.forEach((bot) => {
       const APIURL = `https://hoaxbot3000.herokuapp.com/zetabot/${lobbyData.category}/${lobbyData.word}/${bot.botName}`;
 
@@ -23,7 +24,11 @@ const BotSubmission = (props: BotSubmissionProps): React.ReactElement => {
 
       // props.handleBotSubmitDefinition(`My name is ${bot.botName}`, bot.id);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- submit each bot's definition once per writing round
+  });
+
+  // Submit each bot's definition once per writing round
+  useEffect(() => {
+    submitBotDefinitions();
   }, []);
 
   return <></>;
