@@ -1,5 +1,5 @@
 import gsap from 'gsap';
-import jwt from 'jsonwebtoken';
+import { jwtDecode } from 'jwt-decode';
 import React, { SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
@@ -67,7 +67,12 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
   // Join a game if the lobbyCode is provided in the URL
   useEffect(() => {
     if (allowUrlJoin) {
-      const decodedToken: DecodedToken = jwt.decode(token) as DecodedToken;
+      let decodedToken: DecodedToken | null = null;
+      try {
+        decodedToken = jwtDecode<DecodedToken>(token);
+      } catch {
+        // jwt-decode throws on an empty or malformed token (jsonwebtoken returned null)
+      }
       let lobbyUrl = location.pathname;
 
       if (lobbyUrl !== '/') {

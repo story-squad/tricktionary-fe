@@ -1,6 +1,9 @@
 import { useState } from 'react';
 // Hook translated to TS from JS https://usehooks.com/useLocalStorage/
-export function useLocalStorage<T>(
+// T defaults to any: TypeScript 4.8+ no longer infers it from the caller's
+// destructuring pattern, which is what made the untyped call sites `any` before.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useLocalStorage<T = any>(
   key: string,
   initialValue: unknown,
 ): Array<T> {
