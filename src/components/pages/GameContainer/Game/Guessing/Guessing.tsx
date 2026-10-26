@@ -52,6 +52,7 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   // Recalculate guesses when players disconnect/reconnect
   useEffect(() => {
     setGuesses(recalculateGuessesWithConnected(lobbyData, guesses));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- setGuesses (useLocalStorage) is a new function each render; run only when lobbyData changes
   }, [lobbyData]);
 
   const handleSelectGuess = (

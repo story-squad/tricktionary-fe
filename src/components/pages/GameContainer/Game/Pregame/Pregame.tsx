@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { Socket } from 'socket.io-client';
 import { getWords } from '../../../../../api/apiRequests';
 import { useLocalStorage } from '../../../../../hooks';
 import {
   hostChoiceState,
   lobbySettingsState,
   lobbyState,
-  playerIdState,
   revealResultsState,
 } from '../../../../../state/gameState';
 import { WordItem } from '../../../../../types/gameTypes';
@@ -48,7 +48,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const lobbySettings = useRecoilValue(lobbySettingsState);
   const [hostChoice, setHostChoice] = useRecoilState(hostChoiceState);
   const lobbyData = useRecoilValue(lobbyState);
-  const playerId = useRecoilValue(playerIdState);
   const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
@@ -69,6 +68,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     // Reset previous game states
     setGuesses([]);
     resetRevealResults();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fetch words and reset the previous round once, when the pregame screen mounts
   }, []);
 
   // Clear choice/input when switching between word selection type
@@ -92,6 +92,7 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     } else {
       props.handleSetWord(choice, undefined, undefined, undefined);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- handleSetWord is recreated on every GameContainer render; run only when the selection changes
   }, [isCustom, choice, customInput]);
 
   const handleGetWords = () => {
@@ -515,7 +516,7 @@ interface PregameProps {
   handleSetUsername: (newUsername: string) => void;
   username: string;
   handleUpdateUsername: (newUsername: string) => void;
-  setError: any;
+  setError: (message: string) => void;
   lobbyCode: string;
-  socket: any;
+  socket: Socket;
 }

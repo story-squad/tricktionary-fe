@@ -35,9 +35,6 @@ const Scoreboard = (props: ScoreboardProps): React.ReactElement => {
   ];
   const { hidePoints, revealBoard } = props;
 
-  //* Helper for placement ranking
-  const listPlayerCount = playerList.length - 1;
-
   //* Hide Scoreboard
   const handleHideScoreboard = () => {
     gsap.to('.inner-scoreboard', { y: 100, opacity: 0, duration: 0.3 });

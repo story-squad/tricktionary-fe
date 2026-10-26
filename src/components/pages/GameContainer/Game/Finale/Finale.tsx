@@ -109,6 +109,7 @@ const Finale = (): React.ReactElement => {
         ease: 'elastic(1, 0.5)',
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- play the podium animation once, on mount
   }, []);
 
   return (

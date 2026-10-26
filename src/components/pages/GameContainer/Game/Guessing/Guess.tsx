@@ -8,6 +8,7 @@ import {
   DefinitionSelection,
   GuessItem,
   HandleSelectGuessParams,
+  LobbyData,
   PlayerItem,
 } from '../../../../../types/gameTypes';
 import { getPlayerGuess, isLargeGame } from '../../../../../utils/helpers';
@@ -39,15 +40,15 @@ export const Guess = (props: GuessProps): React.ReactElement => {
       );
 
       //Just make the array be the definitions, not the object
-      filteredBotDefinitions = filteredBotDefinitions.map((definition: any) => {
+      const botDefinitionTexts = filteredBotDefinitions.map((definition) => {
         return definition.content;
       });
 
       // Format the definitions array to be properly used with the API
       let formattedList;
 
-      if (filteredBotDefinitions.length > 0) {
-        formattedList = filteredBotDefinitions.join('*');
+      if (botDefinitionTexts.length > 0) {
+        formattedList = botDefinitionTexts.join('*');
       } else {
         formattedList = '';
       }
@@ -64,6 +65,7 @@ export const Guess = (props: GuessProps): React.ReactElement => {
           console.log(err.message);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- ask the bot API for this player's guess once, when the voting row mounts
   }, []);
 
   const handleSelectWithOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -197,5 +199,5 @@ interface GuessProps {
   definitions: DefinitionItem[];
   player: PlayerItem;
   guesses: GuessItem[];
-  lobbyData: any;
+  lobbyData: LobbyData;
 }

@@ -64,5 +64,5 @@ interface ModalProps {
   handleCancel?: () => void | (() => (args: unknown) => void);
   customConfirmText?: string;
   customCancelText?: string;
-  customJSXCode?: any;
+  customJSXCode?: React.ReactNode;
 }

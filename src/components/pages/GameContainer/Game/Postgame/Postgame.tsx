@@ -69,6 +69,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         );
       })
       .catch((err) => console.log(err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- load the reaction set once, when results open
   }, []);
 
   // After reactionsDictionary initialized, attempt to update definitionReactions if needed
@@ -77,6 +78,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
       handleGetReactions();
       setShouldGetReactions(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- check once the reactions dictionary is filled in
   }, [definitionReactions]);
 
   // Create new sorted definitions array when player recieves guesses from host
@@ -88,6 +90,7 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         playerDict,
       ),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reloadGuesses (useLocalStorage) is a new function each render; run only when lobbyData changes
   }, [lobbyData]);
 
   return (

@@ -23,6 +23,7 @@ const BotSubmission = (props: BotSubmissionProps): React.ReactElement => {
 
       // props.handleBotSubmitDefinition(`My name is ${bot.botName}`, bot.id);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- submit each bot's definition once per writing round
   }, []);
 
   return <></>;

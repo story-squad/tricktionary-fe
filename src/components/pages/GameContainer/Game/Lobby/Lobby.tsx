@@ -62,6 +62,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
 
       props.resetGame();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run only when the URL path changes; props and token are read at that moment
   }, [location.pathname]);
 
   // Join a game if the lobbyCode is provided in the URL
@@ -84,6 +85,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         props.handleJoinLobby(null, lobbyUrl);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- join from the URL only when the server allows it (allowUrlJoin flips), not on every prop change
   }, [allowUrlJoin]);
 
   // Adding some effects to bots
@@ -289,7 +291,7 @@ interface LobbyProps {
   setLobbyCode: React.Dispatch<SetStateAction<string>>;
   handleCreateLobby: (e: React.MouseEvent) => void;
   handleJoinLobby: (e: null | React.MouseEvent, optionalCode: string) => void;
-  handleLogin: any;
-  resetGame: any;
+  handleLogin: (newToken?: boolean) => void;
+  resetGame: () => void;
   openTabs: string;
 }

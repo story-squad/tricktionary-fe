@@ -21,25 +21,25 @@ const Timer = (props: TimerProps): React.ReactElement => {
     if (time === 0 && allowTimeUp) {
       timeUp(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- runs once per tick; the callbacks come from the parent and are not memoized
   }, [time]);
 
   // Decrement local timer state
-  const tick = () => {
-    setTime((prevTime: number) => {
-      if (prevTime > 0) {
-        return prevTime - 1;
-      } else {
-        return prevTime;
-      }
-    });
-  };
-
   useEffect(() => {
+    const tick = () => {
+      setTime((prevTime: number) => {
+        if (prevTime > 0) {
+          return prevTime - 1;
+        } else {
+          return prevTime;
+        }
+      });
+    };
     const interval = setInterval(tick, 1000);
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [setTime]);
 
   return (
     <>

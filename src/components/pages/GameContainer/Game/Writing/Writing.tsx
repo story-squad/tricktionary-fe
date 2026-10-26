@@ -37,7 +37,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const playerId = useRecoilValue(playerIdState);
 
   //set up the form details
-  const { register, errors, setError, clearErrors } = useForm({
+  const { errors, setError, clearErrors } = useForm({
     mode: 'onSubmit',
   });
 
@@ -49,7 +49,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
         setUseTimer(true);
       }
     }
-  }, [lobbyData?.roundSettings?.seconds]);
+  }, [lobbyData?.roundSettings?.seconds, setTime]);
 
   // If a player rejoins, check whether they submitted already
   useEffect(() => {
@@ -59,6 +59,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
         setDefinition(player.definition);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- restore a rejoining player's submission once, on mount
   }, []);
 
   //* If the timer runs out, auto-submit the definition from users, unless it is empty
@@ -67,6 +68,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
       props.handleSubmitDefinition(definition);
       setIsSubmitted(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- auto-submit only at the moment the timer runs out, not on every keystroke
   }, [timerDone]);
 
   const allPlayersHaveWritten = () => {

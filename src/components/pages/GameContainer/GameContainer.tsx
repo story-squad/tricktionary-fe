@@ -122,6 +122,7 @@ const GameContainer = (): React.ReactElement => {
     if (isKicking && lobbyData.phase === 'LOBBY') {
       history.push('/');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- react to each lobby update from the server; handleKickPlayer is recreated every render
   }, [lobbyData]);
 
   useEffect(() => {
@@ -129,6 +130,10 @@ const GameContainer = (): React.ReactElement => {
       console.log('reconnecting...');
       socket.connect();
     }
+    // socket is module-level, so socket.connected is not React state. Listing it
+    // re-checks the connection on any render after it changes, which reconnects
+    // after a server-side disconnect (socket.io does not retry that on its own).
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- see above
   }, [socket.connected]);
 
   // When app unloads, decrement tab count
@@ -308,6 +313,7 @@ const GameContainer = (): React.ReactElement => {
     socket.on('disconnect me', () => {
       console.log('you were disconnected from the game.');
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- register the socket listeners once; re-running would add duplicate listeners
   }, []); /* onMount */
 
   /* Socket event emitters */

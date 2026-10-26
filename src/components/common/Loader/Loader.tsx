@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { loadingState } from '../../../state/gameState';
 import { MAX_LOADING_TIME } from '../../../utils/constants';
 
 const Loader = (): React.ReactElement => {
   const [loading, setLoading] = useRecoilState(loadingState);
-  const [timeoutId, setTimeoutId] = useState<number>(0);
+  const timeoutId = useRef<number>(0);
 
   // Set loading to 'failed' if it takes too long
   useEffect(() => {
     if (loading === 'loading') {
-      clearTimeout(timeoutId);
-      setTimeoutId(
-        window.setTimeout(() => {
-          setLoading('failed');
-        }, MAX_LOADING_TIME),
-      );
+      clearTimeout(timeoutId.current);
+      timeoutId.current = window.setTimeout(() => {
+        setLoading('failed');
+      }, MAX_LOADING_TIME);
     } else if (loading === 'ok') {
-      clearTimeout(timeoutId);
+      clearTimeout(timeoutId.current);
     }
-  }, [loading]);
+  }, [loading, setLoading]);
 
   return (
     <>
