@@ -1,8 +1,9 @@
 /**
- * If a key is set in the ENV, it will use that as the localStorage
- * key for the token, otherwise it will be stored as `token: ''`
+ * The localStorage key for the token. (It used to read `process.env.TOKEN_KEY`,
+ * but Create React App never exposed non-`REACT_APP_` variables to the
+ * browser, so the key was always `token`.)
  */
-const tokenName: string = process.env.TOKEN_KEY || 'token';
+const tokenName = 'token';
 
 /**
  * Decodes the token and checks if you're still logged in before continuing.

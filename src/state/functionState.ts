@@ -7,8 +7,7 @@ export const handleSendReactionFn = atom<HandleSendReactionFn>({
 });
 
 type HandleSendReactionFn =
-  | (() => null)
-  | ((definitionId: number, reactionId: number) => void);
+  (() => null) | ((definitionId: number, reactionId: number) => void);
 
 export const handleSetHostFn = atom<HandleSetHostFn>({
   key: 'handleSetHostFn',
