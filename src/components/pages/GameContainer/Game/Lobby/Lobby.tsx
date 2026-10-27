@@ -60,6 +60,10 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
     } else {
       console.log('Lobby.tsx - Line 44 - Resetting Game');
 
+      // Back on the home page (e.g. the invite's lobby wasn't found): close
+      // the invite's join and re-join dialogs
+      setJoinModal(false);
+      setReJoinModal(false);
       props.resetGame();
     }
   });
@@ -84,9 +88,11 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
       lobbyUrl = lobbyUrl.substring(1, 5);
     }
 
-    // If the user is entering a new game, join. Else, let the login event handle joining
+    // If the user is entering a new game, join. Else, let the login event handle joining.
+    // A lobby code in the URL is an invite link the player followed; on the
+    // home page ('/') the join is one the app sends on its own.
     if (lobbyUrl !== decodedToken?.lob) {
-      props.handleJoinLobby(null, lobbyUrl);
+      props.handleJoinLobby(null, lobbyUrl, lobbyUrl !== '/');
     }
   });
 
@@ -149,7 +155,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
 
   const handleJoinByClick = (e: React.MouseEvent) => {
     setLoading('loading');
-    props.handleJoinLobby(e, '');
+    props.handleJoinLobby(e, '', true);
   };
 
   const joinGameModal = (
@@ -300,7 +306,11 @@ interface LobbyProps {
   handleSetUsername: (newUsername: string) => void;
   setLobbyCode: React.Dispatch<SetStateAction<string>>;
   handleCreateLobby: (e: React.MouseEvent) => void;
-  handleJoinLobby: (e: null | React.MouseEvent, optionalCode: string) => void;
+  handleJoinLobby: (
+    e: null | React.MouseEvent,
+    optionalCode: string,
+    requested: boolean,
+  ) => void;
   handleLogin: (newToken?: boolean) => void;
   resetGame: () => void;
   openTabs: string;

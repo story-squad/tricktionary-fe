@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
 import { useHistory } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
@@ -91,9 +91,11 @@ const GameContainer = (): React.ReactElement => {
   const [, setHandleSendReactionFn] = useRecoilState(handleSendReactionFn);
   const [, setHandleSetHostFn] = useRecoilState(handleSetHostFn);
   const [, setDefinitionReactions] = useRecoilState(definitionReactionsState);
-  // The socket 'error' listener is registered once, on mount, so it has always
-  // compared against the lobby code from the first render. Keep that value.
-  const [initialLobbyCode] = useState(lobbyData.lobbyCode);
+  // The lobby code of a join the player asked for (the Join button, or an
+  // invite link), until the server answers it; '' when no such join is waiting.
+  // The socket 'error' listener reads it to tell those joins from the ones the
+  // app sends on its own.
+  const requestedJoin = useRef('');
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetPlayerGuess = useResetRecoilState(playerGuessState);
@@ -187,7 +189,7 @@ const GameContainer = (): React.ReactElement => {
 
   // Register the socket listeners. Every dependency keeps its identity for the
   // life of the component (state and Recoil setters, the router history, the
-  // useLocalStorage setters, a value fixed at mount), so this runs once, on
+  // useLocalStorage setters, a ref), so this runs once, on
   // mount, and never adds a second set of listeners.
   useEffect(() => {
     /* Socket event listeners */
@@ -198,6 +200,11 @@ const GameContainer = (): React.ReactElement => {
       setLobbyCode(socketData.lobbyCode);
       history.push(`/${socketData.lobbyCode}`);
       setError('');
+      // The join the player asked for has been answered. An update from another
+      // lobby (a returning player put back into their last game) doesn't answer it.
+      if (socketData.lobbyCode === requestedJoin.current) {
+        requestedJoin.current = '';
+      }
     });
 
     // Add a player to the list when they join
@@ -279,12 +286,19 @@ const GameContainer = (): React.ReactElement => {
         ${errorData}
         ${devMessage}`,
       );
-      setError(errorData);
+      const joinCode = requestedJoin.current;
+      requestedJoin.current = '';
       if (code === 2000) {
+        // No lobby with that code: go home. Tell the player only when they
+        // asked for this join; a join the app sent on its own stays silent.
         history.push('/');
-      }
-      if (code === 2000 && initialLobbyCode === '') {
-        setError('');
+        setError(
+          joinCode
+            ? `The lobby with code ${joinCode} doesn't exist or has ended.`
+            : '',
+        );
+      } else {
+        setError(errorData);
       }
     });
 
@@ -349,7 +363,6 @@ const GameContainer = (): React.ReactElement => {
     });
   }, [
     history,
-    initialLobbyCode,
     setAllowUrlJoin,
     setDefinitionReactions,
     setGuesses,
@@ -382,16 +395,22 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('create lobby', username.trim());
   };
 
-  // Join game as Player
-  const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
+  // Join game as Player. `requested` is true when the player asked for this
+  // join (the Join button, or an invite link) and false when the app sends it
+  // on its own; only a requested join that finds no lobby shows a message.
+  const handleJoinLobby = (
+    e: null | React.MouseEvent,
+    optionalCode: string,
+    requested: boolean,
+  ) => {
     if (e) {
       e.preventDefault();
     }
-    socket.emit(
-      'join lobby',
-      username.trim(),
-      optionalCode ? optionalCode : lobbyCode,
-    );
+    const code = optionalCode ? optionalCode : lobbyCode;
+    if (requested) {
+      requestedJoin.current = code;
+    }
+    socket.emit('join lobby', username.trim(), code);
     localStorage.setItem('username', username.trim());
   };
 
