@@ -10,6 +10,8 @@ const socket = io();
 const NOT_ACTIVE =
   'The lobby code you entered does not correspond to an active room';
 const TOO_SHORT = 'The lobby code you entered is not long enough';
+// The server's answer to 'login' when the saved token's lobby has ended
+const ENDED = (code) => `The lobby with code ${code} has ended`;
 const message = (code) =>
   `The lobby with code ${code} doesn't exist or has ended.`;
 
@@ -136,6 +138,46 @@ describe('Joining a lobby that does not exist', () => {
     serverSends('error', 2000, NOT_ACTIVE);
 
     expect(screen.getByText(message('ABCD'))).toBeInTheDocument();
+  });
+
+  it("invite link to a live lobby while the saved token's lobby has ended: joins the invite's lobby", () => {
+    localStorage.setItem('token', JSON.stringify(tokenFor('EFGH')));
+    localStorage.setItem('openTabs', JSON.stringify(0));
+    renderAt('/ABCD');
+    fireEvent.click(screen.getByRole('button', { name: 'Okay' }));
+    serverSends('welcome', 'me');
+    serverSends('token update', tokenFor('EFGH'));
+    expect(joinsSent()).toEqual(['ABCD']);
+    // The answer to 'login' (EFGH is gone) arrives before the invite's join
+    // is answered
+    serverSends('error', 2000, ENDED('EFGH'));
+
+    expect(window.location.pathname).toBe('/ABCD');
+    expect(screen.queryByText(/doesn't exist or has ended/)).toBeNull();
+    expect(screen.queryByText(ENDED('EFGH'))).toBeNull();
+
+    serverSends('game update', lobby('ABCD'));
+
+    expect(window.location.pathname).toBe('/ABCD');
+    expect(screen.queryByText(/doesn't exist or has ended/)).toBeNull();
+    expect(screen.queryByText(/welcome to word hoax/i)).toBeNull();
+  });
+
+  it("invite link to a deleted lobby while the saved token's lobby has ended: the invite's message", () => {
+    localStorage.setItem('token', JSON.stringify(tokenFor('EFGH')));
+    localStorage.setItem('openTabs', JSON.stringify(0));
+    renderAt('/ABCD');
+    fireEvent.click(screen.getByRole('button', { name: 'Okay' }));
+    serverSends('token update', tokenFor('EFGH'));
+    expect(joinsSent()).toEqual(['ABCD']);
+    serverSends('error', 2000, ENDED('EFGH'));
+    expect(window.location.pathname).toBe('/ABCD');
+
+    serverSends('error', 2000, NOT_ACTIVE);
+
+    expect(window.location.pathname).toBe('/');
+    expect(screen.getByText(message('ABCD'))).toBeInTheDocument();
+    expect(screen.queryByText(/EFGH/)).toBeNull();
   });
 
   it('returning player whose saved lobby has closed: goes home, no message', () => {

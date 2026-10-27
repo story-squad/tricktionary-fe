@@ -98,17 +98,21 @@ describe('Re-join dialog after a reload', () => {
     expect(screen.queryByText(/welcome to word hoax/i)).toBeNull();
   });
 
-  it('Okay, lobby deleted: the server answers 2000 and the player goes home', () => {
-    reloadInLobby();
-    fireEvent.click(screen.getByRole('button', { name: 'Okay' }));
-    serverSends('token update', tokenFor('ABCD'));
-    serverSends('error', 2000, NOT_ACTIVE);
+  it.each([['The lobby with code ABCD has ended'], [NOT_ACTIVE]])(
+    'Okay, lobby deleted: the server answers 2000 (%s) and the player goes home',
+    (text) => {
+      reloadInLobby();
+      fireEvent.click(screen.getByRole('button', { name: 'Okay' }));
+      serverSends('token update', tokenFor('ABCD'));
+      serverSends('error', 2000, text);
 
-    expect(window.location.pathname).toBe('/');
-    expect(screen.queryByText(REJOIN)).toBeNull();
-    expect(screen.getByText(/welcome to word hoax/i)).toBeInTheDocument();
-    expect(screen.queryByText(/doesn't exist or has ended/)).toBeNull();
-  });
+      expect(window.location.pathname).toBe('/');
+      expect(screen.queryByText(REJOIN)).toBeNull();
+      expect(screen.getByText(/welcome to word hoax/i)).toBeInTheDocument();
+      expect(screen.queryByText(/doesn't exist or has ended/)).toBeNull();
+      expect(screen.queryByText(text)).toBeNull();
+    },
+  );
 
   it('Cancel goes home', () => {
     reloadInLobby();

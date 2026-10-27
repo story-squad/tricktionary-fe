@@ -292,6 +292,22 @@ const GameContainer = (): React.ReactElement => {
         ${errorData}
         ${devMessage}`,
       );
+      // A returning player's saved lobby has ended: the server's answer to
+      // 'login' (the re-join dialog's Okay). It names that lobby.
+      const endedLobby = /^The lobby with code (\w+) has ended/.exec(
+        errorData,
+      )?.[1];
+      if (code === 2000 && endedLobby && endedLobby !== requestedJoin.current) {
+        // It concerns this page only when the page is for that lobby (a
+        // reload inside it): go home, no message. On an invite link to
+        // another lobby, the invite's own join is still waiting for its
+        // answer, so leave the page and requestedJoin as they are.
+        if (history.location.pathname.substring(1, 5) === endedLobby) {
+          history.push('/');
+          setError('');
+        }
+        return;
+      }
       const joinCode = requestedJoin.current;
       requestedJoin.current = '';
       if (code === 2000) {
