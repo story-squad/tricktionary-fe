@@ -69,4 +69,62 @@ describe('useLocalStorage', () => {
     expect(api[0]).toEqual([1, 2, 3]);
     expect(window.localStorage.getItem('list')).toBe('[1,2,3]');
   });
+
+  it('reads plain (not JSON-encoded) strings back with plainString', () => {
+    let value: unknown;
+    const Probe = ({ k }: { k: string }) => {
+      [value] = useLocalStorage(k, 'initial', { plainString: true });
+      return null;
+    };
+
+    // Saved by an older build with localStorage.setItem
+    const saved: Record<string, string> = {
+      a: 'Alice',
+      b: '1234',
+      c: 'null',
+      d: 'true',
+      e: JSON.stringify('Bob'),
+    };
+    const read: Record<string, unknown> = {};
+    Object.entries(saved).forEach(([k, item]) => {
+      window.localStorage.setItem(k, item);
+      const { unmount } = render(<Probe k={k} />);
+      read[k] = value;
+      unmount();
+    });
+
+    expect(read).toEqual({
+      a: 'Alice',
+      b: '1234',
+      c: 'null',
+      d: 'true',
+      e: 'Bob',
+    });
+  });
+
+  it('falls back to the initial value for a plain string without plainString', () => {
+    let value: unknown;
+    const Probe = () => {
+      [value] = useLocalStorage('k', 'initial');
+      return null;
+    };
+    window.localStorage.setItem('k', 'Alice');
+    render(<Probe />);
+    expect(value).toBe('initial');
+  });
+
+  it('round-trips a string through the setter', () => {
+    let api: unknown[] = [];
+    const Probe = () => {
+      api = useLocalStorage('name', 'initial', { plainString: true });
+      return null;
+    };
+    const { unmount } = render(<Probe />);
+    act(() => (api[1] as (v: string) => void)('Alice'));
+    expect(window.localStorage.getItem('name')).toBe('"Alice"');
+    unmount();
+
+    render(<Probe />);
+    expect(api[0]).toBe('Alice');
+  });
 });

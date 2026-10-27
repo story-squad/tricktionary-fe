@@ -67,7 +67,13 @@ function handleSetHost() {
 
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();
-  const [username, setUsername] = useLocalStorage('username', randomUsername());
+  // Builds before this one saved the name without JSON encoding; plainString
+  // reads those names back instead of replacing them with a random one.
+  const [username, setUsername] = useLocalStorage(
+    'username',
+    randomUsername(),
+    { plainString: true },
+  );
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
@@ -411,7 +417,7 @@ const GameContainer = (): React.ReactElement => {
       requestedJoin.current = code;
     }
     socket.emit('join lobby', username.trim(), code);
-    localStorage.setItem('username', username.trim());
+    setUsername(username.trim());
   };
 
   // Begin game as Host with a word chosen

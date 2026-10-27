@@ -1,4 +1,35 @@
 import { useCallback, useRef, useState } from 'react';
+
+interface UseLocalStorageOptions {
+  // The key holds a string that may have been saved without JSON encoding
+  // (an older build wrote the username with localStorage.setItem). Any stored
+  // value that isn't a JSON-encoded string is then read back as it is.
+  plainString?: boolean;
+}
+
+// Read a stored item. The setter below stores JSON; a number comes back as a
+// string, as before. With `plainString`, a value that isn't a JSON-encoded
+// string ("Alice", "1234", "null") is the plain string itself. Returns any,
+// like JSON.parse, so the hook's values stay `any` for untyped callers.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function parseItem(item: string, plainString: boolean): any {
+  let value: unknown;
+  try {
+    value = JSON.parse(item);
+  } catch (error) {
+    if (plainString) {
+      return item;
+    }
+    throw error;
+  }
+  if (plainString && typeof value !== 'string') {
+    return item;
+  }
+  if (typeof value === 'number') {
+    return String(value);
+  }
+  return value;
+}
 // Hook translated to TS from JS https://usehooks.com/useLocalStorage/
 // T defaults to any: TypeScript 4.8+ no longer infers it from the caller's
 // destructuring pattern, which is what made the untyped call sites `any` before.
@@ -6,7 +37,9 @@ import { useCallback, useRef, useState } from 'react';
 export function useLocalStorage<T = any>(
   key: string,
   initialValue: unknown,
+  options: UseLocalStorageOptions = {},
 ): Array<T> {
+  const plainString = options.plainString === true;
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
   const [storedValue, setStoredValue] = useState(() => {
@@ -14,10 +47,7 @@ export function useLocalStorage<T = any>(
       // Get from local storage by key
       const item = window.localStorage.getItem(key);
       // Parse stored json or if none return initialValue
-      if (item && typeof JSON.parse(item) === 'number') {
-        return String(JSON.parse(item));
-      }
-      return item ? JSON.parse(item) : initialValue;
+      return item ? parseItem(item, plainString) : initialValue;
     } catch (error) {
       // If error also return initialValue
       console.log('uselocalstorage error', error);
@@ -58,13 +88,10 @@ export function useLocalStorage<T = any>(
   const reloadValue = useCallback(() => {
     try {
       const item = window.localStorage.getItem(key);
-      if (item && typeof JSON.parse(item) === 'number') {
-        setStoredValue(String(JSON.parse(item)));
-        return String(JSON.parse(item));
-      }
       if (item) {
-        setStoredValue(JSON.parse(item));
-        return JSON.parse(item);
+        const value = parseItem(item, plainString);
+        setStoredValue(value);
+        return value;
       } else {
         return latestValue.current;
       }
@@ -72,7 +99,7 @@ export function useLocalStorage<T = any>(
       console.log(error);
       return latestValue.current;
     }
-  }, [key]);
+  }, [key, plainString]);
 
   return [storedValue, setValue, reloadValue];
 }
