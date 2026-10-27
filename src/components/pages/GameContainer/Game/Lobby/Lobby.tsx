@@ -219,7 +219,13 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         message={
           'Seems like you disconnected from a game. Would you like to re-join the game?'
         }
-        handleConfirm={() => props.handleLogin()}
+        handleConfirm={() => {
+          // Re-join and close. The server answers with the game (which
+          // replaces this screen) or, when the game is gone, with error 2000,
+          // which sends the player home.
+          setReJoinModal(false);
+          props.handleLogin();
+        }}
         handleCancel={() => {
           setReJoinModal(false);
           props.resetGame();
