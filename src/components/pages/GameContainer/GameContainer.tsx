@@ -402,8 +402,9 @@ const GameContainer = (): React.ReactElement => {
   };
 
   // Join game as Player. `requested` is true when the player asked for this
-  // join (the Join button, or an invite link) and false when the app sends it
-  // on its own; only a requested join that finds no lobby shows a message.
+  // join (the Join button, or an invite link); only a requested join that
+  // finds no lobby shows a message. Every current caller passes true: the
+  // join the app used to send on its own, for '/', is gone.
   const handleJoinLobby = (
     e: null | React.MouseEvent,
     optionalCode: string,

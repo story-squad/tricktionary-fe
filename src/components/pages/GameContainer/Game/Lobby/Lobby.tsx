@@ -82,17 +82,18 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
     } catch {
       // jwt-decode throws on an empty or malformed token (jsonwebtoken returned null)
     }
-    let lobbyUrl = location.pathname;
-
-    if (lobbyUrl !== '/') {
-      lobbyUrl = lobbyUrl.substring(1, 5);
+    // On the home page ('/') there is no code to join. The server answers a
+    // join for '/' with error 2000, which would send a player who has just
+    // created or joined a lobby back to '/'.
+    if (location.pathname === '/') {
+      return;
     }
+    const lobbyUrl = location.pathname.substring(1, 5);
 
     // If the user is entering a new game, join. Else, let the login event handle joining.
-    // A lobby code in the URL is an invite link the player followed; on the
-    // home page ('/') the join is one the app sends on its own.
+    // A lobby code in the URL is an invite link the player followed.
     if (lobbyUrl !== decodedToken?.lob) {
-      props.handleJoinLobby(null, lobbyUrl, lobbyUrl !== '/');
+      props.handleJoinLobby(null, lobbyUrl, true);
     }
   });
 

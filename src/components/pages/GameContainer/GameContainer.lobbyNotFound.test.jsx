@@ -160,18 +160,16 @@ describe('Joining a lobby that does not exist', () => {
     expect(screen.queryByText(NOT_ACTIVE)).toBeNull();
   });
 
-  it("the app's own join after a successful one stays silent", () => {
+  it('a 2000 the player did not ask for stays silent', () => {
     renderAt('/');
     fireEvent.change(screen.getByLabelText(/lobby code/i), {
       target: { value: 'WXYZ' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Join Lobby' }));
-    // A new player's join brings a token update, which sends a second join
-    // for the URL ('/') on its own
     serverSends('token update', tokenFor(''));
-    expect(joinsSent()).toEqual(['WXYZ', '/']);
     serverSends('game update', lobby('WXYZ'));
 
+    // The requested join has been answered, so a later 2000 is not for it
     serverSends('error', 2000, TOO_SHORT);
 
     expect(screen.queryByText(/doesn't exist or has ended/)).toBeNull();
