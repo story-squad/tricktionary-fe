@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { Socket } from 'socket.io-client';
 import { getWords } from '../../../../../api/apiRequests';
-import { useLocalStorage } from '../../../../../hooks';
+import { useEffectEvent, useLocalStorage } from '../../../../../hooks';
 import {
   hostChoiceState,
   lobbySettingsState,
   lobbyState,
-  playerIdState,
   revealResultsState,
 } from '../../../../../state/gameState';
 import { WordItem } from '../../../../../types/gameTypes';
@@ -48,7 +48,6 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const lobbySettings = useRecoilValue(lobbySettingsState);
   const [hostChoice, setHostChoice] = useRecoilState(hostChoiceState);
   const lobbyData = useRecoilValue(lobbyState);
-  const playerId = useRecoilValue(playerIdState);
   const [, setGuesses] = useLocalStorage('guesses', initialGuesses);
   const [useTimer, setUseTimer] = useState<boolean>(
     lobbySettings.seconds && lobbySettings.seconds > 0 ? true : false,
@@ -63,13 +62,18 @@ const Pregame = (props: PregameProps): React.ReactElement => {
   const { register, errors, setError, clearErrors } = useForm({
     mode: 'onSubmit',
   });
+  // handleGetWords reads hostChoice and props when it runs; it is not a reason
+  // to fetch again
+  const getWordsOnMount = useEffectEvent(() => handleGetWords());
+  // Fetch words and reset the previous round once, when the pregame screen
+  // mounts (setGuesses and resetRevealResults keep their identity)
   useEffect(() => {
     // Get 3 word suggestions automatically
-    handleGetWords();
+    getWordsOnMount();
     // Reset previous game states
     setGuesses([]);
     resetRevealResults();
-  }, []);
+  }, [setGuesses, resetRevealResults]);
 
   // Clear choice/input when switching between word selection type
   useEffect(() => {
@@ -80,17 +84,20 @@ const Pregame = (props: PregameProps): React.ReactElement => {
     }
   }, [isCustom]);
 
-  // Update word selection in lobbySettings object
+  // handleSetWord is recreated on every GameContainer render; call the latest
+  // one without making it a reason to run the Effect below
+  const setWord = useEffectEvent(props.handleSetWord);
+  // Update word selection in lobbySettings object when the selection changes
   useEffect(() => {
     if (isCustom) {
-      props.handleSetWord(
+      setWord(
         0,
         customInput.word,
         customInput.definition,
         customInput.category,
       );
     } else {
-      props.handleSetWord(choice, undefined, undefined, undefined);
+      setWord(choice, undefined, undefined, undefined);
     }
   }, [isCustom, choice, customInput]);
 
@@ -515,7 +522,7 @@ interface PregameProps {
   handleSetUsername: (newUsername: string) => void;
   username: string;
   handleUpdateUsername: (newUsername: string) => void;
-  setError: any;
+  setError: (message: string) => void;
   lobbyCode: string;
-  socket: any;
+  socket: Socket;
 }

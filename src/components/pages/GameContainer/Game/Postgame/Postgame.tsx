@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { useLocalStorage } from '../../../../../hooks';
+import { useEffectEvent, useLocalStorage } from '../../../../../hooks';
 import {
   availableReactionsState,
   definitionReactionsState,
@@ -12,6 +12,7 @@ import {
   DefinitionResultItem,
   GuessItem,
   PlayerDictionary,
+  ReactionsDictionary,
 } from '../../../../../types/gameTypes';
 import {
   createReactionsDictionary,
@@ -53,7 +54,8 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
     DefinitionResultItem[]
   >(getSortedDefinitions(lobbyData, guesses as GuessItem[], playerDict));
 
-  useEffect(() => {
+  // Load the reaction set, using the players as they are when results open
+  const loadReactions = useEffectEvent(() => {
     // Reset player's guess for next round
     resetGuess();
     getSelectedReactions()
@@ -69,14 +71,27 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         );
       })
       .catch((err) => console.log(err));
+  });
+
+  // Load the reaction set once, when results open
+  useEffect(() => {
+    loadReactions();
   }, []);
+
+  // Check the reactions dictionary. shouldGetReactions and handleGetReactions
+  // are read when it changes; turning shouldGetReactions off must not re-run it.
+  const onReactionsChange = useEffectEvent(
+    (definitionReactions: ReactionsDictionary) => {
+      if (Object.keys(definitionReactions).length > 0 && shouldGetReactions) {
+        handleGetReactions();
+        setShouldGetReactions(false);
+      }
+    },
+  );
 
   // After reactionsDictionary initialized, attempt to update definitionReactions if needed
   useEffect(() => {
-    if (Object.keys(definitionReactions).length > 0 && shouldGetReactions) {
-      handleGetReactions();
-      setShouldGetReactions(false);
-    }
+    onReactionsChange(definitionReactions);
   }, [definitionReactions]);
 
   // Create new sorted definitions array when player recieves guesses from host
@@ -88,7 +103,9 @@ const Postgame = (props: PostgameProps): React.ReactElement => {
         playerDict,
       ),
     );
-  }, [lobbyData]);
+    // reloadGuesses keeps its identity and playerDict never changes, so this
+    // runs only when lobbyData changes
+  }, [lobbyData, reloadGuesses, playerDict]);
 
   return (
     <section className="postgame game-page">

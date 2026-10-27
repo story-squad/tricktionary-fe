@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useEffectEvent } from '../../../../../hooks';
 import { lobbyState } from '../../../../../state/gameState';
 import {
   BotItem,
@@ -8,6 +9,7 @@ import {
   DefinitionSelection,
   GuessItem,
   HandleSelectGuessParams,
+  LobbyData,
   PlayerItem,
 } from '../../../../../types/gameTypes';
 import { getPlayerGuess, isLargeGame } from '../../../../../utils/helpers';
@@ -19,8 +21,9 @@ export const Guess = (props: GuessProps): React.ReactElement => {
   const [showBotGuessModal, setShowBotGuessModal] = useState(false);
   const [botGuess, setBotGuess] = useState('');
 
-  //* This will be used for the bot guess response API
-  useEffect(() => {
+  //* This will be used for the bot guess response API. Reads this row's player
+  //* and the definitions as they are when the row mounts.
+  const askBotForGuess = useEffectEvent(() => {
     if (
       lobbyData.bots.filter((e: BotItem) => e.botName === player.username)
         .length > 0
@@ -39,15 +42,15 @@ export const Guess = (props: GuessProps): React.ReactElement => {
       );
 
       //Just make the array be the definitions, not the object
-      filteredBotDefinitions = filteredBotDefinitions.map((definition: any) => {
+      const botDefinitionTexts = filteredBotDefinitions.map((definition) => {
         return definition.content;
       });
 
       // Format the definitions array to be properly used with the API
       let formattedList;
 
-      if (filteredBotDefinitions.length > 0) {
-        formattedList = filteredBotDefinitions.join('*');
+      if (botDefinitionTexts.length > 0) {
+        formattedList = botDefinitionTexts.join('*');
       } else {
         formattedList = '';
       }
@@ -64,6 +67,11 @@ export const Guess = (props: GuessProps): React.ReactElement => {
           console.log(err.message);
         });
     }
+  });
+
+  // Ask the bot API for this player's guess once, when the voting row mounts
+  useEffect(() => {
+    askBotForGuess();
   }, []);
 
   const handleSelectWithOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -197,5 +205,5 @@ interface GuessProps {
   definitions: DefinitionItem[];
   player: PlayerItem;
   guesses: GuessItem[];
-  lobbyData: any;
+  lobbyData: LobbyData;
 }

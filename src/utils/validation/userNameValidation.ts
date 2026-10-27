@@ -1,6 +1,7 @@
+import { ValidationResult } from '../../types/commonTypes';
 import { MAX_USERNAME_LENGTH } from '../constants';
 
-export const usernameIsValid = (username: string): any => {
+export const usernameIsValid = (username: string): ValidationResult => {
   if (/[^A-Za-z0-9]/.test(username)) {
     return {
       valid: false,

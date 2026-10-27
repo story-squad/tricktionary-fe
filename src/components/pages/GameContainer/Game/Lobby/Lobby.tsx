@@ -1,12 +1,12 @@
 import gsap from 'gsap';
-import jwt from 'jsonwebtoken';
+import { jwtDecode } from 'jwt-decode';
 import React, { SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import alphabotA from '../../../../../assets/alphabot-a.png';
 import alphabotZ from '../../../../../assets/alphabot-z.png';
-import { useLocalStorage } from '../../../../../hooks';
+import { useEffectEvent, useLocalStorage } from '../../../../../hooks';
 import {
   allowUrlJoinState,
   loadingState,
@@ -40,9 +40,9 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
     mode: 'onSubmit',
   });
 
-  // Either "login" player if we have a code, or just reset game data
-  useEffect(() => {
-    const lobbyUrl = location.pathname;
+  // Either "login" player if we have a code, or just reset game data. Props and
+  // token are read at the moment the path changes.
+  const onPathChange = useEffectEvent((lobbyUrl: string) => {
     console.log('opened tabs', props.openTabs);
 
     if (lobbyUrl !== '/') {
@@ -60,24 +60,48 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
     } else {
       console.log('Lobby.tsx - Line 44 - Resetting Game');
 
+      // Back on the home page (e.g. the invite's lobby wasn't found): close
+      // the invite's join and re-join dialogs
+      setJoinModal(false);
+      setReJoinModal(false);
       props.resetGame();
     }
+  });
+
+  // Run only when the URL path changes
+  useEffect(() => {
+    onPathChange(location.pathname);
   }, [location.pathname]);
 
-  // Join a game if the lobbyCode is provided in the URL
+  // Join a game if the lobbyCode is provided in the URL. Token, path and props
+  // are read at the moment the server allows it.
+  const joinFromUrl = useEffectEvent(() => {
+    let decodedToken: DecodedToken | null = null;
+    try {
+      decodedToken = jwtDecode<DecodedToken>(token);
+    } catch {
+      // jwt-decode throws on an empty or malformed token (jsonwebtoken returned null)
+    }
+    // On the home page ('/') there is no code to join. The server answers a
+    // join for '/' with error 2000, which would send a player who has just
+    // created or joined a lobby back to '/'.
+    if (location.pathname === '/') {
+      return;
+    }
+    const lobbyUrl = location.pathname.substring(1, 5);
+
+    // If the user is entering a new game, join. Else, let the login event handle joining.
+    // A lobby code in the URL is an invite link the player followed.
+    if (lobbyUrl !== decodedToken?.lob) {
+      props.handleJoinLobby(null, lobbyUrl, true);
+    }
+  });
+
+  // Join from the URL only when the server allows it (allowUrlJoin flips), not
+  // on every prop change
   useEffect(() => {
     if (allowUrlJoin) {
-      const decodedToken: DecodedToken = jwt.decode(token) as DecodedToken;
-      let lobbyUrl = location.pathname;
-
-      if (lobbyUrl !== '/') {
-        lobbyUrl = lobbyUrl.substring(1, 5);
-      }
-
-      // If the user is entering a new game, join. Else, let the login event handle joining
-      if (lobbyUrl !== decodedToken?.lob) {
-        props.handleJoinLobby(null, lobbyUrl);
-      }
+      joinFromUrl();
     }
   }, [allowUrlJoin]);
 
@@ -132,7 +156,7 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
 
   const handleJoinByClick = (e: React.MouseEvent) => {
     setLoading('loading');
-    props.handleJoinLobby(e, '');
+    props.handleJoinLobby(e, '', true);
   };
 
   const joinGameModal = (
@@ -196,7 +220,13 @@ const Lobby = (props: LobbyProps): React.ReactElement => {
         message={
           'Seems like you disconnected from a game. Would you like to re-join the game?'
         }
-        handleConfirm={() => props.handleLogin()}
+        handleConfirm={() => {
+          // Re-join and close. The server answers with the game (which
+          // replaces this screen) or, when the game is gone, with error 2000,
+          // which sends the player home.
+          setReJoinModal(false);
+          props.handleLogin();
+        }}
         handleCancel={() => {
           setReJoinModal(false);
           props.resetGame();
@@ -283,8 +313,12 @@ interface LobbyProps {
   handleSetUsername: (newUsername: string) => void;
   setLobbyCode: React.Dispatch<SetStateAction<string>>;
   handleCreateLobby: (e: React.MouseEvent) => void;
-  handleJoinLobby: (e: null | React.MouseEvent, optionalCode: string) => void;
-  handleLogin: any;
-  resetGame: any;
+  handleJoinLobby: (
+    e: null | React.MouseEvent,
+    optionalCode: string,
+    requested: boolean,
+  ) => void;
+  handleLogin: (newToken?: boolean) => void;
+  resetGame: () => void;
   openTabs: string;
 }

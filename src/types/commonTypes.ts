@@ -11,6 +11,11 @@ export interface DecodedToken {
   sub: string;
 }
 
+export interface ValidationResult {
+  valid: boolean;
+  message: string;
+}
+
 export interface ReactionItem {
   id: number;
   content: string;

@@ -61,8 +61,10 @@ const Input = ({
   );
 };
 
-interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+interface InputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'type'
+> {
   id: string;
   name: string;
   label: string;

@@ -1,11 +1,11 @@
 import gsap from 'gsap';
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
 import { useHistory } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import io from 'socket.io-client';
-import { useLocalStorage } from '../../../hooks';
+import { useEffectEvent, useLocalStorage } from '../../../hooks';
 import {
   handleSendReactionFn,
   handleSetHostFn,
@@ -48,9 +48,32 @@ import { Finale, Guessing, Lobby, Postgame, Pregame, Writing } from './Game';
 // Create a socket connection to API
 const socket = io(REACT_APP_API_URL);
 
+/*
+Recoil-stored handlers
+They use only the module-level socket, so they live outside the component.
+The Recoil setter calls each one and stores the function it returns.
+*/
+function handleSendReaction() {
+  return (definitionId: number, reactionId: number) => {
+    socket.emit('send reaction', definitionId, reactionId);
+  };
+}
+
+function handleSetHost() {
+  return (hostId: string, lobbyCode: string, guesses: GuessItem[]) => {
+    socket.emit('set host', hostId, lobbyCode, guesses);
+  };
+}
+
 const GameContainer = (): React.ReactElement => {
   const history = useHistory();
-  const [username, setUsername] = useLocalStorage('username', randomUsername());
+  // Builds before this one saved the name without JSON encoding; plainString
+  // reads those names back instead of replacing them with a random one.
+  const [username, setUsername] = useLocalStorage(
+    'username',
+    randomUsername(),
+    { plainString: true },
+  );
   const [lobbyData, setLobbyData] = useRecoilState(lobbyState);
   const [lobbyCode, setLobbyCode] = useRecoilState(lobbyCodeState);
   const [lobbySettings, setLobbySettings] = useRecoilState(lobbySettingsState);
@@ -74,6 +97,11 @@ const GameContainer = (): React.ReactElement => {
   const [, setHandleSendReactionFn] = useRecoilState(handleSendReactionFn);
   const [, setHandleSetHostFn] = useRecoilState(handleSetHostFn);
   const [, setDefinitionReactions] = useRecoilState(definitionReactionsState);
+  // The lobby code of a join the player asked for (the Join button, or an
+  // invite link), until the server answers it; '' when no such join is waiting.
+  // The socket 'error' listener reads it to tell those joins from the ones the
+  // app sends on its own.
+  const requestedJoin = useRef('');
   const resetLobbyData = useResetRecoilState(lobbyState);
   const resetLobbyCode = useResetRecoilState(lobbyCodeState);
   const resetPlayerGuess = useResetRecoilState(playerGuessState);
@@ -107,7 +135,9 @@ const GameContainer = (): React.ReactElement => {
     setShowLeaveModal(false);
   };
 
-  useEffect(() => {
+  // Handle one lobby update. playerId, isKicking and handleKickPlayer are read
+  // at that moment; changes to them alone don't re-run it.
+  const onLobbyUpdate = useEffectEvent((lobbyData: LobbyData) => {
     // Reset timer
     if (lobbyData.phase !== 'WRITING') {
       setTime(-1);
@@ -122,35 +152,52 @@ const GameContainer = (): React.ReactElement => {
     if (isKicking && lobbyData.phase === 'LOBBY') {
       history.push('/');
     }
+  });
+
+  // React to each lobby update from the server
+  useEffect(() => {
+    onLobbyUpdate(lobbyData);
   }, [lobbyData]);
 
+  // socket is module-level, so socket.connected is not React state. Reading it
+  // during render and listing that value re-checks the connection on any render
+  // after it changes, which reconnects after a server-side disconnect
+  // (socket.io does not retry that on its own).
+  const socketConnected = socket.connected;
   useEffect(() => {
     if (socket.disconnected) {
       console.log('reconnecting...');
       socket.connect();
     }
-  }, [socket.connected]);
+  }, [socketConnected]);
 
   // When app unloads, decrement tab count
   useBeforeunload(() => {
     setOpenTabs(Number(openTabs) - 1);
   });
 
+  // Keep track of the number of tabs players are using (on mount; the
+  // useLocalStorage functions keep one identity, so this runs once)
   useEffect(() => {
-    /* onMount */
-    refreshOpenTabs();
-
-    // Keep track of the number of tabs players are using
-    if (Number(openTabs) >= 0) {
-      setOpenTabs(Number(openTabs) + 1);
+    const tabs = refreshOpenTabs();
+    if (Number(tabs) >= 0) {
+      setOpenTabs(Number(tabs) + 1);
     } else {
       setOpenTabs(1);
     }
+  }, [refreshOpenTabs, setOpenTabs]);
 
-    /* Set up Recoil-stored handler functions */
+  /* Set up Recoil-stored handler functions (on mount; Recoil setters are stable) */
+  useEffect(() => {
     setHandleSendReactionFn(handleSendReaction);
     setHandleSetHostFn(handleSetHost);
+  }, [setHandleSendReactionFn, setHandleSetHostFn]);
 
+  // Register the socket listeners. Every dependency keeps its identity for the
+  // life of the component (state and Recoil setters, the router history, the
+  // useLocalStorage setters, a ref), so this runs once, on
+  // mount, and never adds a second set of listeners.
+  useEffect(() => {
     /* Socket event listeners */
     // Update game each phase, push socket data to state, push lobbyCode to URL
     socket.on('game update', (socketData: LobbyData) => {
@@ -159,6 +206,11 @@ const GameContainer = (): React.ReactElement => {
       setLobbyCode(socketData.lobbyCode);
       history.push(`/${socketData.lobbyCode}`);
       setError('');
+      // The join the player asked for has been answered. An update from another
+      // lobby (a returning player put back into their last game) doesn't answer it.
+      if (socketData.lobbyCode === requestedJoin.current) {
+        requestedJoin.current = '';
+      }
     });
 
     // Add a player to the list when they join
@@ -240,12 +292,35 @@ const GameContainer = (): React.ReactElement => {
         ${errorData}
         ${devMessage}`,
       );
-      setError(errorData);
-      if (code === 2000) {
-        history.push('/');
+      // A returning player's saved lobby has ended: the server's answer to
+      // 'login' (the re-join dialog's Okay). It names that lobby.
+      const endedLobby = /^The lobby with code (\w+) has ended/.exec(
+        errorData,
+      )?.[1];
+      if (code === 2000 && endedLobby && endedLobby !== requestedJoin.current) {
+        // It concerns this page only when the page is for that lobby (a
+        // reload inside it): go home, no message. On an invite link to
+        // another lobby, the invite's own join is still waiting for its
+        // answer, so leave the page and requestedJoin as they are.
+        if (history.location.pathname.substring(1, 5) === endedLobby) {
+          history.push('/');
+          setError('');
+        }
+        return;
       }
-      if (code === 2000 && lobbyData.lobbyCode === '') {
-        setError('');
+      const joinCode = requestedJoin.current;
+      requestedJoin.current = '';
+      if (code === 2000) {
+        // No lobby with that code: go home. Tell the player only when they
+        // asked for this join; a join the app sent on its own stays silent.
+        history.push('/');
+        setError(
+          joinCode
+            ? `The lobby with code ${joinCode} doesn't exist or has ended.`
+            : '',
+        );
+      } else {
+        setError(errorData);
       }
     });
 
@@ -308,7 +383,18 @@ const GameContainer = (): React.ReactElement => {
     socket.on('disconnect me', () => {
       console.log('you were disconnected from the game.');
     });
-  }, []); /* onMount */
+  }, [
+    history,
+    setAllowUrlJoin,
+    setDefinitionReactions,
+    setGuesses,
+    setLoading,
+    setLobbyCode,
+    setLobbyData,
+    setPlayerGuess,
+    setPlayerId,
+    setToken,
+  ]);
 
   /* Socket event emitters */
   const handleLogin = (newToken = false) => {
@@ -331,17 +417,24 @@ const GameContainer = (): React.ReactElement => {
     socket.emit('create lobby', username.trim());
   };
 
-  // Join game as Player
-  const handleJoinLobby = (e: null | React.MouseEvent, optionalCode = '') => {
+  // Join game as Player. `requested` is true when the player asked for this
+  // join (the Join button, or an invite link); only a requested join that
+  // finds no lobby shows a message. Every current caller passes true: the
+  // join the app used to send on its own, for '/', is gone.
+  const handleJoinLobby = (
+    e: null | React.MouseEvent,
+    optionalCode: string,
+    requested: boolean,
+  ) => {
     if (e) {
       e.preventDefault();
     }
-    socket.emit(
-      'join lobby',
-      username.trim(),
-      optionalCode ? optionalCode : lobbyCode,
-    );
-    localStorage.setItem('username', username.trim());
+    const code = optionalCode ? optionalCode : lobbyCode;
+    if (requested) {
+      requestedJoin.current = code;
+    }
+    socket.emit('join lobby', username.trim(), code);
+    setUsername(username.trim());
   };
 
   // Begin game as Host with a word chosen
@@ -414,23 +507,6 @@ const GameContainer = (): React.ReactElement => {
   const handleGetReactions = () => {
     socket.emit('get reactions');
   };
-
-  /* 
-  Recoil-stored handlers 
-  Use regular function syntax to hoist 
-  Return the anonymous function you want to be stored in atom 
-  */
-  function handleSendReaction() {
-    return (definitionId: number, reactionId: number) => {
-      socket.emit('send reaction', definitionId, reactionId);
-    };
-  }
-
-  function handleSetHost() {
-    return (hostId: string, lobbyCode: string, guesses: GuessItem[]) => {
-      socket.emit('set host', hostId, lobbyCode, guesses);
-    };
-  }
 
   /* Other handlers */
   const handleSetWord = (

@@ -1,4 +1,6 @@
-export const lobbyCodeIsValid = (code: string): any => {
+import { ValidationResult } from '../../types/commonTypes';
+
+export const lobbyCodeIsValid = (code: string): ValidationResult => {
   if (/[^A-Za-z]/.test(code)) {
     return {
       valid: false,

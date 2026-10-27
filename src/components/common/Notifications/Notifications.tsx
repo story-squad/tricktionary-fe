@@ -1,22 +1,11 @@
 import { UserAddOutlined } from '@ant-design/icons';
 import { notification } from 'antd';
 import React, { useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
-import { playerIdState } from '../../../state/gameState';
+import { Socket } from 'socket.io-client';
 import { LobbyData, NotificationItem } from '../../../types/gameTypes';
 
-const isPlayerHost = (lobbyData: LobbyData, player: string) => {
-  if (lobbyData.host === player) {
-    return true;
-  }
-
-  return false;
-};
-
 const Notifications = (props: NotificationProps): React.ReactElement => {
-  const { socket, lobbyData } = props;
-
-  const playerId = useRecoilValue(playerIdState);
+  const { socket } = props;
 
   //* Function to open the notifications box
   const openNotification = (data: NotificationItem) => {
@@ -36,7 +25,7 @@ const Notifications = (props: NotificationProps): React.ReactElement => {
   useEffect(() => {
     socket.on(
       'receive-notification',
-      (data: NotificationItem, socketID: number) => {
+      (data: NotificationItem, socketID: string) => {
         if (socketID != socket.id) {
           openNotification(data);
         }
@@ -50,6 +39,6 @@ const Notifications = (props: NotificationProps): React.ReactElement => {
 export default Notifications;
 
 interface NotificationProps {
-  socket: any;
+  socket: Socket;
   lobbyData: LobbyData;
 }

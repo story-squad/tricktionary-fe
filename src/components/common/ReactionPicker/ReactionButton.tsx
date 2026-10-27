@@ -23,7 +23,7 @@ export const ReactionButton = (
         setCanClick(true);
       }, 100);
     }
-  }, [canClick]);
+  }, [canClick, setCanClick]);
 
   return (
     <button

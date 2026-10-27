@@ -1,5 +1,6 @@
+import { ValidationResult } from '../../types/commonTypes';
 import { MAX_DEFINITION_LENGTH } from '../constants';
-export const definitionIsValid = (definition: string): any => {
+export const definitionIsValid = (definition: string): ValidationResult => {
   if (
     /[^A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\u0021-\u0029\u002a-\u003f\s]/.test(
       definition,

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import gsap from 'gsap';
 import React, { useEffect, useState } from 'react';
-import { BotItem } from '../../../../../types/gameTypes';
+import { Socket } from 'socket.io-client';
+import { BotItem, LobbyData } from '../../../../../types/gameTypes';
 
 const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
   const [enableBot, setEnableBot] = useState(false);
@@ -32,7 +33,7 @@ const AlphaBotSettings = (props: AlphaBotProps): React.ReactElement => {
     if (props.lobbyData.bots.length > 0) {
       setEnableBot(true);
     }
-  }, []);
+  }, [props.lobbyData.bots.length]);
 
   return (
     <div className="alphabot-setting">
@@ -84,16 +85,14 @@ const AlphaBotList = (props: AlphaBotListProps): React.ReactElement => {
   //* Add some smoothing effects
   useEffect(() => {
     gsap.from(`#${botID}-box`, { opacity: 0 });
-  }, []);
+  }, [botID]);
 
   // If a bot is in the game, preselect it
   useEffect(() => {
-    activeBots.some((element: BotItem) => {
-      if (element.botName === bot) {
-        setEnableBot(true);
-      }
-    });
-  }, []);
+    if (activeBots.some((element: BotItem) => element.botName === bot)) {
+      setEnableBot(true);
+    }
+  }, [activeBots, bot]);
 
   // Join game as Player
   const handleAddBot = (active: boolean, lobbyCode: string) => {
@@ -128,14 +127,14 @@ export default AlphaBotSettings;
 
 interface AlphaBotProps {
   lobbyCode: string;
-  socket: any;
-  lobbyData: any;
+  socket: Socket;
+  lobbyData: LobbyData;
 }
 
 interface AlphaBotListProps {
   bot: string;
   botID: string;
   lobbyCode: string;
-  socket: any;
+  socket: Socket;
   activeBots: Array<BotItem>;
 }

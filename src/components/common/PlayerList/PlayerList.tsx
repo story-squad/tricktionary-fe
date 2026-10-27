@@ -52,7 +52,7 @@ const playerUserName = (lobbyData: LobbyData, player: PlayerItem) => {
   return username;
 };
 
-const PlayerList = (props: PlayerListProps): React.ReactElement => {
+const PlayerList = (_props: PlayerListProps): React.ReactElement => {
   const playerId = useRecoilValue(playerIdState);
   const lobbyData = useRecoilValue(lobbyState);
 

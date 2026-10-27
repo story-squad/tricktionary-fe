@@ -19,7 +19,7 @@ import {
 } from '../../types/gameTypes';
 import finaleText from '../../utils/text/finaleText.json';
 import { LARGE_GAME_MINIMUM_PLAYERS, MINIMUM_PLAYERS } from '../constants';
-import { getRandomFromArray } from './commonHelpers';
+import { getRandomFromArray, hasOwn } from './commonHelpers';
 
 // Check if the number of definitions submitted makes the game "large"
 export const isLargeGame = (players: PlayerItem[]): boolean => {
@@ -76,16 +76,20 @@ export const recalculateGuessesWithConnected = (
   lobbyData: LobbyData,
   guesses: GuessItem[],
 ): GuessItemWithConnected[] => {
-  const guessDict: any = {};
-  const newGuesses: any = [];
-  guesses.forEach((guess: any) => {
+  const guessDict: Record<
+    string,
+    { player?: string; guess: number; connected: boolean }
+  > = {};
+  const newGuesses: GuessItemWithConnected[] = [];
+  // Stored guesses may carry a connected flag (GuessItemWithConnected)
+  guesses.forEach((guess: GuessItem & { connected?: boolean }) => {
     guessDict[guess.player] = {
       guess: guess.guess,
-      connected: guess.connected,
+      connected: guess.connected as boolean,
     };
   });
   lobbyData.players.forEach((player) => {
-    if (guessDict.hasOwnProperty(player.id)) {
+    if (hasOwn(guessDict, player.id)) {
       guessDict[player.id].connected = player.connected;
     } else {
       guessDict[player.id] = {
@@ -241,8 +245,8 @@ export const addReaction = (
 ): ReactionsDictionary => {
   if (
     value &&
-    reactions.hasOwnProperty(definitionId) &&
-    reactions[definitionId].hasOwnProperty(reactionId)
+    hasOwn(reactions, definitionId) &&
+    hasOwn(reactions[definitionId], reactionId)
   ) {
     return {
       ...reactions,
@@ -262,8 +266,9 @@ export const getReactionCount = (
   reactionId: number,
 ): number => {
   if (
-    reactions?.hasOwnProperty(definitionId) &&
-    reactions[definitionId].hasOwnProperty(reactionId)
+    reactions != null &&
+    hasOwn(reactions, definitionId) &&
+    hasOwn(reactions[definitionId], reactionId)
   ) {
     return reactions[definitionId][reactionId];
   } else {
@@ -277,15 +282,17 @@ export const updateReactionCounts = (
   reactionsList: GetReactionsItem[],
 ): ReactionsDictionary => {
   try {
-    const newReactions: any = {};
-    for (const definition in prevReactions) {
-      if (!newReactions.hasOwnProperty(definition)) {
+    const newReactions: ReactionsDictionary = {};
+    for (const key in prevReactions) {
+      const definition = Number(key);
+      if (!hasOwn(newReactions, definition)) {
         newReactions[definition] = {};
       }
-      for (const reaction in prevReactions[definition] as any) {
-        if (!newReactions[definition].hasOwnProperty(reaction)) {
+      for (const reactionKey in prevReactions[definition]) {
+        const reaction = Number(reactionKey);
+        if (!hasOwn(newReactions[definition], reaction)) {
           newReactions[definition][reaction] =
-            prevReactions[definition][reaction as any];
+            prevReactions[definition][reaction];
         }
       }
     }
@@ -311,11 +318,11 @@ export const getFinaleNoDefinitionText = (): string => {
 // Check if player object has required properties
 export const isValidPlayer = (player: PlayerItem): boolean => {
   return (
-    player.hasOwnProperty('id') &&
-    player.hasOwnProperty('username') &&
-    player.hasOwnProperty('definition') &&
-    player.hasOwnProperty('points') &&
-    player.hasOwnProperty('connected')
+    hasOwn(player, 'id') &&
+    hasOwn(player, 'username') &&
+    hasOwn(player, 'definition') &&
+    hasOwn(player, 'points') &&
+    hasOwn(player, 'connected')
   );
 };
 

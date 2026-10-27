@@ -49,10 +49,14 @@ const Guessing = (props: GuessingProps): React.ReactElement => {
   const [showGuesses, setShowGuesses] = useState(false);
   const [notes, setNotes] = useState('');
 
-  // Recalculate guesses when players disconnect/reconnect
+  // Recalculate guesses when players disconnect/reconnect. setGuesses keeps its
+  // identity, and the updater reads the current guesses, so this runs only when
+  // lobbyData changes.
   useEffect(() => {
-    setGuesses(recalculateGuessesWithConnected(lobbyData, guesses));
-  }, [lobbyData]);
+    setGuesses((guesses: GuessItem[]) =>
+      recalculateGuessesWithConnected(lobbyData, guesses),
+    );
+  }, [lobbyData, setGuesses]);
 
   const handleSelectGuess = (
     playerId: string,

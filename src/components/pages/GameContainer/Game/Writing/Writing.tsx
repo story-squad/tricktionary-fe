@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
+import { useEffectEvent } from '../../../../../hooks';
 import {
   loadingState,
   lobbyState,
@@ -37,7 +38,7 @@ const Writing = (props: WritingProps): React.ReactElement => {
   const playerId = useRecoilValue(playerIdState);
 
   //set up the form details
-  const { register, errors, setError, clearErrors } = useForm({
+  const { errors, setError, clearErrors } = useForm({
     mode: 'onSubmit',
   });
 
@@ -49,24 +50,35 @@ const Writing = (props: WritingProps): React.ReactElement => {
         setUseTimer(true);
       }
     }
-  }, [lobbyData?.roundSettings?.seconds]);
+  }, [lobbyData?.roundSettings?.seconds, setTime]);
 
   // If a player rejoins, check whether they submitted already
-  useEffect(() => {
+  const restoreSubmission = useEffectEvent(() => {
     lobbyData.players.forEach((player) => {
       if (player.id === playerId && player.definition !== '') {
         setIsSubmitted(true);
         setDefinition(player.definition);
       }
     });
+  });
+
+  // Restore a rejoining player's submission once, on mount
+  useEffect(() => {
+    restoreSubmission();
   }, []);
 
-  //* If the timer runs out, auto-submit the definition from users, unless it is empty
-  useEffect(() => {
+  //* Auto-submit the definition from users, unless it is empty. Reads the
+  //* definition as typed at that moment.
+  const autoSubmit = useEffectEvent((timerDone: boolean) => {
     if (timerDone && definition !== '') {
       props.handleSubmitDefinition(definition);
       setIsSubmitted(true);
     }
+  });
+
+  //* If the timer runs out, auto-submit; only at that moment, not on every keystroke
+  useEffect(() => {
+    autoSubmit(timerDone);
   }, [timerDone]);
 
   const allPlayersHaveWritten = () => {

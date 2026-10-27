@@ -13,7 +13,11 @@ const CookiePopup = (): React.ReactElement => {
 
   const toggleCheck = () =>
     setIsChecked((c) => {
-      c ? cookie.clear() : cookie.set();
+      if (c) {
+        cookie.clear();
+      } else {
+        cookie.set();
+      }
       return !c;
     });
   const closePopup = () => setIsShowing(false);

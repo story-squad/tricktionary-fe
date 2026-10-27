@@ -27,9 +27,13 @@ const SetHost = (): React.ReactElement => {
   // Update players list on lobbyData.players update
   useEffect(() => {
     if (lobbyData.players.length >= 1) {
-      setChosenPlayer(connectedOtherPlayers()[0]?.id);
+      setChosenPlayer(
+        lobbyData.players.filter(
+          (player) => player.id !== playerId && player.connected,
+        )[0]?.id,
+      );
     }
-  }, [lobbyData.players]);
+  }, [lobbyData.players, playerId]);
 
   const handleSetChosenPlayer = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setChosenPlayer(e.target.value);
